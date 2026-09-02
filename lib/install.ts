@@ -17,6 +17,23 @@
  *    « ouvre cette page dans Safari/Chrome », avant l'installation.
  */
 
+/**
+ * Interrupteur de la porte « écran d'accueil ».
+ *
+ * ⚠️ TEMPORAIREMENT À `false`.
+ *
+ * La porte suppose une connexion par code à 6 chiffres, seule façon de se
+ * connecter sans quitter l'app installée. Ce code exige que les modèles d'email
+ * Supabase contiennent `{{ .Token }}` — une configuration qui n'est pas encore
+ * faite. En attendant, la connexion passe par le lien reçu par mail, qui s'ouvre
+ * dans le navigateur : la porte le bloquerait, et personne ne pourrait entrer.
+ *
+ * À remettre à `true` dès que les deux modèles (« Magic Link » et « Confirm
+ * signup ») envoient bien un code. Voir le README, section « La porte écran
+ * d'accueil ».
+ */
+export const INSTALL_GATE_ENABLED = false;
+
 export type Os = "ios" | "android" | "other";
 
 /** Applications dont le navigateur intégré ne sait pas installer de PWA. */

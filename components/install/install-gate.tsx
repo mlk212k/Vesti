@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { isOpenPath } from "@/lib/install";
+import { INSTALL_GATE_ENABLED, isOpenPath } from "@/lib/install";
 import { InstallGuide } from "./install-guide";
 import { LogoMark } from "@/components/brand/logo";
 
@@ -54,6 +54,11 @@ function getServerSnapshot(): "unknown" {
 export function InstallGate({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const mode = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  // Porte désactivée le temps que la connexion par code fonctionne : sans elle,
+  // le lien reçu par mail — qui s'ouvre dans le navigateur — serait bloqué et
+  // personne ne pourrait entrer. Voir `INSTALL_GATE_ENABLED`.
+  if (!INSTALL_GATE_ENABLED) return <>{children}</>;
 
   // Le lien de connexion, les pages légales et le back-office passent toujours.
   // Voir `lib/install.ts` : chacun casserait quelque chose s'il était bloqué.

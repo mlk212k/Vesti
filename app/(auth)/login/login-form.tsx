@@ -20,18 +20,21 @@ type Status =
   | { kind: "error"; message: string };
 
 /**
- * Connexion par code à 6 chiffres, pas par lien.
+ * Connexion par email : code à 6 chiffres, avec le lien du mail en secours.
  *
- * Sur iOS, une app installée sur l'écran d'accueil a son propre stockage,
- * séparé de Safari. Un lien de connexion s'ouvre depuis la boîte mail, donc
- * dans Safari, et crée la session là-bas : l'app installée reste déconnectée,
- * définitivement. Le code se saisit à l'intérieur de l'app — rien ne sort du
- * conteneur.
+ * Le code est la voie visée. Sur iOS, une app installée sur l'écran d'accueil a
+ * son propre stockage, séparé de Safari : un lien s'ouvre depuis la boîte mail,
+ * donc dans Safari, et y crée la session — l'app installée reste déconnectée.
+ * Le code, lui, se saisit à l'intérieur de l'app, rien ne sort du conteneur.
  *
- * ⚠️ Côté Supabase, les deux modèles d'email doivent contenir `{{ .Token }}` :
- * « Magic Link » (utilisateur connu) ET « Confirm signup » (première connexion).
- * S'il n'y en a qu'un, la moitié des gens reçoit un lien et reste bloquée sur
- * cet écran. Voir le README.
+ * ⚠️ Mais le code n'arrive que si les modèles d'email Supabase contiennent
+ * `{{ .Token }}` — dans « Magic Link » (utilisateur connu) ET « Confirm signup »
+ * (première connexion). Tant que ce n'est pas fait, le mail ne porte qu'un lien.
+ *
+ * D'où les deux voies proposées ici, et la porte « écran d'accueil »
+ * temporairement désactivée (`INSTALL_GATE_ENABLED`) : sans elle, le lien
+ * s'ouvrirait dans un navigateur que la porte bloquerait. Les deux réglages se
+ * remettent ensemble, une fois les modèles configurés.
  */
 export function LoginForm({ next }: { next: string }) {
   const [email, setEmail] = useState("");
@@ -48,14 +51,30 @@ export function LoginForm({ next }: { next: string }) {
     return () => clearTimeout(timer);
   }, [cooldown]);
 
+  /**
+   * Origine réelle de la page, pas une valeur figée à la compilation.
+   *
+   * Le lien du mail doit ramener là où la personne se trouve vraiment. Une
+   * variable d'environnement mal renseignée l'enverrait ailleurs — c'est
+   * exactement ce qui s'est produit avec l'adresse par défaut du projet
+   * Supabase, qui pointait sur localhost.
+   */
+  function currentOrigin(): string {
+    return typeof window === "undefined" ? env.siteUrl : window.location.origin;
+  }
+
   async function sendCode(address: string) {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: address,
       options: {
-        // Pas d'`emailRedirectTo` : on ne veut pas d'un lien cliquable qui
-        // ramènerait la personne dans Safari, hors de l'app installée.
         shouldCreateUser: true,
+        // Le mail contient les DEUX : le code à 6 chiffres (si le modèle
+        // Supabase porte `{{ .Token }}`) et un lien cliquable. Tant que les
+        // modèles ne sont pas configurés, le lien est la seule voie ouverte —
+        // sans cette redirection il retomberait sur l'adresse par défaut du
+        // projet, qui n'est pas celle du site.
+        emailRedirectTo: `${currentOrigin()}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
 
@@ -113,7 +132,7 @@ export function LoginForm({ next }: { next: string }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${env.siteUrl}/auth/callback?next=${encodeURIComponent(next)}`,
+        redirectTo: `${currentOrigin()}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
     if (error) {
@@ -132,8 +151,15 @@ export function LoginForm({ next }: { next: string }) {
         <div className="flex flex-col gap-2 text-center">
           <h2 className="text-lg font-bold">Entre ton code</h2>
           <p className="text-sm leading-relaxed text-muted">
-            On a envoyé un code à 6 chiffres à{" "}
+            On a envoyé un mail à{" "}
             <span className="font-semibold text-foreground">{status.email}</span>.
+          </p>
+          <p className="text-sm leading-relaxed text-muted">
+            Entre le code à 6 chiffres qu&apos;il contient — ou{" "}
+            <span className="font-semibold text-foreground">
+              clique simplement le lien
+            </span>{" "}
+            du mail, ça marche aussi.
           </p>
         </div>
 
