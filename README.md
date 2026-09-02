@@ -17,11 +17,29 @@ priorisée avec de vraies options trouvées en ligne, et propose chaque jour une
 
 ## ⚠️ À lire en premier
 
-Le code est écrit et testé, **mais aucune analyse réelle n'a encore été
-exécutée** : il n'y avait pas de clé Anthropic pendant le développement. La
-qualité des verdicts et la précision du recadrage des vignettes sont les deux
-seules choses du projet qui n'ont jamais rencontré une vraie photo. C'est le
-point 5 de la checklist, et c'est celui qui compte.
+La chaîne d'analyse **a tourné pour de vrai** : appel API, prompt, sortie
+structurée et refus d'une photo hors sujet, tout fonctionne. Mais elle n'a
+jamais vu **une vraie photo de tenue** — seulement une image de contrôle. La
+qualité des verdicts et la précision du recadrage des vignettes restent donc
+les deux seules choses non vérifiées. C'est le point 5 de la checklist, et
+c'est celui qui compte.
+
+Pour rejouer une analyse réelle sur tes propres photos :
+
+```bash
+ANTHROPIC_API_KEY=... PHOTO=/chemin/photo.jpg \
+  npx vitest run --config vitest.live.config.mts --disable-console-intercept
+```
+
+Ce fichier est exclu de `npm run test` : il est facturé à chaque exécution.
+
+**💰 Coût mesuré** : 847 tokens d'entrée et 568 de sortie sur l'image de
+contrôle. Une vraie photo en consomme davantage — l'image pèse à l'entrée, et
+l'inventaire des pièces à la sortie. **Mesure le coût réel de tes premières
+analyses avant d'ouvrir les vannes** : le plan Pro autorise 150 analyses pour
+8,99 €, et si une analyse coûte plus de 6 centimes, ce plan perd de l'argent.
+Les colonnes `input_tokens` / `output_tokens` de la table `analyses` sont là
+pour ça, et `plan_analysis_limit()` dans `0003_quota_rpc.sql` pour ajuster.
 
 ---
 

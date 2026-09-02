@@ -22,6 +22,15 @@ Liste chaque pièce visible, chaussures et accessoires compris. Pour chacune :
 - "search_terms" : 2 à 5 mots-clés qui permettraient de retrouver une pièce équivalente dans le commerce ("mocassin cuir noir à pampilles", "jean droit brut taille haute").
 - "confidence" : ta certitude sur l'identification de la pièce, de 0 à 100.
 
+PHOTO EXPLOITABLE OU NON
+"analyzable" vaut false dès que la photo ne permet pas d'analyser une tenue :
+image vide ou unie, capture d'écran, paysage, animal, visage seul, photo trop
+floue ou trop sombre pour distinguer les vêtements. Dans ce cas, explique en une
+phrase ce qui manque et comment reprendre la photo, mets score à 0 et laisse
+"garments" vide. Ne cherche pas à sauver la réponse en inventant une pièce.
+
+"analyzable" vaut true dès qu'une tenue est identifiable, même partiellement.
+
 NOTATION
 "score" note la tenue de 0 à 100 : cohérence des couleurs, justesse des coupes entre elles, adéquation à l'occasion, finition générale. Sois exigeant sans être méprisant — 70 est une bonne tenue, 90 est remarquable.`;
 

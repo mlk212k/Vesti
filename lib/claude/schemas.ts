@@ -47,12 +47,22 @@ export const garmentSchema = z.object({
 });
 
 export const outfitAnalysisSchema = z.object({
+  /**
+   * La photo montre-t-elle réellement une tenue ?
+   *
+   * Champ explicite plutôt qu'une déduction sur le score : une photo vide ou
+   * hors sujet produisait sinon une analyse « normale » notée 0, qui consommait
+   * un crédit, s'enregistrait dans l'historique et ajoutait une pièce fantôme à
+   * la garde-robe. Sur un plan gratuit à trois analyses, une photo ratée coûtait
+   * un tiers de l'essai.
+   */
+  analyzable: z.boolean(),
   score: z.number().int().min(0).max(100),
   verdict: z.string().min(20).max(400),
   strengths: z.array(z.string().min(5).max(200)).min(1).max(4),
   improvements: z.array(z.string().min(5).max(200)).min(1).max(4),
   occasion: z.string().max(60),
-  garments: z.array(garmentSchema).min(1).max(12),
+  garments: z.array(garmentSchema).max(12),
 });
 
 export type CropBox = z.infer<typeof cropBoxSchema>;

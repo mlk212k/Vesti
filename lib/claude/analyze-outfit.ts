@@ -67,6 +67,13 @@ export async function analyzeOutfit(
     throw new OutfitAnalysisUnparsable();
   }
 
+  // Photo hors sujet : on refuse AVANT que la route n'enregistre quoi que ce
+  // soit. La route rembourse alors le crédit — sans ça, une photo ratée coûtait
+  // une analyse et polluait la garde-robe d'une pièce inexistante.
+  if (!parsed.analyzable) {
+    throw new OutfitAnalysisRefused();
+  }
+
   return {
     analysis: parsed,
     usage: {
