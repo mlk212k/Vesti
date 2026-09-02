@@ -13,6 +13,14 @@ alter table public.profiles
     first_name is null or (length(btrim(first_name)) between 1 and 40)
   );
 
--- Pas de `revoke` : contrairement au plan, au quota ou au solde de Style, le
--- prénom appartient à la personne. Elle le renseigne et le corrige elle-même,
--- via la policy d'update déjà en place sur son propre profil.
+-- ⚠️ Le droit d'écriture doit être accordé EXPLICITEMENT.
+--
+-- Les permissions d'update sur `profiles` ne sont pas données à la table entière
+-- avec des exceptions : c'est une liste blanche, colonne par colonne. Une
+-- nouvelle colonne est donc fermée par défaut — bon réglage, mais qui veut dire
+-- qu'ajouter un champ d'onboarding sans cette ligne donne un formulaire qui
+-- s'affiche, se remplit, et échoue à l'enregistrement. C'est arrivé.
+--
+-- Contrairement au plan, au quota ou au solde de Style, le prénom appartient à
+-- la personne : elle le renseigne et le corrige elle-même.
+grant update (first_name) on public.profiles to authenticated;
