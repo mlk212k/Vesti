@@ -75,61 +75,95 @@ export function BottomNav() {
   );
 }
 
+/**
+ * Les cinq icônes, dessinées sur la même grammaire que le logo : uniquement des
+ * traits d'épaisseur constante, à bouts et jonctions ronds, et des angles
+ * largement adoucis. Le logo n'est fait que de cercles et de traits arrondis ;
+ * des icônes à angles vifs au bas du même écran se verraient comme une pièce
+ * rapportée.
+ *
+ * Toutes sont cadrées dans la même grille 24×24 avec ~3 unités de marge, pour
+ * qu'elles paraissent de la même taille une fois côte à côte. C'est le poids
+ * optique qui compte, pas la boîte : un carré et un cercle de mêmes dimensions
+ * ne pèsent pas pareil à l'œil.
+ */
 function iconProps(active: boolean) {
   return {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: active ? 2.2 : 1.8,
+    // L'onglet actif épaissit le trait : le repère tient encore quand la
+    // couleur ne se voit pas — plein soleil, ou daltonisme.
+    strokeWidth: active ? 2.1 : 1.7,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
   };
 }
 
+/** Accueil — une maison, avec une porte : sans elle, la forme se lit « tente ». */
 function HomeIcon({ active }: { active: boolean }) {
   return (
     <svg {...iconProps(active)}>
-      <path d="M3 10.5 12 3l9 7.5" />
-      <path d="M5 9.5V21h14V9.5" />
+      <path d="M3.6 10.4 12 3.9l8.4 6.5" />
+      <path d="M5.8 9.3v9.5a2 2 0 0 0 2 2h8.4a2 2 0 0 0 2-2V9.3" />
+      <path d="M9.9 20.8v-4.1a2.1 2.1 0 0 1 4.2 0v4.1" />
     </svg>
   );
 }
 
+/** Analyser — l'appareil photo, puisque tout commence par une photo de la tenue. */
 function CameraIcon({ active }: { active: boolean }) {
   return (
     <svg {...iconProps(active)}>
-      <path d="M3 8h3l2-3h8l2 3h3v12H3z" />
-      <circle cx="12" cy="13" r="3.5" />
+      <rect x="2.7" y="7.5" width="18.6" height="12.9" rx="3.4" />
+      <path d="M8.8 7.5 10.1 5h3.8l1.3 2.5" />
+      <circle cx="12" cy="13.9" r="3.2" />
     </svg>
   );
 }
 
+/**
+ * Dressing — un cintre. L'ancien dessin était cassé : son crochet partait d'un
+ * arc mal fermé et se lisait comme un trait perdu au-dessus du triangle.
+ */
 function HangerIcon({ active }: { active: boolean }) {
   return (
     <svg {...iconProps(active)}>
-      <path d="M12 8a2.5 2.5 0 1 1 2.5-2.5" />
-      <path d="M12 8v2.5L3.5 16.5a1.5 1.5 0 0 0 .9 2.7h15.2a1.5 1.5 0 0 0 .9-2.7L12 10.5" />
+      <path d="M12 9.6V8.2a2.3 2.3 0 1 1 2.3-2.3" />
+      <path d="M12 9.6 4.2 16.1a1.5 1.5 0 0 0 .96 2.65h13.68a1.5 1.5 0 0 0 .96-2.65L12 9.6Z" />
     </svg>
   );
 }
 
+/** Acheter — le sac, pas le caddie : on achète une pièce, on ne remplit pas un panier. */
 function BagIcon({ active }: { active: boolean }) {
   return (
     <svg {...iconProps(active)}>
-      <path d="M5 8h14l-1 12H6z" />
-      <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+      {/* Côtés droits plutôt qu'évasés : un sac qui se rétrécit vers le bas,
+          surmonté d'une anse en demi-cercle, se lit comme une poubelle. */}
+      <path d="M5.6 8.6h12.8v9.8a2.4 2.4 0 0 1-2.4 2.4H8a2.4 2.4 0 0 1-2.4-2.4V8.6Z" />
+      <path d="M9.2 8.6V6.8a2.8 2.8 0 0 1 5.6 0v1.8" />
     </svg>
   );
 }
 
+/**
+ * Progrès — trois barres qui montent. La courbe en zigzag d'avant devenait
+ * illisible à cette taille : à 22 px, trois traits verticaux se lisent d'un
+ * coup d'œil là où une ligne brisée demande de la déchiffrer.
+ */
 function ChartIcon({ active }: { active: boolean }) {
   return (
     <svg {...iconProps(active)}>
-      <path d="M4 19V5" />
-      <path d="M4 19h16" />
-      <path d="M8 15l4-5 3 3 4-6" />
+      {/* Les barres montent jusqu'en haut de la grille : plus courtes, l'icône
+          pesait moins que ses voisines et paraissait plus petite alors qu'elle
+          occupait la même boîte. */}
+      <path d="M4 20.4h16" />
+      <path d="M8 20.4v-6" />
+      <path d="M12 20.4v-10.2" />
+      <path d="M16 20.4v-14" />
     </svg>
   );
 }
