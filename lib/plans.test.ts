@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { effectivePlan } from "./plans";
+import { effectivePlan, hasFeature, planOf } from "./plans";
 
 /**
  * `effectivePlan` double `effective_plan()` en SQL (migration 0010). Le SQL
@@ -33,5 +33,31 @@ describe("effectivePlan", () => {
     // cas on s'en tient au plan payé plutôt que d'offrir sur une intuition.
     expect(effectivePlan("free", "styliste", null)).toBe("free");
     expect(effectivePlan("free", null, DANS_6_MOIS)).toBe("free");
+  });
+});
+
+describe("planOf", () => {
+  it("suit le cadeau, pas la colonne que pilote Stripe", () => {
+    // Le cas qui a réellement échoué : un plan offert accordé, une colonne
+    // `plan` restée sur « free », et l'app qui affichait Découverte tout en
+    // refusant le dressing et les conseils d'achat.
+    const offert = {
+      plan: "free",
+      gift_plan: "styliste",
+      gift_plan_until: DANS_6_MOIS,
+    } as const;
+
+    expect(planOf(offert)).toBe("styliste");
+    expect(hasFeature(planOf(offert), "dressing")).toBe(true);
+    expect(hasFeature(planOf(offert), "shopping")).toBe(true);
+  });
+
+  it("retombe sur free sans profil", () => {
+    expect(planOf(null)).toBe("free");
+    expect(planOf(undefined)).toBe("free");
+  });
+
+  it("tolère une colonne plan vide", () => {
+    expect(planOf({ plan: null, gift_plan: null, gift_plan_until: null })).toBe("free");
   });
 });

@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { hasFeature, PLANS, requiredPlanFor } from "@/lib/plans";
+import { hasFeature, PLANS, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { OUTFITS_BUCKET } from "@/lib/supabase/storage";
 import { WardrobeGrid, type WardrobeItem } from "@/components/dressing/wardrobe-grid";
 import { Button } from "@/components/ui/button";
-import type { Plan } from "@/types/db";
 
 export default async function DressingPage() {
   const supabase = await createClient();
@@ -16,11 +15,11 @@ export default async function DressingPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<PlanRow>();
 
-  const plan: Plan = profile?.plan ?? "free";
+  const plan = planOf(profile);
 
   if (!hasFeature(plan, "dressing")) {
     const needed = requiredPlanFor("dressing");

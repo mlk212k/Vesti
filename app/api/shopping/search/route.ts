@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { searchProducts } from "@/lib/claude/find-products";
-import { hasFeature, type Plan } from "@/lib/plans";
+import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 
 const bodySchema = z.object({
   suggestionId: z.string().uuid(),
@@ -35,11 +35,11 @@ export async function POST(request: Request) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<PlanRow>();
 
-  if (!profile || !hasFeature(profile.plan, "shopping")) {
+  if (!profile || !hasFeature(planOf(profile), "shopping")) {
     return NextResponse.json(
       {
         error: "plan_required",

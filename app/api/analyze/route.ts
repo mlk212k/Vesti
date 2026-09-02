@@ -6,10 +6,10 @@ import { loadImageForClaude } from "@/lib/supabase/storage";
 import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { findProductMatches } from "@/lib/claude/find-products";
-import { hasFeature } from "@/lib/plans";
+import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { awardReferralStyle } from "@/lib/style.server";
 import type { Garment } from "@/lib/claude/schemas";
-import type { Plan, Profile } from "@/types/db";
+import type { Profile } from "@/types/db";
 
 const bodySchema = z.object({
   imagePath: z.string().min(3).max(200),
@@ -44,13 +44,14 @@ export async function POST(request: Request) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("gender, height_cm, weight_kg, morphology, style_prefs, plan")
+    .select(`gender, height_cm, weight_kg, morphology, style_prefs, ${PLAN_COLUMNS}`)
     .eq("id", user.id)
     .single<
-      Pick<
-        Profile,
-        "gender" | "height_cm" | "weight_kg" | "morphology" | "style_prefs" | "plan"
-      >
+      PlanRow &
+        Pick<
+          Profile,
+          "gender" | "height_cm" | "weight_kg" | "morphology" | "style_prefs"
+        >
     >();
 
   if (!profile) {
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
     const image = await loadImageForClaude(imagePath);
     const { analysis, usage, model } = await analyzeOutfit(image, profile);
 
-    const plan = profile.plan as Plan;
+    const plan = planOf(profile);
     const keepsWardrobe = hasFeature(plan, "dressing");
     const getsShopping = hasFeature(plan, "shopping");
 

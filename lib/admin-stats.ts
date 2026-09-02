@@ -38,6 +38,10 @@ export function computeOverview(profiles: ProfileRow[], now: Date): Overview {
     profiles.filter((p) => now.getTime() - new Date(p.created_at).getTime() <= days * day)
       .length;
 
+  // ⚠️ Seul endroit de l'app qui lit `plan` sans le plan offert, et c'est
+  // voulu : ces chiffres comptent des CLIENTS PAYANTS. Quelqu'un à qui on a
+  // offert Styliste utilise le produit sans le payer — le compter ici gonflerait
+  // le chiffre d'affaires. Partout ailleurs, utiliser `planOf()`.
   const byPlan: Record<Plan, number> = { free: 0, pro: 0, styliste: 0 };
   for (const profile of profiles) {
     if (profile.plan in byPlan) byPlan[profile.plan] += 1;

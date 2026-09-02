@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PLANS, hasFeature, requiredPlanFor, type Plan } from "@/lib/plans";
+import { PLANS, hasFeature, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { computeScoreTrend, computeTopItems } from "@/lib/stats";
 import { ScoreTrendChart } from "@/components/dashboard/score-trend";
 import { StatTile } from "@/components/dashboard/stat-tile";
@@ -25,11 +25,11 @@ export default async function HistoryPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<PlanRow>();
 
-  const plan: Plan = profile?.plan ?? "free";
+  const plan = planOf(profile);
 
   if (!hasFeature(plan, "history")) {
     const needed = requiredPlanFor("history");

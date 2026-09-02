@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PlanPicker } from "@/components/billing/plan-picker";
 import { LegalLinks } from "@/components/legal-links";
-import type { Plan } from "@/lib/plans";
+import { PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 
 export default async function BillingPage(props: PageProps<"/billing">) {
   const params = await props.searchParams;
@@ -16,11 +16,11 @@ export default async function BillingPage(props: PageProps<"/billing">) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<PlanRow>();
 
-  const currentPlan: Plan = profile?.plan ?? "free";
+  const currentPlan = planOf(profile);
 
   return (
     <main className="flex flex-1 flex-col gap-5 px-5 py-8">

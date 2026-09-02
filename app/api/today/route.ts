@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchWeather, summarize } from "@/lib/weather";
 import { keepOwnedPieces, suggestDailyOutfit, type WardrobePiece } from "@/lib/claude/suggest-daily";
-import { hasFeature, type Plan } from "@/lib/plans";
+import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import type { Profile } from "@/types/db";
 
 const bodySchema = z.object({
@@ -34,11 +34,11 @@ export async function POST(request: Request) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan, latitude, longitude, city")
+    .select(`${PLAN_COLUMNS}, latitude, longitude, city`)
     .eq("id", user.id)
-    .single<Pick<Profile, "plan" | "latitude" | "longitude" | "city">>();
+    .single<PlanRow & Pick<Profile, "latitude" | "longitude" | "city">>();
 
-  if (!profile || !hasFeature(profile.plan as Plan, "shopping")) {
+  if (!profile || !hasFeature(planOf(profile), "shopping")) {
     return NextResponse.json(
       {
         error: "plan_required",

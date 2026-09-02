@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PLANS, effectivePlan, type Plan } from "@/lib/plans";
+import { PLANS, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { DangerZone } from "@/components/account/danger-zone";
 import { StyleCard } from "@/components/account/style-card";
 import { LegalLinks } from "@/components/legal-links";
@@ -25,18 +25,14 @@ export default async function ComptePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan, gift_plan, gift_plan_until")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan; gift_plan: Plan | null; gift_plan_until: string | null }>();
+    .single<PlanRow>();
 
   // Le plan affiché est le plan EFFECTIF, cadeau compris : la colonne `plan`
   // appartient à Stripe et reste sur « free » pendant six mois offerts. Afficher
   // celle-là ferait passer le cadeau pour un cadeau qui n'a pas marché.
-  const plan = effectivePlan(
-    profile?.plan ?? "free",
-    profile?.gift_plan ?? null,
-    profile?.gift_plan_until ?? null
-  );
+  const plan = planOf(profile);
   const style = await getStyleStatus();
 
   return (

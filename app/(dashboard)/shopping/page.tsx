@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PLANS, hasFeature, requiredPlanFor, type Plan } from "@/lib/plans";
+import { PLANS, hasFeature, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { SuggestionCard, type SuggestionView } from "@/components/shopping/suggestion-card";
 import { Button } from "@/components/ui/button";
 
@@ -14,11 +14,11 @@ export default async function ShoppingPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select(PLAN_COLUMNS)
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<PlanRow>();
 
-  const plan: Plan = profile?.plan ?? "free";
+  const plan = planOf(profile);
 
   if (!hasFeature(plan, "shopping")) {
     const needed = requiredPlanFor("shopping");

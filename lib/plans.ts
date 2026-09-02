@@ -100,6 +100,30 @@ export function effectivePlan(
   return PLAN_ORDER.indexOf(giftPlan) > PLAN_ORDER.indexOf(plan) ? giftPlan : plan;
 }
 
+/**
+ * Colonnes à lire pour connaître le plan réellement en vigueur.
+ *
+ * ⚠️ Ne jamais lire `plan` seule pour décider d'un accès ou d'un affichage.
+ * Cette colonne appartient à Stripe et reste sur « free » pendant tout un plan
+ * offert : la lire seule, c'est facturer le bon plan et en servir un autre.
+ * Neuf endroits l'ont fait, et le premier cadeau accordé n'a débloqué aucune
+ * fonctionnalité. `PLAN_COLUMNS` + `planOf()` existent pour que l'oubli soit
+ * impossible plutôt que rattrapé au cas par cas.
+ */
+export const PLAN_COLUMNS = "plan, gift_plan, gift_plan_until";
+
+export interface PlanRow {
+  plan: Plan | null;
+  gift_plan: Plan | null;
+  gift_plan_until: string | null;
+}
+
+/** Plan en vigueur pour une ligne de profil, cadeau compris. */
+export function planOf(row: PlanRow | null | undefined): Plan {
+  if (!row) return "free";
+  return effectivePlan(row.plan ?? "free", row.gift_plan, row.gift_plan_until);
+}
+
 export function formatPrice(plan: Plan): string {
   const { priceEur } = PLANS[plan];
   return priceEur === 0
