@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getClaude, MODEL } from "./client";
+import { getClaude, MODEL, UTILITY_EFFORT } from "./client";
 import { PRODUCT_SEARCH_SYSTEM_PROMPT } from "./prompts";
 import { productMatchesSchema, type Garment, type ProductMatch } from "./schemas";
 
@@ -35,6 +35,7 @@ export async function searchProducts(query: string): Promise<ProductMatch[]> {
     const response = await claude.messages.create({
       model: MODEL,
       max_tokens: 2000,
+      output_config: { effort: UTILITY_EFFORT },
       system: PRODUCT_SEARCH_SYSTEM_PROMPT,
       tools: [
         {

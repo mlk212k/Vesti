@@ -1,7 +1,7 @@
 import "server-only";
 
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { getClaude, MODEL } from "./client";
+import { getClaude, MODEL, VERDICT_EFFORT } from "./client";
 import { DRESSING_SYSTEM_PROMPT, buildDressingUserPrompt } from "./prompts";
 import { dressingAnalysisSchema, type DressingAnalysis } from "./schemas";
 import { toImageBlock, type ImageInput } from "./images";
@@ -55,7 +55,10 @@ export async function analyzeDressing(
         ],
       },
     ],
-    output_config: { format: zodOutputFormat(dressingAnalysisSchema) },
+    output_config: {
+      format: zodOutputFormat(dressingAnalysisSchema),
+      effort: VERDICT_EFFORT,
+    },
   });
 
   if (response.stop_reason === "refusal") {

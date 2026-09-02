@@ -6,6 +6,7 @@ const createMock = vi.fn();
 vi.mock("server-only", () => ({}));
 vi.mock("./client", () => ({
   MODEL: "claude-opus-5",
+  UTILITY_EFFORT: "low",
   getClaude: () => ({ messages: { create: createMock } }),
 }));
 

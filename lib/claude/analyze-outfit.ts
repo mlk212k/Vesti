@@ -1,7 +1,7 @@
 import "server-only";
 
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { getClaude, MODEL } from "./client";
+import { getClaude, MODEL, VERDICT_EFFORT } from "./client";
 import { OUTFIT_SYSTEM_PROMPT, buildOutfitUserPrompt } from "./prompts";
 import { outfitAnalysisSchema, type OutfitAnalysis } from "./schemas";
 import { toImageBlock, type ImageInput } from "./images";
@@ -55,7 +55,10 @@ export async function analyzeOutfit(
         content: [toImageBlock(image), { type: "text", text: buildOutfitUserPrompt(profile) }],
       },
     ],
-    output_config: { format: zodOutputFormat(outfitAnalysisSchema) },
+    output_config: {
+      format: zodOutputFormat(outfitAnalysisSchema),
+      effort: VERDICT_EFFORT,
+    },
   });
 
   if (response.stop_reason === "refusal") {

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { getClaude, MODEL } from "./client";
+import { getClaude, MODEL, VERDICT_EFFORT } from "./client";
 import { dailyOutfitSchema, type DailyOutfit } from "./schemas";
 import { summarize, weatherConstraints, type WeatherSnapshot } from "@/lib/weather";
 
@@ -73,7 +73,10 @@ ${inventory}
 Compose-moi une tenue pour aujourd'hui.`,
       },
     ],
-    output_config: { format: zodOutputFormat(dailyOutfitSchema) },
+    output_config: {
+      format: zodOutputFormat(dailyOutfitSchema),
+      effort: VERDICT_EFFORT,
+    },
   });
 
   const parsed = response.parsed_output;

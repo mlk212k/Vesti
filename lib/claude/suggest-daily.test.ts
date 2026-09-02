@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
-vi.mock("./client", () => ({ MODEL: "claude-opus-5", getClaude: () => ({}) }));
+vi.mock("./client", () => ({
+  MODEL: "claude-opus-5",
+  VERDICT_EFFORT: "medium",
+  getClaude: () => ({}),
+}));
 
 const { keepOwnedPieces } = await import("./suggest-daily");
 
