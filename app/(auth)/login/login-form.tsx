@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import {
+  adoptSession,
+  createClient,
+  createOtpClient,
+} from "@/lib/supabase/client";
 import { env } from "@/lib/env";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
@@ -34,8 +38,10 @@ type Status =
  * (première connexion). N'en configurer qu'un casse la moitié des connexions —
  * et la moitié cassée est celle des nouveaux inscrits, la moins visible.
  *
- * `emailRedirectTo` reste renseigné : le mail porte aussi un lien, qui sert de
- * secours hors de l'app installée (ordinateur, navigateur classique).
+ * ⚠️ L'envoi ET la vérification passent par `createOtpClient`, en flux
+ * implicite. Avec le client PKCE par défaut, Supabase préfixe le jeton stocké
+ * et le code devient invérifiable — il répond « code expiré » sur un code
+ * parfaitement valide. Le détail est dans `lib/supabase/client.ts`.
  */
 export function LoginForm({ next }: { next: string }) {
   const [email, setEmail] = useState("");
@@ -65,15 +71,16 @@ export function LoginForm({ next }: { next: string }) {
   }
 
   async function sendCode(address: string) {
-    const supabase = createClient();
+    const supabase = createOtpClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: address,
       options: {
         shouldCreateUser: true,
-        // Le mail contient les deux : le code, et un lien de secours. Sans
-        // cette redirection, le lien retomberait sur l'adresse par défaut du
-        // projet Supabase — qui pointait sur localhost, d'où des pages mortes.
-        emailRedirectTo: `${currentOrigin()}/auth/callback?next=${encodeURIComponent(next)}`,
+
+        // Pas d'`emailRedirectTo` : le mail garde son lien, qui pointe vers
+        // l'adresse configurée dans Supabase (Authentication → URL
+        // Configuration). Ce qui compte ici, c'est le code — et c'est
+        // `createOtpClient` qui garantit qu'il sera vérifiable.
       },
     });
 
@@ -106,29 +113,46 @@ export function LoginForm({ next }: { next: string }) {
     const address = status.email;
     setStatus({ kind: "verifying", email: address });
 
-    const supabase = createClient();
+    // Même client qu'à l'envoi : c'est le mode du client qui décide de la
+    // forme du jeton stocké, donc de la clé recherchée à la vérification.
+    const supabase = createOtpClient();
     const token = normalizeOtp(code);
 
     // On essaie chaque type de jeton jusqu'à ce que l'un passe : Supabase ne
     // range pas le code au même endroit pour une adresse déjà inscrite et pour
     // une adresse neuve. Voir `OTP_VERIFY_TYPES`.
     let lastError: { message: string } | null = null;
+    let session: { access_token: string; refresh_token: string } | null = null;
+
     for (const type of OTP_VERIFY_TYPES) {
-      const { error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({
         email: address,
         token,
         type,
       });
-      if (!error) {
+      if (!error && data.session) {
         lastError = null;
+        session = data.session;
         break;
       }
-      lastError = error;
+      lastError = error ?? { message: "no_session" };
     }
 
-    if (lastError) {
+    if (!session) {
       setStatus({ kind: "code", email: address });
-      setCodeError(otpErrorMessage(lastError.message));
+      setCodeError(otpErrorMessage(lastError?.message));
+      return;
+    }
+
+    // Le client OTP ne persiste rien : on pose la session sur le client à
+    // cookies, seul lu par le proxy et les pages serveur. Si cette étape
+    // échoue, inutile de naviguer — la page suivante renverrait ici.
+    const adopted = await adoptSession(session);
+    if (!adopted.ok) {
+      setStatus({ kind: "code", email: address });
+      setCodeError(
+        "Connexion établie mais non enregistrée. Réessaie, ou vérifie que ton navigateur accepte les cookies."
+      );
       return;
     }
 
