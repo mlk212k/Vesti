@@ -25,11 +25,18 @@ export const MODEL = "claude-opus-5";
  * Le verdict est ce que le client paie ; s'il devient plat ou générique, on a
  * gagné dix secondes et perdu le produit.
  *
- * 📉 Passé de `medium` à `low` sur décision explicite : l'attente était le
- * premier reproche fait à l'app, et la réflexion est facturée au tarif de
- * sortie, donc elle coûte du temps ET de l'argent. À surveiller sur les
- * premières analyses réelles — si les verdicts perdent en finesse, c'est la
- * première ligne à remonter, avant d'aller chercher ailleurs.
+ * 📉 Passé de `medium` à `low`, et VÉRIFIÉ en production plutôt que supposé :
+ *
+ *   sortie   1 400 → 779 tokens   (−44 %)
+ *   coût     0,059 → 0,029 $      (moitié, l'entrée ayant aussi baissé grâce
+ *                                  à la photo réduite avant envoi)
+ *   verdicts jugés toujours aussi détaillés sur de vraies analyses
+ *
+ * C'est ce dernier point qui autorise les deux autres. Le raccourci tentant
+ * serait de lire « −44 % de sortie » comme un pur gain : c'est d'abord 44 % de
+ * texte en moins dans ce que le client paie. Ici la qualité a tenu — mais si
+ * un jour les verdicts s'aplatissent, c'est cette ligne qu'on remonte EN
+ * PREMIER, avant d'aller chercher des économies ailleurs.
  */
 export const VERDICT_EFFORT = "low" as const;
 export const UTILITY_EFFORT = "low" as const;
