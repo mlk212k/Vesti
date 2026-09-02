@@ -21,7 +21,12 @@ export function BottomNav() {
 
   return (
     <nav
-      className="sticky bottom-0 z-20 flex border-t border-border-soft bg-background/85 backdrop-blur-xl"
+      // `fixed`, pas `sticky` : une barre collante appartient au flux de la
+      // page, donc elle suit le rebond élastique d'iOS et flotte pendant le
+      // défilement. En position fixe, elle est ancrée au viewport et ne bouge
+      // plus. Elle est recentrée sur la colonne de 480 px de l'app, sinon elle
+      // s'étalerait sur toute la largeur de l'écran.
+      className="fixed bottom-0 left-1/2 z-30 flex w-full max-w-[480px] -translate-x-1/2 border-t border-border-soft bg-background/85 backdrop-blur-xl"
       // Respecte la zone tactile réservée par iOS en bas d'écran.
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
@@ -33,7 +38,11 @@ export function BottomNav() {
             key={tab.href}
             href={tab.href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-[60px] flex-1 flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition ${
+            // La hauteur vient de la même variable que la place réservée dans
+            // le contenu (voir `app/(dashboard)/layout.tsx`) : les laisser
+            // diverger cacherait le dernier élément de la page.
+            style={{ minHeight: "var(--bottom-nav-height)" }}
+            className={`flex flex-1 flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition ${
               active ? "text-accent-strong" : "text-muted"
             }`}
           >

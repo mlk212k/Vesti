@@ -29,7 +29,18 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   return (
     <div className="flex min-h-dvh flex-1 flex-col">
-      <div className="flex flex-1 flex-col">{children}</div>
+      {/* La barre est en position fixe : elle ne pousse plus le contenu. On
+          réserve donc sa hauteur ici, plus la zone tactile d'iOS, sans quoi le
+          dernier élément de chaque page finit caché dessous. */}
+      <div
+        className="flex flex-1 flex-col"
+        style={{
+          paddingBottom:
+            "calc(var(--bottom-nav-height) + env(safe-area-inset-bottom))",
+        }}
+      >
+        {children}
+      </div>
       <BottomNav />
     </div>
   );
