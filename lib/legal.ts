@@ -1,0 +1,97 @@
+/**
+ * Informations légales de l'éditeur.
+ *
+ * ⚠️ REMPLIS CE FICHIER AVANT LA MISE EN LIGNE. Tant qu'une valeur commence par
+ * « [ », les pages légales affichent un bandeau d'avertissement bien visible :
+ * publier des mentions incomplètes vaut mieux que de croire qu'elles sont
+ * faites, mais ça ne remplace pas de les compléter.
+ *
+ * Ces textes sont des modèles sérieux mais génériques, écrits pour une petite
+ * structure française vendant un abonnement à des particuliers. Fais-les relire
+ * par un juriste avant d'encaisser : la responsabilité reste la tienne.
+ */
+export const LEGAL = {
+  /** Raison sociale ou nom de l'entrepreneur individuel. */
+  editeur: "[NOM ou RAISON SOCIALE]",
+  /** Auto-entrepreneur, SASU, SARL… */
+  statut: "[STATUT JURIDIQUE]",
+  siret: "[SIRET]",
+  /** Laisser vide si non assujetti à la TVA. */
+  tvaIntracom: "[NUMÉRO TVA ou « non applicable, art. 293 B du CGI »]",
+  adresse: "[ADRESSE POSTALE COMPLÈTE]",
+  email: "[EMAIL DE CONTACT]",
+  telephone: "[TÉLÉPHONE]",
+  directeurPublication: "[NOM DU DIRECTEUR DE LA PUBLICATION]",
+
+  /**
+   * Obligatoire en B2C : tout professionnel vendant à des consommateurs doit
+   * adhérer à un médiateur de la consommation et le mentionner dans ses CGV.
+   */
+  mediateur: {
+    nom: "[NOM DU MÉDIATEUR DE LA CONSOMMATION]",
+    site: "[SITE DU MÉDIATEUR]",
+    adresse: "[ADRESSE DU MÉDIATEUR]",
+  },
+
+  /** Contact pour les demandes RGPD (peut être le même que l'email général). */
+  emailRgpd: "[EMAIL RGPD]",
+
+  hebergeurs: [
+    { nom: "Vercel Inc.", role: "hébergement de l'application", lieu: "États-Unis / Union européenne" },
+    { nom: "Supabase", role: "base de données et stockage des photos", lieu: "Union européenne (région à confirmer)" },
+  ],
+
+  sousTraitants: [
+    {
+      nom: "Anthropic PBC",
+      role: "analyse des photos et génération des conseils",
+      lieu: "États-Unis",
+      donnees: "photos envoyées, profil (taille, poids, morphologie, styles)",
+    },
+    {
+      nom: "Stripe Payments Europe",
+      role: "paiement et facturation",
+      lieu: "Union européenne",
+      donnees: "email, données de paiement (jamais stockées par nous)",
+    },
+    {
+      nom: "Open-Meteo",
+      role: "météo de la tenue du jour",
+      lieu: "Union européenne",
+      donnees: "coordonnées arrondies (~1 km)",
+    },
+  ],
+} as const;
+
+/** Une valeur est un gabarit tant qu'elle commence par un crochet. */
+function isPlaceholder(value: string): boolean {
+  return value.trim().startsWith("[");
+}
+
+/** Liste des champs encore à remplir — sert au bandeau d'avertissement. */
+export function missingLegalFields(): string[] {
+  const missing: string[] = [];
+
+  const scalars: [string, string][] = [
+    ["éditeur", LEGAL.editeur],
+    ["statut juridique", LEGAL.statut],
+    ["SIRET", LEGAL.siret],
+    ["adresse", LEGAL.adresse],
+    ["email de contact", LEGAL.email],
+    ["directeur de la publication", LEGAL.directeurPublication],
+    ["médiateur de la consommation", LEGAL.mediateur.nom],
+    ["email RGPD", LEGAL.emailRgpd],
+  ];
+
+  for (const [label, value] of scalars) {
+    if (isPlaceholder(value)) missing.push(label);
+  }
+
+  return missing;
+}
+
+export const LEGAL_PAGES = [
+  { href: "/mentions-legales", label: "Mentions légales" },
+  { href: "/cgv", label: "CGV" },
+  { href: "/confidentialite", label: "Confidentialité" },
+] as const;

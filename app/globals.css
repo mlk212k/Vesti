@@ -1,26 +1,122 @@
 @import "tailwindcss";
 
+/*
+  Palette dérivée du logo : un seul violet, #7931FB, relevé au pixel sur le
+  fichier fourni. Tout le reste en découle — l'encre, le papier, les bordures et
+  les fonds teintés sont le même violet désaturé ou éclairci, jamais un gris
+  neutre. C'est ce qui fait tenir l'ensemble sans ajouter une seule couleur.
+
+  Chaque couple texte/fond de ce fichier a été vérifié au ratio de contraste
+  (WCAG AA, 4,5:1) — voir la section « Repères dans le code » du README.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f5fd;
+  --foreground: #170833;
+  --surface: #ffffff;
+  --surface-sunken: #f1ecfd;
+  --border: #d3c4f4;
+  --border-soft: #e9e1fb;
+  --muted: #6b6285;
+
+  /* Le violet du logo. Réservé aux actions : un seul aplat saturé par écran. */
+  --accent: #7931fb;
+  --accent-foreground: #ffffff;
+  --accent-strong: #5716c9;
+  --accent-soft: #efe8ff;
+
+  /* Données (jauges, courbe de score, puces) : même teinte, série unique. */
+  --highlight: #7931fb;
+  --highlight-soft: #efe8ff;
+
+  --danger: #ce2c31;
+  --danger-soft: #fdecec;
+  --success: #0a7c55;
+
+  --radius-card: 28px;
+  --shadow-card: 0 1px 2px rgb(23 8 51 / 0.04), 0 8px 24px -12px rgb(23 8 51 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(23 8 51 / 0.05), 0 18px 40px -18px rgb(121 49 251 / 0.35);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
+  --color-highlight-soft: var(--highlight-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --radius-card: var(--radius-card);
+  --shadow-card: var(--shadow-card);
+  --shadow-lift: var(--shadow-lift);
+
+  /* Bricolage Grotesque pour les titres : ses graisses lourdes ont l'épaisseur
+     des traits du logo. Plus Jakarta Sans pour le texte courant, plus ouverte
+     et plus lisible à 15px sur mobile. */
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-jakarta);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Les titres portent la police d'affichage sans avoir à le répéter partout. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  letter-spacing: -0.035em;
+}
+
+/* Les chiffres alignés verticalement dans les jauges, scores et prix. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Anneau de focus visible partout : le violet est assez sombre pour rester
+   lisible sur les fonds clairs comme sur les aplats blancs. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Évite le zoom automatique de Safari iOS au focus d'un champ : il se déclenche
+   sous 16px, et le trafic est très majoritairement mobile. */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
