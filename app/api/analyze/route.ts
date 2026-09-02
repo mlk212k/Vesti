@@ -59,6 +59,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "no_profile" }, { status: 403 });
   }
 
+  // --- Cette photo a-t-elle déjà été analysée ? ----------------------------
+  //
+  // ⚠️ C'est ce qui rend l'analyse REJOUABLE, et ça répare une vraie perte.
+  // L'analyse dure une trentaine de secondes ; sur un réseau mobile faible, la
+  // connexion tombe avant la réponse. Le serveur, lui, va au bout : il facture
+  // le crédit, appelle le modèle, enregistre le verdict — que personne ne voit
+  // jamais. L'utilisateur reçoit une erreur pour un travail réellement fait et
+  // déjà payé.
+  //
+  // Le chemin de la photo identifie l'analyse de façon stable (il contient un
+  // UUID tiré à l'envoi). Retenter la même photo rend donc le verdict déjà
+  // calculé, sans nouvel appel au modèle et sans reprendre un second crédit.
+  const recovered = await recoverAnalysis(supabase, user.id, imagePath);
+  if (recovered) {
+    return NextResponse.json({ ...recovered, recovered: true });
+  }
+
   // --- Quota : consommé avant tout appel au modèle -------------------------
   const quota = await consumeQuota("outfit");
   if (!quota.allowed) {
@@ -177,6 +194,63 @@ export async function POST(request: Request) {
       { status: 502 }
     );
   }
+}
+
+/**
+ * Retrouve le verdict déjà calculé pour cette photo, s'il existe.
+ *
+ * Lecture faite avec le client de l'utilisateur, pas le client admin : les
+ * policies RLS garantissent alors qu'on ne peut pas ressortir l'analyse de
+ * quelqu'un d'autre, même si le chemin fourni était deviné.
+ *
+ * En cas d'erreur de lecture on rend `null` : on refait l'analyse. Redonner un
+ * verdict est ennuyeux, ne rien rendre du tout l'est davantage.
+ */
+async function recoverAnalysis(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  imagePath: string
+) {
+  const { data: analysis } = await supabase
+    .from("analyses")
+    .select("id, score, occasion, verdict")
+    .eq("user_id", userId)
+    .contains("image_paths", [imagePath])
+    .maybeSingle<{
+      id: string;
+      score: number | null;
+      occasion: string | null;
+      verdict: {
+        verdict?: string;
+        strengths?: string[];
+        improvements?: string[];
+      } | null;
+    }>();
+
+  if (!analysis?.verdict?.verdict) return null;
+
+  // Les pièces ne sont enregistrées que pour les plans qui gardent un dressing.
+  // Leur absence n'empêche pas de rendre le verdict, qui est l'essentiel.
+  const { data: items } = await supabase
+    .from("dressing_items")
+    .select(
+      "category, label, color, material, brand, brand_confidence, crop_box, confidence, product_matches"
+    )
+    .eq("analysis_id", analysis.id);
+
+  return {
+    analysisId: analysis.id,
+    score: analysis.score ?? 0,
+    verdict: analysis.verdict.verdict,
+    strengths: analysis.verdict.strengths ?? [],
+    improvements: analysis.verdict.improvements ?? [],
+    occasion: analysis.occasion ?? "",
+    garments: (items ?? []).map((item) => ({
+      ...item,
+      product_matches: item.product_matches ?? [],
+    })),
+    savedToWardrobe: (items?.length ?? 0) > 0,
+  };
 }
 
 /**
