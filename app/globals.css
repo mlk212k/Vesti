@@ -32,9 +32,9 @@
   --danger-soft: #fdecec;
   --success: #0a7c55;
 
-  /* Hauteur de la barre de navigation basse. Définie ici parce que deux
-     endroits en dépendent : la barre elle-même, et le contenu qui doit
-     réserver la place en bas. Les laisser diverger cache le dernier bouton. */
+  /* Hauteur de la barre de navigation basse. La barre étant maintenant dans le
+     flux, plus rien n'a besoin de réserver la place — mais la valeur reste ici
+     pour que la hauteur des onglets se règle en un seul endroit. */
   --bottom-nav-height: 60px;
 
   --radius-card: 28px;
@@ -76,6 +76,14 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Supprime le rebond élastique du document. Sur iOS, c'est lui qui fait
+   « flotter » tout ce qui est ancré en bas d'écran quand on tire la page au-delà
+   de sa fin. Les zones qui doivent défiler le font dans leur propre cadre. */
+html,
+body {
+  overscroll-behavior: none;
 }
 
 /* Les titres portent la police d'affichage sans avoir à le répéter partout. */

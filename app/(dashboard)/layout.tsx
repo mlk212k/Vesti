@@ -28,17 +28,14 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   return (
-    <div className="flex min-h-dvh flex-1 flex-col">
-      {/* La barre est en position fixe : elle ne pousse plus le contenu. On
-          réserve donc sa hauteur ici, plus la zone tactile d'iOS, sans quoi le
-          dernier élément de chaque page finit caché dessous. */}
-      <div
-        className="flex flex-1 flex-col"
-        style={{
-          paddingBottom:
-            "calc(var(--bottom-nav-height) + env(safe-area-inset-bottom))",
-        }}
-      >
+    // Coque de hauteur fixe qui ne défile JAMAIS : c'est ce qui empêche la
+    // barre du bas de bouger sur iOS. Tant que le document lui-même défile,
+    // Safari applique son rebond élastique à tout ce qu'il contient, y compris
+    // aux éléments en position fixe.
+    <div className="flex h-dvh flex-col overflow-hidden">
+      {/* Le seul élément qui défile. `overscroll-contain` empêche le rebond de
+          se propager au document au-dessus, donc à la barre. */}
+      <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain">
         {children}
       </div>
       <BottomNav />

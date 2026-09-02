@@ -21,18 +21,18 @@ export function BottomNav() {
 
   return (
     <nav
-      // `fixed`, pas `sticky` : une barre collante appartient au flux de la
-      // page, donc elle suit le rebond élastique d'iOS et flotte pendant le
-      // défilement. En position fixe, elle est ancrée au viewport.
+      // Ni `fixed`, ni `sticky` : un élément normal, dernière ligne d'une coque
+      // qui ne défile pas (voir `app/(dashboard)/layout.tsx`).
       //
-      // Fond OPAQUE, sans flou. Une barre translucide laisse défiler le contenu
-      // au travers : le scintillement qui en résulte se lit comme un mouvement
-      // de la barre elle-même, alors qu'elle ne bouge pas d'un pixel.
+      // Les deux positionnements ont été essayés et bougent tous les deux sur
+      // iOS : `sticky` suit le flux, et `fixed` suit le rebond élastique que
+      // Safari applique au document entier pendant le défilement. Aucun réglage
+      // CSS ne corrige ça. La seule chose qui le rend IMPOSSIBLE, c'est que le
+      // document ne défile plus : le défilement a lieu dans le cadre au-dessus,
+      // et cette barre est simplement posée en dessous.
       //
-      // `inset-x-0` + `mx-auto` plutôt que `left-1/2` + `-translate-x-1/2` : un
-      // élément fixe positionné par transformation est plus fragile, et une
-      // transformation sur un ancêtre suffirait à le décrocher du viewport.
-      className="fixed inset-x-0 bottom-0 z-30 mx-auto flex w-full max-w-[480px] border-t border-border bg-background"
+      // Fond opaque : rien ne transparaît, donc rien ne scintille.
+      className="z-30 flex w-full flex-none border-t border-border bg-background"
       // Respecte la zone tactile réservée par iOS en bas d'écran.
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
