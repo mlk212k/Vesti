@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { isOtpComplete, normalizeOtp, otpErrorMessage } from "./otp";
+import {
+  OTP_VERIFY_TYPES,
+  isOtpComplete,
+  normalizeOtp,
+  otpErrorMessage,
+} from "./otp";
 
 describe("normalizeOtp", () => {
   it("garde un code déjà propre", () => {
@@ -55,5 +60,14 @@ describe("otpErrorMessage", () => {
     expect(otpErrorMessage(undefined)).toBe(
       "La vérification a échoué. Réessaie dans un instant."
     );
+  });
+});
+
+describe("OTP_VERIFY_TYPES", () => {
+  it("essaie le type générique en premier, puis les deux cas particuliers", () => {
+    // L'ordre compte : `email` couvre le cas normal en une seule requête ;
+    // `magiclink` (adresse connue) et `signup` (adresse neuve) ne servent que
+    // lorsque Supabase a rangé le code ailleurs.
+    expect([...OTP_VERIFY_TYPES]).toEqual(["email", "magiclink", "signup"]);
   });
 });

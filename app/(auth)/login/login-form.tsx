@@ -6,6 +6,7 @@ import { env } from "@/lib/env";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import {
+  OTP_VERIFY_TYPES,
   RESEND_COOLDOWN_SECONDS,
   isOtpComplete,
   normalizeOtp,
@@ -106,15 +107,28 @@ export function LoginForm({ next }: { next: string }) {
     setStatus({ kind: "verifying", email: address });
 
     const supabase = createClient();
-    const { error } = await supabase.auth.verifyOtp({
-      email: address,
-      token: normalizeOtp(code),
-      type: "email",
-    });
+    const token = normalizeOtp(code);
 
-    if (error) {
+    // On essaie chaque type de jeton jusqu'à ce que l'un passe : Supabase ne
+    // range pas le code au même endroit pour une adresse déjà inscrite et pour
+    // une adresse neuve. Voir `OTP_VERIFY_TYPES`.
+    let lastError: { message: string } | null = null;
+    for (const type of OTP_VERIFY_TYPES) {
+      const { error } = await supabase.auth.verifyOtp({
+        email: address,
+        token,
+        type,
+      });
+      if (!error) {
+        lastError = null;
+        break;
+      }
+      lastError = error;
+    }
+
+    if (lastError) {
       setStatus({ kind: "code", email: address });
-      setCodeError(otpErrorMessage(error.message));
+      setCodeError(otpErrorMessage(lastError.message));
       return;
     }
 

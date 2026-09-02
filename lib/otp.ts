@@ -10,6 +10,25 @@
 
 export const OTP_LENGTH = 6;
 
+/**
+ * Types de jeton à essayer à la vérification, dans l'ordre.
+ *
+ * Supabase ne range pas le code au même endroit selon la personne : une adresse
+ * déjà inscrite déclenche un `user_recovery_requested` (jeton « magiclink »),
+ * une adresse neuve un `user_confirmation_requested` (jeton « signup »). Le type
+ * générique `email` couvre normalement les deux, mais les journaux de
+ * production montrent des codes fraîchement émis — seize secondes — rejetés en
+ * « token has expired or is invalid », ce qui est la réponse de Supabase quand
+ * le type ne correspond pas.
+ *
+ * Plutôt que de parier sur un type, on les essaie tous. Un essai qui échoue ne
+ * consomme rien : seul celui qui réussit ouvre la session. Le coût est d'au
+ * plus deux requêtes supplémentaires, et uniquement quand le code est faux.
+ */
+export const OTP_VERIFY_TYPES = ["email", "magiclink", "signup"] as const;
+
+export type OtpVerifyType = (typeof OTP_VERIFY_TYPES)[number];
+
 /** Délai avant de pouvoir redemander un code. Supabase limite à 60 s. */
 export const RESEND_COOLDOWN_SECONDS = 60;
 
