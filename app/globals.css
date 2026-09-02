@@ -68,8 +68,20 @@
   claire — y compris les bordures, dont la version douce a dû être remontée :
   au ton obtenu par simple symétrie, les contours de cartes disparaissaient.
 */
+/*
+  Le thème sombre s'applique dans deux cas, et il faut les deux.
+
+  1. `prefers-color-scheme` : le réglage du téléphone, quand la personne n'a
+     rien choisi dans l'app. La garde `:not([data-theme="light"])` fait qu'un
+     choix explicite « clair » l'emporte sur un système en sombre.
+  2. `[data-theme="dark"]` : le choix fait dans les réglages, posé sur <html>
+     par le script de `layout.tsx` avant le premier rendu.
+
+  Sans le second bloc, le bouton des réglages n'aurait aucun effet ; sans le
+  premier, l'app ignorerait le téléphone de qui n'a jamais ouvert les réglages.
+*/
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #0d0718;
     --foreground: #f3eeff;
     --surface: #171029;
@@ -77,28 +89,43 @@
     --border: #473879;
     --border-soft: #392c63;
     --muted: #a79dc4;
-
     --accent: #7931fb;
     --accent-foreground: #ffffff;
     --accent-strong: #c3a6ff;
     --accent-soft: #241a44;
-
     --highlight: #9d6bff;
     --highlight-soft: #241a44;
-
     --danger: #ff8a8d;
     --danger-foreground: #2b0b0d;
     --danger-soft: #2b1416;
     --success: #3ddc9c;
-
-    /* Les ombres de la palette claire sont invisibles ici : une ombre noire à
-       4 % sur un fond presque noir ne détache rien. On les rend franches, et
-       c'est le halo violet qui porte le relief. */
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
     --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 40px -18px rgb(121 49 251 / 0.55);
-
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+    --background: #0d0718;
+    --foreground: #f3eeff;
+    --surface: #171029;
+    --surface-sunken: #1e1636;
+    --border: #473879;
+    --border-soft: #392c63;
+    --muted: #a79dc4;
+    --accent: #7931fb;
+    --accent-foreground: #ffffff;
+    --accent-strong: #c3a6ff;
+    --accent-soft: #241a44;
+    --highlight: #9d6bff;
+    --highlight-soft: #241a44;
+    --danger: #ff8a8d;
+    --danger-foreground: #2b0b0d;
+    --danger-soft: #2b1416;
+    --success: #3ddc9c;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 40px -18px rgb(121 49 251 / 0.55);
+    color-scheme: dark;
 }
 
 @theme inline {

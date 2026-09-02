@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PLANS, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { DangerZone } from "@/components/account/danger-zone";
 import { StyleCard } from "@/components/account/style-card";
+import { ThemePicker } from "@/components/account/theme-picker";
 import { LegalLinks } from "@/components/legal-links";
 import { Button } from "@/components/ui/button";
 import { getStyleStatus } from "@/lib/style.server";
@@ -55,6 +56,8 @@ export default async function ComptePage() {
           </Button>
         </form>
       </section>
+
+      <ThemePicker />
 
       {style && <StyleCard status={style} siteUrl={env.siteUrl} />}
 

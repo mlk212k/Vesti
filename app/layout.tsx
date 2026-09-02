@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { THEME_SCRIPT } from "@/lib/theme";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
@@ -34,7 +35,20 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${bricolage.variable} ${jakarta.variable} h-full`}>
+    <html
+      lang="fr"
+      className={`${bricolage.variable} ${jakarta.variable} h-full`}
+      // Le script ci-dessous modifie cet élément avant que React ne s'y
+      // attache : sans cette annotation, React signalerait un écart entre le
+      // HTML du serveur et celui du navigateur.
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Applique le thème choisi AVANT le premier rendu. Fait après, la page
+            s'afficherait dans le thème du système puis basculerait — un éclair
+            blanc à chaque ouverture pour qui a choisi le sombre. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full font-sans antialiased">
         <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col">
           {/* Rien du tunnel ne s'affiche tant que l'app n'est pas ouverte

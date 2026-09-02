@@ -7,7 +7,7 @@ import { PLANS, PLAN_ORDER, formatPrice, type Plan } from "@/lib/plans";
 const FEATURE_LABELS: { key: keyof (typeof PLANS)["free"]["features"]; label: string }[] = [
   { key: "dressing", label: "Garde-robe complète et suggestions de tenues" },
   { key: "history", label: "Historique et suivi de progression" },
-  { key: "shopping", label: "Pièces similaires et conseils d'achat" },
+  { key: "shopping", label: "Recherche d'achat et pièces similaires" },
 ];
 
 export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
@@ -73,22 +73,39 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
               <span className="text-sm font-semibold">{formatPrice(plan)}</span>
             </div>
 
-            <ul className="flex flex-col gap-1.5">
-              <li className="text-sm text-muted">
-                {definition.unlimitedMessaging
-                  ? "Analyses illimitées"
-                  : `${definition.analysesPerMonth} analyses par mois`}
+            <ul className="flex flex-col gap-2 border-t border-border-soft pt-3">
+              <li className="flex items-start gap-2 text-sm">
+                <Check on />
+                <span>
+                  {definition.unlimitedMessaging ? (
+                    <>
+                      Analyses illimitées
+                      {/* Le plafond fair-use est écrit noir sur blanc : vendre
+                          « illimité » et bloquer à 50 sans l'avoir dit est ce
+                          qui produit un litige, pas une limite raisonnable. */}
+                      <span className="text-muted">
+                        {" "}
+                        — plafond anti-abus à {definition.analysesPerMonth}/mois
+                      </span>
+                    </>
+                  ) : (
+                    `${definition.analysesPerMonth} analyses par mois`
+                  )}
+                </span>
               </li>
-              {FEATURE_LABELS.map(({ key, label }) => (
-                <li
-                  key={key}
-                  className={`text-sm ${
-                    definition.features[key] ? "text-foreground" : "text-muted/50 line-through"
-                  }`}
-                >
-                  {label}
-                </li>
-              ))}
+
+              {FEATURE_LABELS.map(({ key, label }) => {
+                const on = definition.features[key];
+                return (
+                  <li
+                    key={key}
+                    className={`flex items-start gap-2 text-sm ${on ? "" : "text-muted"}`}
+                  >
+                    <Check on={on} />
+                    <span>{label}</span>
+                  </li>
+                );
+              })}
             </ul>
 
             {isCurrent ? (
@@ -124,5 +141,32 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
 
       {error && <p className="text-center text-sm text-danger">{error}</p>}
     </div>
+  );
+}
+
+/**
+ * Coche ou croix, jamais un texte barré.
+ *
+ * Le barré disait « ce n'était plus disponible » là où il fallait lire « ce
+ * n'est pas inclus dans cette offre ». Une croix est explicite, et surtout elle
+ * reste lisible : le texte barré grisé passait sous le seuil de contraste.
+ */
+function Check({ on }: { on?: boolean }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`mt-0.5 flex-none ${on ? "text-success" : "text-muted"}`}
+      aria-label={on ? "Inclus" : "Non inclus"}
+      role="img"
+    >
+      {on ? <path d="M4.5 12.5 9.5 17.5 19.5 6.5" /> : <path d="M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5" />}
+    </svg>
   );
 }

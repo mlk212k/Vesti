@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PlanPicker } from "@/components/billing/plan-picker";
+import { CurrentPlan } from "@/components/billing/current-plan";
+import type { QuotaStatus } from "@/types/db";
 import { LegalLinks } from "@/components/legal-links";
 import { PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 
@@ -14,13 +16,22 @@ export default async function BillingPage(props: PageProps<"/billing">) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select(PLAN_COLUMNS)
-    .eq("id", user.id)
-    .single<PlanRow>();
+  const [{ data: profile }, { data: quotaRows }] = await Promise.all([
+    supabase.from("profiles").select(PLAN_COLUMNS).eq("id", user.id).single<PlanRow>(),
+    supabase.rpc("get_quota_status"),
+  ]);
 
   const currentPlan = planOf(profile);
+  const quota = (quotaRows as QuotaStatus[] | null)?.[0];
+
+  // Un cadeau actif est exactement ce qui fait diverger le plan EFFECTIF de la
+  // colonne que pilote Stripe. On lit donc cette divergence plutôt que de
+  // comparer des dates : c'est Postgres qui a déjà tranché, avec son horloge,
+  // et lire l'heure ici rendrait le rendu impur.
+  const giftUntil =
+    quota && quota.plan_code !== (profile?.plan ?? "free")
+      ? (profile?.gift_plan_until ?? null)
+      : null;
 
   return (
     <main className="flex flex-1 flex-col gap-5 px-5 py-8">
@@ -41,6 +52,18 @@ export default async function BillingPage(props: PageProps<"/billing">) {
           Paiement annulé, rien n&apos;a été débité.
         </p>
       )}
+
+      <CurrentPlan
+        plan={currentPlan}
+        used={quota?.used_count ?? 0}
+        limit={quota?.limit_total ?? 0}
+        periodEnd={quota?.period_end ?? null}
+        giftUntil={giftUntil}
+      />
+
+      <h2 className="text-sm font-semibold">
+        {currentPlan === "free" ? "Passer à la vitesse supérieure" : "Toutes les formules"}
+      </h2>
 
       <PlanPicker currentPlan={currentPlan} />
 
