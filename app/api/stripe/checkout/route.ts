@@ -5,6 +5,7 @@ import { getStripe } from "@/lib/stripe/client";
 import { priceIdForPlan, statusGrantsAccess } from "@/lib/stripe/plans";
 import { createPortalSession } from "@/lib/stripe/portal";
 import { linkCustomer } from "@/lib/stripe/sync";
+import { PLANS } from "@/lib/plans";
 import { env } from "@/lib/env";
 import type { Profile } from "@/types/db";
 
@@ -73,10 +74,37 @@ export async function POST(request: Request) {
     });
   }
 
+  // ⚠️ On vérifie que le prix Stripe correspond VRAIMENT au tarif annoncé sur
+  // la page avant d'ouvrir le paiement.
+  //
+  // Les identifiants de prix se ressemblent à s'y méprendre (`price_1UBDIN…`
+  // et `price_1UBDId…` ne diffèrent que d'un caractère au milieu) : une
+  // inversion dans les variables d'environnement est facile à faire et
+  // invisible à la lecture. Elle l'est beaucoup moins pour le client, qui
+  // clique « 8,99 € » et se fait débiter 17,99 €.
+  //
+  // Facturer un montant que l'écran n'annonçait pas est le pire défaut qu'une
+  // page de paiement puisse avoir : mieux vaut refuser la vente que la faire
+  // au mauvais prix.
+  const priceId = priceIdForPlan(parsed.data.plan);
+  const price = await stripe.prices.retrieve(priceId);
+  const expected = Math.round(PLANS[parsed.data.plan].priceEur * 100);
+
+  if (price.unit_amount !== expected || price.currency !== "eur") {
+    console.error("[stripe] prix incohérent avec le tarif annoncé", {
+      plan: parsed.data.plan,
+      priceId,
+      attendu: expected,
+      stripe: price.unit_amount,
+      devise: price.currency,
+    });
+    return NextResponse.json({ error: "price_mismatch" }, { status: 500 });
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     customer: customerId,
-    line_items: [{ price: priceIdForPlan(parsed.data.plan), quantity: 1 }],
+    line_items: [{ price: priceId, quantity: 1 }],
     // Reliera l'abonnement à notre utilisateur côté webhook.
     client_reference_id: user.id,
     locale: "fr",
