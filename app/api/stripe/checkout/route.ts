@@ -86,7 +86,7 @@ export async function POST(request: Request) {
   // Facturer un montant que l'écran n'annonçait pas est le pire défaut qu'une
   // page de paiement puisse avoir : mieux vaut refuser la vente que la faire
   // au mauvais prix.
-  const priceId = priceIdForPlan(parsed.data.plan);
+  const priceId = await priceIdForPlan(parsed.data.plan);
   const price = await stripe.prices.retrieve(priceId);
   const expected = Math.round(PLANS[parsed.data.plan].priceEur * 100);
 

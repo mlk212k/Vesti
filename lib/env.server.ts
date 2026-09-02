@@ -35,12 +35,12 @@ export const serverEnv = {
   get stripeWebhookSecret(): string {
     return required(process.env.STRIPE_WEBHOOK_SECRET, "STRIPE_WEBHOOK_SECRET");
   },
-  get stripePricePro(): string {
-    return required(process.env.STRIPE_PRICE_PRO, "STRIPE_PRICE_PRO");
-  },
-  get stripePriceStyliste(): string {
-    return required(process.env.STRIPE_PRICE_STYLISTE, "STRIPE_PRICE_STYLISTE");
-  },
+  // STRIPE_PRICE_PRO / STRIPE_PRICE_STYLISTE ont disparu d'ici : les prix se
+  // retrouvent désormais par leur `lookup_key` dans Stripe (voir
+  // lib/stripe/plans.ts). Deux identifiants quasi identiques recopiés à la main
+  // finissent inversés, et l'inversion se paie au tarif de l'autre plan.
+  // `lib/stripe/plans.ts` les relit encore en dernier recours, directement
+  // depuis process.env, pour ne pas rétrograder un abonnement antérieur.
   /**
    * Configuration du portail client à utiliser (`bpc_…`).
    *

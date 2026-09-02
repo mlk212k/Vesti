@@ -44,7 +44,7 @@ export async function applySubscription(subscription: Stripe.Subscription): Prom
     : null;
 
   const plan: Plan = statusGrantsAccess(subscription.status)
-    ? planFromPriceId(priceId)
+    ? await planFromPriceId(priceId)
     : "free";
 
   await admin.from("subscriptions").upsert(
