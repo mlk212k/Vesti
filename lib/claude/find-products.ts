@@ -45,7 +45,12 @@ function describeShopper(context?: ShopperContext): string {
  * En cas d'échec on renvoie une liste vide : aucune suggestion vaut mieux
  * qu'une suggestion inventée.
  */
-export async function findProductMatches(garment: Garment): Promise<ProductMatch[]> {
+export async function findProductMatches(
+  // Volontairement plus étroit que `Garment` : ce sont les seuls champs qui
+  // servent, et la recherche différée les relit en base plutôt que de
+  // reconstituer une fiche complète.
+  garment: Pick<Garment, "label" | "color" | "material" | "search_terms">
+): Promise<ProductMatch[]> {
   const query = [garment.label, garment.color, garment.material, ...garment.search_terms]
     .filter(Boolean)
     .join(" ");

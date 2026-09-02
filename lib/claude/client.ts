@@ -21,12 +21,17 @@ export const MODEL = "claude-opus-5";
  *  - UTILITY : de l'extraction mécanique (retrouver des produits achetables à
  *    partir d'une description). Rien à arbitrer, rien à nuancer.
  *
- * ⚠️ Baisser l'effort raccourcit aussi l'attente, qui est le premier reproche
- * fait à l'app. Mais c'est un réglage de QUALITÉ avant d'être un réglage de
- * coût : toute descente supplémentaire se compare sur de vraies photos, verdict
- * contre verdict, avant d'être déployée.
+ * ⚠️ C'est un réglage de QUALITÉ avant d'être un réglage de coût ou de vitesse.
+ * Le verdict est ce que le client paie ; s'il devient plat ou générique, on a
+ * gagné dix secondes et perdu le produit.
+ *
+ * 📉 Passé de `medium` à `low` sur décision explicite : l'attente était le
+ * premier reproche fait à l'app, et la réflexion est facturée au tarif de
+ * sortie, donc elle coûte du temps ET de l'argent. À surveiller sur les
+ * premières analyses réelles — si les verdicts perdent en finesse, c'est la
+ * première ligne à remonter, avant d'aller chercher ailleurs.
  */
-export const VERDICT_EFFORT = "medium" as const;
+export const VERDICT_EFFORT = "low" as const;
 export const UTILITY_EFFORT = "low" as const;
 
 let client: Anthropic | null = null;

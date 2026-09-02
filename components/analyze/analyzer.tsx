@@ -25,6 +25,8 @@ export function Analyzer() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<State>({ step: "idle" });
   const [photoUrl, setPhotoUrl] = useState<string>("");
+  /** Les liens d'achat se chargent après le verdict : la carte le dit au lieu de l'inventer. */
+  const [productsLoading, setProductsLoading] = useState(false);
 
   async function handleFile(original: File) {
     // Aperçu local immédiat : la vignette des pièces s'appuie dessus, aucune
@@ -99,8 +101,18 @@ export function Analyzer() {
       }
 
       setState({ step: "working", stage: 2 });
-      const analysis: AnalysisView = await analyzeResponse.json();
+      const analysis: AnalysisView & { analysisId?: string; productsPending?: boolean } =
+        await analyzeResponse.json();
+
+      // Le verdict s'affiche MAINTENANT. Les liens d'achat, qui demandent
+      // plusieurs recherches web, arrivent ensuite dans la même carte : les
+      // attendre ferait patienter devant un écran vide pour un verdict qui est
+      // déjà là.
       setState({ step: "done", analysis });
+
+      if (analysis.productsPending && analysis.analysisId) {
+        void loadProducts(analysis.analysisId);
+      }
     } catch {
       setState({
         step: "error",
@@ -109,6 +121,38 @@ export function Analyzer() {
         cta: null,
         resumePath: path,
       });
+    }
+  }
+
+  /**
+   * Va chercher les liens d'achat, une fois le verdict affiché.
+   *
+   * Silencieuse en cas d'échec, et c'est voulu : le verdict est déjà à l'écran
+   * et reste utile sans liens. Faire surgir une erreur ici transformerait une
+   * analyse réussie en analyse ratée aux yeux du client.
+   */
+  async function loadProducts(analysisId: string) {
+    setProductsLoading(true);
+    try {
+      const response = await fetch("/api/analyze/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ analysisId }),
+      });
+
+      if (!response.ok) return;
+      const { garments } = await response.json();
+      if (!Array.isArray(garments) || garments.length === 0) return;
+
+      setState((current) =>
+        current.step === "done"
+          ? { ...current, analysis: { ...current.analysis, garments } }
+          : current
+      );
+    } catch {
+      // Sans liens, la carte reste complète : rien à signaler.
+    } finally {
+      setProductsLoading(false);
     }
   }
 
@@ -176,6 +220,11 @@ export function Analyzer() {
     return (
       <div className="flex flex-col gap-6">
         <VerdictCard analysis={state.analysis} photoUrl={photoUrl} />
+        {productsLoading && (
+          <p className="text-center text-xs text-muted" aria-live="polite">
+            Recherche de pièces similaires en cours…
+          </p>
+        )}
         <Button variant="secondary" onClick={() => setState({ step: "idle" })}>
           Analyser une autre tenue
         </Button>

@@ -5,11 +5,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadImageForClaude } from "@/lib/supabase/storage";
 import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
-import { findProductMatches } from "@/lib/claude/find-products";
 import { costMicros } from "@/lib/claude/pricing";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { awardReferralStyle } from "@/lib/style.server";
-import type { Garment } from "@/lib/claude/schemas";
 import type { Profile } from "@/types/db";
 
 const bodySchema = z.object({
@@ -73,7 +71,16 @@ export async function POST(request: Request) {
   // calculé, sans nouvel appel au modèle et sans reprendre un second crédit.
   const recovered = await recoverAnalysis(supabase, user.id, imagePath);
   if (recovered) {
-    return NextResponse.json({ ...recovered, recovered: true });
+    return NextResponse.json({
+      ...recovered,
+      recovered: true,
+      // Une analyse récupérée peut n'avoir jamais eu ses liens : la connexion
+      // a pu tomber entre le verdict et la recherche.
+      productsPending:
+        hasFeature(planOf(profile), "shopping") &&
+        Boolean(recovered.analysisId) &&
+        recovered.garments.every((g) => g.product_matches.length === 0),
+    });
   }
 
   // --- Quota : consommé avant tout appel au modèle -------------------------
@@ -92,11 +99,6 @@ export async function POST(request: Request) {
     const plan = planOf(profile);
     const keepsWardrobe = hasFeature(plan, "dressing");
     const getsShopping = hasFeature(plan, "shopping");
-
-    // Les liens produits sont facturés à l'usage : réservés au plan qui les vend.
-    const garmentsWithProducts = getsShopping
-      ? await attachProductMatches(analysis.garments)
-      : analysis.garments.map((garment) => ({ garment, matches: [] }));
 
     const admin = createAdminClient();
 
@@ -125,7 +127,7 @@ export async function POST(request: Request) {
 
     if (keepsWardrobe && inserted?.id) {
       await admin.from("dressing_items").insert(
-        garmentsWithProducts.map(({ garment, matches }) => ({
+        analysis.garments.map((garment) => ({
           user_id: user.id,
           analysis_id: inserted.id,
           category: garment.category,
@@ -139,7 +141,11 @@ export async function POST(request: Request) {
           brand_confidence: garment.brand_confidence,
           source_image_path: imagePath,
           crop_box: garment.crop_box,
-          product_matches: matches,
+          // Vides à ce stade : la recherche est différée (voir /api/analyze/products).
+          product_matches: [],
+          // Conservés pour que cette recherche différée n'ait besoin de rien
+          // venant du navigateur.
+          search_terms: garment.search_terms,
           confidence: garment.confidence,
         }))
       );
@@ -157,11 +163,14 @@ export async function POST(request: Request) {
       strengths: analysis.strengths,
       improvements: analysis.improvements,
       occasion: analysis.occasion,
-      garments: garmentsWithProducts.map(({ garment, matches }) => ({
+      garments: analysis.garments.map((garment) => ({
         ...garment,
-        product_matches: matches,
+        product_matches: [],
       })),
       savedToWardrobe: keepsWardrobe,
+      // Dit au client d'aller chercher les liens dans un second temps. Les
+      // recherches sont facturées à l'usage : réservées au plan qui les vend.
+      productsPending: getsShopping && Boolean(inserted?.id),
       quota,
     });
   } catch (error) {
@@ -251,32 +260,4 @@ async function recoverAnalysis(
     })),
     savedToWardrobe: (items?.length ?? 0) > 0,
   };
-}
-
-/**
- * Plafond de recherches par analyse.
- *
- * ⚠️ C'était le seul coût NON BORNÉ de l'app : une recherche web partait par
- * vêtement détecté, sans limite. Une photo de groupe ou un dressing en fond
- * pouvait en déclencher dix, et dix recherches web sur une analyse à 17,99 €
- * par mois mangent la marge d'un coup.
- *
- * Trois suffisent largement : au-delà, on propose des liens pour des pièces
- * secondaires que personne ne clique.
- */
-const MAX_PRODUCT_SEARCHES = 3;
-
-async function attachProductMatches(garments: Garment[]) {
-  // Les pièces les plus sûrement identifiées d'abord : chercher un produit
-  // pour un vêtement reconnu à 40 % de confiance, c'est payer une recherche
-  // pour un résultat à côté.
-  const ranked = [...garments].sort((a, b) => b.confidence - a.confidence);
-  const searched = new Set(ranked.slice(0, MAX_PRODUCT_SEARCHES));
-
-  return Promise.all(
-    garments.map(async (garment) => ({
-      garment,
-      matches: searched.has(garment) ? await findProductMatches(garment) : [],
-    }))
-  );
 }
