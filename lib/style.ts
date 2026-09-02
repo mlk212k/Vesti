@@ -31,4 +31,8 @@ export type StyleStatus = {
   giftUntil: string | null;
   /** L'utilisateur a-t-il déjà été parrainé (le code d'un autre est saisi) ? */
   referred: boolean;
+  /** Commissions cumulées, en centimes. Remboursements déduits. */
+  earningsCents: number;
+  /** Filleuls ayant réellement payé au moins une fois. */
+  payingReferrals: number;
 };

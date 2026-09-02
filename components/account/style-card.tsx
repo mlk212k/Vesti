@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { redeemStyleGift, submitStyleCode } from "@/app/(dashboard)/compte/actions";
+import { COMMISSION_RATE, formatCents } from "@/lib/referral/commission";
 import {
   STYLE_GIFT_MONTHS,
   STYLE_GIFT_THRESHOLD,
@@ -123,6 +124,26 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
           </div>
         )}
       </dl>
+
+      {/* Les gains passent avant le code : quelqu'un qui partage son lien
+          revient pour savoir combien il a gagné, pas pour relire son code.
+          Le montant vient des factures réellement encaissées par Stripe, pas
+          d'un prix catalogue — c'est ce qui permet de l'annoncer au centime. */}
+      <div className="flex flex-col gap-2 rounded-[18px] bg-surface-sunken px-4 py-3">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-xs font-semibold text-muted">
+            Tes gains ({Math.round(COMMISSION_RATE * 100)} % de ce qu&apos;ils paient)
+          </span>
+          <span className="font-[family-name:var(--font-bricolage)] text-xl font-extrabold tabular-nums">
+            {formatCents(status.earningsCents)}
+          </span>
+        </div>
+        <span className="text-xs text-muted">
+          {status.payingReferrals === 0
+            ? "Aucun filleul abonné pour l'instant."
+            : `${status.payingReferrals} filleul${status.payingReferrals > 1 ? "s" : ""} abonné${status.payingReferrals > 1 ? "s" : ""} — tant qu'ils le restent, tu es payé.`}
+        </span>
+      </div>
 
       {status.code && (
         <div className="flex flex-col gap-2">

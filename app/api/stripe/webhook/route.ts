@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe/client";
 import { serverEnv } from "@/lib/env.server";
+import { recordReferralEarning } from "@/lib/referral/record";
 import {
   applySubscription,
   claimEvent,
@@ -93,6 +94,49 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
       // Sur `deleted`, le statut de l'objet vaut `canceled` : applySubscription
       // en déduit le retour au plan gratuit, pas besoin de cas séparé.
       await applySubscription(event.data.object as Stripe.Subscription);
+      break;
+    }
+
+    case "invoice.paid": {
+      // Le seul montant qui fait foi pour payer un parrain : ce que Stripe a
+      // RÉELLEMENT encaissé. `amount_paid` tient compte des remises, des mois
+      // partiels et des avoirs — un prix catalogue, non.
+      const invoice = event.data.object as Stripe.Invoice;
+      const customerId =
+        typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+
+      if (customerId && invoice.id && invoice.amount_paid > 0) {
+        await recordReferralEarning({
+          customerId,
+          stripeId: invoice.id,
+          kind: "invoice",
+          grossCents: invoice.amount_paid,
+          currency: invoice.currency,
+          occurredAt: new Date((invoice.status_transitions?.paid_at ?? invoice.created) * 1000),
+        });
+      }
+      break;
+    }
+
+    case "charge.refunded": {
+      // Un remboursement reprend la commission qu'il annule. Sans ce cas, un
+      // parrain resterait payé sur un mois rendu au client.
+      const charge = event.data.object as Stripe.Charge;
+      const customerId =
+        typeof charge.customer === "string" ? charge.customer : charge.customer?.id;
+
+      if (customerId && charge.amount_refunded > 0) {
+        await recordReferralEarning({
+          customerId,
+          // Clé distincte de la facture : un remboursement est un second
+          // mouvement, pas une correction du premier.
+          stripeId: `refund_${charge.id}_${charge.amount_refunded}`,
+          kind: "refund",
+          grossCents: -charge.amount_refunded,
+          currency: charge.currency,
+          occurredAt: new Date(charge.created * 1000),
+        });
+      }
       break;
     }
 

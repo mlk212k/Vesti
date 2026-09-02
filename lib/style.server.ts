@@ -41,6 +41,12 @@ export async function getStyleStatus(): Promise<StyleStatus | null> {
     .select("referral_rewarded_at")
     .eq("referred_by", user.id);
 
+  // Commissions : lues via la fonction SQL, qui filtre déjà sur l'utilisateur.
+  const { data: earnings } = await supabase.rpc("referral_earnings_summary");
+  const summary = (earnings as
+    | { total_cents: number; referred_paying: number }[]
+    | null)?.[0];
+
   const rows = filleuls ?? [];
   const confirmed = rows.filter((r) => r.referral_rewarded_at !== null).length;
 
@@ -51,6 +57,8 @@ export async function getStyleStatus(): Promise<StyleStatus | null> {
     pendingReferrals: rows.length - confirmed,
     giftUntil: profile.gift_plan_until,
     referred: profile.referred_by !== null,
+    earningsCents: Number(summary?.total_cents ?? 0),
+    payingReferrals: summary?.referred_paying ?? 0,
   };
 }
 
