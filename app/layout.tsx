@@ -1,4 +1,7 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
+import { REFERRAL_COOKIE } from "@/proxy";
+import { normalizeReferralCode } from "@/lib/navigation";
 import { THEME_SCRIPT } from "@/lib/theme";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -20,11 +23,27 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Vesti — ton styliste personnel",
-  description:
-    "Envoie une photo de ta tenue, reçois un avis stylé et des conseils personnalisés.",
-};
+/**
+ * Le lien vers le manifeste porte le code de parrainage quand il y en a un.
+ *
+ * C'est ce lien que le système lit au moment d'« Ajouter à l'écran d'accueil » :
+ * en y glissant le code, l'icône installée s'ouvrira sur une URL qui le
+ * contient, et le proxy pourra reposer le cookie DANS l'app — là où celui du
+ * navigateur n'arrive pas. Voir `app/manifest.webmanifest/route.ts`.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const ref = (await cookies()).get(REFERRAL_COOKIE)?.value;
+  const code = normalizeReferralCode(ref ?? "");
+
+  return {
+    title: "Vesti — ton styliste personnel",
+    description:
+      "Envoie une photo de ta tenue, reçois un avis stylé et des conseils personnalisés.",
+    manifest: code
+      ? `/manifest.webmanifest?ref=${encodeURIComponent(code)}`
+      : "/manifest.webmanifest",
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#7931fb",

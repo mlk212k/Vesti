@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { ReferralKeepsake } from "./referral-keepsake";
 import { LogoMark } from "@/components/brand/logo";
 import { LegalLinks } from "@/components/legal-links";
 import { Button } from "@/components/ui/button";
@@ -89,6 +90,11 @@ export function InstallGuide() {
       ) : (
         <OpenOnPhone />
       )}
+
+      {/* Filet de sécurité de l'attribution : le code devrait voyager tout
+          seul via le manifeste, mais un échec silencieux ne se verrait de
+          personne — ni du filleul, ni de l'influenceur. */}
+      <ReferralKeepsake />
 
       <p className="text-center text-xs leading-relaxed text-muted">
         Une fois l&apos;icône ajoutée, ouvre Vesti depuis ton écran

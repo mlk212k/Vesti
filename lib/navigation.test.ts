@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { safeNext } from "./navigation";
+import { normalizeReferralCode, safeNext } from "./navigation";
 
 describe("safeNext", () => {
   it("laisse passer un chemin interne", () => {
@@ -23,5 +23,29 @@ describe("safeNext", () => {
   it("bloque les schémas exotiques", () => {
     expect(safeNext("javascript:alert(1)")).toBe("/dashboard");
     expect(safeNext("data:text/html,<script>")).toBe("/dashboard");
+  });
+});
+
+describe("normalizeReferralCode", () => {
+  it("met en majuscules et retire séparateurs et espaces", () => {
+    expect(normalizeReferralCode("lea-10")).toBe("LEA10");
+    expect(normalizeReferralCode(" Lea 10 ")).toBe("LEA10");
+  });
+
+  it("jette tout ce qui n'est pas alphanumérique", () => {
+    // La valeur repart dans une URL et dans un cookie : on ne l'échappe pas,
+    // on la réduit à ce qu'un code peut contenir.
+    expect(normalizeReferralCode("ABC<script>")).toBe("ABCSCRIPT");
+    expect(normalizeReferralCode("../../etc")).toBe("ETC");
+    expect(normalizeReferralCode("A&B=C")).toBe("ABC");
+  });
+
+  it("borne la longueur", () => {
+    expect(normalizeReferralCode("A".repeat(200))).toHaveLength(32);
+  });
+
+  it("rend une chaîne vide sur une entrée sans rien d'utile", () => {
+    expect(normalizeReferralCode("")).toBe("");
+    expect(normalizeReferralCode("---")).toBe("");
   });
 });
