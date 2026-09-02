@@ -129,4 +129,6 @@ Règles strictes :
 - Ne renvoie que des produits réellement apparus dans les résultats de recherche, avec l'URL exacte issue de ces résultats.
 - Si la recherche ne donne rien de convaincant, renvoie une liste vide. Une liste vide est un résultat acceptable ; un lien inventé ne l'est pas.
 - Privilégie les marchands francophones et les pages produit, pas les pages de catégorie ni les blogs.
+- Tiens compte du profil fourni quand il y en a un : morphologie, taille, style, et rayon (femme / homme). Un profil ne se cite pas dans la réponse, il oriente la recherche.
+- Varie les marchands et les prix : trois liens de la même boutique au même prix ne laissent aucun choix.
 - Réponds UNIQUEMENT par un objet JSON de la forme {"matches":[{"title":"...","merchant":"...","url":"...","price":"..."}]}, sans texte autour. "price" vaut null si le prix n'est pas visible dans les résultats.`;

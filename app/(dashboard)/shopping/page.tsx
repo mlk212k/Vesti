@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PLANS, hasFeature, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { SuggestionCard, type SuggestionView } from "@/components/shopping/suggestion-card";
+import { ProductSearch } from "@/components/shopping/product-search";
 import { Button } from "@/components/ui/button";
 
 export default async function ShoppingPage() {
@@ -57,17 +58,31 @@ export default async function ShoppingPage() {
     .slice()
     .sort((a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]);
 
+  // Pas de cul-de-sac quand le dressing n'a rien donné : la recherche libre
+  // reste utilisable, et c'est elle qui fait vivre l'onglet au début.
   if (suggestions.length === 0) {
     return (
-      <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Quoi acheter</h1>
-        <p className="text-sm leading-relaxed text-muted">
-          Scanne ton dressing : Vesti repère ce qui te manque pour compléter tes
-          tenues, et c&apos;est ici que tu retrouveras la liste.
-        </p>
-        <Link href="/dressing/scan">
-          <Button>Scanner mon dressing</Button>
-        </Link>
+      <main className="flex flex-1 flex-col gap-6 px-5 py-8">
+        <header className="flex flex-col gap-1">
+          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Quoi acheter</h1>
+          <p className="text-sm leading-relaxed text-muted">
+            Dis ce que tu cherches : Vesti va trouver de vraies pièces en ligne,
+            choisies pour ta morphologie et ton style.
+          </p>
+        </header>
+
+        <ProductSearch />
+
+        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+          <span className="text-sm font-semibold">Ou laisse Vesti décider</span>
+          <p className="text-xs leading-relaxed text-muted">
+            Scanne ton dressing : Vesti repère ce qui te manque pour compléter
+            tes tenues, et te le propose ici.
+          </p>
+          <Link href="/dressing/scan">
+            <Button variant="secondary">Scanner mon dressing</Button>
+          </Link>
+        </div>
       </main>
     );
   }
@@ -81,6 +96,10 @@ export default async function ShoppingPage() {
           utile au moins pressé.
         </p>
       </header>
+
+      <ProductSearch />
+
+      <h2 className="text-sm font-semibold">Repéré dans ton dressing</h2>
 
       <ul className="flex flex-col gap-3">
         {suggestions.map((suggestion) => (

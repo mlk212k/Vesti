@@ -3,6 +3,34 @@ import "server-only";
 import { getClaude, MODEL, UTILITY_EFFORT } from "./client";
 import { PRODUCT_SEARCH_SYSTEM_PROMPT } from "./prompts";
 import { productMatchesSchema, type Garment, type ProductMatch } from "./schemas";
+import { attachImages } from "@/lib/products/fetch-image";
+
+/**
+ * Ce qu'on sait de la personne, pour que la recherche lui corresponde.
+ * Tout est facultatif : un profil vide donne une recherche générique, pas une
+ * erreur.
+ */
+export interface ShopperContext {
+  gender?: string | null;
+  height_cm?: number | null;
+  morphology?: string | null;
+  style_prefs?: string[] | null;
+}
+
+/** Met le profil en mots, ou renvoie une chaîne vide s'il n'y a rien à dire. */
+function describeShopper(context?: ShopperContext): string {
+  if (!context) return "";
+  const parts = [
+    context.gender && context.gender !== "non-precise" ? `rayon ${context.gender}` : null,
+    context.height_cm ? `${context.height_cm} cm` : null,
+    context.morphology && context.morphology !== "non-precise"
+      ? `morphologie ${context.morphology}`
+      : null,
+    context.style_prefs?.length ? `style ${context.style_prefs.join(", ")}` : null,
+  ].filter(Boolean);
+
+  return parts.length > 0 ? `\n\nProfil : ${parts.join(" · ")}.` : "";
+}
 
 /**
  * Cherche des produits réels correspondant à une pièce détectée.
@@ -28,7 +56,10 @@ export async function findProductMatches(garment: Garment): Promise<ProductMatch
  * Même recherche, à partir d'une description libre — utilisée pour les pièces
  * manquantes du dressing, qui n'ont pas de fiche vêtement derrière elles.
  */
-export async function searchProducts(query: string): Promise<ProductMatch[]> {
+export async function searchProducts(
+  query: string,
+  context?: ShopperContext
+): Promise<ProductMatch[]> {
   const claude = getClaude();
 
   try {
@@ -49,7 +80,7 @@ export async function searchProducts(query: string): Promise<ProductMatch[]> {
       messages: [
         {
           role: "user",
-          content: `Trouve jusqu'à 3 vêtements achetables correspondant à : ${query}. Réponds uniquement par le JSON demandé.`,
+          content: `Trouve jusqu'à 3 vêtements achetables correspondant à : ${query}.${describeShopper(context)}\n\nRéponds uniquement par le JSON demandé.`,
         },
       ],
     });
@@ -58,7 +89,11 @@ export async function searchProducts(query: string): Promise<ProductMatch[]> {
     const text = extractText(response.content);
     const parsed = parseMatches(text);
 
-    return parsed.filter((match) => allowedUrls.has(normalizeUrl(match.url)));
+    const kept = parsed.filter((match) => allowedUrls.has(normalizeUrl(match.url)));
+
+    // La photo est lue sur la page du produit, après le filtre : inutile
+    // d'aller chercher l'image d'un lien qu'on s'apprête à jeter.
+    return attachImages(kept);
   } catch {
     // Recherche indisponible : la garde-robe reste utilisable sans liens.
     return [];

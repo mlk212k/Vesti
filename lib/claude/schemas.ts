@@ -130,6 +130,12 @@ export const productMatchSchema = z.object({
   merchant: z.string().max(80),
   url: z.string().url(),
   price: z.string().max(40).nullable(),
+  /**
+   * Photo du produit. Jamais demandée au modèle : elle est lue après coup sur
+   * la page du produit (`lib/products/fetch-image.ts`). Le schéma la garde
+   * facultative — beaucoup de pages n'en publient pas.
+   */
+  image: z.string().url().nullable().default(null),
 });
 
 export const productMatchesSchema = z.object({
