@@ -26,6 +26,8 @@ export type ItemCategory =
 export interface Profile {
   id: string;
   email: string | null;
+  /** Prénom, saisi à l'onboarding. Facultatif : l'étape se passe. */
+  first_name: string | null;
   gender: Gender | null;
   height_cm: number | null;
   /** Facultatif : sert aux proportions, jamais restitué à l'utilisateur. */
@@ -63,7 +65,13 @@ export interface Profile {
 export type ProfileOnboardingUpdate = Partial<
   Pick<
     Profile,
-    "gender" | "height_cm" | "weight_kg" | "morphology" | "style_prefs" | "onboarded_at"
+    | "first_name"
+    | "gender"
+    | "height_cm"
+    | "weight_kg"
+    | "morphology"
+    | "style_prefs"
+    | "onboarded_at"
   >
 >;
 

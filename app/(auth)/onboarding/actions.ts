@@ -10,6 +10,9 @@ import { createClient } from "@/lib/supabase/server";
  * contraintes CHECK des migrations, sinon Postgres rejette l'update.
  */
 const onboardingSchema = z.object({
+  // Le prénom sert à s'adresser à la personne. Borné à 40 caractères comme en
+  // base, et vidé s'il ne contient que des espaces.
+  first_name: z.string().trim().min(1).max(40).nullable(),
   gender: z.enum(["femme", "homme", "non-binaire", "non-precise"]).nullable(),
   height_cm: z.number().int().min(100).max(250).nullable(),
   weight_kg: z.number().int().min(30).max(300).nullable(),
@@ -98,6 +101,7 @@ export async function saveOnboarding(input: OnboardingInput) {
   const { error } = await supabase
     .from("profiles")
     .update({
+      first_name: parsed.data.first_name,
       gender: parsed.data.gender,
       height_cm: parsed.data.height_cm,
       weight_kg: parsed.data.weight_kg,

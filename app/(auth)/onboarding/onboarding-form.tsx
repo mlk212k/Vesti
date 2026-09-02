@@ -38,6 +38,7 @@ type Morphology = (typeof MORPHOLOGIES)[number]["value"];
 
 export function OnboardingForm({ initialReferralCode }: { initialReferralCode: string }) {
   const [step, setStep] = useState<"referral" | "profile">("referral");
+  const [firstName, setFirstName] = useState("");
   const [gender, setGender] = useState<Gender | null>(null);
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
@@ -83,6 +84,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
     if (!parsedWeight.ok) return setError(parsedWeight.message);
 
     const input: OnboardingInput = {
+      first_name: firstName.trim() === "" ? null : firstName.trim(),
       gender,
       height_cm: parsedHeight.value,
       weight_kg: parsedWeight.value,
@@ -106,6 +108,20 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
           justes — jamais à te juger.
         </p>
       </div>
+
+      {/* Le prénom d'abord : c'est la question la moins intrusive du
+          formulaire, et commencer par elle rend la suite plus facile à
+          accepter. `autoComplete` évite d'avoir à le taper. */}
+      <Field label="Ton prénom">
+        <Input
+          autoComplete="given-name"
+          autoCapitalize="words"
+          maxLength={40}
+          placeholder="Comment on t'appelle ?"
+          value={firstName}
+          onChange={(event) => setFirstName(event.target.value)}
+        />
+      </Field>
 
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold">Tu t&apos;habilles plutôt en…</h2>

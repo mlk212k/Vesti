@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FirstNamePrompt } from "@/components/dashboard/first-name-prompt";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PLANS, hasFeature, type Plan } from "@/lib/plans";
@@ -36,9 +37,9 @@ export default async function DashboardPage() {
         .limit(20),
       supabase
         .from("profiles")
-        .select("latitude")
+        .select("latitude, first_name")
         .eq("id", user.id)
-        .single<{ latitude: number | null }>(),
+        .single<{ latitude: number | null; first_name: string | null }>(),
     ]);
 
   const quota = (quotaRows as QuotaStatus[] | null)?.[0];
@@ -48,6 +49,15 @@ export default async function DashboardPage() {
   const trend = computeScoreTrend(recent);
 
   const exhausted = quota ? quota.remaining <= 0 : false;
+
+  const firstName = locationRow?.first_name?.trim() || null;
+  const greeting = recent.length === 0
+    ? firstName
+      ? `On commence, ${firstName} ?`
+      : "On commence ?"
+    : firstName
+      ? `Content de te revoir, ${firstName}`
+      : "Content de te revoir";
 
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
@@ -74,8 +84,13 @@ export default async function DashboardPage() {
       </header>
 
       <h1 className="text-[2rem] font-extrabold leading-[1.05]">
-        {recent.length === 0 ? "On commence ?" : "Content de te revoir"}
+        {greeting}
       </h1>
+
+      {/* Posée aux comptes créés avant que l'onboarding demande le prénom :
+          cette étape ne se rejoue pas, donc sans cette carte ils n'auraient
+          jamais l'occasion de répondre. */}
+      {!firstName && <FirstNamePrompt />}
 
       <Card className="gap-4">
         <div className="flex items-baseline justify-between">
