@@ -20,19 +20,20 @@
 /**
  * Interrupteur de la porte « écran d'accueil ».
  *
- * ⚠️ TEMPORAIREMENT À `false`.
+ * La porte n'a de sens que si l'on peut se connecter SANS quitter l'app
+ * installée — donc uniquement par le code à 6 chiffres. Elle est restée à
+ * `false` le temps que les modèles d'email Supabase portent `{{ .Token }}` :
+ * sans code, la seule voie était le lien du mail, qui s'ouvre dans le
+ * navigateur, que la porte bloque. Fermer avant d'avoir la clé enferme tout le
+ * monde dehors — c'est arrivé, d'où ce commentaire.
  *
- * La porte suppose une connexion par code à 6 chiffres, seule façon de se
- * connecter sans quitter l'app installée. Ce code exige que les modèles d'email
- * Supabase contiennent `{{ .Token }}` — une configuration qui n'est pas encore
- * faite. En attendant, la connexion passe par le lien reçu par mail, qui s'ouvre
- * dans le navigateur : la porte le bloquerait, et personne ne pourrait entrer.
+ * Le modèle « Magic Link » envoie maintenant un code : la porte peut fermer.
  *
- * À remettre à `true` dès que les deux modèles (« Magic Link » et « Confirm
- * signup ») envoient bien un code. Voir le README, section « La porte écran
- * d'accueil ».
+ * ⚠️ Si tu la remets à `false` un jour, vérifie d'abord qu'un mail arrive
+ * réellement avec 6 chiffres, sur une adresse déjà inscrite ET sur une adresse
+ * neuve — Supabase n'utilise pas le même modèle dans les deux cas.
  */
-export const INSTALL_GATE_ENABLED = false;
+export const INSTALL_GATE_ENABLED = true;
 
 export type Os = "ios" | "android" | "other";
 

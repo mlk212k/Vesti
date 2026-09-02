@@ -402,27 +402,6 @@ qui référence des bundles disparus : écran blanc chez les gens déjà install
 et un service worker se désinstalle mal. Si tu ajoutes du cache, fais-le
 « réseau d'abord », jamais « cache d'abord » sur les navigations.
 
-### 🔴 La porte est temporairement désactivée
-
-`INSTALL_GATE_ENABLED` vaut `false` dans `lib/install.ts`, et la connexion
-accepte le lien du mail en plus du code.
-
-**Pourquoi :** le code à 6 chiffres n'arrive que si les modèles d'email Supabase
-contiennent `{{ .Token }}`, ce qui n'est pas encore configuré. Sans code, la
-seule voie est le lien — qui s'ouvre dans le navigateur, que la porte
-bloquerait. Personne ne pourrait entrer.
-
-**Pour tout remettre**, dans cet ordre :
-
-1. Mettre `{{ .Token }}` dans les **deux** modèles (voir l'étape 2 c bis) et
-   vérifier qu'un mail arrive bien avec un code.
-2. Repasser `INSTALL_GATE_ENABLED` à `true`.
-
-Tant que le point 1 n'est pas fait, ne remets pas le point 2 : tu fermerais la
-porte sur une serrure sans clé.
-
----
-
 ### Pourquoi un code et pas un lien
 
 **Sur iOS, une app installée sur l'écran d'accueil a son propre stockage, séparé
