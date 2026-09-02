@@ -20,6 +20,15 @@ export const serverEnv = {
   get anthropicApiKey(): string {
     return required(process.env.ANTHROPIC_API_KEY, "ANTHROPIC_API_KEY");
   },
+  /**
+   * Facultatif. N'est nécessaire qu'avec une clé Anthropic « liée à une
+   * identité », qui refuse toute requête ne précisant pas dans quel espace de
+   * travail elle agit. Une clé de console classique n'en a pas besoin — et lui
+   * envoyer cet en-tête à vide la casserait.
+   */
+  get anthropicWorkspaceId(): string | undefined {
+    return process.env.ANTHROPIC_WORKSPACE_ID?.trim() || undefined;
+  },
   get stripeSecretKey(): string {
     return required(process.env.STRIPE_SECRET_KEY, "STRIPE_SECRET_KEY");
   },

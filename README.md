@@ -172,6 +172,25 @@ STRIPE_PRICE_STYLISTE=
 Clé API sur [console.anthropic.com](https://console.anthropic.com) →
 `ANTHROPIC_API_KEY`.
 
+⚠️ **Deux sortes de clés existent, et une seule marche seule.** Une clé créée
+dans la console, rattachée à un espace de travail, se suffit à elle-même. Une
+clé **« liée à une identité »** exige que chaque requête précise l'espace dans
+lequel elle agit, sinon l'API répond :
+
+```
+anthropic-workspace-id is required when authenticating with an
+identity-linked API key
+```
+
+Côté app, l'erreur ne se voit pas : elle est avalée et affichée comme
+« L'analyse n'a pas abouti ». Deux solutions :
+
+- **le plus simple** — recréer une clé depuis la console, dans un espace de
+  travail ;
+- ou renseigner `ANTHROPIC_WORKSPACE_ID` (visible dans l'URL de la console
+  quand tu ouvres l'espace : `.../settings/workspaces/wrkspc_…`). L'en-tête
+  n'est envoyé que si cette variable existe.
+
 **Météo : rien à configurer.** La tenue du jour utilise
 [Open-Meteo](https://open-meteo.com), sans clé ni compte. ⚠️ Leur offre gratuite
 couvre l'usage non commercial ; **au-delà, un abonnement payant est requis** —
