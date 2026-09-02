@@ -16,8 +16,15 @@ export const LEGAL = {
   /** Auto-entrepreneur, SASU, SARL… */
   statut: "[STATUT JURIDIQUE]",
   siret: "[SIRET]",
-  /** Laisser vide si non assujetti à la TVA. */
-  tvaIntracom: "[NUMÉRO TVA ou « non applicable, art. 293 B du CGI »]",
+  /**
+   * Statut TVA. Renseigné : Vesti relève aujourd'hui de la franchise en base.
+   *
+   * ⚠️ À remplacer par le numéro de TVA intracommunautaire le jour où le seuil
+   * est franchi — en même temps que `VAT_ENABLED` dans `lib/tax.ts`. Les deux
+   * vont ensemble : afficher une mention de franchise tout en collectant la TVA
+   * (ou l'inverse) est une mention légale fausse.
+   */
+  tvaIntracom: "TVA non applicable, art. 293 B du CGI",
   adresse: "[ADRESSE POSTALE COMPLÈTE]",
   email: "[EMAIL DE CONTACT]",
   telephone: "[TÉLÉPHONE]",

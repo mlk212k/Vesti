@@ -34,7 +34,7 @@ done
 echo "→ tests fonctionnels"
 # Le filtre garde aussi les ERROR, et PIPESTATUS propage l'échec de psql :
 # sans ça un test qui plante ressort comme une suite verte tronquée.
-for t in "$HERE"/0[134]_*.sql; do
+for t in "$HERE"/0[1345]_*.sql; do
   echo "   $(basename "$t")"
   "${PSQL[@]}" -d "$DB" -f "$t" 2>&1 | grep -E "PASS|FAIL|ERROR|TOUS LES"
   [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "ÉCHEC : $(basename "$t") s'est arrêté"; exit 1; }
