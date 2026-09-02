@@ -57,6 +57,12 @@ supabase/migrations/0007_shopping.sql              recommandations d'achat (plan
 supabase/migrations/0008_weather.sql               position + tenue du jour selon la météo
 ```
 
+**Première installation, en un seul copier-coller** : `supabase/setup.sql` est
+la concaténation des 8 fichiers ci-dessus, dans l'ordre. Colle-le dans le SQL
+Editor et exécute — c'est plus court que huit allers-retours, surtout depuis un
+téléphone. Les fichiers numérotés restent la référence : toute modification
+ultérieure se fait là-bas, dans une nouvelle migration jamais dans `setup.sql`.
+
 Le bucket Storage `outfits` est créé par la migration 0004 — rien à faire à la
 main.
 
