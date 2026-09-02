@@ -107,6 +107,8 @@ export interface Analysis {
   model: string | null;
   input_tokens: number | null;
   output_tokens: number | null;
+  /** Coût du modèle en micro-dollars. 0 = non mesuré, pas gratuit. */
+  cost_micros: number;
   created_at: string;
 }
 

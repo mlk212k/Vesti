@@ -6,6 +6,7 @@ import { loadImageForClaude } from "@/lib/supabase/storage";
 import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { findProductMatches } from "@/lib/claude/find-products";
+import { costMicros } from "@/lib/claude/pricing";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { awardReferralStyle } from "@/lib/style.server";
 import type { Garment } from "@/lib/claude/schemas";
@@ -98,6 +99,9 @@ export async function POST(request: Request) {
         model,
         input_tokens: usage.inputTokens,
         output_tokens: usage.outputTokens,
+        // Le coût est figé ici, au tarif du jour : recalculé plus tard, il
+        // serait faux dès le prochain changement de prix ou de modèle.
+        cost_micros: costMicros(model, usage.inputTokens, usage.outputTokens),
       })
       .select("id")
       .single();
@@ -175,11 +179,30 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * Plafond de recherches par analyse.
+ *
+ * ⚠️ C'était le seul coût NON BORNÉ de l'app : une recherche web partait par
+ * vêtement détecté, sans limite. Une photo de groupe ou un dressing en fond
+ * pouvait en déclencher dix, et dix recherches web sur une analyse à 17,99 €
+ * par mois mangent la marge d'un coup.
+ *
+ * Trois suffisent largement : au-delà, on propose des liens pour des pièces
+ * secondaires que personne ne clique.
+ */
+const MAX_PRODUCT_SEARCHES = 3;
+
 async function attachProductMatches(garments: Garment[]) {
+  // Les pièces les plus sûrement identifiées d'abord : chercher un produit
+  // pour un vêtement reconnu à 40 % de confiance, c'est payer une recherche
+  // pour un résultat à côté.
+  const ranked = [...garments].sort((a, b) => b.confidence - a.confidence);
+  const searched = new Set(ranked.slice(0, MAX_PRODUCT_SEARCHES));
+
   return Promise.all(
     garments.map(async (garment) => ({
       garment,
-      matches: await findProductMatches(garment),
+      matches: searched.has(garment) ? await findProductMatches(garment) : [],
     }))
   );
 }
