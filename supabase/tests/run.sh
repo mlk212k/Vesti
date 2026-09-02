@@ -34,8 +34,11 @@ done
 echo "→ tests fonctionnels"
 # Le filtre garde aussi les ERROR, et PIPESTATUS propage l'échec de psql :
 # sans ça un test qui plante ressort comme une suite verte tronquée.
-"${PSQL[@]}" -d "$DB" -f "$HERE/01_quota_and_rls.sql" 2>&1 | grep -E "PASS|FAIL|ERROR|TOUS LES"
-[ "${PIPESTATUS[0]}" -eq 0 ] || { echo "ÉCHEC : les tests fonctionnels se sont arrêtés"; exit 1; }
+for t in "$HERE"/0[13]_*.sql; do
+  echo "   $(basename "$t")"
+  "${PSQL[@]}" -d "$DB" -f "$t" 2>&1 | grep -E "PASS|FAIL|ERROR|TOUS LES"
+  [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "ÉCHEC : $(basename "$t") s'est arrêté"; exit 1; }
+done
 
 echo "→ test de concurrence du quota"
 bash "$HERE/02_concurrency.sh" "$DB"

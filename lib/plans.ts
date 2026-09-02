@@ -78,6 +78,28 @@ export function requiredPlanFor(feature: keyof PlanFeatures): Plan {
   return PLAN_ORDER.find((plan) => PLANS[plan].features[feature]) ?? "styliste";
 }
 
+/**
+ * Plan réellement en vigueur : le plan payé, ou le plan offert par le
+ * parrainage s'il est meilleur et encore valide.
+ *
+ * ⚠️ Miroir de `effective_plan()` en SQL (migration 0010), qui reste la seule
+ * autorité — c'est lui qui décide du quota. Celui-ci ne sert qu'à l'affichage.
+ * Le cadeau ne touche jamais la colonne `plan` : elle appartient à Stripe, et
+ * l'écraser ferait perdre le cadeau au premier événement de facturation.
+ */
+export function effectivePlan(
+  plan: Plan,
+  giftPlan: Plan | null,
+  giftUntil: string | null
+): Plan {
+  if (!giftPlan || !giftUntil) return plan;
+  if (new Date(giftUntil).getTime() <= Date.now()) return plan;
+
+  // Jamais de rétrogradation : un client qui paie Styliste et reçoit un cadeau
+  // Pro reste Styliste.
+  return PLAN_ORDER.indexOf(giftPlan) > PLAN_ORDER.indexOf(plan) ? giftPlan : plan;
+}
+
 export function formatPrice(plan: Plan): string {
   const { priceEur } = PLANS[plan];
   return priceEur === 0

@@ -8,6 +8,7 @@ import { submitReferralCode } from "@/app/(auth)/onboarding/actions";
 const MESSAGES: Record<string, string> = {
   unknown_code: "Ce code n'est pas valide.",
   already_referred: "Un code est déjà enregistré sur ton compte.",
+  self_referral: "C'est ton propre code.",
   empty_code: "Saisis un code ou passe cette étape.",
   error: "Impossible de vérifier ce code pour le moment.",
 };

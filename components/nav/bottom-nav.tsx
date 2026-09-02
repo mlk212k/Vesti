@@ -47,7 +47,13 @@ export function BottomNav() {
             // La hauteur vient de la même variable que la place réservée dans
             // le contenu (voir `app/(dashboard)/layout.tsx`) : les laisser
             // diverger cacherait le dernier élément de la page.
-            style={{ minHeight: "var(--bottom-nav-height)" }}
+            // `touch-action: manipulation` supprime le délai de 300 ms hérité
+            // du double-tap et le zoom accidentel : sur une barre d'onglets, un
+            // tap doit partir immédiatement.
+            style={{
+              minHeight: "var(--bottom-nav-height)",
+              touchAction: "manipulation",
+            }}
             className={`flex flex-1 flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition ${
               active ? "text-accent-strong" : "text-muted"
             }`}

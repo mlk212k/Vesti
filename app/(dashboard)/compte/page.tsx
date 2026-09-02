@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PLANS, type Plan } from "@/lib/plans";
+import { PLANS, effectivePlan, type Plan } from "@/lib/plans";
 import { DangerZone } from "@/components/account/danger-zone";
+import { StyleCard } from "@/components/account/style-card";
 import { LegalLinks } from "@/components/legal-links";
 import { Button } from "@/components/ui/button";
+import { getStyleStatus } from "@/lib/style.server";
+import { env } from "@/lib/env";
 
 async function signOut() {
   "use server";
@@ -22,11 +25,19 @@ export default async function ComptePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan")
+    .select("plan, gift_plan, gift_plan_until")
     .eq("id", user.id)
-    .single<{ plan: Plan }>();
+    .single<{ plan: Plan; gift_plan: Plan | null; gift_plan_until: string | null }>();
 
-  const plan: Plan = profile?.plan ?? "free";
+  // Le plan affiché est le plan EFFECTIF, cadeau compris : la colonne `plan`
+  // appartient à Stripe et reste sur « free » pendant six mois offerts. Afficher
+  // celle-là ferait passer le cadeau pour un cadeau qui n'a pas marché.
+  const plan = effectivePlan(
+    profile?.plan ?? "free",
+    profile?.gift_plan ?? null,
+    profile?.gift_plan_until ?? null
+  );
+  const style = await getStyleStatus();
 
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
@@ -48,6 +59,8 @@ export default async function ComptePage() {
           </Button>
         </form>
       </section>
+
+      {style && <StyleCard status={style} siteUrl={env.siteUrl} />}
 
       <DangerZone />
 

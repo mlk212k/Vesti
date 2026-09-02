@@ -26,11 +26,22 @@ export interface ReferralResult {
   reason: string | null;
 }
 
+type RedeemRow = { accepted: boolean; reason: string | null };
+
 /**
- * Enregistre le code. Passe par la fonction SQL : la colonne `referral_code`
- * n'est pas écrivable par le client et l'attribution est définitive côté base.
+ * Enregistre le code. Passe par les fonctions SQL : ni la colonne
+ * `referral_code` ni `referred_by` ne sont écrivables par le client, et
+ * l'attribution est définitive côté base.
  *
- * La réponse est strictement binaire — à qui le code est rattaché ne sort
+ * Un seul champ, deux familles de codes :
+ *  - les codes de partenariat, créés à la main par l'éditeur (migration 0005) ;
+ *  - les codes personnels des utilisateurs, qui rapportent du Style (0010).
+ *
+ * On essaie le premier, puis le second. Demander à l'utilisateur de choisir
+ * lui-même la nature de son code serait lui faire porter une distinction
+ * purement interne — celui qui a reçu un code sait seulement qu'il en a un.
+ *
+ * La réponse reste strictement binaire : à qui le code est rattaché ne sort
  * jamais du serveur.
  */
 export async function submitReferralCode(code: string): Promise<ReferralResult> {
@@ -41,18 +52,32 @@ export async function submitReferralCode(code: string): Promise<ReferralResult> 
 
   if (!user) redirect("/login");
 
-  const { data, error } = await supabase.rpc("redeem_referral_code", { p_code: code });
+  const partner = await supabase.rpc("redeem_referral_code", { p_code: code });
+  const partnerRow = (partner.data as RedeemRow[] | null)?.[0];
 
-  if (error || !data) {
+  if (partnerRow?.accepted) {
+    return { accepted: true, reason: null };
+  }
+
+  // Code partenaire inconnu : c'est peut-être le code personnel d'un
+  // utilisateur. Tout autre refus (déjà parrainé, code désactivé) est définitif
+  // et ne gagne rien à être rejoué.
+  if (partnerRow && partnerRow.reason !== "unknown_code") {
+    return { accepted: false, reason: partnerRow.reason };
+  }
+
+  const style = await supabase.rpc("redeem_style_code", { p_code: code });
+  const styleRow = (style.data as RedeemRow[] | null)?.[0];
+
+  if (styleRow) {
+    return { accepted: styleRow.accepted, reason: styleRow.reason };
+  }
+
+  if (partner.error && style.error) {
     return { accepted: false, reason: "error" };
   }
 
-  const row = (data as { accepted: boolean; reason: string | null }[])[0];
-
-  return {
-    accepted: row?.accepted ?? false,
-    reason: row?.reason ?? null,
-  };
+  return { accepted: false, reason: partnerRow?.reason ?? "unknown_code" };
 }
 
 export async function saveOnboarding(input: OnboardingInput) {

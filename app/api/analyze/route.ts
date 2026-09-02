@@ -7,6 +7,7 @@ import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { findProductMatches } from "@/lib/claude/find-products";
 import { hasFeature } from "@/lib/plans";
+import { awardReferralStyle } from "@/lib/style.server";
 import type { Garment } from "@/lib/claude/schemas";
 import type { Plan, Profile } from "@/types/db";
 
@@ -121,6 +122,11 @@ export async function POST(request: Request) {
         }))
       );
     }
+
+    // Le parrain n'est payé qu'ici : après une analyse réellement rendue, et
+    // pas à l'inscription du filleul. Sans effet si celui-ci n'a pas de parrain
+    // ou si le versement a déjà eu lieu.
+    await awardReferralStyle(user.id);
 
     return NextResponse.json({
       analysisId: inserted?.id ?? null,

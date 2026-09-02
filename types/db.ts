@@ -40,6 +40,18 @@ export interface Profile {
   /** Partenaire à l'origine de l'inscription. Écrit par redeem_referral_code(). */
   referral_code: string | null;
   referred_at: string | null;
+  /** Solde de Style. Écrit uniquement par les fonctions SQL du parrainage. */
+  style_balance: number;
+  /** Code personnel à partager, généré à l'inscription. */
+  own_code: string | null;
+  /** Utilisateur parrain. Écrit une seule fois par redeem_style_code(). */
+  referred_by: string | null;
+  referred_by_at: string | null;
+  /** Date du versement au parrain : sa présence interdit un second versement. */
+  referral_rewarded_at: string | null;
+  /** Plan offert par le parrainage. Distinct de `plan`, qui appartient à Stripe. */
+  gift_plan: Plan | null;
+  gift_plan_until: string | null;
   /** Position arrondie (~1 km), uniquement pour la météo du jour. */
   latitude: number | null;
   longitude: number | null;
