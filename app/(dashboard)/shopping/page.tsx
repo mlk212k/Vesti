@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PLANS, hasFeature, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { SuggestionCard, type SuggestionView } from "@/components/shopping/suggestion-card";
 import { ProductSearch } from "@/components/shopping/product-search";
+import { AdvicePanel } from "@/components/shopping/advice-panel";
 import { Button } from "@/components/ui/button";
 
 export default async function ShoppingPage() {
@@ -73,6 +74,8 @@ export default async function ShoppingPage() {
 
         <ProductSearch />
 
+        <AdvicePanel />
+
         <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
           <span className="text-sm font-semibold">Ou laisse Vesti décider</span>
           <p className="text-xs leading-relaxed text-muted">
@@ -98,6 +101,8 @@ export default async function ShoppingPage() {
       </header>
 
       <ProductSearch />
+
+      <AdvicePanel />
 
       <h2 className="text-sm font-semibold">Repéré dans ton dressing</h2>
 

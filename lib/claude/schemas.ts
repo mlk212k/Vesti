@@ -143,3 +143,24 @@ export const productMatchesSchema = z.object({
 });
 
 export type ProductMatch = z.infer<typeof productMatchSchema>;
+
+/**
+ * Pièces à acheter, déduites des tenues déjà analysées.
+ *
+ * `search` est séparée de `item` volontairement : `item` s'affiche à l'écran
+ * (« un chino beige, coupe droite »), `search` part dans le moteur de
+ * recherche et n'a pas les mêmes contraintes de lisibilité.
+ */
+export const outfitAdviceSchema = z.object({
+  pieces: z
+    .array(
+      z.object({
+        item: z.string().min(3).max(80),
+        why: z.string().min(10).max(220),
+        search: z.string().min(3).max(100),
+      })
+    )
+    .max(3),
+});
+
+export type OutfitAdvicePiece = z.infer<typeof outfitAdviceSchema>["pieces"][number];
