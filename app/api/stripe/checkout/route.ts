@@ -6,6 +6,7 @@ import { priceIdForPlan, statusGrantsAccess } from "@/lib/stripe/plans";
 import { createPortalSession } from "@/lib/stripe/portal";
 import { linkCustomer } from "@/lib/stripe/sync";
 import { PLANS } from "@/lib/plans";
+import { PRICES_INCLUDE_VAT } from "@/lib/tax";
 import { env } from "@/lib/env";
 import type { Profile } from "@/types/db";
 
@@ -97,6 +98,24 @@ export async function POST(request: Request) {
       attendu: expected,
       stripe: price.unit_amount,
       devise: price.currency,
+    });
+    return NextResponse.json({ error: "price_mismatch" }, { status: 500 });
+  }
+
+  // Même garde, sur l'autre façon de facturer plus que le montant affiché.
+  //
+  // Les prix Stripe sont en `tax_behavior: inclusive` : 8,99 € est ce que le
+  // client paie, TVA comprise le jour où elle s'appliquera. En `exclusive`,
+  // Stripe ajouterait la taxe PAR-DESSUS — le client verrait 8,99 € et serait
+  // débité de 10,79 €. Le montant unitaire, lui, resterait à 899 : la garde
+  // ci-dessus ne verrait rien passer.
+  //
+  // `unspecified` reste accepté : aucune taxe n'est calculée, le client paie
+  // bien le montant affiché. Seul `exclusive` rompt la promesse de la page.
+  if (PRICES_INCLUDE_VAT && price.tax_behavior === "exclusive") {
+    console.error("[stripe] prix en TVA exclusive alors que l'affichage est TTC", {
+      plan: parsed.data.plan,
+      priceId,
     });
     return NextResponse.json({ error: "price_mismatch" }, { status: 500 });
   }
