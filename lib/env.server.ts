@@ -41,4 +41,17 @@ export const serverEnv = {
   get stripePriceStyliste(): string {
     return required(process.env.STRIPE_PRICE_STYLISTE, "STRIPE_PRICE_STYLISTE");
   },
+  /**
+   * Configuration du portail client à utiliser (`bpc_…`).
+   *
+   * Facultative : sans elle, Stripe applique la configuration par défaut du
+   * compte. Elle devient nécessaire dès que le compte Stripe sert plusieurs
+   * produits — c'est le cas ici — parce que la configuration par défaut est
+   * partagée : y déclarer les formules Vesti les proposerait aussi aux clients
+   * des autres produits du compte. Une configuration dédiée à Vesti, désignée
+   * explicitement, garde chaque portail dans son périmètre.
+   */
+  get stripePortalConfiguration(): string | undefined {
+    return process.env.STRIPE_PORTAL_CONFIGURATION?.trim() || undefined;
+  },
 };

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
 import { priceIdForPlan, statusGrantsAccess } from "@/lib/stripe/plans";
+import { createPortalSession } from "@/lib/stripe/portal";
 import { linkCustomer } from "@/lib/stripe/sync";
 import { env } from "@/lib/env";
 import type { Profile } from "@/types/db";
@@ -66,13 +67,10 @@ export async function POST(request: Request) {
   });
 
   if (existing.data.some((subscription) => statusGrantsAccess(subscription.status))) {
-    const portal = await stripe.billingPortal.sessions.create({
-      customer: customerId,
-      return_url: `${env.siteUrl}/billing`,
-      locale: "fr",
+    return NextResponse.json({
+      url: await createPortalSession(customerId),
+      portal: true,
     });
-
-    return NextResponse.json({ url: portal.url, portal: true });
   }
 
   const session = await stripe.checkout.sessions.create({

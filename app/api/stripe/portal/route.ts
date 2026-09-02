@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getStripe } from "@/lib/stripe/client";
-import { env } from "@/lib/env";
+import { createPortalSession } from "@/lib/stripe/portal";
 import type { Profile } from "@/types/db";
 
 /**
@@ -30,11 +29,7 @@ export async function POST() {
     return NextResponse.json({ error: "no_customer" }, { status: 400 });
   }
 
-  const session = await getStripe().billingPortal.sessions.create({
-    customer: profile.stripe_customer_id,
-    return_url: `${env.siteUrl}/billing`,
-    locale: "fr",
+  return NextResponse.json({
+    url: await createPortalSession(profile.stripe_customer_id),
   });
-
-  return NextResponse.json({ url: session.url });
 }
