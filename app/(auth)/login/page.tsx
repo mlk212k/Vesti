@@ -3,8 +3,8 @@ import { LoginForm } from "./login-form";
 import { safeNext } from "@/lib/navigation";
 import { LogoMark } from "@/components/brand/logo";
 
-// Ces deux erreurs ne viennent plus que du retour Google : la connexion par
-// email se fait désormais par code, sans quitter l'app.
+// Ces deux erreurs ne viennent que du retour Google : la connexion par mot de
+// passe et la récupération par code se font sans quitter l'app.
 const ERRORS: Record<string, string> = {
   connexion_invalide: "La connexion a été interrompue. Réessaie.",
   connexion_expiree: "Cette tentative a expiré. Réessaie.",
@@ -39,8 +39,8 @@ export default async function LoginPage(props: PageProps<"/login">) {
       <LoginForm next={safeNext(rawNext)} />
 
       <p className="text-center text-xs leading-relaxed text-muted">
-        Pas de mot de passe à retenir. En continuant, tu acceptes que tes photos
-        servent uniquement à générer tes conseils.
+        En continuant, tu acceptes que tes photos servent uniquement à générer
+        tes conseils.
       </p>
     </main>
   );

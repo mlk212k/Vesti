@@ -16,35 +16,44 @@ import {
   normalizeOtp,
   otpErrorMessage,
 } from "@/lib/otp";
+import { PASSWORD_MIN_LENGTH, authErrorMessage, passwordProblem } from "@/lib/password";
+
+/**
+ * Connexion par mot de passe.
+ *
+ * Le mot de passe a remplacé le code par email comme porte d'entrée, et la
+ * raison est mesurée : sur les cinq premiers inscrits, deux ne sont jamais
+ * entrés, et les délais de réception allaient de 17 secondes à près de 8
+ * heures. Tant que les emails partent d'une adresse dont on ne possède pas le
+ * domaine, les serveurs de réception les retiennent — et une connexion qui
+ * dépend d'un email est une connexion qui dépend de ce délai.
+ *
+ * Un mot de passe se saisit sur place. Rien à attendre, rien à aller chercher
+ * dans une autre application — ce qui compte double dans une app installée sur
+ * l'écran d'accueil, d'où sortir coûte un aller-retour.
+ *
+ * ⚠️ Le code par email n'a PAS disparu : il est devenu le chemin de
+ * récupération. C'est volontaire. Le lien de réinitialisation que propose
+ * Supabase s'ouvre depuis la boîte mail, donc dans Safari, alors que l'app
+ * installée a son propre stockage : la session atterrirait à côté de l'app.
+ * Le code, lui, se saisit à l'intérieur. C'est aussi par là que passent les
+ * comptes créés avant ce changement, qui n'ont pas encore de mot de passe.
+ */
+type Mode = "signin" | "signup";
 
 type Status =
   | { kind: "idle" }
-  | { kind: "sending" }
+  | { kind: "busy" }
+  | { kind: "error"; message: string }
+  // Récupération : saisie du code, puis choix d'un nouveau mot de passe.
   | { kind: "code"; email: string }
   | { kind: "verifying"; email: string }
-  | { kind: "error"; message: string };
+  | { kind: "reset" };
 
-/**
- * Connexion par code reçu par email.
- *
- * Sur iOS, une app installée sur l'écran d'accueil a son propre stockage,
- * séparé de Safari. Un lien de connexion s'ouvre depuis la boîte mail, donc
- * dans Safari, et y crée la session : l'app installée reste déconnectée, et
- * aucune API ne permet de franchir cette cloison. Le code, lui, se saisit à
- * l'intérieur de l'app — rien ne sort du conteneur.
- *
- * ⚠️ Le code n'arrive que si les modèles d'email Supabase contiennent
- * `{{ .Token }}` : « Magic Link » (adresse déjà inscrite) ET « Confirm signup »
- * (première connexion). N'en configurer qu'un casse la moitié des connexions —
- * et la moitié cassée est celle des nouveaux inscrits, la moins visible.
- *
- * ⚠️ L'envoi ET la vérification passent par `createOtpClient`, en flux
- * implicite. Avec le client PKCE par défaut, Supabase préfixe le jeton stocké
- * et le code devient invérifiable — il répond « code expiré » sur un code
- * parfaitement valide. Le détail est dans `lib/supabase/client.ts`.
- */
 export function LoginForm({ next }: { next: string }) {
+  const [mode, setMode] = useState<Mode>("signup");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [codeError, setCodeError] = useState<string | null>(null);
@@ -59,36 +68,92 @@ export function LoginForm({ next }: { next: string }) {
   }, [cooldown]);
 
   /**
-   * Origine réelle de la page, pas une valeur figée à la compilation.
-   *
-   * Le lien du mail doit ramener là où la personne se trouve vraiment. Une
-   * variable d'environnement mal renseignée l'enverrait ailleurs — c'est
-   * exactement ce qui s'est produit avec l'adresse par défaut du projet
-   * Supabase, qui pointait sur localhost.
+   * Origine réelle de la page, pas une valeur figée à la compilation : une
+   * variable d'environnement mal renseignée renverrait Google ailleurs.
    */
   function currentOrigin(): string {
     return typeof window === "undefined" ? env.siteUrl : window.location.origin;
   }
 
-  async function sendCode(address: string) {
-    const supabase = createOtpClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email: address,
-      options: {
-        shouldCreateUser: true,
+  /**
+   * Rechargement complet plutôt que `router.push` : le proxy et toutes les
+   * pages serveur doivent être rendus avec le cookie de session tout juste
+   * écrit. Un rendu client réutiliserait des payloads produits sans lui.
+   */
+  function enterApp() {
+    window.location.replace(next);
+  }
 
-        // Pas d'`emailRedirectTo` : le mail garde son lien, qui pointe vers
-        // l'adresse configurée dans Supabase (Authentication → URL
-        // Configuration). Ce qui compte ici, c'est le code — et c'est
-        // `createOtpClient` qui garantit qu'il sera vérifiable.
-      },
+  /* ── Mot de passe ──────────────────────────────────────────────────── */
+
+  async function submitPassword(event: React.FormEvent) {
+    event.preventDefault();
+    const address = email.trim();
+
+    const problem = mode === "signup" ? passwordProblem(password) : null;
+    if (problem) {
+      setStatus({ kind: "error", message: problem });
+      return;
+    }
+
+    setStatus({ kind: "busy" });
+    const supabase = createClient();
+
+    if (mode === "signin") {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: address,
+        password,
+      });
+      if (error) {
+        setStatus({ kind: "error", message: authErrorMessage(error.message) });
+        return;
+      }
+      enterApp();
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email: address,
+      password,
+      options: { emailRedirectTo: `${currentOrigin()}/auth/callback` },
     });
 
     if (error) {
-      setStatus({
-        kind: "error",
-        message: otpErrorMessage(error.message),
-      });
+      setStatus({ kind: "error", message: authErrorMessage(error.message) });
+      return;
+    }
+
+    // Deux issues selon le réglage « Confirm email » de Supabase. Avec une
+    // session, on entre tout de suite. Sans, le compte existe mais attend un
+    // email — le pire des cas ici, donc on le dit franchement au lieu de
+    // laisser la personne devant un écran qui ne bouge plus.
+    if (data.session) {
+      enterApp();
+      return;
+    }
+
+    setStatus({
+      kind: "error",
+      message:
+        "Compte créé. Il faut confirmer ton adresse : ouvre le mail qu'on vient de t'envoyer.",
+    });
+  }
+
+  /* ── Récupération par code ─────────────────────────────────────────── */
+
+  async function sendCode(address: string) {
+    // Client en flux implicite : avec le client PKCE par défaut, Supabase
+    // préfixe le jeton stocké et le code devient invérifiable — il répond
+    // « code expiré » sur un code parfaitement valide. Détail dans
+    // `lib/supabase/client.ts`.
+    const supabase = createOtpClient();
+    const { error } = await supabase.auth.signInWithOtp({
+      email: address,
+      options: { shouldCreateUser: false },
+    });
+
+    if (error) {
+      setStatus({ kind: "error", message: otpErrorMessage(error.message) });
       return false;
     }
 
@@ -96,12 +161,16 @@ export function LoginForm({ next }: { next: string }) {
     return true;
   }
 
-  async function requestCode(event: React.FormEvent) {
-    event.preventDefault();
+  async function startRecovery() {
     const address = email.trim();
-    setStatus({ kind: "sending" });
+    if (address.length === 0) {
+      setStatus({ kind: "error", message: "Saisis ton email d'abord." });
+      return;
+    }
+    setStatus({ kind: "busy" });
     if (await sendCode(address)) {
       setCode("");
+      setCodeError(null);
       setStatus({ kind: "code", email: address });
     }
   }
@@ -113,14 +182,11 @@ export function LoginForm({ next }: { next: string }) {
     const address = status.email;
     setStatus({ kind: "verifying", email: address });
 
-    // Même client qu'à l'envoi : c'est le mode du client qui décide de la
-    // forme du jeton stocké, donc de la clé recherchée à la vérification.
     const supabase = createOtpClient();
     const token = normalizeOtp(code);
 
-    // On essaie chaque type de jeton jusqu'à ce que l'un passe : Supabase ne
-    // range pas le code au même endroit pour une adresse déjà inscrite et pour
-    // une adresse neuve. Voir `OTP_VERIFY_TYPES`.
+    // Supabase ne range pas le code au même endroit pour une adresse déjà
+    // inscrite et pour une adresse neuve : on essaie chaque type.
     let lastError: { message: string } | null = null;
     let session: { access_token: string; refresh_token: string } | null = null;
 
@@ -145,8 +211,7 @@ export function LoginForm({ next }: { next: string }) {
     }
 
     // Le client OTP ne persiste rien : on pose la session sur le client à
-    // cookies, seul lu par le proxy et les pages serveur. Si cette étape
-    // échoue, inutile de naviguer — la page suivante renverrait ici.
+    // cookies, seul lu par le proxy et les pages serveur.
     const adopted = await adoptSession(session);
     if (!adopted.ok) {
       setStatus({ kind: "code", email: address });
@@ -156,14 +221,34 @@ export function LoginForm({ next }: { next: string }) {
       return;
     }
 
-    // Rechargement complet plutôt que `router.push` : le proxy et toutes les
-    // pages serveur doivent être rendus avec le cookie de session tout juste
-    // écrit. Un rendu client réutiliserait des payloads produits sans lui.
-    window.location.replace(next);
+    // Connectée, mais toujours sans mot de passe utilisable : on lui en fait
+    // choisir un tout de suite. La renvoyer dans l'app la ramènerait ici à la
+    // prochaine connexion.
+    setPassword("");
+    setStatus({ kind: "reset" });
+  }
+
+  async function saveNewPassword(event: React.FormEvent) {
+    event.preventDefault();
+    const problem = passwordProblem(password);
+    if (problem) {
+      setCodeError(problem);
+      return;
+    }
+
+    setCodeError(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      setCodeError(authErrorMessage(error.message));
+      return;
+    }
+    enterApp();
   }
 
   async function signInWithGoogle() {
-    setStatus({ kind: "sending" });
+    setStatus({ kind: "busy" });
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -177,7 +262,45 @@ export function LoginForm({ next }: { next: string }) {
     // En cas de succès, le navigateur part chez Google : rien à faire ici.
   }
 
-  /* ── Étape 2 : saisie du code ────────────────────────────────────────── */
+  /* ── Écran : nouveau mot de passe ──────────────────────────────────── */
+
+  if (status.kind === "reset") {
+    return (
+      <form onSubmit={saveNewPassword} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 text-center">
+          <h2 className="text-lg font-bold">Choisis ton mot de passe</h2>
+          <p className="text-sm leading-relaxed text-muted">
+            Il te servira à te reconnecter, sans passer par ta boîte mail.
+          </p>
+        </div>
+
+        <Field label="Nouveau mot de passe">
+          <Input
+            type="password"
+            autoComplete="new-password"
+            autoFocus
+            required
+            placeholder={`${PASSWORD_MIN_LENGTH} caractères minimum`}
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setCodeError(null);
+            }}
+          />
+        </Field>
+
+        {codeError && (
+          <p role="alert" className="text-center text-sm text-danger">
+            {codeError}
+          </p>
+        )}
+
+        <Button type="submit">Enregistrer et continuer</Button>
+      </form>
+    );
+  }
+
+  /* ── Écran : saisie du code de récupération ────────────────────────── */
 
   if (status.kind === "code" || status.kind === "verifying") {
     const verifying = status.kind === "verifying";
@@ -189,21 +312,20 @@ export function LoginForm({ next }: { next: string }) {
           <p className="text-sm leading-relaxed text-muted">
             On a envoyé un code à{" "}
             <span className="font-semibold text-foreground">{status.email}</span>.
+            Il peut mettre quelques minutes à arriver.
           </p>
         </div>
 
         <form onSubmit={verifyCode} className="flex flex-col gap-3">
           <Input
-            // `one-time-code` est ce qui déclenche la proposition automatique
-            // du code par iOS et Android au-dessus du clavier. Sans cet
-            // attribut, il faut basculer vers la boîte mail et revenir.
+            // `one-time-code` déclenche la proposition automatique du code par
+            // iOS et Android au-dessus du clavier.
             autoComplete="one-time-code"
             inputMode="numeric"
             pattern="[0-9]*"
             // Pas de `maxLength` : le navigateur l'applique au collage AVANT
-            // notre nettoyage, donc « 123 456 » (7 caractères) arriverait
-            // tronqué en « 123 45 », soit un code à 5 chiffres. C'est
-            // `normalizeOtp` qui borne la valeur, une fois les espaces retirés.
+            // notre nettoyage, donc « 123 456 » arriverait tronqué. C'est
+            // `normalizeOtp` qui borne la valeur, espaces retirés.
             autoFocus
             required
             aria-label="Code reçu par email"
@@ -224,7 +346,7 @@ export function LoginForm({ next }: { next: string }) {
           )}
 
           <Button type="submit" disabled={verifying || !isOtpComplete(code)}>
-            {verifying ? "Vérification…" : "Me connecter"}
+            {verifying ? "Vérification…" : "Valider"}
           </Button>
         </form>
 
@@ -237,9 +359,7 @@ export function LoginForm({ next }: { next: string }) {
               await sendCode(status.email);
             }}
           >
-            {cooldown > 0
-              ? `Renvoyer un code dans ${cooldown} s`
-              : "Renvoyer un code"}
+            {cooldown > 0 ? `Renvoyer un code dans ${cooldown} s` : "Renvoyer un code"}
           </Button>
           <Button
             variant="ghost"
@@ -250,20 +370,21 @@ export function LoginForm({ next }: { next: string }) {
               setStatus({ kind: "idle" });
             }}
           >
-            Utiliser une autre adresse
+            Revenir en arrière
           </Button>
         </div>
       </div>
     );
   }
 
-  /* ── Étape 1 : adresse email ─────────────────────────────────────────── */
+  /* ── Écran : email + mot de passe ──────────────────────────────────── */
 
-  const sending = status.kind === "sending";
+  const busy = status.kind === "busy";
+  const signup = mode === "signup";
 
   return (
     <div className="flex flex-col gap-4">
-      <form onSubmit={requestCode} className="flex flex-col gap-3">
+      <form onSubmit={submitPassword} className="flex flex-col gap-3">
         <Field label="Ton email">
           <Input
             type="email"
@@ -272,13 +393,62 @@ export function LoginForm({ next }: { next: string }) {
             required
             placeholder="prenom@email.fr"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
           />
         </Field>
-        <Button type="submit" disabled={sending || email.trim().length === 0}>
-          {sending ? "Envoi…" : "Recevoir mon code"}
+
+        <Field label="Ton mot de passe">
+          <Input
+            type="password"
+            // Distinguer les deux valeurs indique au gestionnaire de mots de
+            // passe s'il doit en proposer un nouveau ou remplir l'existant.
+            autoComplete={signup ? "new-password" : "current-password"}
+            required
+            placeholder={signup ? `${PASSWORD_MIN_LENGTH} caractères minimum` : "Ton mot de passe"}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </Field>
+
+        <Button
+          type="submit"
+          disabled={busy || email.trim().length === 0 || password.length === 0}
+        >
+          {busy ? "Un instant…" : signup ? "Créer mon compte" : "Me connecter"}
         </Button>
       </form>
+
+      {status.kind === "error" && (
+        <p role="alert" className="text-center text-sm text-danger">
+          {status.message}
+        </p>
+      )}
+
+      <div className="flex flex-col items-center gap-1">
+        <button
+          type="button"
+          onClick={() => {
+            setMode(signup ? "signin" : "signup");
+            setStatus({ kind: "idle" });
+          }}
+          style={{ touchAction: "manipulation" }}
+          className="text-sm font-semibold text-accent-strong underline underline-offset-2"
+        >
+          {signup ? "J'ai déjà un compte" : "Créer un compte"}
+        </button>
+
+        {/* Aussi le chemin des comptes créés avant le mot de passe : ils n'en
+            ont pas encore, et c'est ici qu'ils s'en donnent un. */}
+        <button
+          type="button"
+          onClick={startRecovery}
+          disabled={busy}
+          style={{ touchAction: "manipulation" }}
+          className="text-xs text-muted underline underline-offset-2 disabled:opacity-40"
+        >
+          Mot de passe oublié
+        </button>
+      </div>
 
       <div className="flex items-center gap-3">
         <span className="h-px flex-1 bg-border" />
@@ -286,15 +456,9 @@ export function LoginForm({ next }: { next: string }) {
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <Button variant="secondary" onClick={signInWithGoogle} disabled={sending}>
+      <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
         Continuer avec Google
       </Button>
-
-      {status.kind === "error" && (
-        <p role="alert" className="text-center text-sm text-danger">
-          {status.message}
-        </p>
-      )}
     </div>
   );
 }
