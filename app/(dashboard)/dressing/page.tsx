@@ -5,6 +5,7 @@ import { hasFeature, PLANS, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow 
 import { OUTFITS_BUCKET } from "@/lib/supabase/storage";
 import { WardrobeGrid, type WardrobeItem } from "@/components/dressing/wardrobe-grid";
 import { WardrobeEmpty } from "@/components/dressing/wardrobe-empty";
+import { WeatherPill } from "@/components/dressing/weather-pill";
 import { missingEssentials, summarizeWardrobe } from "@/lib/wardrobe";
 import { Button } from "@/components/ui/button";
 
@@ -67,7 +68,11 @@ export default async function DressingPage() {
     }
   }
 
-  if (rows.length === 0) return <WardrobeEmpty />;
+  // La météo du jour est vendue avec le plan Styliste, comme la suggestion
+  // qu'elle sert à produire.
+  const showWeather = hasFeature(plan, "shopping");
+
+  if (rows.length === 0) return <WardrobeEmpty weather={showWeather} />;
 
   const counts = summarizeWardrobe(rows);
   const missing = missingEssentials(rows);
@@ -86,6 +91,8 @@ export default async function DressingPage() {
           Cette ligne donne la répartition d'un coup d'œil, y compris les
           catégories à zéro — un « 0 chaussures » est une information, une
           ligne absente n'en est pas une. */}
+      {showWeather && <WeatherPill hasWardrobe />}
+
       <section className="flex flex-wrap gap-2">
         {counts.map((category) => (
           <span

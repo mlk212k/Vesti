@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { buttonClasses } from "@/components/ui/button";
+import { WeatherPill } from "./weather-pill";
 
 /**
  * Ce que voit quelqu'un dont la garde-robe est vide — c'est-à-dire tout le
@@ -34,7 +35,7 @@ const PROMISES = [
   },
 ];
 
-export function WardrobeEmpty() {
+export function WardrobeEmpty({ weather }: { weather: boolean }) {
   return (
     <main className="flex flex-1 flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-2">
@@ -44,6 +45,10 @@ export function WardrobeEmpty() {
           avec tes vêtements plutôt qu&apos;en général.
         </p>
       </header>
+
+      {/* La météo s'affiche même sans garde-robe : elle montre concrètement ce
+          que remplir sa penderie débloquerait, au lieu de le promettre. */}
+      {weather && <WeatherPill hasWardrobe={false} />}
 
       <ul className="flex flex-col gap-3">
         {PROMISES.map(({ title, body, icon: Icon }) => (
