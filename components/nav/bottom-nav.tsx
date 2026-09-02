@@ -23,10 +23,16 @@ export function BottomNav() {
     <nav
       // `fixed`, pas `sticky` : une barre collante appartient au flux de la
       // page, donc elle suit le rebond élastique d'iOS et flotte pendant le
-      // défilement. En position fixe, elle est ancrée au viewport et ne bouge
-      // plus. Elle est recentrée sur la colonne de 480 px de l'app, sinon elle
-      // s'étalerait sur toute la largeur de l'écran.
-      className="fixed bottom-0 left-1/2 z-30 flex w-full max-w-[480px] -translate-x-1/2 border-t border-border-soft bg-background/85 backdrop-blur-xl"
+      // défilement. En position fixe, elle est ancrée au viewport.
+      //
+      // Fond OPAQUE, sans flou. Une barre translucide laisse défiler le contenu
+      // au travers : le scintillement qui en résulte se lit comme un mouvement
+      // de la barre elle-même, alors qu'elle ne bouge pas d'un pixel.
+      //
+      // `inset-x-0` + `mx-auto` plutôt que `left-1/2` + `-translate-x-1/2` : un
+      // élément fixe positionné par transformation est plus fragile, et une
+      // transformation sur un ancêtre suffirait à le décrocher du viewport.
+      className="fixed inset-x-0 bottom-0 z-30 mx-auto flex w-full max-w-[480px] border-t border-border bg-background"
       // Respecte la zone tactile réservée par iOS en bas d'écran.
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >

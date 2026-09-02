@@ -5,19 +5,13 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { VerdictCard, type AnalysisView } from "./verdict-card";
+import { AnalysisProgress } from "./analysis-progress";
 
 type State =
   | { step: "idle" }
   | { step: "working"; stage: number }
   | { step: "done"; analysis: AnalysisView }
   | { step: "error"; title: string; body: string; cta: "upgrade" | null };
-
-/** Le verdict se fait attendre : on montre où on en est plutôt qu'un spinner nu. */
-const STAGES = [
-  "Envoi de ta photo…",
-  "Lecture des pièces et des couleurs…",
-  "Rédaction du verdict…",
-];
 
 export function Analyzer() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,34 +107,7 @@ export function Analyzer() {
   }
 
   if (state.step === "working") {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-6 py-16 text-center">
-        {photoUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={photoUrl}
-            alt="Ta tenue"
-            className="h-48 w-48 rounded-3xl object-cover"
-          />
-        )}
-        <div className="flex flex-col gap-2">
-          {STAGES.map((label, index) => (
-            <p
-              key={label}
-              className={`text-sm transition-opacity ${
-                index === state.stage
-                  ? "font-semibold opacity-100"
-                  : index < state.stage
-                    ? "text-muted opacity-60"
-                    : "text-muted opacity-30"
-              }`}
-            >
-              {label}
-            </p>
-          ))}
-        </div>
-      </div>
-    );
+    return <AnalysisProgress photoUrl={photoUrl} stage={state.stage} />;
   }
 
   if (state.step === "error") {
