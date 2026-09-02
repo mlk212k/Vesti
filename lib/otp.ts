@@ -1,5 +1,5 @@
 /**
- * Code de connexion à 6 chiffres.
+ * Code de connexion reçu par email.
  *
  * Pourquoi un code et pas un lien : sur iOS, une app installée sur l'écran
  * d'accueil a son propre stockage, séparé de Safari. Un lien de connexion
@@ -8,7 +8,19 @@
  * rien ne sort du conteneur, et le problème disparaît.
  */
 
-export const OTP_LENGTH = 6;
+/**
+ * Longueurs acceptées pour le code.
+ *
+ * ⚠️ Ne JAMAIS coder une longueur fixe ici. Supabase laisse régler la taille du
+ * code (Authentication → « Email OTP Length ») et ce projet en émet 8, pas 6.
+ * Une troncature à six chiffres jetait silencieusement les deux derniers : un
+ * code faux partait, et Supabase répondait « token has expired or is invalid »
+ * — un message qui envoie chercher le problème partout sauf au bon endroit.
+ *
+ * On accepte donc une fourchette, et on ne coupe qu'au-delà du raisonnable.
+ */
+export const OTP_MIN_LENGTH = 6;
+export const OTP_MAX_LENGTH = 10;
 
 /**
  * Types de jeton à essayer à la vérification, dans l'ordre.
@@ -41,11 +53,12 @@ export const RESEND_COOLDOWN_SECONDS = 60;
  * renvoyer « code invalide » alors qu'ils ont collé le bon.
  */
 export function normalizeOtp(input: string): string {
-  return input.replace(/\D/g, "").slice(0, OTP_LENGTH);
+  return input.replace(/\D/g, "").slice(0, OTP_MAX_LENGTH);
 }
 
+/** Assez de chiffres pour tenter la vérification. */
 export function isOtpComplete(code: string): boolean {
-  return normalizeOtp(code).length === OTP_LENGTH;
+  return normalizeOtp(code).length >= OTP_MIN_LENGTH;
 }
 
 /**

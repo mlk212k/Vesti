@@ -422,6 +422,12 @@ Trois détails qui comptent plus qu'ils n'en ont l'air :
 - Le champ porte `autocomplete="one-time-code"`. C'est ce qui fait proposer le
   code au-dessus du clavier par iOS et Android. Sans lui, il faut basculer vers
   la boîte mail et revenir — c'est là qu'on perd les gens.
+- Le code n'a **pas de longueur figée** dans le code applicatif. Supabase laisse
+  régler « Email OTP Length » et ce projet émet **8 chiffres**, pas 6. Une
+  troncature à six jetait silencieusement les deux derniers, envoyait un code
+  faux, et Supabase répondait « code expiré » — un message qui fait chercher le
+  problème partout sauf au bon endroit. `normalizeOtp` accepte de 6 à 10
+  chiffres.
 - Le champ n'a **pas** de `maxLength`. Le navigateur l'appliquerait au collage
   *avant* notre nettoyage : « 123 456 » (7 caractères) arriverait tronqué en
   « 123 45 ». C'est `normalizeOtp` qui borne, une fois les espaces retirés — et

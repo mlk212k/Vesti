@@ -22,8 +22,15 @@ describe("normalizeOtp", () => {
     expect(normalizeOtp("123 456")).toBe("123456");
   });
 
-  it("tronque au-delà de six chiffres", () => {
-    expect(normalizeOtp("1234567890")).toBe("123456");
+  it("garde un code de huit chiffres en entier", () => {
+    // Le réglage « Email OTP Length » de Supabase vaut 8 sur ce projet. Couper
+    // à six envoyait un code faux, que Supabase renvoyait comme « expiré ».
+    expect(normalizeOtp("12345678")).toBe("12345678");
+    expect(normalizeOtp("1234 5678")).toBe("12345678");
+  });
+
+  it("ne coupe qu'au-delà de dix chiffres", () => {
+    expect(normalizeOtp("123456789012")).toBe("1234567890");
   });
 
   it("rend une chaîne vide quand il n'y a aucun chiffre", () => {
@@ -33,8 +40,9 @@ describe("normalizeOtp", () => {
 });
 
 describe("isOtpComplete", () => {
-  it("n'accepte que six chiffres", () => {
+  it("accepte à partir de six chiffres, sans plafond bas", () => {
     expect(isOtpComplete("123456")).toBe(true);
+    expect(isOtpComplete("12345678")).toBe(true);
     expect(isOtpComplete("12345")).toBe(false);
     expect(isOtpComplete("")).toBe(false);
   });

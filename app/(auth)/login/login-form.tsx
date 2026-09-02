@@ -25,7 +25,7 @@ type Status =
   | { kind: "error"; message: string };
 
 /**
- * Connexion par code à 6 chiffres.
+ * Connexion par code reçu par email.
  *
  * Sur iOS, une app installée sur l'écran d'accueil a son propre stockage,
  * séparé de Safari. Un lien de connexion s'ouvre depuis la boîte mail, donc
@@ -187,7 +187,7 @@ export function LoginForm({ next }: { next: string }) {
         <div className="flex flex-col gap-2 text-center">
           <h2 className="text-lg font-bold">Entre ton code</h2>
           <p className="text-sm leading-relaxed text-muted">
-            On a envoyé un code à 6 chiffres à{" "}
+            On a envoyé un code à{" "}
             <span className="font-semibold text-foreground">{status.email}</span>.
           </p>
         </div>
@@ -206,15 +206,15 @@ export function LoginForm({ next }: { next: string }) {
             // `normalizeOtp` qui borne la valeur, une fois les espaces retirés.
             autoFocus
             required
-            aria-label="Code à 6 chiffres"
+            aria-label="Code reçu par email"
             aria-invalid={codeError !== null}
-            placeholder="000000"
+            placeholder="Ton code"
             value={code}
             onChange={(event) => {
               setCode(normalizeOtp(event.target.value));
               setCodeError(null);
             }}
-            className="text-center font-display text-[28px] font-extrabold tracking-[0.3em]"
+            className="text-center font-display text-[26px] font-extrabold tracking-[0.22em]"
           />
 
           {codeError && (
