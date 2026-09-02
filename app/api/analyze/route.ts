@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loadImageForClaude } from "@/lib/supabase/storage";
-import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
+import { consumeQuota, releaseQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { costMicros } from "@/lib/claude/pricing";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
@@ -156,6 +156,11 @@ export async function POST(request: Request) {
     // ou si le versement a déjà eu lieu.
     await awardReferralStyle(user.id);
 
+    // L'analyse est en base : c'est elle qui compte désormais. Sans cette
+    // libération, elle serait comptée deux fois — une fois comme rendue, une
+    // fois comme encore en route — jusqu'à expiration de la réservation.
+    await releaseQuota(quota.reservation_id);
+
     return NextResponse.json({
       analysisId: inserted?.id ?? null,
       score: analysis.score,
@@ -176,7 +181,7 @@ export async function POST(request: Request) {
   } catch (error) {
     // L'analyse a échoué après consommation : on rend le crédit, sinon une
     // panne de notre côté coûte une analyse à l'utilisateur.
-    await refundQuota();
+    await releaseQuota(quota.reservation_id);
 
     if (error instanceof OutfitAnalysisRefused) {
       return NextResponse.json(

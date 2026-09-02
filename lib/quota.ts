@@ -20,16 +20,35 @@ export async function consumeQuota(kind: AnalysisKind): Promise<QuotaConsumption
       limit_total: 0,
       remaining: 0,
       plan_code: "free",
+      reservation_id: null,
     };
   }
 
   return (data as QuotaConsumption[])[0];
 }
 
-/** Rend le crédit quand l'analyse échoue après consommation. */
-export async function refundQuota(): Promise<void> {
+/**
+ * Libère la réservation posée par `consumeQuota`.
+ *
+ * À appeler dans les DEUX cas, et c'est contre-intuitif :
+ *  • échec  → le crédit n'a jamais été consommé ;
+ *  • succès → la ligne écrite dans `analyses` prend le relais du comptage.
+ *
+ * Oublier l'appel en cas de succès ferait compter l'analyse deux fois — une
+ * fois comme rendue, une fois comme encore en route — jusqu'à expiration.
+ *
+ * ⚠️ Et si l'appel n'a jamais lieu, ce n'est plus grave : la réservation
+ * expire seule. C'est tout l'objet de 0017 — un serveur tué en vol ne coûte
+ * plus un crédit à personne.
+ */
+export async function releaseQuota(reservationId: string | null): Promise<void> {
   const supabase = await createClient();
-  await supabase.rpc("refund_analysis_quota");
+  await supabase.rpc("release_analysis_quota", { p_reservation: reservationId });
+}
+
+/** Ancien nom, conservé pour les appels qui n'ont pas d'identifiant sous la main. */
+export async function refundQuota(): Promise<void> {
+  await releaseQuota(null);
 }
 
 export async function getQuotaStatus(): Promise<QuotaStatus | null> {

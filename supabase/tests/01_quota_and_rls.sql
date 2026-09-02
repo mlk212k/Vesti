@@ -114,9 +114,23 @@ select tests.check(
 );
 
 -- --------------------------------------------------------------------------
--- get_quota_status ne doit rien écrire
+-- get_quota_status lit les analyses rendues, pas un compteur
+--
+-- ⚠️ Ce test posait autrefois `analyses_used = 2` à la main et vérifiait que
+-- l'affichage le reprenait. Ce n'est plus le contrat : depuis 0017, la colonne
+-- n'est qu'un miroir et ce qui fait foi, ce sont les analyses réellement
+-- rendues. On construit donc l'état par la vérité — deux analyses en base —
+-- et on vérifie en prime qu'un compteur faussé ne trompe plus personne.
 -- --------------------------------------------------------------------------
-update public.profiles set analyses_used = 2, plan = 'free'
+update public.profiles set plan = 'free', period_start = now()
+ where id = '11111111-1111-1111-1111-111111111111';
+
+insert into public.analyses (user_id, kind, image_paths, verdict, score) values
+  ('11111111-1111-1111-1111-111111111111', 'outfit', array['a.jpg'], '{"verdict":"ok"}'::jsonb, 70),
+  ('11111111-1111-1111-1111-111111111111', 'outfit', array['b.jpg'], '{"verdict":"ok"}'::jsonb, 80);
+
+-- Compteur volontairement faux, dans le sens qui pénalisait l'utilisateur.
+update public.profiles set analyses_used = 99
  where id = '11111111-1111-1111-1111-111111111111';
 
 select tests.check(
@@ -127,9 +141,24 @@ select tests.check(
 
 select tests.check(
   'get_quota_status est en lecture seule',
-  (select analyses_used = 2 from public.profiles
+  (select analyses_used = 99 from public.profiles
     where id = '11111111-1111-1111-1111-111111111111')
 );
+
+select tests.check(
+  'un compteur faussé ne prive plus personne de ses analyses',
+  (select allowed from public.consume_analysis_quota('outfit'))
+);
+
+-- Nettoyage : ces lignes n'existent que pour le bloc ci-dessus, et les tests
+-- RLS qui suivent comptent les analyses de cet utilisateur.
+delete from public.analyses
+ where user_id = '11111111-1111-1111-1111-111111111111'
+   and image_paths[1] in ('a.jpg', 'b.jpg');
+delete from public.analysis_reservations
+ where user_id = '11111111-1111-1111-1111-111111111111';
+update public.profiles set analyses_used = 0
+ where id = '11111111-1111-1111-1111-111111111111';
 
 -- --------------------------------------------------------------------------
 -- Sécurité : un utilisateur ne doit pas pouvoir s'offrir un plan payant

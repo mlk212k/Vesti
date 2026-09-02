@@ -152,6 +152,8 @@ export interface QuotaConsumption {
   used_count: number;
   limit_total: number;
   remaining: number;
+  /** Réservation à libérer une fois l'analyse rendue OU échouée (cf. 0017). */
+  reservation_id: string | null;
   plan_code: Plan;
 }
 

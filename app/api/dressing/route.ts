@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loadImageForClaude } from "@/lib/supabase/storage";
-import { consumeQuota, refundQuota, quotaRefusalMessage } from "@/lib/quota";
+import { consumeQuota, releaseQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeDressing } from "@/lib/claude/analyze-dressing";
 import { OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import type { Profile } from "@/types/db";
@@ -134,6 +134,10 @@ export async function POST(request: Request) {
       );
     }
 
+    // L'analyse est en base : c'est elle qui compte désormais. Sans cette
+    // libération, elle serait comptée deux fois jusqu'à expiration.
+    await releaseQuota(quota.reservation_id);
+
     return NextResponse.json({
       analysisId: inserted?.id ?? null,
       summary: analysis.summary,
@@ -143,7 +147,7 @@ export async function POST(request: Request) {
       quota,
     });
   } catch (error) {
-    await refundQuota();
+    await releaseQuota(quota.reservation_id);
 
     if (error instanceof OutfitAnalysisRefused) {
       return NextResponse.json(
