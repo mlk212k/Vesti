@@ -18,8 +18,11 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     "bg-surface text-foreground border border-border hover:border-accent hover:text-accent-strong disabled:opacity-40",
   ghost: "text-muted hover:bg-accent-soft hover:text-accent-strong disabled:opacity-40",
+  // Jeton dédié plutôt que `text-white` : en mode sombre le rouge s'éclaircit
+  // pour se détacher du fond, et un blanc figé dessus tomberait sous le seuil
+  // de lisibilité.
   danger:
-    "bg-danger text-white hover:brightness-95 disabled:opacity-40",
+    "bg-danger text-danger-foreground hover:brightness-95 disabled:opacity-40",
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

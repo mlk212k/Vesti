@@ -29,8 +29,14 @@
   --highlight-soft: #efe8ff;
 
   --danger: #ce2c31;
+  --danger-foreground: #ffffff;
   --danger-soft: #fdecec;
   --success: #0a7c55;
+
+  /* Indique au navigateur la nature du thème : c'est ce qui accorde les
+     éléments qu'on ne peint pas soi-même — barres de défilement, sélecteurs
+     de date, autocomplétion des champs. */
+  color-scheme: light;
 
   /* Hauteur de la barre de navigation basse. La barre étant maintenant dans le
      flux, plus rien n'a besoin de réserver la place — mais la valeur reste ici
@@ -40,6 +46,59 @@
   --radius-card: 28px;
   --shadow-card: 0 1px 2px rgb(23 8 51 / 0.04), 0 8px 24px -12px rgb(23 8 51 / 0.10);
   --shadow-lift: 0 2px 4px rgb(23 8 51 / 0.05), 0 18px 40px -18px rgb(121 49 251 / 0.35);
+}
+
+/*
+  Mode sombre — suit le réglage du téléphone.
+
+  Ce n'est PAS la palette claire inversée. Deux rôles changent de sens, et les
+  inverser mécaniquement les casserait :
+
+  - `--accent-strong` est le violet du TEXTE. Sur fond clair il doit être
+    sombre, sur fond sombre il doit être clair : il s'éclaircit au lieu de
+    s'assombrir.
+  - `--accent-soft` est le fond des pastilles. Il passe d'un violet très pâle à
+    un violet très foncé, pour rester un fond dans les deux cas.
+
+  `--accent` lui-même ne bouge pas : c'est l'aplat de la carte de score, et le
+  blanc dessus y reste lisible (5,76:1). L'éclaircir aurait fait passer ce
+  blanc sous le seuil.
+
+  Chaque couple texte/fond est vérifié au ratio WCAG AA, comme la palette
+  claire — y compris les bordures, dont la version douce a dû être remontée :
+  au ton obtenu par simple symétrie, les contours de cartes disparaissaient.
+*/
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0d0718;
+    --foreground: #f3eeff;
+    --surface: #171029;
+    --surface-sunken: #1e1636;
+    --border: #473879;
+    --border-soft: #392c63;
+    --muted: #a79dc4;
+
+    --accent: #7931fb;
+    --accent-foreground: #ffffff;
+    --accent-strong: #c3a6ff;
+    --accent-soft: #241a44;
+
+    --highlight: #9d6bff;
+    --highlight-soft: #241a44;
+
+    --danger: #ff8a8d;
+    --danger-foreground: #2b0b0d;
+    --danger-soft: #2b1416;
+    --success: #3ddc9c;
+
+    /* Les ombres de la palette claire sont invisibles ici : une ombre noire à
+       4 % sur un fond presque noir ne détache rien. On les rend franches, et
+       c'est le halo violet qui porte le relief. */
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 40px -18px rgb(121 49 251 / 0.55);
+
+    color-scheme: dark;
+  }
 }
 
 @theme inline {
@@ -57,6 +116,7 @@
   --color-highlight: var(--highlight);
   --color-highlight-soft: var(--highlight-soft);
   --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
 
@@ -130,6 +190,11 @@ textarea {
 .vesti-scan {
   position: absolute;
   inset-inline: 0;
+  /* ⚠️ `top` est indispensable : `inset-inline` ne pose que la gauche et la
+     droite. Sans lui, `top: auto` cale le faisceau à sa position statique —
+     c'est-à-dire sous la photo, la seule sœur restée dans le flux — et le
+     balayage part du bas puis sort du cadre. */
+  top: 0;
   height: 45%;
   background: linear-gradient(
     to bottom,
@@ -140,12 +205,16 @@ textarea {
   animation: vesti-scan 2.2s ease-in-out infinite;
 }
 
+/* Le faisceau fait 45 % de la hauteur du cadre : il entre juste au-dessus du
+   bord haut (-100 % de sa propre hauteur) et ressort juste sous le bord bas
+   (222 % ≈ 100 % du cadre). La course allait jusqu'à 320 %, soit près de la
+   moitié du cycle passée hors champ — le balayage semblait s'interrompre. */
 @keyframes vesti-scan {
   0% {
     transform: translateY(-100%);
   }
   100% {
-    transform: translateY(320%);
+    transform: translateY(222%);
   }
 }
 

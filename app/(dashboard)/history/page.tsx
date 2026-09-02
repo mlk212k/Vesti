@@ -115,30 +115,36 @@ export default async function HistoryPage() {
         <h2 className="text-sm font-semibold">Toutes tes analyses</h2>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (
-            <li
-              key={row.id}
-              className="flex flex-col gap-1 rounded-2xl border border-border-soft bg-surface p-4"
-            >
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-sm font-medium">
-                  {row.occasion || "Tenue analysée"}
+            <li key={row.id}>
+              {/* Toute la carte est la cible, pas seulement le titre : sur
+                  mobile, une cible étroite demande une visée que le pouce
+                  n'a pas. */}
+              <Link
+                href={`/history/${row.id}`}
+                style={{ touchAction: "manipulation" }}
+                className="flex flex-col gap-1 rounded-2xl border border-border-soft bg-surface p-4 transition hover:border-accent active:scale-[0.99]"
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-sm font-medium">
+                    {row.occasion || "Tenue analysée"}
+                  </span>
+                  <span className="flex-none text-base font-bold tabular-nums">
+                    {row.score ?? "—"}
+                  </span>
+                </div>
+                <span className="text-xs text-muted">
+                  {new Date(row.created_at).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </span>
-                <span className="flex-none text-base font-bold tabular-nums">
-                  {row.score ?? "—"}
-                </span>
-              </div>
-              <span className="text-xs text-muted">
-                {new Date(row.created_at).toLocaleDateString("fr-FR", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
-              {row.verdict?.verdict && (
-                <p className="line-clamp-2 text-sm leading-relaxed text-muted">
-                  {row.verdict.verdict}
-                </p>
-              )}
+                {row.verdict?.verdict && (
+                  <p className="line-clamp-2 text-sm leading-relaxed text-muted">
+                    {row.verdict.verdict}
+                  </p>
+                )}
+              </Link>
             </li>
           ))}
         </ul>
