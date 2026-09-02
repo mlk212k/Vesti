@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
-import { priceIdForPlan } from "@/lib/stripe/plans";
+import { priceIdForPlan, statusGrantsAccess } from "@/lib/stripe/plans";
 import { linkCustomer } from "@/lib/stripe/sync";
 import { env } from "@/lib/env";
 import type { Profile } from "@/types/db";
@@ -45,6 +45,34 @@ export async function POST(request: Request) {
     });
     customerId = customer.id;
     await linkCustomer(user.id, customerId);
+  }
+
+  // ⚠️ Un abonné qui repasse par le Checkout se retrouverait avec DEUX
+  // abonnements actifs, et donc facturé deux fois (8,99 € + 17,99 € = 26,98 €
+  // par mois). Le webhook enregistrerait les deux, et le plan affiché
+  // dépendrait de l'événement arrivé en dernier.
+  //
+  // Un changement de formule n'est pas un nouvel achat : c'est une
+  // modification de l'abonnement existant, et ça se passe dans le portail
+  // Stripe. On le renvoie là-bas plutôt que d'encaisser deux fois.
+  //
+  // La vérification interroge Stripe et non notre table `subscriptions` :
+  // c'est Stripe qui facture, et c'est donc son état qui fait foi, même si un
+  // webhook s'est perdu.
+  const existing = await stripe.subscriptions.list({
+    customer: customerId,
+    status: "all",
+    limit: 20,
+  });
+
+  if (existing.data.some((subscription) => statusGrantsAccess(subscription.status))) {
+    const portal = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${env.siteUrl}/billing`,
+      locale: "fr",
+    });
+
+    return NextResponse.json({ url: portal.url, portal: true });
   }
 
   const session = await stripe.checkout.sessions.create({

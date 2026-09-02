@@ -13,6 +13,7 @@ const FEATURE_LABELS: { key: keyof (typeof PLANS)["free"]["features"]; label: st
 export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
   const [pending, setPending] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const subscribed = currentPlan !== "free";
 
   async function subscribe(plan: Exclude<Plan, "free">) {
     setPending(plan);
@@ -96,17 +97,26 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
               </span>
             ) : plan === "free" ? null : (
               <Button
-                onClick={() => subscribe(plan)}
+                // Déjà abonné : un changement de formule passe par le portail,
+                // pas par un nouvel achat — sinon deux abonnements tournent en
+                // parallèle et le client est facturé deux fois. Le serveur
+                // refuse de toute façon (voir app/api/stripe/checkout), mais
+                // autant ne pas promener l'utilisateur pour rien.
+                onClick={() => (subscribed ? openPortal() : subscribe(plan))}
                 disabled={pending !== null}
               >
-                {pending === plan ? "Ouverture…" : `Passer en ${definition.name}`}
+                {pending === plan
+                  ? "Ouverture…"
+                  : subscribed
+                    ? `Passer en ${definition.name}`
+                    : `Choisir ${definition.name}`}
               </Button>
             )}
           </div>
         );
       })}
 
-      {currentPlan !== "free" && (
+      {subscribed && (
         <Button variant="secondary" onClick={openPortal} disabled={pending !== null}>
           Gérer mon abonnement
         </Button>
