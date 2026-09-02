@@ -245,10 +245,10 @@ end $$;
 -- rougit et rappelle d'aligner les deux.
 -- --------------------------------------------------------------------------
 select tests.check(
-  'limites par plan : free=3, pro=150, styliste=300 (alignées sur lib/plans.ts)',
+  'limites par plan : free=3, pro=50, styliste=100 (alignées sur lib/plans.ts)',
   public.plan_analysis_limit('free') = 3
-  and public.plan_analysis_limit('pro') = 150
-  and public.plan_analysis_limit('styliste') = 300
+  and public.plan_analysis_limit('pro') = 50
+  and public.plan_analysis_limit('styliste') = 100
   and public.plan_analysis_limit('inconnu') = 0
 );
 
