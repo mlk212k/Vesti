@@ -35,7 +35,10 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     <div className="flex h-dvh flex-col overflow-hidden">
       {/* Le seul élément qui défile. `overscroll-contain` empêche le rebond de
           se propager au document au-dessus, donc à la barre. */}
-      <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain">
+      {/* `vesti-pages` : le fondu de 120 ms des pages d'onglet. Posé ici plutôt
+          que sur chaque page — la règle vise le <main> que rend chacune d'elles,
+          donc une page ajoutée demain en hérite sans rien à penser. */}
+      <div className="vesti-pages flex flex-1 flex-col overflow-y-auto overscroll-contain">
         {children}
       </div>
       <BottomNav />

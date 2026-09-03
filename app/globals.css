@@ -249,6 +249,35 @@ textarea {
   animation: vesti-fade-in 0.45s ease-out;
 }
 
+/* ─── Arrivée d'une page d'onglet ─────────────────────────────────────────
+   Chaque page rend un <main>. Changer d'onglet retire l'ancien du document et
+   y insère le nouveau — et une animation CSS se déclenche à l'insertion. La
+   règle vaut donc pour toutes les pages, y compris celles qui n'existent pas
+   encore, sans une seule classe à poser à la main.
+
+   ⚠️ Opacité SEULE, et 120 ms. Deux raisons de ne pas reprendre
+   `vesti-fade-in` ici :
+   - son `translateY` déplacerait la page entière, ce qui accroche à l'œil sur
+     un texte long et se voit encore plus quand le squelette de `loading.tsx`
+     laisse la place au vrai contenu, les deux ne bougeant pas ensemble ;
+   - 450 ms, c'est plus long que le chargement lui-même : l'animation
+     deviendrait l'attente au lieu de l'adoucir.
+
+   Le seuil est autour de 150 ms — au-delà, on ne perçoit plus une apparition
+   mais un délai. */
+.vesti-pages main {
+  animation: vesti-page-in 0.12s ease-out;
+}
+
+@keyframes vesti-page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes vesti-fade-in {
   from {
     opacity: 0;
