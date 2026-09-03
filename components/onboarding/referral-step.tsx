@@ -50,7 +50,7 @@ export function ReferralStep({
 
   if (accepted) {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-6 text-center">
+      <div className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
         <span className="text-3xl">✓</span>
         <p className="text-sm font-medium">Code validé</p>
       </div>

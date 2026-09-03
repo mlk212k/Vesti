@@ -61,7 +61,7 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
         return (
           <div
             key={plan}
-            className={`flex flex-col gap-3 rounded-3xl border p-5 ${
+            className={`flex flex-col gap-3 rounded-[var(--radius-card)] border p-5 ${
               isCurrent ? "border-accent bg-surface" : "border-border-soft bg-surface"
             }`}
           >

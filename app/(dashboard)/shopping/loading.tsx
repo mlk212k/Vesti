@@ -12,7 +12,7 @@ export default function Loading() {
           <Bone className="h-5 w-1/2" />
           <Bone className="h-4 w-3/4" />
           <div className="flex gap-3">
-            <Bone className="h-20 w-20 rounded-[18px]" />
+            <Bone className="h-20 w-20 rounded-[var(--radius-control)]" />
             <div className="flex flex-1 flex-col gap-2">
               <Bone className="h-4 w-full" />
               <Bone className="h-4 w-2/3" />

@@ -113,7 +113,7 @@ export function TodayCard({ hasLocation }: { hasLocation: boolean }) {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-5">
+    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
       <div className="flex items-baseline justify-between gap-2">
         <h2 className="text-sm font-semibold">Aujourd&apos;hui</h2>
         {state.step === "done" && (
@@ -171,7 +171,7 @@ export function TodayCard({ hasLocation }: { hasLocation: boolean }) {
               </ul>
               <p className="text-sm leading-relaxed">{state.suggestion.outfit.advice}</p>
               {state.suggestion.outfit.missing && (
-                <p className="rounded-2xl border border-border bg-background p-3 text-xs leading-relaxed text-muted">
+                <p className="rounded-[var(--radius-control)] border border-border bg-background p-3 text-xs leading-relaxed text-muted">
                   {state.suggestion.outfit.missing}
                 </p>
               )}
@@ -195,7 +195,16 @@ export function TodayCard({ hasLocation }: { hasLocation: boolean }) {
               )}
             </div>
           ) : (
-            <Button onClick={suggest} disabled={state.step === "loading"}>
+            // `secondary` et non `primary` : sur l'accueil, cette carte est
+            // posée juste sous « Analyser une tenue ». Deux aplats violets
+            // pleine largeur l'un au-dessus de l'autre, et plus aucun des deux
+            // n'est l'action principale — c'est la règle que se donne
+            // `components/ui/button.tsx` : un seul aplat saturé par écran.
+            <Button
+              variant="secondary"
+              onClick={suggest}
+              disabled={state.step === "loading"}
+            >
               {state.step === "loading" ? "Composition…" : "Que mettre aujourd'hui ?"}
             </Button>
           )}

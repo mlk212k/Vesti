@@ -122,7 +122,7 @@ export default async function HistoryPage() {
               <Link
                 href={`/history/${row.id}`}
                 style={{ touchAction: "manipulation" }}
-                className="flex flex-col gap-1 rounded-2xl border border-border-soft bg-surface p-4 transition hover:border-accent active:scale-[0.99]"
+                className="flex flex-col gap-1 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4 transition hover:border-accent active:scale-[0.99]"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium">

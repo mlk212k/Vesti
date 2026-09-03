@@ -51,7 +51,7 @@ export function DangerZone() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-5">
+      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
         <h2 className="text-sm font-semibold">Récupérer mes données</h2>
         <p className="text-sm leading-relaxed text-muted">
           Télécharge tout ce que Vesti sait de toi : profil, analyses,

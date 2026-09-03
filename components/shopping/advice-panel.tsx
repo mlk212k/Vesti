@@ -49,7 +49,7 @@ export function AdvicePanel() {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 shadow-[var(--shadow-card)]">
+    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
       <div className="flex flex-col gap-1">
         <h2 className="text-sm font-semibold">Ce qui te manque vraiment</h2>
         <p className="text-xs leading-relaxed text-muted">

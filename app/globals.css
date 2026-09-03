@@ -43,9 +43,39 @@
      pour que la hauteur des onglets se règle en un seul endroit. */
   --bottom-nav-height: 60px;
 
-  --radius-card: 28px;
-  --shadow-card: 0 1px 2px rgb(23 8 51 / 0.04), 0 8px 24px -12px rgb(23 8 51 / 0.10);
-  --shadow-lift: 0 2px 4px rgb(23 8 51 / 0.05), 0 18px 40px -18px rgb(121 49 251 / 0.35);
+  /*
+    Trois rayons, attribués par RÔLE — pas au goût du moment.
+
+    ⚠️ Il y en avait six qui se promenaient dans le code (28, 24, 20, 18, 16 et
+    12 px) plus la gélule, souvent deux valeurs différentes sur le même écran.
+    Un rayon n'est pas une décoration : il dit à quelle famille appartient une
+    boîte. Six familles, c'est aucune famille — et le résultat se lit comme un
+    empilement de dalles arrondies plutôt que comme une interface.
+
+    - `card`    : les panneaux. 14 px. À 28, sur une colonne de 350 px, le
+                  coin devient une courbe qu'on voit avant le contenu.
+    - `control` : ce qui se touche — boutons, champs, lignes de liste.
+                  Légèrement plus serré que les panneaux : un contrôle posé
+                  DANS un panneau ne doit pas avoir un coin plus rond que lui,
+                  sinon il déborde optiquement de son contenant.
+    - la gélule (`rounded-full`) est réservée aux vraies pastilles : puces,
+      étiquettes, avatars. Un bouton en gélule pleine largeur est le tic
+      graphique le plus reconnaissable des interfaces générées.
+  */
+  --radius-card: 14px;
+  --radius-control: 10px;
+
+  /*
+    Les ombres ne servent qu'à ce qui flotte VRAIMENT au-dessus de la page.
+
+    Avant, chaque carte en portait une. Deux problèmes : en thème sombre une
+    ombre noire sur fond noir ne se voit pas — elle n'ajoutait que du flou
+    autour des bords ; et en thème clair, tout flottant au même niveau, plus
+    rien ne ressortait. Le relief se fait maintenant au trait : une bordure
+    d'1 px, qui a le même poids dans les deux thèmes.
+  */
+  --shadow-card: none;
+  --shadow-lift: 0 1px 2px rgb(23 8 51 / 0.06), 0 6px 16px -10px rgb(23 8 51 / 0.25);
 }
 
 /*
@@ -99,8 +129,8 @@
     --danger-foreground: #2b0b0d;
     --danger-soft: #2b1416;
     --success: #3ddc9c;
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 40px -18px rgb(121 49 251 / 0.55);
+    --shadow-card: none;
+    --shadow-lift: 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px -10px rgb(0 0 0 / 0.7);
     color-scheme: dark;
   }
 }
@@ -123,8 +153,8 @@
     --danger-foreground: #2b0b0d;
     --danger-soft: #2b1416;
     --success: #3ddc9c;
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 40px -18px rgb(121 49 251 / 0.55);
+    --shadow-card: none;
+    --shadow-lift: 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px -10px rgb(0 0 0 / 0.7);
     color-scheme: dark;
 }
 
@@ -148,6 +178,7 @@
   --color-success: var(--success);
 
   --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
   --shadow-card: var(--shadow-card);
   --shadow-lift: var(--shadow-lift);
 

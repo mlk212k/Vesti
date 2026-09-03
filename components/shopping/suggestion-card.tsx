@@ -70,7 +70,7 @@ export function SuggestionCard({ suggestion }: { suggestion: SuggestionView }) {
   }
 
   return (
-    <li className="flex flex-col gap-3 rounded-2xl border border-border-soft bg-surface p-4">
+    <li className="flex flex-col gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
           <span className="text-sm font-semibold">{suggestion.item}</span>

@@ -41,14 +41,14 @@ export default async function BillingPage(props: PageProps<"/billing">) {
       </header>
 
       {checkout === "success" && (
-        <p className="rounded-2xl border border-success/30 bg-success/5 px-4 py-3 text-sm text-success">
+        <p className="rounded-[var(--radius-control)] border border-success/30 bg-success/5 px-4 py-3 text-sm text-success">
           Paiement confirmé. Si ton plan n&apos;apparaît pas tout de suite,
           rafraîchis dans quelques secondes.
         </p>
       )}
 
       {checkout === "cancelled" && (
-        <p className="rounded-2xl border border-border-soft bg-surface px-4 py-3 text-sm text-muted">
+        <p className="rounded-[var(--radius-control)] border border-border-soft bg-surface px-4 py-3 text-sm text-muted">
           Paiement annulé, rien n&apos;a été débité.
         </p>
       )}

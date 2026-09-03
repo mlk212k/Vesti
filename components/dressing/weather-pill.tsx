@@ -147,7 +147,7 @@ export function WeatherPill({ hasWardrobe }: { hasWardrobe: boolean }) {
   const { weather } = state;
 
   return (
-    <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4 shadow-[var(--shadow-card)]">
+    <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
       <div className="flex items-center gap-3">
         <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-strong">
           <CloudIcon />

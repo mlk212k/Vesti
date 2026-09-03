@@ -74,7 +74,7 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold">Revenu</h2>
-        <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-5">
+        <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-muted">MRR estimé</span>
             <span className="font-display text-[28px] font-extrabold tabular-nums">{euro(overview.mrr)} €</span>

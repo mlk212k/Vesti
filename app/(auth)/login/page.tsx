@@ -31,7 +31,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
       </div>
 
       {errorMessage && (
-        <p className="rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-center text-sm text-danger">
+        <p className="rounded-[var(--radius-control)] border border-danger/25 bg-danger-soft px-4 py-3 text-center text-sm text-danger">
           {errorMessage}
         </p>
       )}

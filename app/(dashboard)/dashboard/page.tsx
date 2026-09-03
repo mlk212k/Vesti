@@ -150,11 +150,19 @@ export default async function DashboardPage() {
             )}
           </div>
 
-          <ul className="flex flex-col gap-2">
+          {/* ⚠️ Une seule boîte, des lignes séparées par un trait — et non trois
+              cartes empilées, ce qu'elles étaient.
+
+              Trois cartes disent « trois objets sans rapport ». Or ce sont trois
+              lignes d'une même liste : c'est le filet qui le dit, en un pixel,
+              là où trois bordures complètes hurlaient une séparation qui
+              n'existe pas. `divide-y` ne trace le trait qu'ENTRE les lignes,
+              donc jamais sous la dernière. */}
+          <ul className="divide-y divide-border-soft overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
             {recent.slice(0, 3).map((analysis) => (
               <li
                 key={analysis.id}
-                className="flex items-center justify-between gap-3 rounded-2xl border border-border-soft bg-surface px-4 py-3 shadow-[var(--shadow-card)]"
+                className="flex items-center justify-between gap-3 px-4 py-3"
               >
                 <div className="flex min-w-0 flex-col">
                   <span className="truncate text-sm font-medium">
@@ -167,7 +175,7 @@ export default async function DashboardPage() {
                     })}
                   </span>
                 </div>
-                <span className="font-display flex-none text-xl font-extrabold tabular-nums">
+                <span className="font-display flex-none text-lg font-bold tabular-nums">
                   {analysis.score ?? "—"}
                 </span>
               </li>

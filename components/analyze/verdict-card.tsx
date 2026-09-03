@@ -44,7 +44,7 @@ export function VerdictCard({
       {/* L'écran de récompense : c'est le seul endroit de l'app où le violet
           prend toute la carte. Le score y est le point de mire, le verdict se
           lit juste en dessous sur fond clair. */}
-      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)]">
+      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
         <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
           <span className="font-display text-[64px] font-extrabold leading-none tracking-[-0.05em] tabular-nums">
             {analysis.score}
@@ -101,7 +101,7 @@ export function VerdictCard({
           {analysis.garments.map((garment, index) => (
             <li
               key={`${garment.label}-${index}`}
-              className="flex gap-3 rounded-2xl border border-border-soft bg-surface p-3"
+              className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
             >
               <GarmentThumb
                 imageUrl={photoUrl}
@@ -142,7 +142,7 @@ export function VerdictCard({
         </ul>
 
         {!analysis.savedToWardrobe && (
-          <p className="rounded-2xl border border-border bg-accent-soft/60 p-3 text-xs leading-relaxed text-muted">
+          <p className="rounded-[var(--radius-control)] border border-border bg-accent-soft/60 p-3 text-xs leading-relaxed text-muted">
             Ces pièces ne sont pas conservées avec le plan gratuit. Passe en Pro
             pour construire ta garde-robe au fil des analyses.
           </p>

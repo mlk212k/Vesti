@@ -76,7 +76,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
   }
 
   return (
-    <section className="flex flex-col gap-5 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 shadow-[var(--shadow-card)]">
+    <section className="flex flex-col gap-5 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
       <div className="flex flex-col gap-1">
         <h2 className="text-sm font-semibold">Parrainage</h2>
         <p className="text-xs leading-relaxed text-muted">
@@ -129,7 +129,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
           revient pour savoir combien il a gagné, pas pour relire son code.
           Le montant vient des factures réellement encaissées par Stripe, pas
           d'un prix catalogue — c'est ce qui permet de l'annoncer au centime. */}
-      <div className="flex flex-col gap-2 rounded-[18px] bg-surface-sunken px-4 py-3">
+      <div className="flex flex-col gap-2 rounded-[var(--radius-control)] bg-surface-sunken px-4 py-3">
         <div className="flex items-baseline justify-between gap-2">
           <span className="text-xs font-semibold text-muted">
             Tes gains ({Math.round(COMMISSION_RATE * 100)} % de ce qu&apos;ils paient)
@@ -148,7 +148,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
       {status.code && (
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold text-muted">Ton code</span>
-          <div className="flex items-center justify-between gap-3 rounded-[18px] bg-surface-sunken px-4 py-3">
+          <div className="flex items-center justify-between gap-3 rounded-[var(--radius-control)] bg-surface-sunken px-4 py-3">
             {/* Chiffres tabulaires et lettres espacées : ce code se recopie
                 depuis une story, souvent de mémoire. */}
             <span className="font-[family-name:var(--font-bricolage)] text-xl font-extrabold tracking-[0.18em] tabular-nums">
@@ -167,7 +167,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
       )}
 
       {until ? (
-        <p className="rounded-[18px] bg-accent-soft px-4 py-3 text-xs font-semibold text-accent-strong">
+        <p className="rounded-[var(--radius-control)] bg-accent-soft px-4 py-3 text-xs font-semibold text-accent-strong">
           Styliste offert jusqu&apos;au{" "}
           {new Date(until).toLocaleDateString("fr-FR", {
             day: "numeric",

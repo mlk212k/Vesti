@@ -67,7 +67,7 @@ export function WardrobeGrid({
         {visible.map((item) => (
           <li
             key={item.id}
-            className="flex gap-3 rounded-2xl border border-border-soft bg-surface p-3"
+            className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
           >
             <GarmentThumb
               imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}

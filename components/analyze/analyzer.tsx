@@ -238,7 +238,7 @@ export function Analyzer() {
 
   if (state.step === "error") {
     return (
-      <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-6 text-center">
+      <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
         <h2 className="text-lg font-semibold">{state.title}</h2>
         <p className="text-sm leading-relaxed text-muted">{state.body}</p>
         {state.cta === "upgrade" ? (

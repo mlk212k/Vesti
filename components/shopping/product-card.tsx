@@ -15,7 +15,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ touchAction: "manipulation" }}
-        className="flex gap-3 rounded-2xl border border-border-soft bg-surface p-3 transition hover:border-accent active:scale-[0.99]"
+        className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3 transition hover:border-accent active:scale-[0.99]"
       >
         {/* Beaucoup de fiches produit ne publient pas de photo : la carte doit
             tenir sans, plutôt que de réserver un carré vide. */}
@@ -25,7 +25,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
             src={match.image}
             alt=""
             loading="lazy"
-            className="h-20 w-20 flex-none rounded-xl border border-border-soft object-cover"
+            className="h-20 w-20 flex-none rounded-[var(--radius-control)] border border-border-soft object-cover"
           />
         )}
         <div className="flex min-w-0 flex-col gap-1">

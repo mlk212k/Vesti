@@ -43,7 +43,7 @@ export default async function ComptePage() {
         <p className="text-sm text-muted">{user.email}</p>
       </header>
 
-      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-5">
+      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
         <div className="flex items-baseline justify-between">
           <span className="text-sm font-semibold">Plan {PLANS[plan].name}</span>
           <Link href="/billing" className="text-xs underline underline-offset-2">

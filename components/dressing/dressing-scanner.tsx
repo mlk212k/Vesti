@@ -155,7 +155,7 @@ export function DressingScanner() {
 
   if (state.step === "error") {
     return (
-      <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-6 text-center">
+      <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
         <h2 className="text-lg font-semibold">{state.title}</h2>
         <p className="text-sm leading-relaxed text-muted">{state.body}</p>
         {state.upgrade ? (
@@ -216,7 +216,7 @@ export function DressingScanner() {
               <img
                 src={photo.previewUrl}
                 alt={`Photo ${index + 1}`}
-                className="aspect-square w-full rounded-2xl object-cover"
+                className="aspect-square w-full rounded-[var(--radius-control)] object-cover"
               />
               <button
                 type="button"
@@ -265,7 +265,7 @@ function ScanResults({
 }) {
   return (
     <div className="flex flex-col gap-7">
-      <section className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)] p-5">
+      <section className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
         <h1 className="text-lg font-semibold">Ton dressing</h1>
         <p className="text-sm leading-relaxed text-muted">{result.summary}</p>
       </section>
@@ -279,7 +279,7 @@ function ScanResults({
           {result.garments.map((garment, index) => (
             <li
               key={`${garment.label}-${index}`}
-              className="flex items-center gap-3 rounded-2xl border border-border-soft bg-surface p-3"
+              className="flex items-center gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
             >
               <GarmentThumb
                 imageUrl={photoUrls[garment.source_index] ?? ""}
@@ -311,7 +311,7 @@ function ScanResults({
             {result.outfits.map((outfit) => (
               <li
                 key={outfit.name}
-                className="flex flex-col gap-2 rounded-2xl border border-border-soft bg-surface p-4"
+                className="flex flex-col gap-2 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4"
               >
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-sm font-semibold">{outfit.name}</span>
@@ -347,7 +347,7 @@ function ScanResults({
             {result.gaps.map((gap) => (
               <li
                 key={gap.item}
-                className="flex flex-col gap-1 rounded-2xl border border-border-soft bg-surface p-4"
+                className="flex flex-col gap-1 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4"
               >
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-sm font-medium">{gap.item}</span>

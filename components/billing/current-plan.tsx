@@ -33,7 +33,7 @@ export function CurrentPlan({
   const gifted = giftUntil !== null;
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-accent/30 bg-surface p-5 shadow-[var(--shadow-card)]">
+    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-accent/30 bg-surface p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
@@ -97,7 +97,7 @@ export function CurrentPlan({
       {gifted && (
         // La date compte : un plan offert qui s'arrête sans prévenir donne
         // l'impression d'une panne, pas d'une fin de cadeau.
-        <p className="rounded-2xl bg-accent-soft px-4 py-3 text-xs leading-relaxed text-accent-strong">
+        <p className="rounded-[var(--radius-control)] bg-accent-soft px-4 py-3 text-xs leading-relaxed text-accent-strong">
           Offert jusqu&apos;au{" "}
           {new Date(giftUntil).toLocaleDateString("fr-FR", {
             day: "numeric",

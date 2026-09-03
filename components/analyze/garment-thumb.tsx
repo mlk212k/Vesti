@@ -23,7 +23,7 @@ export function GarmentThumb({
   alt: string;
 }) {
   if (!imageUrl) {
-    return <div className="h-16 w-16 flex-none rounded-xl bg-border" />;
+    return <div className="h-16 w-16 flex-none rounded-[var(--radius-control)] bg-border" />;
   }
 
   if (!cropBox) {
@@ -32,7 +32,7 @@ export function GarmentThumb({
       <img
         src={imageUrl}
         alt={alt}
-        className="h-16 w-16 flex-none rounded-xl object-cover"
+        className="h-16 w-16 flex-none rounded-[var(--radius-control)] object-cover"
       />
     );
   }
@@ -41,7 +41,7 @@ export function GarmentThumb({
   const scaleY = 100 / Math.max(cropBox.height, 1);
 
   return (
-    <div className="h-16 w-16 flex-none overflow-hidden rounded-xl bg-border">
+    <div className="h-16 w-16 flex-none overflow-hidden rounded-[var(--radius-control)] bg-border">
       <div className="relative h-full w-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

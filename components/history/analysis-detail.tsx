@@ -34,7 +34,7 @@ export function AnalysisDetail({
 }) {
   return (
     <div className="flex flex-col gap-6">
-      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface shadow-[var(--shadow-card)]">
+      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
         <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
           <span className="font-display text-[64px] font-extrabold leading-none tracking-[-0.05em] tabular-nums">
             {score ?? "—"}
@@ -108,7 +108,7 @@ export function AnalysisDetail({
             {garments.map((garment, index) => (
               <li
                 key={`${garment.label}-${index}`}
-                className="flex gap-3 rounded-2xl border border-border-soft bg-surface p-3"
+                className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
               >
                 {photoUrl && (
                   <GarmentThumb

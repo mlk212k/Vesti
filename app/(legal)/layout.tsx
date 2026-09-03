@@ -15,7 +15,7 @@ export default function LegalLayout({ children }: { children: ReactNode }) {
       {missing.length > 0 && (
         // Visible en développement comme en production : mieux vaut un bandeau
         // gênant qu'un site qui semble en règle sans l'être.
-        <p className="mb-6 rounded-2xl border border-danger/30 bg-danger/5 p-4 text-xs leading-relaxed text-danger">
+        <p className="mb-6 rounded-[var(--radius-control)] border border-danger/30 bg-danger/5 p-4 text-xs leading-relaxed text-danger">
           <strong>À compléter avant mise en ligne.</strong> Champs manquants dans{" "}
           <code>lib/legal.ts</code> : {missing.join(", ")}.
         </p>

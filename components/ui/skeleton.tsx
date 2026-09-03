@@ -18,7 +18,7 @@
 export function Bone({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-[10px] bg-surface-sunken ${className}`}
+      className={`animate-pulse rounded-[var(--radius-control)] bg-surface-sunken ${className}`}
       aria-hidden
     />
   );
@@ -34,7 +34,7 @@ export function BoneCard({
 }) {
   return (
     <div
-      className={`flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 shadow-[var(--shadow-card)] ${className}`}
+      className={`flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 ${className}`}
       aria-hidden
     >
       {children}
