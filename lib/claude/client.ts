@@ -25,20 +25,31 @@ export const MODEL = "claude-opus-5";
  * Le verdict est ce que le client paie ; s'il devient plat ou générique, on a
  * gagné dix secondes et perdu le produit.
  *
- * 📉 Passé de `medium` à `low`, et VÉRIFIÉ en production plutôt que supposé :
+ * 🔴 REPASSÉ À `medium` APRÈS UNE RÉGRESSION MESURÉE. Ne pas rebaisser sans
+ * lire ce qui suit.
  *
- *   sortie   1 400 → 779 tokens   (−44 %)
- *   coût     0,059 → 0,029 $      (moitié, l'entrée ayant aussi baissé grâce
- *                                  à la photo réduite avant envoi)
- *   verdicts jugés toujours aussi détaillés sur de vraies analyses
+ * L'essai en `low` avait tout l'air d'un succès : sortie −44 %, coût divisé
+ * par deux, et des verdicts jugés « toujours aussi détaillés » à la lecture.
+ * Les chiffres en base disaient autre chose :
  *
- * C'est ce dernier point qui autorise les deux autres. Le raccourci tentant
- * serait de lire « −44 % de sortie » comme un pur gain : c'est d'abord 44 % de
- * texte en moins dans ce que le client paie. Ici la qualité a tenu — mais si
- * un jour les verdicts s'aplatissent, c'est cette ligne qu'on remonte EN
- * PREMIER, avant d'aller chercher des économies ailleurs.
+ *   effort medium — 11 analyses — scores 42 à 76, bien répartis
+ *   effort low    —  3 analyses — scores 58, 58, 58
+ *
+ * Le TEXTE tenait, la NOTE s'était effondrée sur une valeur par défaut.
+ * Rédiger un verdict ne demande pas de délibération ; arbitrer un chiffre
+ * entre 0 et 100, si. Le premier survit à la baisse d'effort, le second non.
+ *
+ * ⚠️ La leçon vaut au-delà de ce réglage : on surveillait la qualité visible
+ * et la dégradation est passée par une dimension que personne ne regardait.
+ * Une note identique trois fois de suite ne se voit pas en lisant une analyse
+ * — elle se voit en comparant plusieurs analyses en base.
+ *
+ * Pour détecter la même panne à l'avenir :
+ *   select stddev_samp(score) from analyses where created_at > now() - '7 days';
+ * Un écart-type qui s'écrase (< 5) veut dire que la note ne distingue plus
+ * rien, quelle qu'en soit la cause.
  */
-export const VERDICT_EFFORT = "low" as const;
+export const VERDICT_EFFORT = "medium" as const;
 export const UTILITY_EFFORT = "low" as const;
 
 let client: Anthropic | null = null;

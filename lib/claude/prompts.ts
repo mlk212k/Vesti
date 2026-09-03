@@ -32,7 +32,21 @@ phrase ce qui manque et comment reprendre la photo, mets score à 0 et laisse
 "analyzable" vaut true dès qu'une tenue est identifiable, même partiellement.
 
 NOTATION
-"score" note la tenue de 0 à 100 : cohérence des couleurs, justesse des coupes entre elles, adéquation à l'occasion, finition générale. Sois exigeant sans être méprisant — 70 est une bonne tenue, 90 est remarquable.`;
+"score" note la tenue sur 100. COMPOSE-LE, ne l'improvise pas : quatre critères valant 25 points chacun, que tu évalues séparément avant d'additionner.
+
+- Couleurs (25) : accord de la palette, contrastes, nombre de teintes tenu.
+- Coupes (25) : proportions entre les pièces, ajustement à la morphologie décrite, longueurs.
+- Occasion (25) : adéquation au contexte que la tenue annonce d'elle-même.
+- Finition (25) : chaussures, état des pièces, détails, cohérence de l'ensemble.
+
+Vérifie ensuite que le total correspond à ce que tu vois :
+- 90-100 : impeccable, rien à retoucher.
+- 75-89 : très bonne tenue, une retouche mineure au plus.
+- 60-74 : correcte, deux ou trois choses à revoir.
+- 40-59 : des erreurs visibles qui desservent la personne.
+- 20-39 : la tenue ne fonctionne pas.
+
+SERS-TOI DE TOUTE L'ÉCHELLE. Une tenue vraiment réussie mérite 90, une tenue ratée mérite 30. Tout ramener vers 55-65 rend la note inutile : elle ne distingue plus rien, et deux tenues de qualité très différente ressortiraient avec le même chiffre. Deux tenues qui ne se valent pas doivent recevoir des notes nettement différentes.`;
 
 export function buildOutfitUserPrompt(profile: Pick<
   Profile,
