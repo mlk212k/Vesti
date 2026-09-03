@@ -62,9 +62,14 @@ export function InstallGuide() {
 
   if (installed) return <InstalledConfirmation />;
 
-  // La flèche vers le bouton Partager est en position fixe : sans cette marge,
-  // elle recouvrirait la fin de la page — dont les liens légaux.
-  const showsPointer = environment.os === "ios" && !environment.inAppBrowser;
+  // La flèche ne se montre que dans SAFARI. Ailleurs sur iPhone — Chrome,
+  // Firefox, Edge — le bouton Partager est dans la barre d'adresse, en haut :
+  // une flèche vers le bas y désignerait le vide, et enverrait chercher au
+  // mauvais endroit quelqu'un qui suivait pourtant les instructions.
+  //
+  // Elle est en position fixe, d'où la marge basse : sans elle, elle
+  // recouvrirait la fin de la page — dont les liens légaux.
+  const showsPointer = environment.isIosSafari;
 
   return (
     <main
@@ -92,7 +97,7 @@ export function InstallGuide() {
           os={environment.os}
         />
       ) : environment.os === "ios" ? (
-        <IosSteps />
+        <IosSteps showPointer={environment.isIosSafari} />
       ) : environment.os === "android" ? (
         <AndroidSteps promptEvent={promptEvent} />
       ) : (
@@ -214,13 +219,19 @@ function LeaveInAppBrowser({
 
 /* ─── iOS ─────────────────────────────────────────────────────────────────── */
 
-function IosSteps() {
+function IosSteps({ showPointer }: { showPointer: boolean }) {
   return (
     <>
       <StepList>
         <Step index={1} icon={<ShareIcon />}>
-          Appuie sur le bouton <Strong>Partager</Strong> — en bas de
-          l&apos;écran dans Safari, dans la barre d&apos;adresse ailleurs.
+          Appuie sur le bouton <Strong>Partager</Strong>{" "}
+          {showPointer ? (
+            // Safari : la barre d'outils est en bas, et la flèche le désigne.
+            <>— tout en bas de l&apos;écran.</>
+          ) : (
+            // Chrome, Firefox, Edge : il vit dans la barre d'adresse, en haut.
+            <>— en haut, dans la barre d&apos;adresse.</>
+          )}
         </Step>
         <Step index={2} icon={<AddSquareIcon />}>
           Fais défiler le menu et choisis{" "}
@@ -231,7 +242,7 @@ function IosSteps() {
           Vesti apparaît sur ton écran d&apos;accueil.
         </Step>
       </StepList>
-      <SharePointer />
+      {showPointer && <SharePointer />}
     </>
   );
 }

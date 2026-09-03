@@ -18,6 +18,12 @@ const UA = {
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
   safariIpad:
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+  chromeIos:
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/122.0.6261.89 Mobile/15E148 Safari/604.1",
+  firefoxIos:
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/124.0 Mobile/15E148 Safari/605.1.15",
+  edgeIos:
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 EdgiOS/122.0.2365.86 Mobile/15E148 Safari/604.1",
 };
 
 describe("detectEnvironment", () => {
@@ -70,6 +76,40 @@ describe("detectEnvironment", () => {
     expect(
       detectEnvironment({ userAgent: UA.safariIpad, maxTouchPoints: 0 })
     ).toMatchObject({ os: "other", canInstallHere: false });
+  });
+});
+
+describe("isIosSafari", () => {
+  // ⚠️ Ce drapeau décide si l'on ose DÉSIGNER le bouton Partager du doigt.
+  // Il est en bas de l'écran dans Safari, mais dans la barre d'adresse en HAUT
+  // sur Chrome iOS et les autres. Se tromper, c'est envoyer chercher au mauvais
+  // endroit quelqu'un qui suivait les instructions — pire que ne rien montrer.
+  const detect = (userAgent: string, maxTouchPoints = 5) =>
+    detectEnvironment({ userAgent, maxTouchPoints });
+
+  it("reconnaît Safari sur iPhone et iPad", () => {
+    expect(detect(UA.safariIos).isIosSafari).toBe(true);
+    expect(detect(UA.safariIpad).isIosSafari).toBe(true);
+  });
+
+  it("écarte les autres navigateurs iOS, dont le bouton est ailleurs", () => {
+    // Tous tournent sur WebKit et gardent « Safari » dans leur agent : c'est le
+    // suffixe qui les trahit, pas l'absence du mot.
+    expect(detect(UA.chromeIos).isIosSafari).toBe(false);
+    expect(detect(UA.firefoxIos).isIosSafari).toBe(false);
+    expect(detect(UA.edgeIos).isIosSafari).toBe(false);
+  });
+
+  it("écarte les navigateurs intégrés, qui n'ont aucun bouton Partager", () => {
+    // Ceux-là ne portent pas de suffixe et passeraient pour Safari sans la
+    // condition sur `inAppBrowser` — or leur barre d'outils est celle de TikTok.
+    expect(detect(UA.tiktokIos).isIosSafari).toBe(false);
+    expect(detect(UA.instagram).isIosSafari).toBe(false);
+  });
+
+  it("écarte tout ce qui n'est pas iOS", () => {
+    expect(detect(UA.chromeAndroid).isIosSafari).toBe(false);
+    expect(detect(UA.chromeDesktop, 0).isIosSafari).toBe(false);
   });
 });
 

@@ -53,6 +53,16 @@ const IN_APP_BROWSERS: { pattern: RegExp; name: string }[] = [
   { pattern: /Twitter/i, name: "X" },
 ];
 
+/**
+ * Navigateurs iOS qui ne sont PAS Safari.
+ *
+ * Sur iPhone, tous utilisent le même moteur : leur nom n'apparaît que sous
+ * forme de suffixe dans l'agent utilisateur. Chrome se signe `CriOS`, Firefox
+ * `FxiOS`, Edge `EdgiOS`, Opera `OPiOS`. Safari, lui, n'ajoute rien — on le
+ * reconnaît donc par élimination.
+ */
+const IOS_NON_SAFARI = /CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|Brave/i;
+
 export interface BrowserEnvironment {
   os: Os;
   /** Nom de l'application dont le navigateur intégré nous retient, ou `null`. */
@@ -63,6 +73,16 @@ export interface BrowserEnvironment {
    * conçue pour un téléphone).
    */
   canInstallHere: boolean;
+  /**
+   * Safari sur iPhone ou iPad, et lui seul.
+   *
+   * ⚠️ Sert à décider si l'on peut DÉSIGNER le bouton Partager du doigt. Il est
+   * en bas de l'écran dans Safari, mais dans la barre d'adresse EN HAUT sur
+   * Chrome iOS et les autres. Une flèche vers le bas y pointerait le vide, ce
+   * qui est pire que pas de flèche du tout : elle ferait chercher au mauvais
+   * endroit quelqu'un qui suivait déjà les instructions.
+   */
+  isIosSafari: boolean;
 }
 
 export function detectEnvironment(input: {
@@ -90,6 +110,10 @@ export function detectEnvironment(input: {
     os,
     inAppBrowser,
     canInstallHere: inAppBrowser === null && os !== "other",
+    // Un navigateur intégré est exclu d'office : il tourne sur le moteur de
+    // Safari et ne porte aucun suffixe, mais sa barre d'outils n'est pas celle
+    // de Safari — il n'a pas de bouton Partager du tout.
+    isIosSafari: os === "ios" && inAppBrowser === null && !IOS_NON_SAFARI.test(ua),
   };
 }
 
