@@ -24,6 +24,14 @@ const UA = {
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/124.0 Mobile/15E148 Safari/605.1.15",
   edgeIos:
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 EdgiOS/122.0.2365.86 Mobile/15E148 Safari/604.1",
+  // ⚠️ L'app Google — celle où l'on tape une recherche. À `GSA/` près, cet
+  // agent est identique à celui de Safari : ni `CriOS`, ni le moindre autre
+  // indice. C'est ce qui l'a fait passer pour Safari, et lui a valu la flèche
+  // « c'est ce bouton » pointant une barre d'outils qui n'est pas la sienne.
+  googleAppIos:
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Safari/604.1 GSA/302.0.586296673",
+  googleAppAndroid:
+    "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36 GSA/15.12.32.29.arm64",
 };
 
 describe("detectEnvironment", () => {
@@ -110,6 +118,47 @@ describe("isIosSafari", () => {
   it("écarte tout ce qui n'est pas iOS", () => {
     expect(detect(UA.chromeAndroid).isIosSafari).toBe(false);
     expect(detect(UA.chromeDesktop, 0).isIosSafari).toBe(false);
+  });
+
+  it("écarte l'app Google, dont l'agent est le sosie de celui de Safari", () => {
+    // Signalé en vrai : la flèche s'affichait encore en ouvrant depuis une
+    // recherche Google. Rien dans cet agent ne distingue l'app de Safari, à
+    // `GSA/` près — c'est le seul fil auquel se raccrocher.
+    expect(detect(UA.googleAppIos).isIosSafari).toBe(false);
+    expect(detect(UA.googleAppIos).inAppBrowser).toBe("Google");
+    expect(detect(UA.googleAppIos).canInstallHere).toBe(false);
+  });
+});
+
+describe("inAppMenuCorner", () => {
+  // On n'indique un coin QUE là où il a été constaté. Ailleurs, `null` : la
+  // page reste vague plutôt que d'envoyer chercher au mauvais endroit — le
+  // défaut même que ce fichier passe son temps à éviter.
+  it("donne un coin différent selon le système, pour une même app", () => {
+    expect(detectEnvironment({ userAgent: UA.tiktokIos }).inAppMenuCorner).toBe(
+      "en bas à droite de l'écran"
+    );
+    expect(
+      detectEnvironment({ userAgent: UA.tiktokAndroid }).inAppMenuCorner
+    ).toBe("en haut à droite de l'écran");
+  });
+
+  it("n'invente rien là où la position n'est pas connue", () => {
+    expect(
+      detectEnvironment({ userAgent: UA.googleAppIos }).inAppMenuCorner
+    ).toBeNull();
+    expect(
+      detectEnvironment({ userAgent: UA.googleAppAndroid }).inAppMenuCorner
+    ).toBeNull();
+    expect(
+      detectEnvironment({ userAgent: UA.instagram }).inAppMenuCorner
+    ).toBeNull();
+  });
+
+  it("ne donne aucun coin hors navigateur intégré", () => {
+    expect(
+      detectEnvironment({ userAgent: UA.safariIos }).inAppMenuCorner
+    ).toBeNull();
   });
 });
 

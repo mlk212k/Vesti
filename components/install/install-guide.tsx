@@ -94,6 +94,7 @@ export function InstallGuide() {
       {environment.inAppBrowser ? (
         <LeaveInAppBrowser
           appName={environment.inAppBrowser}
+          menuCorner={environment.inAppMenuCorner}
           os={environment.os}
         />
       ) : environment.os === "ios" ? (
@@ -132,9 +133,12 @@ export function InstallGuide() {
  */
 function LeaveInAppBrowser({
   appName,
+  menuCorner,
   os,
 }: {
   appName: string;
+  /** Position du bouton ⋯, quand elle est connue. Voir `lib/install.ts`. */
+  menuCorner: string | null;
   os: "ios" | "android" | "other";
 }) {
   const [copied, setCopied] = useState(false);
@@ -176,8 +180,8 @@ function LeaveInAppBrowser({
         {os === "ios" ? (
           <>
             <Step index={1}>
-              Appuie sur <Glyph label="les trois points">⋯</Glyph> en bas à
-              droite de l&apos;écran.
+              Appuie sur <Glyph label="les trois points">⋯</Glyph>{" "}
+              {menuCorner ?? "dans un coin de l'écran"}.
             </Step>
             <Step index={2}>
               Choisis <Strong>« Ouvrir dans le navigateur »</Strong> ou{" "}
@@ -190,8 +194,8 @@ function LeaveInAppBrowser({
         ) : (
           <>
             <Step index={1}>
-              Appuie sur <Glyph label="les trois points">⋮</Glyph> en haut à
-              droite de l&apos;écran.
+              Appuie sur <Glyph label="les trois points">⋮</Glyph>{" "}
+              {menuCorner ?? "dans un coin de l'écran"}.
             </Step>
             <Step index={2}>
               Choisis <Strong>« Ouvrir dans le navigateur »</Strong> ou{" "}

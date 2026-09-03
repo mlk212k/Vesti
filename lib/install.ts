@@ -37,12 +37,44 @@ export const INSTALL_GATE_ENABLED = true;
 
 export type Os = "ios" | "android" | "other";
 
-/** Applications dont le navigateur intégré ne sait pas installer de PWA. */
-const IN_APP_BROWSERS: { pattern: RegExp; name: string }[] = [
+/**
+ * Applications dont le navigateur intégré ne sait pas installer de PWA.
+ *
+ * `menuCorner` : où se trouve le bouton ⋯ qui permet d'en sortir. Il n'est
+ * renseigné QUE pour les apps où il a été constaté. Ailleurs il vaut `null`, et
+ * la page dit « dans un coin de l'écran » au lieu d'envoyer regarder à un
+ * endroit précis qui serait peut-être le mauvais — le même défaut, exactement,
+ * que la flèche qui désignait la barre d'outils de Safari chez les autres.
+ *
+ * ⚠️ La position dépend du COUPLE app + système, pas de l'app seule : la même
+ * application range ce bouton en bas sur iPhone et en haut sur Android. D'où
+ * deux entrées séparées et non une valeur unique.
+ */
+const IN_APP_BROWSERS: {
+  pattern: RegExp;
+  name: string;
+  menuCorner?: { ios?: string; android?: string };
+}[] = [
   // TikTok signe ses webviews de plusieurs façons selon la plateforme et la
   // version : `musical_ly` (iOS), `trill` (Android), `BytedanceWebview` (les
   // deux). Il faut les trois — c'est la source de trafic principale.
-  { pattern: /BytedanceWebview|musical_ly|\btrill\b|TikTok/i, name: "TikTok" },
+  {
+    pattern: /BytedanceWebview|musical_ly|\btrill\b|TikTok/i,
+    name: "TikTok",
+    menuCorner: {
+      ios: "en bas à droite de l'écran",
+      android: "en haut à droite de l'écran",
+    },
+  },
+  // L'app Google — celle où l'on tape une recherche, pas Chrome. Ouvrir un
+  // résultat y ouvre SON navigateur intégré, qui ne sait pas installer d'app.
+  //
+  // ⚠️ Son agent utilisateur ne porte AUCUN suffixe de navigateur : sur iPhone
+  // il ressemble trait pour trait à celui de Safari, à `GSA/` près. Sans cette
+  // ligne il passait donc pour Safari, et la page lui montrait la flèche
+  // « c'est ce bouton » en désignant une barre d'outils qui n'est pas la
+  // sienne. C'est exactement le défaut que la flèche devait éviter.
+  { pattern: /\bGSA\//i, name: "Google" },
   { pattern: /Instagram/i, name: "Instagram" },
   { pattern: /FBAN|FBAV|FB_IAB|FBIOS/i, name: "Facebook" },
   { pattern: /Messenger/i, name: "Messenger" },
@@ -67,6 +99,12 @@ export interface BrowserEnvironment {
   os: Os;
   /** Nom de l'application dont le navigateur intégré nous retient, ou `null`. */
   inAppBrowser: string | null;
+  /**
+   * Où chercher le bouton ⋯ pour sortir de ce navigateur intégré, quand on le
+   * sait. `null` quand on ne le sait pas : la page reste alors volontairement
+   * vague plutôt que d'indiquer un coin au hasard.
+   */
+  inAppMenuCorner: string | null;
   /**
    * L'installation est-elle possible ici et maintenant ? Faux dans un
    * navigateur intégré (aucun menu pour le faire) et sur ordinateur (l'app est
@@ -109,6 +147,10 @@ export function detectEnvironment(input: {
   return {
     os,
     inAppBrowser,
+    inAppMenuCorner:
+      (os === "ios" || os === "android"
+        ? match?.menuCorner?.[os]
+        : undefined) ?? null,
     canInstallHere: inAppBrowser === null && os !== "other",
     // Un navigateur intégré est exclu d'office : il tourne sur le moteur de
     // Safari et ne porte aucun suffixe, mais sa barre d'outils n'est pas celle
