@@ -138,8 +138,17 @@ export async function searchProducts(
         costMicros(response.model, usage?.input_tokens, usage?.output_tokens) +
         searches * WEB_SEARCH_MICROS,
     };
-  } catch {
-    // Recherche indisponible : la garde-robe reste utilisable sans liens.
+  } catch (error) {
+    // ⚠️ NE JAMAIS AVALER CETTE ERREUR EN SILENCE.
+    //
+    // Rendre une liste vide est le bon comportement pour l'utilisateur : la
+    // garde-robe reste utilisable sans liens. Mais « aucun résultat » et « la
+    // recherche est cassée » se ressemblent trait pour trait à l'écran, et
+    // c'est ce qui a laissé passer une panne totale — un modèle incompatible
+    // avec l'outil de recherche faisait échouer 100 % des appels, sans une
+    // ligne nulle part. Trois fois cette session, ce catch a masqué un vrai
+    // défaut.
+    console.error("[produits] recherche échouée", error);
     return { matches: [], costMicros: 0 };
   }
 }

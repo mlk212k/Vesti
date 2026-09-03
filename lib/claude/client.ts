@@ -16,15 +16,20 @@ export const MODEL = "claude-opus-5";
  * coûtait plus de dix fois autant, sans que rien ne le mesure.
  *
  * Or chercher un pantalon noir et le mettre en JSON n'est pas un travail de
- * jugement : c'est de la lecture et du formatage. Haiku fait ça aussi bien
- * pour cinq fois moins cher à l'entrée comme à la sortie — et plus vite, ce
+ * jugement : c'est de la lecture et du formatage. Sonnet fait ça aussi bien
+ * pour 2,5 fois moins cher à l'entrée comme à la sortie — et plus vite, ce
  * qui compte autant ici, ces appels étant sur le chemin de l'utilisateur.
  *
- * ⚠️ Le jour où on voudra remonter ce modèle, mesurer d'abord ce que ça coûte
- * par analyse : la dépense est PROPORTIONNELLE au nombre de recherches, pas
- * fixe comme le verdict.
+ * ⚠️ POURQUOI PAS HAIKU, qui serait encore moins cher : essayé, et la
+ * recherche produits a cessé de rendre le moindre lien. Haiku 4.5 ne supporte
+ * ni l'outil `web_search_20260209` (réservé aux Opus 4.6+ et Sonnet 4.6+), ni
+ * `output_config.effort`. Les deux appels échouaient, et le `catch` de
+ * find-products rendait une liste vide sans rien dire.
+ *
+ * La leçon : un modèle ne se choisit pas sur son seul tarif. Vérifier qu'il
+ * supporte les OUTILS utilisés avant de le retenir.
  */
-export const SEARCH_MODEL = "claude-haiku-4-5";
+export const SEARCH_MODEL = "claude-sonnet-5";
 
 /**
  * Effort de réflexion accordé au modèle.

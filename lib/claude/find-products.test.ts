@@ -11,7 +11,7 @@ vi.mock("server-only", () => ({}));
 // SEARCH_MODEL. Ajouter ici tout nouvel export utilisé par le module testé.
 vi.mock("./client", () => ({
   MODEL: "claude-opus-5",
-  SEARCH_MODEL: "claude-haiku-4-5",
+  SEARCH_MODEL: "claude-sonnet-5",
   UTILITY_EFFORT: "low",
   getClaude: () => ({ messages: { create: createMock } }),
 }));
