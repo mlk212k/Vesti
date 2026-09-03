@@ -35,21 +35,27 @@ export async function recordReferralEarning(params: {
 
   const admin = createAdminClient();
 
-  // Du client Stripe au filleul, puis du filleul à son parrain.
-  const { data: referred } = await admin
-    .from("profiles")
-    .select("id, referred_by")
-    .eq("stripe_customer_id", params.customerId)
-    .maybeSingle<{ id: string; referred_by: string | null }>();
+  // Du client Stripe au filleul, puis du filleul à son parrain — à condition
+  // que ce parrain soit un PARTENAIRE. La règle vit en SQL (0018) plutôt
+  // qu'ici : elle décide de qui touche de l'argent, elle mérite d'être
+  // vérifiable par un test et de ne pas dépendre d'un appelant qui l'oublie.
+  const { data: recipients } = await admin.rpc("commission_recipient", {
+    p_customer: params.customerId,
+  });
 
-  if (!referred?.referred_by) return;
+  const recipient = (recipients as { referred_id: string; referrer_id: string }[] | null)?.[0];
+
+  // Aucun destinataire : client sans parrain, ou parrainé par un simple
+  // utilisateur. C'est le cas de la grande majorité des factures — le
+  // parrainage grand public se récompense en Style, pas en argent.
+  if (!recipient) return;
 
   // Base de la commission : l'encaissé, moins la TVA qui ne nous appartient pas.
   const net = netCents(params.grossCents);
 
   const { error } = await admin.from("referral_earnings").insert({
-    referrer_id: referred.referred_by,
-    referred_id: referred.id,
+    referrer_id: recipient.referrer_id,
+    referred_id: recipient.referred_id,
     stripe_id: params.stripeId,
     kind: params.kind,
     // Les trois montants sont conservés : le brut pour rapprocher avec Stripe,

@@ -26,7 +26,10 @@ declare
     'plan', 'analyses_used', 'period_start', 'stripe_customer_id',
     'referral_code', 'referred_at',
     'style_balance', 'own_code', 'referred_by', 'referred_by_at',
-    'referral_rewarded_at', 'gift_plan', 'gift_plan_until'
+    'referral_rewarded_at', 'gift_plan', 'gift_plan_until',
+    -- Se déclarer partenaire, ce serait s'attribuer 30 % du chiffre de
+    -- ses filleuls. La colonne la plus lucrative de la table.
+    'is_partner'
   ];
 begin
   foreach c in array v_siennes loop

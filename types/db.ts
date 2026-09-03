@@ -51,6 +51,8 @@ export interface Profile {
   referred_by_at: string | null;
   /** Date du versement au parrain : sa présence interdit un second versement. */
   referral_rewarded_at: string | null;
+  /** Partenaire rémunéré à la commission. Faux par défaut, posé côté serveur. */
+  is_partner: boolean;
   /** Plan offert par le parrainage. Distinct de `plan`, qui appartient à Stripe. */
   gift_plan: Plan | null;
   gift_plan_until: string | null;
