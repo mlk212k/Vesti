@@ -92,15 +92,15 @@ export async function POST(request: Request) {
   // par confiance) : chercher un produit pour un vêtement reconnu à 40 % de
   // confiance, c'est payer une recherche pour un résultat à côté.
   const searched = await Promise.all(
-    items.slice(0, MAX_PRODUCT_SEARCHES).map(async (item) => ({
-      id: item.id,
-      matches: await findProductMatches({
+    items.slice(0, MAX_PRODUCT_SEARCHES).map(async (item) => {
+      const { matches, costMicros } = await findProductMatches({
         label: item.label,
         color: item.color ?? "",
         material: item.material,
         search_terms: item.search_terms ?? [],
-      }),
-    }))
+      });
+      return { id: item.id, matches, costMicros };
+    })
   );
 
   // Écriture par le client admin : `dressing_items` n'est pas écrivable par le
@@ -116,6 +116,19 @@ export async function POST(request: Request) {
           .eq("id", entry.id)
       )
   );
+
+  // ⚠️ Le coût des recherches s'ajoute à celui du verdict, sur la MÊME ligne.
+  // Sans ça, `analyses.cost_micros` ne mesure qu'une fraction de la dépense —
+  // c'est exactement ce qui a fait croire qu'une analyse Styliste coûtait
+  // 0,034 $ quand elle en coûtait dix fois plus. Une mesure partielle est plus
+  // dangereuse qu'une absence de mesure : on lui fait confiance.
+  const searchCost = searched.reduce((total, entry) => total + entry.costMicros, 0);
+  if (searchCost > 0) {
+    await admin.rpc("add_analysis_cost", {
+      p_analysis: parsed.data.analysisId,
+      p_micros: searchCost,
+    });
+  }
 
   const foundById = new Map(searched.map((entry) => [entry.id, entry.matches]));
 

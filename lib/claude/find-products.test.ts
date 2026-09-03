@@ -4,8 +4,14 @@ import type { Garment } from "./schemas";
 const createMock = vi.fn();
 
 vi.mock("server-only", () => ({}));
+// ⚠️ Ce double doit exporter TOUT ce que find-products importe. Un export
+// manquant lève à l'import, l'exception part dans le catch de searchProducts,
+// et le test échoue sur « 0 produit » — un symptôme qui ne dit rien de la
+// cause. C'est déjà arrivé deux fois : d'abord avec UTILITY_EFFORT, puis avec
+// SEARCH_MODEL. Ajouter ici tout nouvel export utilisé par le module testé.
 vi.mock("./client", () => ({
   MODEL: "claude-opus-5",
+  SEARCH_MODEL: "claude-haiku-4-5",
   UTILITY_EFFORT: "low",
   getClaude: () => ({ messages: { create: createMock } }),
 }));
@@ -58,7 +64,7 @@ describe("findProductMatches", () => {
       ],
     });
 
-    const matches = await findProductMatches(garment);
+    const { matches } = await findProductMatches(garment);
     expect(matches).toHaveLength(1);
     expect(matches[0].url).toBe("https://boutique.fr/mocassin-noir");
   });
@@ -81,7 +87,7 @@ describe("findProductMatches", () => {
       ],
     });
 
-    expect(await findProductMatches(garment)).toEqual([]);
+    expect((await findProductMatches(garment)).matches).toEqual([]);
   });
 
   it("ne plante pas quand l'outil de recherche renvoie une erreur", async () => {
@@ -93,7 +99,7 @@ describe("findProductMatches", () => {
       ],
     });
 
-    expect(await findProductMatches(garment)).toEqual([]);
+    expect((await findProductMatches(garment)).matches).toEqual([]);
   });
 
   it("renvoie une liste vide quand la réponse est inexploitable", async () => {
@@ -104,7 +110,7 @@ describe("findProductMatches", () => {
     // est le même que sur une panne réseau.
     createMock.mockResolvedValue(null);
 
-    expect(await findProductMatches(garment)).toEqual([]);
+    expect((await findProductMatches(garment)).matches).toEqual([]);
   });
 
   it("tolère du texte autour du JSON", async () => {
@@ -118,7 +124,7 @@ describe("findProductMatches", () => {
       ],
     });
 
-    const matches = await findProductMatches(garment);
+    const { matches } = await findProductMatches(garment);
     expect(matches).toHaveLength(1);
   });
 });

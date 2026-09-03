@@ -3,8 +3,28 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { serverEnv } from "@/lib/env.server";
 
-/** Modèle unique de l'app. Centralisé pour n'avoir qu'un endroit à changer. */
+/** Modèle du verdict : ce que le client paie, on n'y touche pas. */
 export const MODEL = "claude-opus-5";
+
+/**
+ * Modèle des recherches produits.
+ *
+ * 💸 SÉPARÉ DU VERDICT APRÈS UNE FACTURE SALÉE. Les recherches tournaient sur
+ * Opus, et une analyse Styliste en enchaîne jusqu'à trois — chacune ramenant
+ * des pages web entières dans le contexte, facturées au tarif d'entrée du
+ * modèle le plus cher. Le verdict coûtait 0,034 $ ; l'analyse complète en
+ * coûtait plus de dix fois autant, sans que rien ne le mesure.
+ *
+ * Or chercher un pantalon noir et le mettre en JSON n'est pas un travail de
+ * jugement : c'est de la lecture et du formatage. Haiku fait ça aussi bien
+ * pour cinq fois moins cher à l'entrée comme à la sortie — et plus vite, ce
+ * qui compte autant ici, ces appels étant sur le chemin de l'utilisateur.
+ *
+ * ⚠️ Le jour où on voudra remonter ce modèle, mesurer d'abord ce que ça coûte
+ * par analyse : la dépense est PROPORTIONNELLE au nombre de recherches, pas
+ * fixe comme le verdict.
+ */
+export const SEARCH_MODEL = "claude-haiku-4-5";
 
 /**
  * Effort de réflexion accordé au modèle.

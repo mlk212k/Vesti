@@ -76,7 +76,7 @@ export async function POST(request: Request) {
   }
 
   const query = [suggestion.item, suggestion.occasion].filter(Boolean).join(" ");
-  const matches = await searchProducts(query);
+  const { matches } = await searchProducts(query);
 
   const admin = createAdminClient();
   await admin

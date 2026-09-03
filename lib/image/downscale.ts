@@ -68,13 +68,35 @@ export async function downscaleImage(
   maxEdge = MAX_EDGE
 ): Promise<{ file: File; shrunk: boolean }> {
   try {
-    const bitmap = await createImageBitmap(file);
-    const target = fitWithin(bitmap.width, bitmap.height, maxEdge);
+    // ⚠️ Laisser le navigateur PEINDRE avant de commencer.
+    //
+    // Décoder puis ré-encoder une photo de 12 mégapixels occupe le fil
+    // principal plusieurs secondes sur un téléphone. Appelée aussitôt après le
+    // `setState` de l'aperçu, cette fonction retardait l'affichage de la photo
+    // d'autant : on venait de la prendre et l'écran restait vide.
+    //
+    // Deux trames d'attente suffisent : la première laisse React produire le
+    // rendu, la seconde laisse le navigateur l'afficher. Le redimensionnement
+    // ne commence qu'après, et le décalage devient invisible.
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve))
+    );
 
-    if (target.width === bitmap.width && target.height === bitmap.height) {
-      bitmap.close();
-      return { file, shrunk: false };
-    }
+    const probe = await createImageBitmap(file);
+    const target = fitWithin(probe.width, probe.height, maxEdge);
+    const already = target.width === probe.width && target.height === probe.height;
+    probe.close();
+
+    if (already) return { file, shrunk: false };
+
+    // Redimensionné par le décodeur plutôt que par le canvas : le navigateur
+    // le fait hors du fil principal, là où `drawImage` sur une image pleine
+    // résolution le bloque.
+    const bitmap = await createImageBitmap(file, {
+      resizeWidth: target.width,
+      resizeHeight: target.height,
+      resizeQuality: "high",
+    });
 
     const canvas = document.createElement("canvas");
     canvas.width = target.width;

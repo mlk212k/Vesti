@@ -90,12 +90,14 @@ export async function POST() {
   const withProducts = await Promise.all(
     pieces.map(async (piece) => ({
       ...piece,
-      matches: await searchProducts(piece.search, {
-        gender: profile.gender,
-        height_cm: profile.height_cm,
-        morphology: profile.morphology,
-        style_prefs: profile.style_prefs,
-      }),
+      matches: (
+        await searchProducts(piece.search, {
+          gender: profile.gender,
+          height_cm: profile.height_cm,
+          morphology: profile.morphology,
+          style_prefs: profile.style_prefs,
+        })
+      ).matches,
     }))
   );
 

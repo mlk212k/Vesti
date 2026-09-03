@@ -21,6 +21,16 @@ export const MODEL_PRICES: Record<string, { inputPerMTok: number; outputPerMTok:
 const FALLBACK = MODEL_PRICES["claude-opus-5"];
 
 /**
+ * Coût d'UNE recherche web, en micro-dollars (10 $ les mille).
+ *
+ * ⚠️ Facturée à l'acte, en plus des tokens. C'est ce qui rend une recherche
+ * produit trompeuse : elle coûte une première fois par l'appel, une seconde
+ * par la recherche elle-même, et une troisième par les pages qu'elle ramène
+ * dans le contexte. Compter les seuls tokens la sous-estime.
+ */
+export const WEB_SEARCH_MICROS = 10_000;
+
+/**
  * Coût d'un appel, en MICRO-DOLLARS (millionièmes de dollar).
  *
  * Ni en dollars flottants — les erreurs s'accumulent à la sommation — ni en

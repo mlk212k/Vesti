@@ -1,15 +1,30 @@
 import "server-only";
 
-import { getClaude, MODEL, UTILITY_EFFORT } from "./client";
+import { getClaude, SEARCH_MODEL, UTILITY_EFFORT } from "./client";
 import { PRODUCT_SEARCH_SYSTEM_PROMPT } from "./prompts";
 import { productMatchesSchema, type Garment, type ProductMatch } from "./schemas";
 import { attachImages } from "@/lib/products/fetch-image";
+import { costMicros, WEB_SEARCH_MICROS } from "./pricing";
 
 /**
  * Ce qu'on sait de la personne, pour que la recherche lui corresponde.
  * Tout est facultatif : un profil vide donne une recherche générique, pas une
  * erreur.
  */
+/**
+ * Ce que la recherche a rendu, ET ce qu'elle a coûté.
+ *
+ * ⚠️ Le coût fait partie du retour, il n'est pas laissé de côté « pour plus
+ * tard ». C'est précisément l'oubli qui a fait croire qu'une analyse Styliste
+ * coûtait 0,034 $ alors qu'elle en coûtait dix fois plus : le verdict était
+ * mesuré, les recherches ne l'étaient pas, et rien dans le code ne signalait
+ * le trou.
+ */
+export interface SearchResult {
+  matches: ProductMatch[];
+  costMicros: number;
+}
+
 export interface ShopperContext {
   gender?: string | null;
   height_cm?: number | null;
@@ -50,7 +65,7 @@ export async function findProductMatches(
   // servent, et la recherche différée les relit en base plutôt que de
   // reconstituer une fiche complète.
   garment: Pick<Garment, "label" | "color" | "material" | "search_terms">
-): Promise<ProductMatch[]> {
+): Promise<SearchResult> {
   const query = [garment.label, garment.color, garment.material, ...garment.search_terms]
     .filter(Boolean)
     .join(" ");
@@ -64,12 +79,12 @@ export async function findProductMatches(
 export async function searchProducts(
   query: string,
   context?: ShopperContext
-): Promise<ProductMatch[]> {
+): Promise<SearchResult> {
   const claude = getClaude();
 
   try {
     const response = await claude.messages.create({
-      model: MODEL,
+      model: SEARCH_MODEL,
       max_tokens: 2000,
       output_config: { effort: UTILITY_EFFORT },
       system: PRODUCT_SEARCH_SYSTEM_PROMPT,
@@ -77,9 +92,11 @@ export async function searchProducts(
         {
           type: "web_search_20260209",
           name: "web_search",
-          // Plafond dur : la recherche web est facturée à l'usage, et une pièce
-          // ne justifie pas une exploration illimitée.
-          max_uses: 3,
+          // Plafond dur : chaque recherche est facturée À L'ACTE, et ramène
+          // en plus des pages entières dans le contexte — donc elle coûte
+          // deux fois. Deux suffisent pour trouver un vêtement précis ; la
+          // troisième ne faisait qu'élargir le filet.
+          max_uses: 2,
         },
       ],
       messages: [
@@ -96,12 +113,34 @@ export async function searchProducts(
 
     const kept = parsed.filter((match) => allowedUrls.has(normalizeUrl(match.url)));
 
+    // Les recherches web se facturent à l'acte, en plus des tokens : les
+    // omettre sous-estimerait le coût de moitié sur un appel court.
+    // ⚠️ Tout est lu en optionnel. Une réponse sans `usage` ferait lever
+    // l'accès direct, et comme le calcul du coût est DANS le try, l'exception
+    // partirait au catch et renverrait une liste vide : on perdrait les
+    // produits trouvés pour un problème de comptabilité. La mesure ne doit
+    // jamais pouvoir casser ce qu'elle mesure.
+    const usage = response.usage as
+      | {
+          input_tokens?: number | null;
+          output_tokens?: number | null;
+          server_tool_use?: { web_search_requests?: number };
+        }
+      | undefined;
+
+    const searches = usage?.server_tool_use?.web_search_requests ?? 0;
+
     // La photo est lue sur la page du produit, après le filtre : inutile
     // d'aller chercher l'image d'un lien qu'on s'apprête à jeter.
-    return attachImages(kept);
+    return {
+      matches: await attachImages(kept),
+      costMicros:
+        costMicros(response.model, usage?.input_tokens, usage?.output_tokens) +
+        searches * WEB_SEARCH_MICROS,
+    };
   } catch {
     // Recherche indisponible : la garde-robe reste utilisable sans liens.
-    return [];
+    return { matches: [], costMicros: 0 };
   }
 }
 

@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const matches = await searchProducts(parsed.data.query, {
+  const { matches } = await searchProducts(parsed.data.query, {
     gender: profile.gender,
     height_cm: profile.height_cm,
     morphology: profile.morphology,
