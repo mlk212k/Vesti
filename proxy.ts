@@ -88,6 +88,36 @@ export async function proxy(request: NextRequest) {
       sameSite: "lax",
       path: "/",
     });
+
+    // Le code est rangé dans le cookie : on le retire de l'URL et on renvoie
+    // vers l'adresse propre.
+    //
+    // ⚠️ Sans ça, `?ref=` reste dans la barre d'adresse — et suit tout ce qu'on
+    // en copie. Quelqu'un qui partage « le lien de l'app » à ses amis leur
+    // envoie en réalité le lien parrainé de la dernière personne dont il a
+    // suivi le lien. L'app installée aggravait le cas : son `start_url`
+    // contient le code, donc chaque lancement le remettait dans l'URL.
+    //
+    // ⚠️ SAUF pour le manifeste, et c'est vital : c'est justement le paramètre
+    // de son URL qui inscrit le code dans `start_url` (voir
+    // `app/manifest.webmanifest/route.ts`). Le lui retirer casserait
+    // l'attribution sur iPhone — le défaut le plus coûteux du parcours
+    // influenceur, celui que ce manifeste dynamique existe pour éviter.
+    //
+    // Limité aux GET : rediriger un POST le rejouerait à l'aveugle.
+    if (pathname !== "/manifest.webmanifest" && request.method === "GET") {
+      const clean = request.nextUrl.clone();
+      clean.searchParams.delete("ref");
+
+      const redirect = NextResponse.redirect(clean);
+      // Les cookies déjà posés sur `response` — le code qu'on vient de ranger,
+      // mais aussi la session Supabase rafraîchie juste au-dessus. Les oublier
+      // déconnecterait au passage quiconque arrive par un lien parrainé.
+      for (const cookie of response.cookies.getAll()) {
+        redirect.cookies.set(cookie);
+      }
+      return redirect;
+    }
   }
 
   if (!user && matches(pathname, PROTECTED_PREFIXES)) {
