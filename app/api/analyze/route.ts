@@ -6,6 +6,7 @@ import { loadImageForClaude } from "@/lib/supabase/storage";
 import { consumeQuota, releaseQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { costMicros } from "@/lib/claude/pricing";
+import { recordSpend } from "@/lib/ai-budget";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import { awardReferralStyle } from "@/lib/style.server";
 import type { Profile } from "@/types/db";
@@ -100,6 +101,7 @@ export async function POST(request: Request) {
     const keepsWardrobe = hasFeature(plan, "dressing");
     const getsShopping = hasFeature(plan, "shopping");
 
+    const verdictCost = costMicros(model, usage.inputTokens, usage.outputTokens);
     const admin = createAdminClient();
 
     const { data: inserted } = await admin
@@ -120,7 +122,7 @@ export async function POST(request: Request) {
         output_tokens: usage.outputTokens,
         // Le coût est figé ici, au tarif du jour : recalculé plus tard, il
         // serait faux dès le prochain changement de prix ou de modèle.
-        cost_micros: costMicros(model, usage.inputTokens, usage.outputTokens),
+        cost_micros: verdictCost,
       })
       .select("id")
       .single();
@@ -150,6 +152,10 @@ export async function POST(request: Request) {
         }))
       );
     }
+
+    // Toute dépense IA passe au registre, pas seulement celles rattachées à
+    // une analyse : c'est lui qui garantit la marge du mois.
+    await recordSpend(user.id, "verdict", verdictCost);
 
     // Le parrain n'est payé qu'ici : après une analyse réellement rendue, et
     // pas à l'inscription du filleul. Sans effet si celui-ci n'a pas de parrain

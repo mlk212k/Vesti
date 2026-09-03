@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { advisePurchases, type AnalysedOutfit } from "@/lib/claude/advise-purchases";
 import { searchProducts } from "@/lib/claude/find-products";
+import { hasBudgetLeft, recordSpend } from "@/lib/ai-budget";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import type { Profile } from "@/types/db";
 
@@ -85,19 +86,36 @@ export async function POST() {
 
   const pieces = await advisePurchases(outfits, wardrobe);
 
+  // Un diagnostic PUIS jusqu'à trois recherches : c'est l'appel le plus cher
+  // de toute l'app. Il ne part pas si l'enveloppe du mois est vide.
+  if (!(await hasBudgetLeft(user.id))) {
+    return NextResponse.json(
+      {
+        error: "budget_reached",
+        message: {
+          title: "Recherches épuisées pour ce mois",
+          body: "Tu as utilisé toutes les recherches de produits de ton forfait. Elles repartent au prochain cycle — tes analyses, elles, continuent normalement.",
+        },
+      },
+      { status: 402 }
+    );
+  }
+
   // Les recherches partent en parallèle : trois en série ajouteraient trois
   // temps d'attente bout à bout, sur une page qui attend déjà le diagnostic.
   const withProducts = await Promise.all(
     pieces.map(async (piece) => ({
       ...piece,
-      matches: (
-        await searchProducts(piece.search, {
+      ...(await (async () => {
+        const { matches, costMicros } = await searchProducts(piece.search, {
           gender: profile.gender,
           height_cm: profile.height_cm,
           morphology: profile.morphology,
           style_prefs: profile.style_prefs,
-        })
-      ).matches,
+        });
+        await recordSpend(user.id, "product_search", costMicros);
+        return { matches };
+      })()),
     }))
   );
 

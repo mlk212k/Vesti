@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { findProductMatches } from "@/lib/claude/find-products";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
+import { hasBudgetLeft, recordSpend } from "@/lib/ai-budget";
 
 const bodySchema = z.object({
   analysisId: z.uuid(),
@@ -20,10 +21,12 @@ export const maxDuration = 120;
  * déclencher dix, et dix recherches sur un abonnement à 17,99 € par mois
  * mangent la marge d'un coup.
  *
- * Trois suffisent : au-delà, on propose des liens pour des pièces secondaires
- * que personne ne clique.
+ * 💸 Ramené de 3 à 1 après mesure : trois recherches coûtaient 0,363 $ par
+ * analyse, soit onze fois le verdict. La pièce la mieux identifiée est aussi
+ * celle dont les liens servent ; les deux suivantes proposaient des pièces
+ * secondaires que personne ne clique, au même prix.
  */
-const MAX_PRODUCT_SEARCHES = 3;
+const MAX_PRODUCT_SEARCHES = 1;
 
 /**
  * Cherche les produits d'une analyse — APRÈS que le verdict a été rendu.
@@ -88,6 +91,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ garments: items.map(toGarmentView), cached: true });
   }
 
+  // ⚠️ LE GARDE-FOU DE LA MARGE, et il est placé ici pour une raison : c'est le
+  // seul appel dont le coût peut s'emballer. Une recherche coûte dix fois un
+  // verdict, et rien dans un plafond d'analyses ne le voit passer.
+  //
+  // Budget épuisé : on rend les pièces sans liens, en le disant. Le verdict,
+  // lui, a déjà été rendu et ne dépend pas de ceci — on ampute le produit de sa
+  // partie la plus chère, pas de sa raison d'être.
+  if (!(await hasBudgetLeft(user.id))) {
+    return NextResponse.json({
+      garments: items.map(toGarmentView),
+      budgetReached: true,
+    });
+  }
+
   // Les pièces les plus sûrement identifiées d'abord (la requête les trie déjà
   // par confiance) : chercher un produit pour un vêtement reconnu à 40 % de
   // confiance, c'est payer une recherche pour un résultat à côté.
@@ -128,6 +145,9 @@ export async function POST(request: Request) {
       p_analysis: parsed.data.analysisId,
       p_micros: searchCost,
     });
+    // Au registre aussi : c'est lui qui coupera les recherches suivantes une
+    // fois l'enveloppe du mois épuisée.
+    await recordSpend(user.id, "product_search", searchCost);
   }
 
   const foundById = new Map(searched.map((entry) => [entry.id, entry.matches]));

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { searchProducts } from "@/lib/claude/find-products";
+import { hasBudgetLeft, recordSpend } from "@/lib/ai-budget";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 
 const bodySchema = z.object({
@@ -75,8 +76,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ matches: suggestion.product_matches, cached: true });
   }
 
+  if (!(await hasBudgetLeft(user.id))) {
+    return NextResponse.json(
+      {
+        error: "budget_reached",
+        message: {
+          title: "Recherches épuisées pour ce mois",
+          body: "Tu as utilisé toutes les recherches de produits de ton forfait. Elles repartent au prochain cycle — tes analyses, elles, continuent normalement.",
+        },
+      },
+      { status: 402 }
+    );
+  }
+
   const query = [suggestion.item, suggestion.occasion].filter(Boolean).join(" ");
-  const { matches } = await searchProducts(query);
+  const { matches, costMicros } = await searchProducts(query);
+  await recordSpend(user.id, "product_search", costMicros);
 
   const admin = createAdminClient();
   await admin

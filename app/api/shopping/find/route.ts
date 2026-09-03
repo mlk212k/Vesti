@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { searchProducts } from "@/lib/claude/find-products";
+import { hasBudgetLeft, recordSpend } from "@/lib/ai-budget";
 import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
 import type { Profile } from "@/types/db";
 
@@ -59,12 +60,29 @@ export async function POST(request: Request) {
     );
   }
 
-  const { matches } = await searchProducts(parsed.data.query, {
+  // Les recherches web sont la dépense la plus lourde de l'app : on vérifie
+  // l'enveloppe du mois avant d'en lancer une.
+  if (!(await hasBudgetLeft(user.id))) {
+    return NextResponse.json(
+      {
+        error: "budget_reached",
+        message: {
+          title: "Recherches épuisées pour ce mois",
+          body: "Tu as utilisé toutes les recherches de produits de ton forfait. Elles repartent au prochain cycle — tes analyses, elles, continuent normalement.",
+        },
+      },
+      { status: 402 }
+    );
+  }
+
+  const { matches, costMicros } = await searchProducts(parsed.data.query, {
     gender: profile.gender,
     height_cm: profile.height_cm,
     morphology: profile.morphology,
     style_prefs: profile.style_prefs,
   });
+
+  await recordSpend(user.id, "product_search", costMicros);
 
   return NextResponse.json({ matches });
 }
