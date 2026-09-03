@@ -114,11 +114,16 @@ export interface BrowserEnvironment {
   /**
    * Safari sur iPhone ou iPad, et lui seul.
    *
-   * ⚠️ Sert à décider si l'on peut DÉSIGNER le bouton Partager du doigt. Il est
-   * en bas de l'écran dans Safari, mais dans la barre d'adresse EN HAUT sur
-   * Chrome iOS et les autres. Une flèche vers le bas y pointerait le vide, ce
-   * qui est pire que pas de flèche du tout : elle ferait chercher au mauvais
-   * endroit quelqu'un qui suivait déjà les instructions.
+   * ⚠️ Sert à décider CE QU'ON OSE AFFIRMER sur la position du bouton Partager.
+   *
+   * Dans Chrome, Firefox et Edge iOS, il est toujours dans la barre d'adresse,
+   * en haut : on peut le dire. Dans Safari, non — la barre d'outils se met en
+   * bas ou en haut selon un réglage du téléphone (« Onglet unique »), que rien
+   * ne permet de lire depuis une page. Là, on se contente de montrer l'icône.
+   *
+   * Une flèche animée désignait autrefois le bas de l'écran ; elle a été
+   * retirée pour cette raison exacte. Faire chercher au mauvais endroit
+   * quelqu'un qui suit les instructions est pire que ne rien montrer.
    */
   isIosSafari: boolean;
 }

@@ -62,21 +62,8 @@ export function InstallGuide() {
 
   if (installed) return <InstalledConfirmation />;
 
-  // La flèche ne se montre que dans SAFARI. Ailleurs sur iPhone — Chrome,
-  // Firefox, Edge — le bouton Partager est dans la barre d'adresse, en haut :
-  // une flèche vers le bas y désignerait le vide, et enverrait chercher au
-  // mauvais endroit quelqu'un qui suivait pourtant les instructions.
-  //
-  // Elle est en position fixe, d'où la marge basse : sans elle, elle
-  // recouvrirait la fin de la page — dont les liens légaux.
-  const showsPointer = environment.isIosSafari;
-
   return (
-    <main
-      className={`flex min-h-dvh flex-1 flex-col gap-7 px-6 pt-12 ${
-        showsPointer ? "pb-56" : "pb-10"
-      }`}
-    >
+    <main className="flex min-h-dvh flex-1 flex-col gap-7 px-6 pt-12 pb-10">
       <header className="flex flex-col items-center gap-4 text-center">
         <LogoMark size={88} priority />
         <h1 className="text-[2rem] font-extrabold leading-[1.05]">
@@ -98,7 +85,7 @@ export function InstallGuide() {
           os={environment.os}
         />
       ) : environment.os === "ios" ? (
-        <IosSteps showPointer={environment.isIosSafari} />
+        <IosSteps isSafari={environment.isIosSafari} />
       ) : environment.os === "android" ? (
         <AndroidSteps promptEvent={promptEvent} />
       ) : (
@@ -223,17 +210,32 @@ function LeaveInAppBrowser({
 
 /* ─── iOS ─────────────────────────────────────────────────────────────────── */
 
-function IosSteps({ showPointer }: { showPointer: boolean }) {
+/**
+ * ⚠️ Aucune flèche ici, et c'est un choix, pas un oubli.
+ *
+ * Une flèche animée désignait le bouton Partager en bas de l'écran. Elle a été
+ * retirée : Safari laisse choisir où mettre sa barre d'outils — en bas, ou en
+ * haut avec le réglage « Onglet unique » — et rien, côté page, ne permet de
+ * savoir lequel des deux est actif. La flèche pointait donc le vide chez une
+ * partie des gens, ce qui est pire que pas de flèche : elle fait chercher au
+ * mauvais endroit quelqu'un qui suivait pourtant les instructions.
+ *
+ * Pour la même raison, l'étape 1 ne dit plus où se trouve le bouton dans
+ * Safari : elle le montre. L'icône dessinée à gauche de la phrase permet de le
+ * reconnaître, où qu'Apple — ou l'utilisateur — l'ait rangé.
+ *
+ * Chrome, Firefox et Edge n'ont pas ce réglage : leur bouton est toujours dans
+ * la barre d'adresse, en haut. Là, et là seulement, on peut l'affirmer.
+ */
+function IosSteps({ isSafari }: { isSafari: boolean }) {
   return (
     <>
       <StepList>
         <Step index={1} icon={<ShareIcon />}>
           Appuie sur le bouton <Strong>Partager</Strong>{" "}
-          {showPointer ? (
-            // Safari : la barre d'outils est en bas, et la flèche le désigne.
-            <>— tout en bas de l&apos;écran.</>
+          {isSafari ? (
+            <>— celui-ci, dans la barre de Safari.</>
           ) : (
-            // Chrome, Firefox, Edge : il vit dans la barre d'adresse, en haut.
             <>— en haut, dans la barre d&apos;adresse.</>
           )}
         </Step>
@@ -246,56 +248,7 @@ function IosSteps({ showPointer }: { showPointer: boolean }) {
           Vesti apparaît sur ton écran d&apos;accueil.
         </Step>
       </StepList>
-      {showPointer && <SharePointer />}
     </>
-  );
-}
-
-/**
- * La flèche qui désigne le bouton Partager, en bas de l'écran.
- *
- * ⚠️ C'est le seul levier qui reste sur iPhone. Apple n'expose aucune API pour
- * ajouter une app à l'écran d'accueil : contrairement à Android, on ne peut pas
- * proposer de bouton qui le fasse. Le geste appartient à l'utilisateur, et tout
- * ce qu'on peut faire est de le rendre évident.
- *
- * Trois phrases numérotées ne suffisaient pas : beaucoup ne savent pas à quoi
- * ressemble ce bouton, ni qu'il est en bas. Une flèche qui bouge à l'endroit
- * exact se suit sans rien lire — et l'icône dessinée à côté permet de le
- * reconnaître avant même de baisser les yeux.
- *
- * Positionnée au-dessus de `safe-area-inset-bottom` : sur iPhone, la barre
- * d'outils de Safari occupe cette zone, et s'y superposer reviendrait à cacher
- * ce qu'on cherche à montrer.
- */
-function SharePointer() {
-  return (
-    <div
-      // Dégradé vers le fond : le texte qui défile dessous s'efface au lieu de
-      // se superposer à la pastille, qui deviendrait illisible.
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex flex-col items-center gap-2 bg-gradient-to-t from-background via-background to-transparent pt-14 pb-[calc(env(safe-area-inset-bottom)+12px)]"
-      aria-hidden
-    >
-      <div className="flex items-center gap-2 rounded-full bg-accent px-4 py-2 shadow-[var(--shadow-lift)]">
-        <span className="text-accent-foreground">
-          <ShareIcon />
-        </span>
-        <span className="text-[13px] font-bold text-accent-foreground">
-          C&apos;est ce bouton
-        </span>
-      </div>
-      <span className="vesti-point-down text-accent">
-        <ChevronDownIcon />
-      </span>
-    </div>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg {...iconProps} width={30} height={30} strokeWidth={2.4}>
-      <path d="M6 9.5 12 15.5 18 9.5" />
-    </svg>
   );
 }
 

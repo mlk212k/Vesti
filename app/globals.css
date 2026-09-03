@@ -289,28 +289,6 @@ textarea {
   }
 }
 
-/* Flèche qui désigne le bouton Partager d'iOS.
-   Sur iPhone, ajouter une app à l'écran d'accueil passe obligatoirement par ce
-   bouton : Apple n'expose aucune API pour le faire à la place de
-   l'utilisateur. Décrire le geste en toutes lettres ne suffit pas — beaucoup
-   ne savent pas à quoi ressemble ce bouton ni où il se trouve. Une flèche qui
-   bouge, elle, se suit sans lire.
-   Va-et-vient court et lent : assez pour attirer l'œil, pas assez pour gêner
-   la lecture du reste de la page. */
-.vesti-point-down {
-  animation: vesti-point-down 1.6s ease-in-out infinite;
-}
-
-@keyframes vesti-point-down {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -88,10 +88,12 @@ describe("detectEnvironment", () => {
 });
 
 describe("isIosSafari", () => {
-  // ⚠️ Ce drapeau décide si l'on ose DÉSIGNER le bouton Partager du doigt.
-  // Il est en bas de l'écran dans Safari, mais dans la barre d'adresse en HAUT
-  // sur Chrome iOS et les autres. Se tromper, c'est envoyer chercher au mauvais
-  // endroit quelqu'un qui suivait les instructions — pire que ne rien montrer.
+  // ⚠️ Ce drapeau décide de ce qu'on ose AFFIRMER sur la position du bouton
+  // Partager : « en haut, dans la barre d'adresse » chez Chrome iOS et les
+  // autres, où c'est toujours vrai — et rien de tel dans Safari, dont la barre
+  // se met en bas ou en haut selon un réglage qu'aucune page ne peut lire.
+  // Se tromper, c'est envoyer chercher au mauvais endroit quelqu'un qui suivait
+  // les instructions — pire que ne rien montrer.
   const detect = (userAgent: string, maxTouchPoints = 5) =>
     detectEnvironment({ userAgent, maxTouchPoints });
 
