@@ -58,15 +58,15 @@ export const SOCIAL_NETWORKS: SocialNetwork[] = [
     id: "instagram",
     label: "Instagram",
     hint: "Les tenues du jour et les avant/après",
-    // À remplir avec le vrai compte : `https://instagram.com/<pseudo>`.
-    url: null,
+    url: "https://instagram.com/vesti__app",
   },
   {
     id: "tiktok",
     label: "TikTok",
     hint: "Les analyses en vidéo, et les pires tenues qu'on ait vues",
-    // À remplir avec le vrai compte : `https://tiktok.com/@<pseudo>`.
-    url: null,
+    // ⚠️ L'arobase fait partie du chemin chez TikTok. Sans elle, l'adresse
+    // mène à une recherche et non au compte — `isSocialUrl` la vérifie.
+    url: "https://tiktok.com/@vesti_app",
   },
 ];
 
