@@ -61,26 +61,13 @@ export default async function DashboardPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
-      <header className="flex items-center justify-between gap-3">
+      {/* Le petit bonhomme en haut à droite menait ici aux réglages. Il a été
+          retiré : les réglages sont désormais un onglet de la barre du bas, à
+          portée de pouce. Deux portes vers le même endroit, dont une hors de
+          portée en haut de l'écran, ne font pas gagner de temps — elles
+          obligent à choisir. */}
+      <header className="flex items-center">
         <Wordmark size={26} priority />
-        <Link
-          href="/compte"
-          aria-label="Mon compte"
-          className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-border-soft bg-surface text-muted transition hover:border-accent hover:text-accent-strong"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.9"
-            strokeLinecap="round"
-          >
-            <circle cx="12" cy="8" r="3.6" />
-            <path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6" />
-          </svg>
-        </Link>
       </header>
 
       <h1 className="text-[2rem] font-extrabold leading-[1.05]">

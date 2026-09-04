@@ -43,41 +43,37 @@ export function ThemePicker() {
     for (const listener of listeners) listener();
   }
 
+  // ⚠️ Ce composant ne porte NI cadre, NI titre : il n'est que le sélecteur.
+  // Il possédait les deux, et se retrouvait imbriqué dans le groupe
+  // « Apparence » des réglages — qui affichait donc le mot deux fois, dans deux
+  // cadres emboîtés. Un composant qui décide de son propre entourage ne peut
+  // être posé nulle part ailleurs sans se répéter.
   return (
-    <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-sm font-semibold">Apparence</h2>
-        <p className="text-xs leading-relaxed text-muted">
-          « Système » suit le réglage de ton téléphone.
-        </p>
-      </div>
-
-      <div
-        role="radiogroup"
-        aria-label="Thème de l'application"
-        className="flex gap-2"
-      >
-        {THEME_CHOICES.map((option) => {
-          const active = choice === option.value;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              role="radio"
-              aria-checked={active}
-              onClick={() => select(option.value)}
-              style={{ touchAction: "manipulation" }}
-              className={`flex flex-1 items-center justify-center rounded-full px-3 py-2.5 text-xs font-semibold transition ${
-                active
-                  ? "bg-accent text-accent-foreground"
-                  : "border border-border-soft text-muted hover:border-accent hover:text-accent-strong"
-              }`}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
-    </section>
+    <div
+      role="radiogroup"
+      aria-label="Thème de l'application"
+      className="flex gap-2"
+    >
+      {THEME_CHOICES.map((option) => {
+        const active = choice === option.value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => select(option.value)}
+            style={{ touchAction: "manipulation" }}
+            className={`flex min-h-[44px] flex-1 items-center justify-center rounded-[var(--radius-control)] px-3 text-xs font-semibold transition ${
+              active
+                ? "bg-accent text-accent-foreground"
+                : "border border-border-soft text-muted hover:border-accent hover:text-accent-strong"
+            }`}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }

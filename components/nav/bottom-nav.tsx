@@ -11,10 +11,14 @@ import { usePathname } from "next/navigation";
  */
 const TABS = [
   { href: "/dashboard", label: "Accueil", icon: HomeIcon },
-  { href: "/analyze", label: "Analyser", icon: CameraIcon },
   { href: "/dressing", label: "Dressing", icon: HangerIcon },
   { href: "/shopping", label: "Acheter", icon: BagIcon },
   { href: "/history", label: "Progrès", icon: ChartIcon },
+  // ⚠️ « Analyser » occupait cette barre alors que l'accueil porte déjà le
+  // bouton « Analyser une tenue », en grand, au-dessus de la ligne de flottaison.
+  // Un onglet qui double une action déjà visible ne fait pas gagner un tap : il
+  // occupe un cinquième de la barre, où il empêchait les réglages d'exister.
+  { href: "/compte", label: "Paramètres", icon: SlidersIcon },
 ] as const;
 
 export function BottomNav() {
@@ -67,7 +71,10 @@ export function BottomNav() {
           marge basse d'iOS, et la pastille descendrait de la hauteur de cette
           marge — d'autant plus bas que le téléphone a une encoche. */}
       <div className="relative flex w-full">
-        <SlidingPill index={tappedIndex >= 0 ? tappedIndex : activeIndex} />
+        <SlidingPill
+          index={tappedIndex >= 0 ? tappedIndex : activeIndex}
+          count={TABS.length}
+        />
         {TABS.map((tab) => {
           const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
           const Icon = tab.icon;
@@ -132,9 +139,10 @@ export function BottomNav() {
  *
  * ── Comment elle tombe pile au bon endroit, sans mesurer quoi que ce soit ──
  *
- * Horizontalement : les onglets sont en `flex-1` avec une base nulle, donc
- * exactement à un cinquième chacun. La pastille vit dans une case `w-1/5` et se
- * décale de `index × 100 %` de SA propre largeur — soit exactement une case.
+ * Horizontalement : les onglets sont en `flex-1` avec une base nulle, donc tous
+ * de largeur identique. La pastille vit dans une case de cette même largeur —
+ * calculée depuis le nombre d'onglets, pas écrite en dur — et se décale de
+ * `index × 100 %` de SA propre largeur, soit exactement une case.
  *
  * Verticalement : la case rejoue les mêmes classes de mise en page que les
  * onglets (`justify-center gap-1 pt-1.5`) et contient les deux mêmes boîtes —
@@ -143,7 +151,7 @@ export function BottomNav() {
  * ou la taille du libellé changent un jour. Une valeur `top` codée en dur, elle,
  * se serait décalée en silence à la première de ces retouches.
  */
-function SlidingPill({ index }: { index: number }) {
+function SlidingPill({ index, count }: { index: number; count: number }) {
   // Aucun onglet ne correspond (réglages, facturation…) : pas de pastille du
   // tout. La laisser sous « Accueil » désignerait une page où l'on n'est pas.
   if (index < 0) return null;
@@ -151,8 +159,14 @@ function SlidingPill({ index }: { index: number }) {
   return (
     <div className="pointer-events-none absolute inset-0 flex" aria-hidden>
       <div
-        className="flex w-1/5 flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{ transform: `translateX(${index * 100}%)` }}
+        className="flex flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        // La largeur vient du NOMBRE d'onglets, pas d'une classe `w-1/5` figée :
+        // le jour où l'on en ajoute ou en retire un — c'est arrivé — la pastille
+        // se serait décalée en silence sur tous les onglets sauf le premier.
+        style={{
+          width: `${100 / count}%`,
+          transform: `translateX(${index * 100}%)`,
+        }}
       >
         <span className="h-7 w-12 rounded-full bg-accent-soft" />
         {/* Cale invisible : elle occupe la ligne du libellé pour que le
@@ -201,17 +215,6 @@ function HomeIcon({ active }: { active: boolean }) {
   );
 }
 
-/** Analyser — l'appareil photo, puisque tout commence par une photo de la tenue. */
-function CameraIcon({ active }: { active: boolean }) {
-  return (
-    <svg {...iconProps(active)}>
-      <rect x="2.7" y="7.5" width="18.6" height="12.9" rx="3.4" />
-      <path d="M8.8 7.5 10.1 5h3.8l1.3 2.5" />
-      <circle cx="12" cy="13.9" r="3.2" />
-    </svg>
-  );
-}
-
 /**
  * Dressing — un cintre. L'ancien dessin était cassé : son crochet partait d'un
  * arc mal fermé et se lisait comme un trait perdu au-dessus du triangle.
@@ -233,6 +236,27 @@ function BagIcon({ active }: { active: boolean }) {
           surmonté d'une anse en demi-cercle, se lit comme une poubelle. */}
       <path d="M5.6 8.6h12.8v9.8a2.4 2.4 0 0 1-2.4 2.4H8a2.4 2.4 0 0 1-2.4-2.4V8.6Z" />
       <path d="M9.2 8.6V6.8a2.8 2.8 0 0 1 5.6 0v1.8" />
+    </svg>
+  );
+}
+
+/**
+ * Paramètres — des curseurs, pas un engrenage.
+ *
+ * L'engrenage est le symbole attendu, mais il ne se dessine qu'avec des dents,
+ * c'est-à-dire des angles vifs : au milieu de quatre icônes faites uniquement de
+ * traits à bouts ronds, il se verrait comme une pièce rapportée. Deux curseurs
+ * disent la même chose — « ce qui se règle » — dans la grammaire du logo.
+ */
+function SlidersIcon({ active }: { active: boolean }) {
+  return (
+    <svg {...iconProps(active)}>
+      <path d="M4 8.2h16" />
+      <path d="M4 15.8h16" />
+      {/* Les molettes, décalées l'une par rapport à l'autre : alignées, on
+          lirait un seul curseur coupé en deux plutôt que deux réglages. */}
+      <circle cx="9.2" cy="8.2" r="2.5" />
+      <circle cx="15.2" cy="15.8" r="2.5" />
     </svg>
   );
 }

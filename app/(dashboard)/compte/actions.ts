@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { profileSchema, type ProfileInput } from "@/lib/profile-schema";
 
 export interface CodeResult {
   accepted: boolean;
@@ -81,4 +82,49 @@ export async function redeemStyleGift(): Promise<GiftResult> {
     reason: row?.reason ?? null,
     until: row?.until ?? null,
   };
+}
+
+/**
+ * Mise à jour du profil depuis les réglages.
+ *
+ * ⚠️ Ces champs n'étaient modifiables QU'À l'inscription. Or ce sont eux que le
+ * styliste lit pour juger une tenue : quelqu'un qui s'était trompé de
+ * morphologie, ou dont les goûts ont changé, recevait des conseils calés sur une
+ * réponse donnée une fois, sans aucun moyen d'y revenir.
+ *
+ * Le même schéma que l'inscription — délibérément importé plutôt que recopié.
+ * Deux validations qui divergent, c'est une porte ouverte du côté le moins
+ * regardé, et la base rejette de toute façon ce qui sort de ses contraintes.
+ */
+export async function updateProfile(
+  input: ProfileInput
+): Promise<{ ok: boolean; message: string | null }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  const parsed = profileSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: "Ces informations n'ont pas été acceptées." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update(parsed.data)
+    .eq("id", user.id);
+
+  if (error) {
+    return { ok: false, message: "Enregistrement impossible. Réessaie." };
+  }
+
+  // L'accueil affiche le prénom, les réglages affichent le résumé : les deux
+  // montreraient l'ancienne valeur sans ça.
+  revalidatePath("/compte");
+  revalidatePath("/compte/profil");
+  revalidatePath("/dashboard");
+
+  return { ok: true, message: null };
 }

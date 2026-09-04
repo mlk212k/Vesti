@@ -4,37 +4,18 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ChoiceChip, Field, Input } from "@/components/ui/field";
 import { ReferralStep } from "@/components/onboarding/referral-step";
+import {
+  GENDERS,
+  HEIGHT_CM,
+  MORPHOLOGIES,
+  STYLES,
+  WEIGHT_KG,
+  parseMeasure,
+  type Gender,
+  type Morphology,
+} from "@/lib/profile";
 import { saveOnboarding, skipOnboarding, type OnboardingInput } from "./actions";
 
-const GENDERS = [
-  { value: "femme", label: "Femme" },
-  { value: "homme", label: "Homme" },
-  { value: "non-binaire", label: "Non-binaire" },
-  { value: "non-precise", label: "Je préfère ne pas dire" },
-] as const;
-
-const MORPHOLOGIES = [
-  { value: "sablier", label: "Sablier" },
-  { value: "triangle", label: "Triangle" },
-  { value: "triangle-inverse", label: "Triangle inversé" },
-  { value: "rectangle", label: "Rectangle" },
-  { value: "ovale", label: "Ovale" },
-  { value: "non-precise", label: "Je ne sais pas" },
-] as const;
-
-const STYLES = [
-  "Minimaliste",
-  "Streetwear",
-  "Classique",
-  "Bohème",
-  "Sportif",
-  "Vintage",
-  "Casual",
-  "Chic",
-];
-
-type Gender = (typeof GENDERS)[number]["value"];
-type Morphology = (typeof MORPHOLOGIES)[number]["value"];
 
 export function OnboardingForm({ initialReferralCode }: { initialReferralCode: string }) {
   const [step, setStep] = useState<"referral" | "profile">("referral");
@@ -62,25 +43,11 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
     );
   }
 
-  function parseOptionalNumber(
-    value: string,
-    min: number,
-    max: number,
-    label: string
-  ): { ok: true; value: number | null } | { ok: false; message: string } {
-    if (value.trim() === "") return { ok: true, value: null };
-    const parsed = Number(value);
-    if (Number.isNaN(parsed) || parsed < min || parsed > max) {
-      return { ok: false, message: `${label} doit être compris entre ${min} et ${max}.` };
-    }
-    return { ok: true, value: Math.round(parsed) };
-  }
-
   function submit() {
-    const parsedHeight = parseOptionalNumber(height, 100, 250, "La taille");
+    const parsedHeight = parseMeasure(height, HEIGHT_CM, "La taille");
     if (!parsedHeight.ok) return setError(parsedHeight.message);
 
-    const parsedWeight = parseOptionalNumber(weight, 30, 300, "Le poids");
+    const parsedWeight = parseMeasure(weight, WEIGHT_KG, "Le poids");
     if (!parsedWeight.ok) return setError(parsedWeight.message);
 
     const input: OnboardingInput = {

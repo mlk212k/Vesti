@@ -5,6 +5,7 @@ import { CurrentPlan } from "@/components/billing/current-plan";
 import type { QuotaStatus } from "@/types/db";
 import { LegalLinks } from "@/components/legal-links";
 import { PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
+import { BackLink } from "@/components/nav/back-link";
 
 export default async function BillingPage(props: PageProps<"/billing">) {
   const params = await props.searchParams;
@@ -35,10 +36,18 @@ export default async function BillingPage(props: PageProps<"/billing">) {
 
   return (
     <main className="flex flex-1 flex-col gap-5 px-5 py-8">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton abonnement</h1>
-        <p className="text-sm text-muted">Sans engagement, résiliable à tout moment.</p>
-      </header>
+      {/* Cette page n'a pas d'onglet : on y arrive depuis les paramètres ou
+          depuis un bouton de l'accueil. Sans retour explicite, la seule sortie
+          serait la barre du bas — qui ramène à un onglet, pas à l'endroit d'où
+          l'on vient. Dans une app installée, il n'y a pas non plus de flèche de
+          navigateur pour rattraper le coup. */}
+      <div className="flex flex-col gap-3">
+        <BackLink href="/compte" label="Paramètres" />
+        <header className="flex flex-col gap-1">
+          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton abonnement</h1>
+          <p className="text-sm text-muted">Sans engagement, résiliable à tout moment.</p>
+        </header>
+      </div>
 
       {checkout === "success" && (
         <p className="rounded-[var(--radius-control)] border border-success/30 bg-success/5 px-4 py-3 text-sm text-success">

@@ -1,28 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { profileSchema, type ProfileInput } from "@/lib/profile-schema";
 
-/**
- * Le formulaire est une frontière : on valide tout ce qui arrive plutôt que de
- * faire confiance au client. Les valeurs doivent aussi correspondre aux
- * contraintes CHECK des migrations, sinon Postgres rejette l'update.
- */
-const onboardingSchema = z.object({
-  // Le prénom sert à s'adresser à la personne. Borné à 40 caractères comme en
-  // base, et vidé s'il ne contient que des espaces.
-  first_name: z.string().trim().min(1).max(40).nullable(),
-  gender: z.enum(["femme", "homme", "non-binaire", "non-precise"]).nullable(),
-  height_cm: z.number().int().min(100).max(250).nullable(),
-  weight_kg: z.number().int().min(30).max(300).nullable(),
-  morphology: z
-    .enum(["sablier", "triangle", "triangle-inverse", "rectangle", "ovale", "non-precise"])
-    .nullable(),
-  style_prefs: z.array(z.string().min(1).max(40)).max(10),
-});
-
-export type OnboardingInput = z.infer<typeof onboardingSchema>;
+export type OnboardingInput = ProfileInput;
 
 export interface ReferralResult {
   accepted: boolean;
@@ -84,7 +66,7 @@ export async function submitReferralCode(code: string): Promise<ReferralResult> 
 }
 
 export async function saveOnboarding(input: OnboardingInput) {
-  const parsed = onboardingSchema.safeParse(input);
+  const parsed = profileSchema.safeParse(input);
   if (!parsed.success) {
     return { error: "Certaines réponses sont invalides." as const };
   }

@@ -22,6 +22,10 @@ const PROTECTED_PREFIXES = [
   "/history",
   "/shopping",
   "/billing",
+  // Les paramètres sont un onglet à part entière depuis qu'ils ont remplacé
+  // « Analyser » dans la barre. Le garde du layout les couvrait déjà, mais un
+  // visiteur sans session traversait tout le rendu serveur avant d'être renvoyé.
+  "/compte",
   "/onboarding",
   // L'accès admin lui-même est contrôlé par email dans app/admin/layout.tsx ;
   // ici on évite simplement qu'un visiteur anonyme atteigne la route.
