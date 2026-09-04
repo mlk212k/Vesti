@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buttonClasses } from "@/components/ui/button";
 import { DISCORD_INVITE_URL } from "@/lib/community";
+import { DiscordIcon } from "@/components/brand/social-icons";
 
 /**
  * Dernière étape de l'inscription : le Discord.
@@ -66,7 +67,7 @@ export function CommunityStep() {
           className={buttonClasses()}
           style={{ touchAction: "manipulation" }}
         >
-          <DiscordGlyph />
+          <DiscordIcon />
           Rejoindre le Discord
         </a>
 
@@ -101,29 +102,7 @@ function DiscordMark() {
       className="flex h-14 w-14 items-center justify-center rounded-[var(--radius-card)] bg-accent-soft text-accent-strong"
       aria-hidden
     >
-      <DiscordGlyph size={30} />
+      <DiscordIcon size={30} />
     </span>
-  );
-}
-
-/**
- * La manette de Discord, redessinée en aplat.
- *
- * Un aplat et non des traits, contrairement aux icônes de la barre du bas : ce
- * n'est pas une icône de l'app, c'est une marque tierce. On la reconnaît à sa
- * silhouette pleine, et la redessiner « à la manière de Vesti » la rendrait
- * méconnaissable — c'est-à-dire inutile.
- */
-function DiscordGlyph({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M19.3 5.6a16.5 16.5 0 0 0-4.1-1.3l-.2.4a15 15 0 0 1 3.6 1.2 12.7 12.7 0 0 0-10.9 0 15 15 0 0 1 3.6-1.2l-.2-.4a16.5 16.5 0 0 0-4.1 1.3C4 9.4 3.3 13.1 3.6 16.7a16.7 16.7 0 0 0 5 2.5l.6-1a11 11 0 0 1-1.9-.9l.3-.3a11.9 11.9 0 0 0 10 0l.3.3c-.6.4-1.2.7-1.9.9l.6 1a16.6 16.6 0 0 0 5-2.5c.4-4.2-.6-7.9-2.3-11.1ZM9.4 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm5.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z" />
-    </svg>
   );
 }

@@ -17,6 +17,7 @@ import {
   otpErrorMessage,
 } from "@/lib/otp";
 import { PASSWORD_MIN_LENGTH, authErrorMessage, passwordProblem } from "@/lib/password";
+import { GoogleIcon } from "@/components/brand/social-icons";
 
 /**
  * Connexion par mot de passe.
@@ -457,6 +458,7 @@ export function LoginForm({ next }: { next: string }) {
       </div>
 
       <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
+        <GoogleIcon />
         Continuer avec Google
       </Button>
     </div>

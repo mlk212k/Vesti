@@ -15,8 +15,20 @@ import { Button } from "@/components/ui/button";
 import { getStyleStatus } from "@/lib/style.server";
 import { formatCents } from "@/lib/referral/commission";
 import { MORPHOLOGIES } from "@/lib/profile";
-import { DISCORD_INVITE_URL } from "@/lib/community";
+import { openNetworks, type SocialId } from "@/lib/community";
+import {
+  DiscordIcon,
+  InstagramIcon,
+  TikTokIcon,
+} from "@/components/brand/social-icons";
 import { LocationRow } from "@/components/settings/location-row";
+
+/** Chaque réseau et son logo. Réunis ici pour qu'aucun n'arrive sans le sien. */
+const SOCIAL_ICONS: Record<SocialId, React.ReactNode> = {
+  discord: <DiscordIcon />,
+  instagram: <InstagramIcon />,
+  tiktok: <TikTokIcon />,
+};
 
 async function signOut() {
   "use server";
@@ -69,6 +81,7 @@ export default async function ParametresPage() {
   const style = await getStyleStatus();
 
   const morphology = MORPHOLOGIES.find((m) => m.value === profile?.morphology);
+  const networks = openNetworks();
 
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
@@ -142,16 +155,27 @@ export default async function ParametresPage() {
         <LocationRow hasLocation={typeof profile?.latitude === "number"} />
       </SettingsGroup>
 
-      {/* L'invitation est proposée à l'inscription, une fois. Sans cette
-          ligne, celui qui a répondu « Plus tard » n'aurait plus jamais aucun
-          moyen de retrouver le lien — l'étape ne se rejoue pas. */}
-      <SettingsGroup title="Communauté">
-        <SettingsExternal
-          href={DISCORD_INVITE_URL}
-          label="Discord de Vesti"
-          hint="Partager ses tenues, demander un deuxième avis, voir les nouveautés en premier"
-        />
-      </SettingsGroup>
+      {/* Le Discord est proposé à l'inscription, une fois, et l'étape ne se
+          rejoue pas : sans ce groupe, celui qui a répondu « Plus tard » n'aurait
+          plus jamais aucun moyen de retrouver le lien.
+
+          Les réseaux sans adresse configurée ne sont PAS affichés — voir
+          `openNetworks()`. Un lien vers un compte qui n'existe pas encore mène
+          à « ce compte est introuvable », ce qui fait bien plus de mal qu'une
+          ligne absente. */}
+      {networks.length > 0 && (
+        <SettingsGroup title="Réseaux">
+          {networks.map((network) => (
+            <SettingsExternal
+              key={network.id}
+              href={network.url}
+              label={network.label}
+              hint={network.hint}
+              icon={SOCIAL_ICONS[network.id]}
+            />
+          ))}
+        </SettingsGroup>
+      )}
 
       <SettingsGroup title="Informations légales">
         {LEGAL_PAGES.map((page) => (

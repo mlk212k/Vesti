@@ -43,11 +43,27 @@ interface RowContent {
   /** Ce que vaut le réglage aujourd'hui. Sans lui, il faut ouvrir pour savoir. */
   value?: string | null;
   hint?: string;
+  /**
+   * Logo de la marque, à gauche du libellé.
+   *
+   * ⚠️ Réservé aux lignes qui mènent AILLEURS. Une icône devant un réglage
+   * interne ne dit rien de plus que son intitulé et alourdit la liste ; devant
+   * un réseau, elle se reconnaît avant d'être lue — c'est tout son intérêt.
+   */
+  icon?: ReactNode;
 }
 
-function RowBody({ label, value, hint, chevron }: RowContent & { chevron: boolean }) {
+function RowBody({ label, value, hint, icon, chevron }: RowContent & { chevron: boolean }) {
   return (
     <>
+      {icon && (
+        <span
+          className="flex h-9 w-9 flex-none items-center justify-center rounded-[var(--radius-control)] bg-surface-sunken text-foreground"
+          aria-hidden
+        >
+          {icon}
+        </span>
+      )}
       <span className="flex min-w-0 flex-col gap-0.5">
         <span className="text-[15px] font-medium">{label}</span>
         {hint && <span className="text-xs leading-relaxed text-muted">{hint}</span>}
