@@ -97,7 +97,13 @@ export async function saveOnboarding(input: OnboardingInput) {
     return { error: "Impossible d'enregistrer ton profil pour le moment." as const };
   }
 
-  redirect("/dashboard");
+  // ⚠️ Plus de `redirect("/dashboard")` ici, et c'est volontaire : une dernière
+  // étape suit — le Discord de la communauté. Rediriger depuis le serveur la
+  // sauterait purement et simplement, sans erreur nulle part.
+  //
+  // Le profil EST enregistré à ce point : quoi qu'il arrive ensuite, y compris
+  // si l'app est fermée sur l'écran suivant, le compte est complet.
+  return { ok: true as const };
 }
 
 /** « Passer » : on marque l'onboarding fait sans rien collecter. */
@@ -116,5 +122,7 @@ export async function skipOnboarding() {
     .update({ onboarded_at: new Date().toISOString() })
     .eq("id", user.id);
 
-  redirect("/dashboard");
+  // Passer le formulaire ne veut pas dire passer l'invitation : celui qui ne
+  // veut pas donner sa morphologie peut très bien vouloir rejoindre le Discord.
+  return { ok: true as const };
 }

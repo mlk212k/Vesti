@@ -7,6 +7,7 @@ import { ThemePicker } from "@/components/account/theme-picker";
 import {
   SettingsGroup,
   SettingsLink,
+  SettingsExternal,
   SettingsValue,
   SettingsCustom,
 } from "@/components/settings/settings-list";
@@ -14,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { getStyleStatus } from "@/lib/style.server";
 import { formatCents } from "@/lib/referral/commission";
 import { MORPHOLOGIES } from "@/lib/profile";
+import { DISCORD_INVITE_URL } from "@/lib/community";
 
 async function signOut() {
   "use server";
@@ -131,6 +133,17 @@ export default async function ParametresPage() {
           label="Ville détectée"
           value={profile?.city ?? "Aucune"}
           hint="Utilisée par « Que mettre aujourd'hui ? ». Elle se règle en autorisant la localisation depuis l'accueil."
+        />
+      </SettingsGroup>
+
+      {/* L'invitation est proposée à l'inscription, une fois. Sans cette
+          ligne, celui qui a répondu « Plus tard » n'aurait plus jamais aucun
+          moyen de retrouver le lien — l'étape ne se rejoue pas. */}
+      <SettingsGroup title="Communauté">
+        <SettingsExternal
+          href={DISCORD_INVITE_URL}
+          label="Discord de Vesti"
+          hint="Partager ses tenues, demander un deuxième avis, voir les nouveautés en premier"
         />
       </SettingsGroup>
 

@@ -79,6 +79,33 @@ export function SettingsLink({
   );
 }
 
+/**
+ * Ligne qui mène HORS de Vesti.
+ *
+ * ⚠️ Distincte de `SettingsLink`, et pas seulement pour la flèche. Vesti tourne
+ * en app installée : un lien externe ouvert dans la même fenêtre remplacerait
+ * l'app entière, et il n'y a alors aucune barre de navigateur pour revenir. La
+ * flèche oblique le dit avant le tap, `target="_blank"` s'en charge après, et
+ * `rel` empêche la page ouverte de garder une prise sur celle-ci.
+ */
+export function SettingsExternal({
+  href,
+  ...content
+}: RowContent & { href: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex min-h-[52px] items-center justify-between gap-3 px-4 py-3 transition-colors active:bg-surface-sunken"
+      style={{ touchAction: "manipulation" }}
+    >
+      <RowBody {...content} chevron={false} />
+      <ExternalArrow />
+    </a>
+  );
+}
+
 /** Ligne qui ne fait qu'afficher — pas de chevron, donc rien à toucher. */
 export function SettingsValue(content: RowContent) {
   return (
@@ -106,6 +133,26 @@ export function SettingsCustom({
       </span>
       {children}
     </div>
+  );
+}
+
+function ExternalArrow() {
+  return (
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="flex-none text-muted"
+      aria-hidden
+    >
+      <path d="M8 16 16 8" />
+      <path d="M9.5 8H16v6.5" />
+    </svg>
   );
 }
 

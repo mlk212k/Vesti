@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ChoiceChip, Field, Input } from "@/components/ui/field";
+import { CommunityStep } from "@/components/onboarding/community-step";
 import { ReferralStep } from "@/components/onboarding/referral-step";
 import {
   GENDERS,
@@ -18,7 +19,9 @@ import { saveOnboarding, skipOnboarding, type OnboardingInput } from "./actions"
 
 
 export function OnboardingForm({ initialReferralCode }: { initialReferralCode: string }) {
-  const [step, setStep] = useState<"referral" | "profile">("referral");
+  const [step, setStep] = useState<"referral" | "profile" | "community">(
+    "referral"
+  );
   const [firstName, setFirstName] = useState("");
   const [gender, setGender] = useState<Gender | null>(null);
   const [height, setHeight] = useState("");
@@ -36,6 +39,10 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       />
     );
   }
+
+  // Dernière étape, atteinte que le formulaire ait été rempli ou passé. Le
+  // profil est déjà enregistré ici : cet écran ne retient plus rien.
+  if (step === "community") return <CommunityStep />;
 
   function toggleStyle(style: string) {
     setStyles((prev) =>
@@ -62,7 +69,11 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
     setError(null);
     startTransition(async () => {
       const result = await saveOnboarding(input);
-      if (result?.error) setError(result.error);
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      setStep("community");
     });
   }
 
@@ -177,7 +188,12 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
         <Button
           variant="ghost"
           disabled={pending}
-          onClick={() => startTransition(() => skipOnboarding())}
+          onClick={() =>
+            startTransition(async () => {
+              await skipOnboarding();
+              setStep("community");
+            })
+          }
         >
           Passer cette étape
         </Button>
