@@ -30,6 +30,8 @@ export interface AnalysisView {
   occasion: string;
   garments: GarmentView[];
   savedToWardrobe: boolean;
+  /** La garde-robe du plan a atteint sa limite. Absent sur une analyse relue. */
+  wardrobeFull?: boolean;
 }
 
 export function VerdictCard({
@@ -141,10 +143,15 @@ export function VerdictCard({
           ))}
         </ul>
 
-        {!analysis.savedToWardrobe && (
+        {/* ⚠️ Ce message disait « ces pièces ne sont pas conservées avec le plan
+            gratuit ». C'est devenu faux : le plan Découverte garde maintenant
+            ses pièces, jusqu'à la limite de sa garde-robe. Il ne s'affiche donc
+            plus que dans le cas où c'est vrai — la garde-robe est pleine — et
+            dit ce qui s'est réellement passé. */}
+        {analysis.wardrobeFull && (
           <p className="rounded-[var(--radius-control)] border border-border bg-accent-soft/60 p-3 text-xs leading-relaxed text-muted">
-            Ces pièces ne sont pas conservées avec le plan gratuit. Passe en Pro
-            pour construire ta garde-robe au fil des analyses.
+            Ta garde-robe est pleine : ces pièces n&apos;y ont pas été ajoutées.
+            Passe en Pro pour l&apos;agrandir et garder tout ce que tu analyses.
           </p>
         )}
       </section>

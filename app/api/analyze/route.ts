@@ -7,7 +7,13 @@ import { consumeQuota, releaseQuota, quotaRefusalMessage } from "@/lib/quota";
 import { analyzeOutfit, OutfitAnalysisRefused } from "@/lib/claude/analyze-outfit";
 import { costMicros } from "@/lib/claude/pricing";
 import { recordSpend } from "@/lib/ai-budget";
-import { hasFeature, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
+import {
+  hasFeature,
+  PLAN_COLUMNS,
+  planOf,
+  wardrobeLimit,
+  type PlanRow,
+} from "@/lib/plans";
 import { awardReferralStyle } from "@/lib/style.server";
 import type { Profile } from "@/types/db";
 
@@ -98,7 +104,6 @@ export async function POST(request: Request) {
     const { analysis, usage, model } = await analyzeOutfit(image, profile);
 
     const plan = planOf(profile);
-    const keepsWardrobe = hasFeature(plan, "dressing");
     const getsShopping = hasFeature(plan, "shopping");
 
     const verdictCost = costMicros(model, usage.inputTokens, usage.outputTokens);
@@ -127,9 +132,38 @@ export async function POST(request: Request) {
       .select("id")
       .single();
 
-    if (keepsWardrobe && inserted?.id) {
+    /**
+     * Ce que la garde-robe retient de cette analyse.
+     *
+     * ⚠️ Le plan Découverte n'en retenait RIEN : les pièces détectées étaient
+     * jetées sitôt le verdict rendu, et l'onglet Dressing n'était qu'un mur de
+     * paiement. On ne vend pas une garde-robe à quelqu'un qui n'a jamais vu la
+     * sienne. Elle se remplit maintenant pour tout le monde, mais s'arrête à la
+     * limite du plan — c'est ce qu'on voit derrière le cadenas qui donne envie
+     * de l'ouvrir.
+     *
+     * La troncature est ici, côté serveur, ET dans un déclencheur Postgres. Ce
+     * calcul-là décide seulement COMBIEN de pièces on tente d'écrire ; c'est la
+     * base qui refuse celles de trop, quel que soit le chemin d'écriture.
+     */
+    const limit = wardrobeLimit(plan);
+    let garments = analysis.garments;
+    let wardrobeFull = false;
+
+    if (limit !== null) {
+      const { count } = await admin
+        .from("dressing_items")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id);
+
+      const room = Math.max(limit - (count ?? 0), 0);
+      garments = analysis.garments.slice(0, room);
+      wardrobeFull = room === 0;
+    }
+
+    if (garments.length > 0 && inserted?.id) {
       await admin.from("dressing_items").insert(
-        analysis.garments.map((garment) => ({
+        garments.map((garment) => ({
           user_id: user.id,
           analysis_id: inserted.id,
           category: garment.category,
@@ -178,7 +212,12 @@ export async function POST(request: Request) {
         ...garment,
         product_matches: [],
       })),
-      savedToWardrobe: keepsWardrobe,
+      savedToWardrobe: garments.length > 0,
+      // ⚠️ Distinct de `savedToWardrobe` : celui-ci est aussi faux quand
+      // l'analyse n'a trouvé aucune pièce. Confondre les deux ferait annoncer
+      // « ta garde-robe est pleine » à quelqu'un qui a simplement photographié
+      // un mur.
+      wardrobeFull,
       // Dit au client d'aller chercher les liens dans un second temps. Les
       // recherches sont facturées à l'usage : réservées au plan qui les vend.
       productsPending: getsShopping && Boolean(inserted?.id),

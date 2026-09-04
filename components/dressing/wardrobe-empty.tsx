@@ -35,7 +35,21 @@ const PROMISES = [
   },
 ];
 
-export function WardrobeEmpty({ weather }: { weather: boolean }) {
+/**
+ * ⚠️ `canScan` n'est pas un détail d'affichage : sans lui, l'action PRINCIPALE
+ * de cet écran envoyait le plan Découverte sur « Scanner ma penderie », qui lui
+ * répond « passe en Pro ». Une garde-robe vide dont le seul gros bouton est un
+ * mur de paiement, c'est le meilleur moyen de faire fermer l'app. Pour lui,
+ * c'est l'analyse de tenue qui devient le chemin — elle est comprise dans son
+ * offre, et c'est elle qui remplit sa garde-robe.
+ */
+export function WardrobeEmpty({
+  weather,
+  canScan,
+}: {
+  weather: boolean;
+  canScan: boolean;
+}) {
   return (
     <main className="flex flex-1 flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-2">
@@ -67,26 +81,53 @@ export function WardrobeEmpty({ weather }: { weather: boolean }) {
         ))}
       </ul>
 
-      <div className="flex flex-col gap-2">
-        <Link href="/dressing/scan" className={buttonClasses("primary")}>
-          Scanner ma penderie
-        </Link>
-        <p className="text-center text-xs leading-relaxed text-muted">
-          Quelques photos de tes vêtements suffisent — étalés sur un lit, ou
-          suspendus.
-        </p>
-      </div>
+      {canScan ? (
+        <>
+          <div className="flex flex-col gap-2">
+            <Link href="/dressing/scan" className={buttonClasses("primary")}>
+              Scanner ma penderie
+            </Link>
+            <p className="text-center text-xs leading-relaxed text-muted">
+              Quelques photos de tes vêtements suffisent — étalés sur un lit, ou
+              suspendus.
+            </p>
+          </div>
 
-      <div className="flex flex-col gap-2 border-t border-border-soft pt-5">
-        <span className="text-sm font-semibold">Ou sans rien faire de plus</span>
-        <p className="text-xs leading-relaxed text-muted">
-          Chaque tenue que tu analyses dépose ses pièces ici, une par une. C&apos;est
-          plus lent, mais tu n&apos;as rien à photographier en plus.
-        </p>
-        <Link href="/analyze">
-          <Button variant="secondary">Analyser une tenue</Button>
-        </Link>
-      </div>
+          <div className="flex flex-col gap-2 border-t border-border-soft pt-5">
+            <span className="text-sm font-semibold">Ou sans rien faire de plus</span>
+            <p className="text-xs leading-relaxed text-muted">
+              Chaque tenue que tu analyses dépose ses pièces ici, une par une.
+              C&apos;est plus lent, mais tu n&apos;as rien à photographier en plus.
+            </p>
+            <Link href="/analyze">
+              <Button variant="secondary">Analyser une tenue</Button>
+            </Link>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-col gap-2">
+            <Link href="/analyze" className={buttonClasses("primary")}>
+              Analyser une tenue
+            </Link>
+            <p className="text-center text-xs leading-relaxed text-muted">
+              Chaque tenue analysée dépose ses pièces ici. C&apos;est compris dans
+              ton offre, tu n&apos;as rien à photographier en plus.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 border-t border-border-soft pt-5">
+            <span className="text-sm font-semibold">Ou beaucoup plus vite</span>
+            <p className="text-xs leading-relaxed text-muted">
+              Le scan photographie toute ta penderie d&apos;un coup, au lieu
+              d&apos;une tenue à la fois. Il est compris dans les plans payants.
+            </p>
+            <Link href="/billing">
+              <Button variant="secondary">Voir les plans</Button>
+            </Link>
+          </div>
+        </>
+      )}
     </main>
   );
 }

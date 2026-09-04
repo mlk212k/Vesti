@@ -65,6 +65,36 @@ export const PLANS: Record<Plan, PlanDefinition> = {
 
 export const PLAN_ORDER: Plan[] = ["free", "pro", "styliste"];
 
+/**
+ * Pièces qu'une tenue analysée fait entrer en garde-robe, en moyenne : un haut,
+ * un bas, une paire de chaussures, et une quatrième pièce — veste, ceinture,
+ * sac. C'est ce que rendent les analyses réelles, pas une estimation de salon.
+ */
+const GARMENTS_PER_OUTFIT = 4;
+
+/**
+ * Combien de pièces la garde-robe retient, selon le plan. `null` = sans limite.
+ *
+ * ── Pourquoi c'est CALCULÉ et non écrit en dur ──────────────────────────────
+ *
+ * La limite du plan Découverte est « ce que produisent les analyses offertes ».
+ * Elle se déduit donc du nombre d'analyses de ce plan : passer l'offre de 3 à 5
+ * analyses fait suivre la garde-robe toute seule. Un 12 écrit en dur, lui,
+ * serait resté à 12 — et le jour où l'offre change, plus personne ne saurait
+ * d'où sortait ce chiffre.
+ *
+ * ⚠️ Avant, le plan gratuit ne gardait AUCUNE pièce : les habits détectés
+ * pendant l'analyse étaient jetés une fois le verdict rendu, et l'onglet
+ * Dressing n'était qu'un mur de paiement. Personne ne payait pour une
+ * garde-robe qu'il n'avait jamais vue. Maintenant il voit la sienne — la
+ * vraie, avec ses propres habits dedans — et c'est CE dont le cadenas le prive
+ * quand elle est pleine.
+ */
+export function wardrobeLimit(plan: Plan): number | null {
+  if (PLANS[plan].features.dressing) return null;
+  return PLANS[plan].analysesPerMonth * GARMENTS_PER_OUTFIT;
+}
+
 export function isPlan(value: string): value is Plan {
   return value === "free" || value === "pro" || value === "styliste";
 }

@@ -1,10 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { hasFeature, PLANS, requiredPlanFor, PLAN_COLUMNS, planOf, type PlanRow } from "@/lib/plans";
+import {
+  hasFeature,
+  PLAN_COLUMNS,
+  planOf,
+  wardrobeLimit,
+  type PlanRow,
+} from "@/lib/plans";
 import { OUTFITS_BUCKET } from "@/lib/supabase/storage";
 import { WardrobeGrid, type WardrobeItem } from "@/components/dressing/wardrobe-grid";
 import { WardrobeEmpty } from "@/components/dressing/wardrobe-empty";
+import { WardrobeLock } from "@/components/dressing/wardrobe-lock";
 import { WeatherPill } from "@/components/dressing/weather-pill";
 import { missingEssentials, summarizeWardrobe } from "@/lib/wardrobe";
 import { Button } from "@/components/ui/button";
@@ -24,22 +31,12 @@ export default async function DressingPage() {
 
   const plan = planOf(profile);
 
-  if (!hasFeature(plan, "dressing")) {
-    const needed = requiredPlanFor("dressing");
-    return (
-      <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ta garde-robe</h1>
-        <p className="text-sm leading-relaxed text-muted">
-          Chaque tenue analysée vient remplir ta garde-robe : chaque pièce y est
-          fichée, chaussures comprises. C&apos;est inclus à partir du plan{" "}
-          {PLANS[needed].name}.
-        </p>
-        <Link href="/billing">
-          <Button>Passer en {PLANS[needed].name}</Button>
-        </Link>
-      </main>
-    );
-  }
+  // ⚠️ Plus de mur de paiement à la place de l'onglet. Le plan Découverte
+  // arrivait ici sur un écran « c'est à partir du plan Pro », sans avoir jamais
+  // vu une seule de ses pièces — on lui demandait de payer pour une garde-robe
+  // qu'il ne pouvait pas imaginer. Il voit maintenant la sienne, plafonnée, et
+  // le cadenas ne ferme que la suite. Voir `wardrobeLimit()`.
+  const limit = wardrobeLimit(plan);
 
   const { data: items } = await supabase
     .from("dressing_items")
@@ -72,7 +69,8 @@ export default async function DressingPage() {
   // qu'elle sert à produire.
   const showWeather = hasFeature(plan, "shopping");
 
-  if (rows.length === 0) return <WardrobeEmpty weather={showWeather} />;
+  if (rows.length === 0)
+    return <WardrobeEmpty weather={showWeather} canScan={limit === null} />;
 
   const counts = summarizeWardrobe(rows);
   const missing = missingEssentials(rows);
@@ -84,6 +82,7 @@ export default async function DressingPage() {
         <p className="text-sm text-muted">
           {rows.length} pièce{rows.length > 1 ? "s" : ""} enregistrée
           {rows.length > 1 ? "s" : ""}
+          {limit !== null && ` sur ${limit}`}
         </p>
       </header>
 
@@ -125,9 +124,21 @@ export default async function DressingPage() {
 
       <WardrobeGrid items={rows} urls={Object.fromEntries(signedUrls)} />
 
-      <Link href="/dressing/scan">
-        <Button variant="secondary">Ajouter des pièces</Button>
-      </Link>
+      {limit !== null && <WardrobeLock count={rows.length} limit={limit} />}
+
+      {/* Le scan multi-photos reste réservé aux plans payants — c'est lui qui
+          coûte cher en analyse. Le plan Découverte remplit sa garde-robe par
+          les analyses de tenue, qui sont déjà comprises dans son offre : on
+          l'envoie donc là, et non vers une page qui le renverrait payer. */}
+      {limit === null ? (
+        <Link href="/dressing/scan">
+          <Button variant="secondary">Ajouter des pièces</Button>
+        </Link>
+      ) : rows.length < limit ? (
+        <Link href="/analyze">
+          <Button variant="secondary">Analyser une tenue</Button>
+        </Link>
+      ) : null}
     </main>
   );
 }

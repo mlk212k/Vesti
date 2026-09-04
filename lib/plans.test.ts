@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { effectivePlan, hasFeature, planOf } from "./plans";
+import { effectivePlan, hasFeature, planOf, PLANS, wardrobeLimit } from "./plans";
 
 /**
  * `effectivePlan` double `effective_plan()` en SQL (migration 0010). Le SQL
@@ -59,5 +59,35 @@ describe("planOf", () => {
 
   it("tolère une colonne plan vide", () => {
     expect(planOf({ plan: null, gift_plan: null, gift_plan_until: null })).toBe("free");
+  });
+});
+
+describe("wardrobeLimit", () => {
+  it("laisse les plans payants sans limite", () => {
+    expect(wardrobeLimit("pro")).toBeNull();
+    expect(wardrobeLimit("styliste")).toBeNull();
+  });
+
+  it("donne au plan Découverte de quoi remplir ses analyses offertes", () => {
+    // 3 analyses × 4 pièces par tenue. Le chiffre importe moins que le lien :
+    // c'est ce que produisent les analyses du plan, pas un nombre choisi.
+    expect(wardrobeLimit("free")).toBe(PLANS.free.analysesPerMonth * 4);
+  });
+
+  it("suit l'offre si elle change", () => {
+    // ⚠️ Le vrai contrat de cette fonction. Une limite écrite en dur resterait
+    // figée le jour où l'offre passe de 3 à 5 analyses, et plus personne ne
+    // saurait d'où sortait le chiffre. Ce test devient rouge si quelqu'un la
+    // remplace par une constante.
+    const limite = wardrobeLimit("free");
+    expect(limite).not.toBeNull();
+    expect(limite! % PLANS.free.analysesPerMonth).toBe(0);
+    expect(limite!).toBeGreaterThan(PLANS.free.analysesPerMonth);
+  });
+
+  it("ne rend jamais zéro : une garde-robe vide ne se vend pas", () => {
+    // Le cadenas ne marche que si l'on a vu ce qu'il enferme. À zéro pièce,
+    // l'onglet redeviendrait le mur de paiement qu'on vient d'enlever.
+    expect(wardrobeLimit("free")).toBeGreaterThan(0);
   });
 });
