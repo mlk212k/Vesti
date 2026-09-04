@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { updateLocation } from "@/lib/location-actions";
+import { coarseLocation } from "@/lib/geo";
 
 const OCCASIONS = ["travail", "rendez-vous", "soirée", "week-end", "sport"] as const;
 type Occasion = (typeof OCCASIONS)[number];
@@ -50,16 +51,28 @@ export function TodayCard({ hasLocation }: { hasLocation: boolean }) {
     setState({ step: "locating" });
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const supabase = createClient();
-        // Arrondi au centième de degré (~1 km) : assez pour la météo, et on
-        // évite d'enregistrer la position précise de quelqu'un.
-        await supabase
-          .from("profiles")
-          .update({
-            latitude: Number(position.coords.latitude.toFixed(2)),
-            longitude: Number(position.coords.longitude.toFixed(2)),
-          })
-          .eq("id", (await supabase.auth.getUser()).data.user?.id ?? "");
+        // ⚠️ L'arrondi ne se fait plus ici. Ce composant écrivait lui-même en
+        // base, en arrondissant au passage : la promesse « on ne garde pas ta
+        // position exacte » ne tenait donc qu'à ce fichier, et un appel forgé
+        // l'ignorait. C'est le serveur qui arrondit maintenant, une fois pour
+        // les deux écrans qui demandent la position. Voir `lib/geo.ts`.
+        const coarse = coarseLocation(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        const result = coarse
+          ? await updateLocation(coarse.latitude, coarse.longitude)
+          : { ok: false };
+
+        if (!result.ok) {
+          setState({
+            step: "error",
+            title: "Position non enregistrée",
+            body: "Réessaie dans un instant.",
+            action: null,
+          });
+          return;
+        }
 
         setLocated(true);
         setState({ step: "idle" });

@@ -16,6 +16,7 @@ import { getStyleStatus } from "@/lib/style.server";
 import { formatCents } from "@/lib/referral/commission";
 import { MORPHOLOGIES } from "@/lib/profile";
 import { DISCORD_INVITE_URL } from "@/lib/community";
+import { LocationRow } from "@/components/settings/location-row";
 
 async function signOut() {
   "use server";
@@ -50,14 +51,14 @@ export default async function ParametresPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select(`${PLAN_COLUMNS}, first_name, morphology, height_cm, city`)
+    .select(`${PLAN_COLUMNS}, first_name, morphology, height_cm, latitude`)
     .eq("id", user.id)
     .single<
       PlanRow & {
         first_name: string | null;
         morphology: string | null;
         height_cm: number | null;
-        city: string | null;
+        latitude: number | null;
       }
     >();
 
@@ -128,12 +129,17 @@ export default async function ParametresPage() {
         </SettingsCustom>
       </SettingsGroup>
 
-      <SettingsGroup title="Météo">
-        <SettingsValue
-          label="Ville détectée"
-          value={profile?.city ?? "Aucune"}
-          hint="Utilisée par « Que mettre aujourd'hui ? ». Elle se règle en autorisant la localisation depuis l'accueil."
-        />
+      {/* ⚠️ Cette ligne affichait « Ville détectée », lue dans `profiles.city`.
+          Or cette colonne n'est écrite NULLE PART dans le code — seulement lue.
+          La ligne ne pouvait donc afficher que « Aucune », pour tout le monde et
+          pour toujours. Ce qu'on sait réellement, c'est si une position est
+          enregistrée : c'est ce qu'elle dit maintenant, et on peut l'activer
+          d'ici au lieu d'aller la chercher sur l'accueil. */}
+      <SettingsGroup
+        title="Météo"
+        footnote="Sert à adapter la tenue du jour au temps qu'il fait. La position est arrondie au kilomètre avant d'être enregistrée — jamais l'adresse exacte."
+      >
+        <LocationRow hasLocation={typeof profile?.latitude === "number"} />
       </SettingsGroup>
 
       {/* L'invitation est proposée à l'inscription, une fois. Sans cette
