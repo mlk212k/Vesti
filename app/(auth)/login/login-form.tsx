@@ -18,8 +18,6 @@ import {
 } from "@/lib/otp";
 import { PASSWORD_MIN_LENGTH, authErrorMessage, passwordProblem } from "@/lib/password";
 import { GoogleIcon } from "@/components/brand/social-icons";
-import { useLaunchedFromIcon } from "@/components/install/install-gate";
-import { detectEnvironment } from "@/lib/install";
 
 /**
  * Connexion par mot de passe.
@@ -251,33 +249,33 @@ export function LoginForm({ next }: { next: string }) {
   }
 
   /**
-   * Le bouton Google n'a pas sa place dans l'app installée sur iPhone.
+   * ⚠️ CE BOUTON A DÉJÀ ÉTÉ RETIRÉ DE L'APP INSTALLÉE SUR iPHONE, PUIS REMIS.
    *
-   * ⚠️ Constaté chez une vraie utilisatrice : cinq tentatives en 90 secondes,
-   * un `/token 200` dans les journaux — donc une session RÉELLEMENT créée — et
-   * un retour à la page d'accueil à chaque fois.
+   * Ce qui a été constaté chez une utilisatrice iPhone : cinq tentatives en
+   * 90 secondes, un `/token 200` dans les journaux — donc une session
+   * RÉELLEMENT créée — et un retour à la page d'accueil à chaque fois.
    *
-   * La raison n'est pas un réglage : c'est iOS. Une app ajoutée à l'écran
-   * d'accueil possède son propre stockage, séparé de Safari. Or Google renvoie
-   * toujours dans le navigateur (voir `app/auth/callback/route.ts`). La session
-   * naît donc dans Safari, où l'app installée ne peut pas la voir — et l'icône
-   * rouvre sur un écran déconnecté. La boucle est sans issue.
+   * Deux causes possibles ont été identifiées, et une seule est certaine :
    *
-   * Dans l'app installée, il reste le code à 6 chiffres, qui ne quitte jamais
-   * l'app. C'est exactement la raison d'être de ce code — voir
-   * `INSTALL_GATE_ENABLED` dans `lib/install.ts`.
+   *  1. CERTAINE — la porte d'entrée acceptait `minimal-ui` comme preuve d'un
+   *     lancement depuis l'icône, donc le navigateur intégré d'Instagram ou de
+   *     Google passait pour l'app installée. Corrigé : voir
+   *     `INSTALLED_DISPLAY_MODES` dans `lib/install.ts`. C'était son cas.
    *
-   * Android n'a pas ce problème : une PWA y partage le stockage de Chrome, et
-   * le retour d'OAuth atterrit dans l'app. Le bouton y reste donc.
+   *  2. NON VÉRIFIÉE — sur iPhone, une app ajoutée à l'écran d'accueil a son
+   *     propre stockage, séparé de Safari, et Google renvoie toujours dans le
+   *     navigateur (voir `app/auth/callback/route.ts`). Si c'est vrai, la
+   *     session naît dans Safari et l'icône rouvre déconnectée : le bouton est
+   *     alors un cul-de-sac ici, quel que soit le réglage.
+   *
+   * Le bouton est remis pour éprouver le point 2 sur un vrai iPhone, la cause
+   * 1 étant maintenant écartée. SI LA BOUCLE REVIENT, c'est le point 2 : il
+   * faudra le masquer quand `useLaunchedFromIcon()` est vrai et que l'OS est
+   * iOS — et non chercher un réglage, il n'y en a pas.
+   *
+   * La connexion e-mail + mot de passe, elle, ne quitte jamais l'app : c'est
+   * elle le chemin sûr sur iPhone, pas celui-ci.
    */
-  const launchedFromIcon = useLaunchedFromIcon();
-  const isIos =
-    typeof navigator !== "undefined" &&
-    detectEnvironment({
-      userAgent: navigator.userAgent,
-      maxTouchPoints: navigator.maxTouchPoints,
-    }).os === "ios";
-  const googleWorksHere = !(launchedFromIcon && isIos);
 
   async function signInWithGoogle() {
     setStatus({ kind: "busy" });
@@ -482,20 +480,16 @@ export function LoginForm({ next }: { next: string }) {
         </button>
       </div>
 
-      {googleWorksHere && (
-        <>
-          <div className="flex items-center gap-3">
-            <span className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted">ou</span>
-            <span className="h-px flex-1 bg-border" />
-          </div>
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted">ou</span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
 
-          <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
-            <GoogleIcon />
-            Continuer avec Google
-          </Button>
-        </>
-      )}
+      <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
+        <GoogleIcon />
+        Continuer avec Google
+      </Button>
     </div>
   );
 }
