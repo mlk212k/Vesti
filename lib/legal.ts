@@ -15,7 +15,17 @@ export const LEGAL = {
   editeur: "[NOM ou RAISON SOCIALE]",
   /** Auto-entrepreneur, SASU, SARL… */
   statut: "[STATUT JURIDIQUE]",
-  siret: "[SIRET]",
+  /**
+   * SIRET, ou `null` tant que l'immatriculation n'est pas revenue.
+   *
+   * ⚠️ `null` n'est pas un moyen de s'en passer. Le SIRET est obligatoire dans
+   * les mentions légales d'un professionnel français, et vendre à des
+   * particuliers sans être immatriculé expose bien au-delà d'une page web. Ce
+   * `null` sert à ne pas MENTIR en attendant : la page écrit alors
+   * « immatriculation en cours » au lieu d'un crochet vide ou, pire, d'une
+   * ligne absente qui laisserait croire que tout est en règle.
+   */
+  siret: null as string | null,
   /**
    * Statut TVA. Renseigné : Vesti relève aujourd'hui de la franchise en base.
    *
@@ -45,7 +55,8 @@ export const LEGAL = {
 
   hebergeurs: [
     { nom: "Vercel Inc.", role: "hébergement de l'application", lieu: "États-Unis / Union européenne" },
-    { nom: "Supabase", role: "base de données et stockage des photos", lieu: "Union européenne (région à confirmer)" },
+    // Région relevée sur le projet lui-même (`eu-west-1`), pas supposée.
+    { nom: "Supabase", role: "base de données et stockage des photos", lieu: "Irlande (Union européenne)" },
   ],
 
   sousTraitants: [
@@ -82,7 +93,6 @@ export function missingLegalFields(): string[] {
   const scalars: [string, string][] = [
     ["éditeur", LEGAL.editeur],
     ["statut juridique", LEGAL.statut],
-    ["SIRET", LEGAL.siret],
     ["adresse", LEGAL.adresse],
     ["email de contact", LEGAL.email],
     ["directeur de la publication", LEGAL.directeurPublication],

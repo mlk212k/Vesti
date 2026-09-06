@@ -14,7 +14,7 @@ export default function MentionsLegalesPage() {
         <p>
           {LEGAL.editeur} — {LEGAL.statut}
           <br />
-          SIRET : {LEGAL.siret}
+          SIRET : {LEGAL.siret ?? "immatriculation en cours"}
           <br />
           TVA : {LEGAL.tvaIntracom}
           <br />
