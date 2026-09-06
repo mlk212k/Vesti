@@ -36,7 +36,7 @@ export const LEGAL = {
    */
   tvaIntracom: "TVA non applicable, art. 293 B du CGI",
   adresse: "[ADRESSE POSTALE COMPLÈTE]",
-  email: "contact@vesti8.app",
+  email: "badnxko18@gmail.com",
   telephone: "[TÉLÉPHONE]",
   /**
    * Déduit : en entreprise individuelle, l'éditeur et le directeur de la
@@ -62,7 +62,7 @@ export const LEGAL = {
    * n'est relevée par personne est pire qu'une adresse unique qu'on lit
    * vraiment. Le délai de réponse légal est d'un mois.
    */
-  emailRgpd: "contact@vesti8.app",
+  emailRgpd: "badnxko18@gmail.com",
 
   hebergeurs: [
     { nom: "Vercel Inc.", role: "hébergement de l'application", lieu: "États-Unis / Union européenne" },
