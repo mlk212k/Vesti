@@ -12,9 +12,9 @@
  */
 export const LEGAL = {
   /** Raison sociale ou nom de l'entrepreneur individuel. */
-  editeur: "[NOM ou RAISON SOCIALE]",
+  editeur: "Malik Ben Aissa",
   /** Auto-entrepreneur, SASU, SARL… */
-  statut: "[STATUT JURIDIQUE]",
+  statut: "Entrepreneur individuel (auto-entrepreneur)",
   /**
    * SIRET, ou `null` tant que l'immatriculation n'est pas revenue.
    *
@@ -36,9 +36,14 @@ export const LEGAL = {
    */
   tvaIntracom: "TVA non applicable, art. 293 B du CGI",
   adresse: "[ADRESSE POSTALE COMPLÈTE]",
-  email: "[EMAIL DE CONTACT]",
+  email: "contact@vesti8.app",
   telephone: "[TÉLÉPHONE]",
-  directeurPublication: "[NOM DU DIRECTEUR DE LA PUBLICATION]",
+  /**
+   * Déduit : en entreprise individuelle, l'éditeur et le directeur de la
+   * publication sont la même personne. À changer si quelqu'un d'autre prend la
+   * responsabilité éditoriale du site.
+   */
+  directeurPublication: "Malik Ben Aissa",
 
   /**
    * Obligatoire en B2C : tout professionnel vendant à des consommateurs doit
@@ -50,8 +55,14 @@ export const LEGAL = {
     adresse: "[ADRESSE DU MÉDIATEUR]",
   },
 
-  /** Contact pour les demandes RGPD (peut être le même que l'email général). */
-  emailRgpd: "[EMAIL RGPD]",
+  /**
+   * Contact pour les demandes RGPD — accès, rectification, suppression.
+   *
+   * Volontairement le même que l'adresse générale : une adresse dédiée qui
+   * n'est relevée par personne est pire qu'une adresse unique qu'on lit
+   * vraiment. Le délai de réponse légal est d'un mois.
+   */
+  emailRgpd: "contact@vesti8.app",
 
   hebergeurs: [
     { nom: "Vercel Inc.", role: "hébergement de l'application", lieu: "États-Unis / Union européenne" },
