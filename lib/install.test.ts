@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectEnvironment, isOpenPath } from "./install";
+import { detectEnvironment, isOpenPath, isInstalledDisplayMode } from "./install";
 
 // Chaînes relevées sur de vrais appareils : c'est le seul type de donnée qui
 // vaille quelque chose pour ce genre de détection.
@@ -195,5 +195,31 @@ describe("isOpenPath", () => {
   it("ne se laisse pas contourner par un préfixe qui ressemble", () => {
     expect(isOpenPath("/cgv-truc")).toBe(false);
     expect(isOpenPath("/administration")).toBe(false);
+  });
+});
+
+describe("isInstalledDisplayMode", () => {
+  it("reconnaît l'app lancée depuis l'icône", () => {
+    expect(isInstalledDisplayMode(["standalone"])).toBe(true);
+  });
+
+  it("⚠️ REFUSE `minimal-ui`, qui est un navigateur à barre réduite", () => {
+    // Le défaut constaté en vrai : `minimal-ui` était accepté, donc le
+    // navigateur intégré d'Instagram ou de Google passait pour l'app
+    // installée. La porte s'ouvrait, l'app s'affichait dans ce webview, et la
+    // connexion Google s'y perdait — cinq allers-retours en 90 secondes.
+    expect(isInstalledDisplayMode(["minimal-ui"])).toBe(false);
+  });
+
+  it("refuse `fullscreen`, qui ne peut pas venir de notre manifeste", () => {
+    // Le manifeste déclare `display: standalone` : une Vesti réellement
+    // installée annonce `standalone`. `fullscreen` ne pouvait donc désigner
+    // qu'autre chose — une page vidéo, par exemple.
+    expect(isInstalledDisplayMode(["fullscreen"])).toBe(false);
+  });
+
+  it("refuse le navigateur ordinaire", () => {
+    expect(isInstalledDisplayMode(["browser"])).toBe(false);
+    expect(isInstalledDisplayMode([])).toBe(false);
   });
 });

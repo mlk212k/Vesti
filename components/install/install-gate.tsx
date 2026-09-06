@@ -2,7 +2,12 @@
 
 import { useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { INSTALL_GATE_ENABLED, isOpenPath } from "@/lib/install";
+import {
+  INSTALL_GATE_ENABLED,
+  INSTALLED_DISPLAY_MODES,
+  isInstalledDisplayMode,
+  isOpenPath,
+} from "@/lib/install";
 import { InstallGuide } from "./install-guide";
 import { LogoMark } from "@/components/brand/logo";
 
@@ -22,7 +27,7 @@ import { LogoMark } from "@/components/brand/logo";
  * l'app installée sans recharger.
  */
 function subscribe(onChange: () => void): () => void {
-  const queries = DISPLAY_MODES.map((mode) =>
+  const queries = INSTALLED_DISPLAY_MODES.map((mode) =>
     window.matchMedia(`(display-mode: ${mode})`)
   );
   for (const query of queries) query.addEventListener("change", onChange);
@@ -31,19 +36,30 @@ function subscribe(onChange: () => void): () => void {
   };
 }
 
-const DISPLAY_MODES = ["standalone", "fullscreen", "minimal-ui"] as const;
+export function getSnapshot(): "standalone" | "browser" {
+  const matching = INSTALLED_DISPLAY_MODES.filter(
+    (mode) => window.matchMedia(`(display-mode: ${mode})`).matches
+  );
 
-function getSnapshot(): "standalone" | "browser" {
   const launchedFromIcon =
-    DISPLAY_MODES.some(
-      (mode) => window.matchMedia(`(display-mode: ${mode})`).matches
-    ) ||
+    isInstalledDisplayMode(matching) ||
     // Safari iOS : propriété non standard, mais c'est la seule qui réponde
     // correctement sur les versions d'iOS encore très répandues.
     (window.navigator as Navigator & { standalone?: boolean }).standalone ===
       true;
 
   return launchedFromIcon ? "standalone" : "browser";
+}
+
+/**
+ * Le mode d'affichage, pour les écrans qui doivent s'adapter sans être la porte
+ * elle-même — l'écran de connexion, notamment.
+ */
+export function useLaunchedFromIcon(): boolean {
+  return (
+    useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot) ===
+    "standalone"
+  );
 }
 
 /** Sur le serveur, on ne sait pas : on rend l'écran d'attente. */

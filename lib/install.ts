@@ -35,6 +35,36 @@
  */
 export const INSTALL_GATE_ENABLED = true;
 
+/**
+ * Le SEUL mode d'affichage qui prouve un lancement depuis l'icône.
+ *
+ * ⚠️ Il y en avait trois : `standalone`, `fullscreen` et `minimal-ui`. Les deux
+ * derniers ont causé un vrai défaut, constaté chez une utilisatrice iPhone.
+ *
+ * `minimal-ui` veut dire « un navigateur à barre réduite » — c'est-à-dire
+ * exactement le navigateur intégré d'Instagram, de Google ou d'un client mail.
+ * La porte le prenait pour l'app installée, ouvrait l'app dans ce webview, et
+ * la connexion Google s'y perdait : cinq allers-retours en 90 secondes,
+ * `/token 200` au milieu, et retour à la page d'accueil à chaque fois.
+ *
+ * `fullscreen` ne peut de toute façon jamais arriver : le manifeste déclare
+ * `display: standalone`, donc une Vesti réellement installée annonce
+ * `standalone` et rien d'autre. Le garder n'ouvrait qu'une porte de plus.
+ */
+export const INSTALLED_DISPLAY_MODES = ["standalone"] as const;
+
+/**
+ * Ces modes d'affichage désignent-ils une app lancée depuis l'écran d'accueil ?
+ *
+ * Prend la liste des modes qui correspondent réellement, pour que la décision
+ * se teste sans navigateur.
+ */
+export function isInstalledDisplayMode(modes: readonly string[]): boolean {
+  return modes.some((mode) =>
+    (INSTALLED_DISPLAY_MODES as readonly string[]).includes(mode)
+  );
+}
+
 export type Os = "ios" | "android" | "other";
 
 /**

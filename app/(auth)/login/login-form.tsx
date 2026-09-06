@@ -18,6 +18,8 @@ import {
 } from "@/lib/otp";
 import { PASSWORD_MIN_LENGTH, authErrorMessage, passwordProblem } from "@/lib/password";
 import { GoogleIcon } from "@/components/brand/social-icons";
+import { useLaunchedFromIcon } from "@/components/install/install-gate";
+import { detectEnvironment } from "@/lib/install";
 
 /**
  * Connexion par mot de passe.
@@ -248,6 +250,35 @@ export function LoginForm({ next }: { next: string }) {
     enterApp();
   }
 
+  /**
+   * Le bouton Google n'a pas sa place dans l'app installée sur iPhone.
+   *
+   * ⚠️ Constaté chez une vraie utilisatrice : cinq tentatives en 90 secondes,
+   * un `/token 200` dans les journaux — donc une session RÉELLEMENT créée — et
+   * un retour à la page d'accueil à chaque fois.
+   *
+   * La raison n'est pas un réglage : c'est iOS. Une app ajoutée à l'écran
+   * d'accueil possède son propre stockage, séparé de Safari. Or Google renvoie
+   * toujours dans le navigateur (voir `app/auth/callback/route.ts`). La session
+   * naît donc dans Safari, où l'app installée ne peut pas la voir — et l'icône
+   * rouvre sur un écran déconnecté. La boucle est sans issue.
+   *
+   * Dans l'app installée, il reste le code à 6 chiffres, qui ne quitte jamais
+   * l'app. C'est exactement la raison d'être de ce code — voir
+   * `INSTALL_GATE_ENABLED` dans `lib/install.ts`.
+   *
+   * Android n'a pas ce problème : une PWA y partage le stockage de Chrome, et
+   * le retour d'OAuth atterrit dans l'app. Le bouton y reste donc.
+   */
+  const launchedFromIcon = useLaunchedFromIcon();
+  const isIos =
+    typeof navigator !== "undefined" &&
+    detectEnvironment({
+      userAgent: navigator.userAgent,
+      maxTouchPoints: navigator.maxTouchPoints,
+    }).os === "ios";
+  const googleWorksHere = !(launchedFromIcon && isIos);
+
   async function signInWithGoogle() {
     setStatus({ kind: "busy" });
     const supabase = createClient();
@@ -451,16 +482,20 @@ export function LoginForm({ next }: { next: string }) {
         </button>
       </div>
 
-      <div className="flex items-center gap-3">
-        <span className="h-px flex-1 bg-border" />
-        <span className="text-xs text-muted">ou</span>
-        <span className="h-px flex-1 bg-border" />
-      </div>
+      {googleWorksHere && (
+        <>
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted">ou</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
 
-      <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
-        <GoogleIcon />
-        Continuer avec Google
-      </Button>
+          <Button variant="secondary" onClick={signInWithGoogle} disabled={busy}>
+            <GoogleIcon />
+            Continuer avec Google
+          </Button>
+        </>
+      )}
     </div>
   );
 }
