@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import { LegalLinks } from "@/components/legal-links";
 import { LogoMark, Wordmark } from "@/components/brand/logo";
 import { buttonClasses } from "@/components/ui/button";
@@ -8,7 +10,28 @@ import { buttonClasses } from "@/components/ui/button";
  * seule page où l'on peut se permettre un aplat violet plein cadre, et c'est ce
  * qui fait le lien avec la vignette de la vidéo d'où vient le visiteur.
  */
-export default function LandingPage() {
+export default async function LandingPage() {
+  /**
+   * Un utilisateur connecté n'a rien à faire sur la page de vente.
+   *
+   * ⚠️ Ce renvoi manquait, et ça se voyait surtout dans l'app installée : sur
+   * iPhone, si l'icône a été ajoutée depuis cette page, elle ouvre `/` et non
+   * `/dashboard` — le `start_url` du manifeste n'est pas toujours appliqué par
+   * iOS. On retombait donc sur « Ta tenue, jugée en 30 secondes » à chaque
+   * lancement, en étant parfaitement connecté, avec l'impression que la
+   * connexion n'avait pas pris.
+   *
+   * Corriger le manifeste n'aurait rien réglé pour les icônes DÉJÀ installées :
+   * leur adresse de départ est figée au moment de l'ajout. Le renvoi, lui,
+   * fonctionne quelle que soit la porte d'entrée.
+   */
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) redirect("/dashboard");
+
   return (
     <main className="flex flex-1 flex-col px-6 pb-10 pt-8">
       <Wordmark size={30} priority className="self-start" />
