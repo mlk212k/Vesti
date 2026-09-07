@@ -65,6 +65,20 @@ export const env = {
     return "http://localhost:3000";
   },
 
+  /**
+   * Le domaine seul, sans protocole — ce qu'on ÉCRIT à quelqu'un.
+   *
+   * ⚠️ Existe parce qu'une page écrivait « vesti.app » en dur pour dire où
+   * ouvrir l'app sur son téléphone. Le domaine réel est `vesti8.app` : la
+   * personne qui suivait l'instruction tapait une adresse qui n'est pas la
+   * nôtre. Une adresse écrite à la main dans du texte ne se met jamais à jour
+   * quand le domaine change — celle-ci suit `siteUrl`, donc la variable
+   * d'environnement, donc la réalité.
+   */
+  get siteHost(): string {
+    return this.siteUrl.replace(/^https?:\/\//, "").replace(/\/+$/, "");
+  },
+
   get siteName(): string {
     return firstFilled(process.env.NEXT_PUBLIC_SITE_NAME) ?? "Vesti";
   },

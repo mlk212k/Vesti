@@ -6,6 +6,7 @@ import { THEME_SCRIPT } from "@/lib/theme";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
+import { env } from "@/lib/env";
 
 /* Titres : graisses lourdes, largeur variable — l'écho typographique des traits
    épais du logo. `display: swap` pour ne jamais bloquer le premier rendu. */
@@ -31,17 +32,61 @@ const jakarta = Plus_Jakarta_Sans({
  * contient, et le proxy pourra reposer le cookie DANS l'app — là où celui du
  * navigateur n'arrive pas. Voir `app/manifest.webmanifest/route.ts`.
  */
+const TITLE = "Vesti — ton styliste personnel";
+const DESCRIPTION =
+  "Envoie une photo de ta tenue, reçois un avis stylé et des conseils personnalisés.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const ref = (await cookies()).get(REFERRAL_COOKIE)?.value;
   const code = normalizeReferralCode(ref ?? "");
 
   return {
-    title: "Vesti — ton styliste personnel",
-    description:
-      "Envoie une photo de ta tenue, reçois un avis stylé et des conseils personnalisés.",
+    title: TITLE,
+    description: DESCRIPTION,
     manifest: code
       ? `/manifest.webmanifest?ref=${encodeURIComponent(code)}`
       : "/manifest.webmanifest",
+
+    /*
+      L'aperçu du lien quand on le partage.
+
+      ⚠️ Sans ces trois blocs, `vesti8.app` collé sur Discord, en message ou
+      dans une bio n'affiche qu'un texte nu : pas d'image, pas de bandeau. Un
+      lien sans aperçu, à côté de dix liens qui en ont un, ne se lit pas comme
+      sobre — il se lit comme douteux, et c'est le tout premier contact avec
+      l'app pour quelqu'un qui vient de TikTok.
+
+      `metadataBase` est obligatoire dès qu'une image est donnée en chemin
+      relatif : sans elle, Next refuse de construire l'URL absolue que les
+      réseaux exigent. Elle vient de la configuration, jamais d'un domaine
+      écrit à la main — c'est le défaut qu'on vient de corriger ailleurs.
+    */
+    metadataBase: new URL(env.siteUrl),
+    openGraph: {
+      type: "website",
+      siteName: env.siteName,
+      locale: "fr_FR",
+      url: "/",
+      title: TITLE,
+      description: DESCRIPTION,
+      images: [
+        {
+          url: "/og.png",
+          width: 1200,
+          height: 630,
+          alt: "Vesti — ta tenue, notée et expliquée en 30 secondes.",
+        },
+      ],
+    },
+    twitter: {
+      // `summary_large_image` : la grande image. Sans ce mot, X et plusieurs
+      // messageries affichent une vignette carrée de 120 px, où le texte de
+      // l'image devient illisible.
+      card: "summary_large_image",
+      title: TITLE,
+      description: DESCRIPTION,
+      images: ["/og.png"],
+    },
   };
 }
 

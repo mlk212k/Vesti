@@ -6,6 +6,7 @@ import { LogoMark } from "@/components/brand/logo";
 import { LegalLinks } from "@/components/legal-links";
 import { Button } from "@/components/ui/button";
 import { detectEnvironment } from "@/lib/install";
+import { env } from "@/lib/env";
 
 /**
  * Événement propre à Chromium : il n'existe dans aucune définition standard,
@@ -296,8 +297,11 @@ function OpenOnPhone() {
       <p className="text-sm leading-relaxed text-muted">
         Tu vas photographier tes tenues : autant le faire depuis l&apos;appareil
         qui a l&apos;appareil photo. Ouvre{" "}
-        <Strong>vesti.app</Strong> sur ton mobile, puis ajoute-le à ton écran
-        d&apos;accueil.
+        {/* ⚠️ Jamais un domaine écrit à la main : il y avait « vesti.app » ici,
+            qui n'est pas notre adresse. Quelqu'un qui suivait l'instruction
+            atterrissait chez quelqu'un d'autre. */}
+        <Strong>{env.siteHost}</Strong> sur ton mobile, puis ajoute-le à ton
+        écran d&apos;accueil.
       </p>
     </div>
   );

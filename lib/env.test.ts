@@ -1,7 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { __test } from "./env";
+import { __test, env } from "./env";
 
 const { firstFilled } = __test;
+
+describe("siteHost", () => {
+  // ⚠️ Ce test existe à cause d'un vrai défaut : la page « ouvre l'app sur ton
+  // téléphone » écrivait « vesti.app » en dur, alors que le domaine est
+  // `vesti8.app`. On envoyait donc les gens sur une adresse qui n'est pas la
+  // nôtre, au moment précis où ils allaient la taper.
+  it("retire le protocole de l'adresse du site", () => {
+    expect(env.siteHost).toBe(env.siteUrl.replace(/^https?:\/\//, ""));
+  });
+
+  it("n'écrit jamais un domaine à la main", () => {
+    // Le domaine doit venir de la configuration, jamais d'une constante.
+    expect(env.siteHost).not.toBe("vesti.app");
+  });
+});
 
 describe("firstFilled", () => {
   it("prend la première valeur renseignée", () => {
