@@ -35,9 +35,10 @@ export const LEGAL = {
    * (ou l'inverse) est une mention légale fausse.
    */
   tvaIntracom: "TVA non applicable, art. 293 B du CGI",
-  adresse: "[ADRESSE POSTALE COMPLÈTE]",
+  adresse: "74 rue des Romains, 57360 Amnéville",
   email: "badnxko18@gmail.com",
-  telephone: "[TÉLÉPHONE]",
+  /** Obligatoire en vente à distance : un moyen de contact rapide. */
+  telephone: "07 53 61 03 44",
   /**
    * Déduit : en entreprise individuelle, l'éditeur et le directeur de la
    * publication sont la même personne. À changer si quelqu'un d'autre prend la
@@ -49,11 +50,20 @@ export const LEGAL = {
    * Obligatoire en B2C : tout professionnel vendant à des consommateurs doit
    * adhérer à un médiateur de la consommation et le mentionner dans ses CGV.
    */
-  mediateur: {
-    nom: "[NOM DU MÉDIATEUR DE LA CONSOMMATION]",
-    site: "[SITE DU MÉDIATEUR]",
-    adresse: "[ADRESSE DU MÉDIATEUR]",
-  },
+  /**
+   * `null` tant que l'adhésion n'est pas souscrite.
+   *
+   * ⚠️ CE N'EST PAS OPTIONNEL. Tout professionnel vendant à des consommateurs
+   * doit adhérer à un médiateur de la consommation et le mentionner dans ses
+   * CGV. Sans lui, les CGV sont incomplètes et un client peut le retourner
+   * contre l'éditeur.
+   *
+   * `null` sert seulement à ne pas AFFICHER de crochets vides en attendant :
+   * les CGV écrivent alors que l'adhésion est en cours, ce qui est la vérité,
+   * plutôt qu'un nom inventé ou un paragraphe absent qui laisserait croire que
+   * l'obligation n'existe pas. À remplir dès réception de l'adhésion.
+   */
+  mediateur: null as { nom: string; site: string; adresse: string } | null,
 
   /**
    * Contact pour les demandes RGPD — accès, rectification, suppression.
@@ -107,7 +117,6 @@ export function missingLegalFields(): string[] {
     ["adresse", LEGAL.adresse],
     ["email de contact", LEGAL.email],
     ["directeur de la publication", LEGAL.directeurPublication],
-    ["médiateur de la consommation", LEGAL.mediateur.nom],
     ["email RGPD", LEGAL.emailRgpd],
   ];
 

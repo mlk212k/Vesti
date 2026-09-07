@@ -140,10 +140,23 @@ export default function CgvPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-base font-semibold">10. Médiation de la consommation</h2>
         <p>
-          En cas de litige non résolu directement, l&apos;abonné peut recourir
-          gratuitement au médiateur de la consommation :{" "}
-          {LEGAL.mediateur.nom}, {LEGAL.mediateur.adresse} —{" "}
-          {LEGAL.mediateur.site}. La plateforme européenne de règlement en ligne
+          {LEGAL.mediateur ? (
+            <>
+              En cas de litige non résolu directement, l&apos;abonné peut
+              recourir gratuitement au médiateur de la consommation :{" "}
+              {LEGAL.mediateur.nom}, {LEGAL.mediateur.adresse} —{" "}
+              {LEGAL.mediateur.site}.
+            </>
+          ) : (
+            <>
+              En cas de litige non résolu directement, l&apos;abonné peut
+              recourir gratuitement à un médiateur de la consommation.
+              L&apos;adhésion de l&apos;éditeur à un organisme de médiation est
+              en cours ; ses coordonnées seront publiées ici dès qu&apos;elle
+              sera effective.
+            </>
+          )}{" "}
+          La plateforme européenne de règlement en ligne
           des litiges est également accessible à l&apos;adresse{" "}
           <a
             href="https://ec.europa.eu/consumers/odr"
