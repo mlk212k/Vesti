@@ -7,6 +7,7 @@ import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
 import { env } from "@/lib/env";
+import { Analytics } from "@vercel/analytics/next";
 
 /* Titres : graisses lourdes, largeur variable — l'écho typographique des traits
    épais du logo. `display: swap` pour ne jamais bloquer le premier rendu. */
@@ -119,6 +120,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               depuis l'écran d'accueil. Voir components/install/install-gate. */}
           <InstallGate>{children}</InstallGate>
         </div>
+        <Analytics />
       </body>
     </html>
   );
