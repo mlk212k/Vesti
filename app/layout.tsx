@@ -7,6 +7,7 @@ import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
 import { env } from "@/lib/env";
+import { Analytics } from "@vercel/analytics/next";
 
 /* Titres : graisses lourdes, largeur variable — l'écho typographique des traits
    épais du logo. `display: swap` pour ne jamais bloquer le premier rendu. */
@@ -119,6 +120,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               depuis l'écran d'accueil. Voir components/install/install-gate. */}
           <InstallGate>{children}</InstallGate>
         </div>
+        {/* Vercel Web Analytics. Posé hors de l'InstallGate, sinon les visites
+            qui s'arrêtent à l'écran d'installation — c'est-à-dire la majorité
+            du trafic TikTok — ne seraient jamais comptées, et le taux de
+            passage vers l'app installée resterait invisible. Le script ne se
+            charge qu'en production (`mode: 'auto'`) : rien en `next dev`. */}
+        <Analytics />
       </body>
     </html>
   );
