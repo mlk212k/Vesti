@@ -20,20 +20,49 @@
 /**
  * Interrupteur de la porte « écran d'accueil ».
  *
- * La porte n'a de sens que si l'on peut se connecter SANS quitter l'app
- * installée — donc uniquement par le code à 6 chiffres. Elle est restée à
- * `false` le temps que les modèles d'email Supabase portent `{{ .Token }}` :
- * sans code, la seule voie était le lien du mail, qui s'ouvre dans le
- * navigateur, que la porte bloque. Fermer avant d'avoir la clé enferme tout le
- * monde dehors — c'est arrivé, d'où ce commentaire.
+ * ── OUVERTE, et c'est la mesure qui l'a décidé ──────────────────────────────
  *
- * Le modèle « Magic Link » envoie maintenant un code : la porte peut fermer.
+ * Trois jours de Web Analytics, du 12 au 14 septembre 2026 :
  *
- * ⚠️ Si tu la remets à `false` un jour, vérifie d'abord qu'un mail arrive
+ *   /        194 visiteurs     ← l'écran d'installation, que tout le monde voit
+ *   /login     6 visiteurs     ← derrière la porte : uniquement ceux qui ont
+ *                                installé PUIS sont revenus par l'icône
+ *   inscrits   5
+ *
+ * Soit **3 % de franchissement**. Ce n'est pas une estimation : `/login` étant
+ * lui aussi derrière la porte, ces 6 visiteurs SONT la mesure exacte des gens
+ * qui ont réussi l'installation.
+ *
+ * Pire, 167 de ces 194 venaient de tiktok.com — donc du navigateur intégré de
+ * TikTok, qui ne sait pas installer de PWA (voir `IN_APP_BROWSERS`). Pour eux,
+ * la porte imposait sept étapes avant d'avoir rien vu de l'app : sortir de
+ * TikTok, trouver le bouton ⋯, ouvrir dans Safari, bouton Partager, ajouter à
+ * l'écran d'accueil, retrouver l'icône, l'ouvrir. On demandait un engagement
+ * avant d'avoir montré la moindre valeur.
+ *
+ * ⚠️ Ce qui est abandonné ici, c'est la PORTE, pas la PWA. Le manifeste,
+ * l'icône et l'installation restent entiers — l'app s'installe toujours, et
+ * l'icône sur l'écran d'accueil reste le meilleur outil de rétention dont on
+ * dispose. Ce qui change, c'est le MOMENT où on la propose : après la première
+ * analyse, quand la personne a vu son verdict et a une raison de revenir, et
+ * non en péage à l'entrée.
+ *
+ * ── Ce que la réouverture change, et qu'il ne faut pas redécouvrir ──────────
+ *
+ *  - La connexion Google redevient disponible sur iPhone. `googleWorksHere`
+ *    dans le formulaire de connexion vaut `!(launchedFromIcon && isIos)` : hors
+ *    app installée, le cas qui cassait la session PKCE n'existe pas.
+ *  - Le parrainage n'est pas affecté : le code arrive par `?ref=` et le proxy
+ *    le pose en cookie dès la première page, installée ou non.
+ *  - La connexion par code à 6 chiffres reste en place et reste nécessaire le
+ *    jour où la porte refermerait.
+ *
+ * 🔁 Pour refermer : repasser à `true`. Vérifier d'abord qu'un mail arrive
  * réellement avec 6 chiffres, sur une adresse déjà inscrite ET sur une adresse
- * neuve — Supabase n'utilise pas le même modèle dans les deux cas.
+ * neuve — Supabase n'utilise pas le même modèle dans les deux cas. Fermer sans
+ * cette clé enferme tout le monde dehors ; c'est déjà arrivé.
  */
-export const INSTALL_GATE_ENABLED = true;
+export const INSTALL_GATE_ENABLED = false;
 
 /**
  * Le SEUL mode d'affichage qui prouve un lancement depuis l'icône.
