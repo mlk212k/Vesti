@@ -152,3 +152,40 @@ export function affiliateUrl(url: string, config: AffiliateConfig): string {
 
   return deepLink.toString();
 }
+
+/**
+ * L'affiliation est-elle réellement en service ?
+ *
+ * Même condition que `affiliateUrl` : les deux moitiés de la configuration sont
+ * nécessaires. Elle est exposée parce qu'une phrase affichée à l'utilisateur en
+ * dépend, et qu'une phrase et un comportement qui se contredisent sont pires
+ * que les deux pris séparément.
+ */
+export function isAffiliateActive(config: AffiliateConfig): boolean {
+  return Boolean(config.awinAffiliateId) && config.merchants.size > 0;
+}
+
+/**
+ * Ce qu'on écrit sous les liens produits.
+ *
+ * ⚠️ Pourquoi cette phrase est CALCULÉE et non écrite dans la page.
+ *
+ * La page annonçait « Vesti ne touche aucune commission ». C'était vrai, et ça
+ * cessait de l'être à la seconde où les identifiants d'affiliation seraient
+ * posés — sans qu'aucune ligne de code ne change, donc sans que personne ne
+ * pense à corriger le texte. Un engagement pris auprès de l'utilisateur qui
+ * devient faux tout seul est le pire genre de dette : invisible, et sur un
+ * sujet où la loi française impose justement la transparence.
+ *
+ * La phrase suit donc la configuration. Elle ne peut plus mentir, dans un sens
+ * comme dans l'autre — et le jour où un programme est résilié, elle redevient
+ * exacte toute seule.
+ */
+export function affiliateDisclosure(config: AffiliateConfig): string {
+  const origin =
+    "Les liens proviennent d'une recherche web réelle : Vesti ne propose rien qu'il n'a pas trouvé.";
+
+  return isAffiliateActive(config)
+    ? `${origin} Certains sont des liens partenaires : un achat peut rapporter une commission à Vesti, sans rien changer à ton prix.`
+    : `${origin} Vesti ne touche aucune commission.`;
+}

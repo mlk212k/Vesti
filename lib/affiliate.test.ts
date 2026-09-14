@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { affiliateUrl, matchMerchant, parseMerchantMap } from "./affiliate";
+import {
+  affiliateDisclosure,
+  affiliateUrl,
+  isAffiliateActive,
+  matchMerchant,
+  parseMerchantMap,
+} from "./affiliate";
 
 const MERCHANTS = parseMerchantMap("asos.com:1234,hm.com:5678,zalando.fr:9012");
 const CONFIG = { awinAffiliateId: "999888", merchants: MERCHANTS };
@@ -135,5 +141,55 @@ describe("affiliateUrl — la transformation", () => {
 
     expect(hm.searchParams.get("awinmid")).toBe("5678");
     expect(zalando.searchParams.get("awinmid")).toBe("9012");
+  });
+});
+
+/**
+ * ⚠️ Le groupe de tests qui protège un ENGAGEMENT, pas un comportement.
+ *
+ * La page affichait « Vesti ne touche aucune commission » en dur. La phrase
+ * serait devenue fausse à la seconde où les identifiants auraient été posés,
+ * sans qu'aucune ligne de code ne change — donc sans que personne ne pense à la
+ * corriger. En France, l'affiliation doit être signalée : ces tests existent
+ * pour que la mention ne puisse plus diverger de la réalité.
+ */
+describe("affiliateDisclosure", () => {
+  const INACTIF = { merchants: new Map() };
+
+  it("sans affiliation : la promesse d'origine est tenue", () => {
+    expect(affiliateDisclosure(INACTIF)).toContain("ne touche aucune commission");
+    expect(affiliateDisclosure(INACTIF)).not.toContain("liens partenaires");
+  });
+
+  it("avec affiliation : la commission est annoncée, et le prix rassuré", () => {
+    const texte = affiliateDisclosure(CONFIG);
+    expect(texte).toContain("liens partenaires");
+    expect(texte).toContain("sans rien changer à ton prix");
+    expect(texte).not.toContain("ne touche aucune commission");
+  });
+
+  it("dit toujours d'où viennent les liens, dans les deux cas", () => {
+    expect(affiliateDisclosure(INACTIF)).toContain("recherche web réelle");
+    expect(affiliateDisclosure(CONFIG)).toContain("recherche web réelle");
+  });
+
+  /** Une configuration à moitié posée ne rémunère rien : la mention doit le dire. */
+  it("configuration incomplète : la mention reste celle de l'inactif", () => {
+    expect(
+      affiliateDisclosure({ awinAffiliateId: "999888", merchants: new Map() })
+    ).toContain("ne touche aucune commission");
+    expect(affiliateDisclosure({ merchants: MERCHANTS })).toContain(
+      "ne touche aucune commission"
+    );
+  });
+});
+
+describe("isAffiliateActive", () => {
+  it("exige les deux moitiés de la configuration", () => {
+    expect(isAffiliateActive(CONFIG)).toBe(true);
+    expect(isAffiliateActive({ merchants: MERCHANTS })).toBe(false);
+    expect(
+      isAffiliateActive({ awinAffiliateId: "999888", merchants: new Map() })
+    ).toBe(false);
   });
 });
