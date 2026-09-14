@@ -109,17 +109,21 @@ export function BottomNav() {
               }}
               // `relative` : sans lui, les onglets ne sont pas positionnés et la
               // pastille — qui l'est — se peindrait PAR-DESSUS les icônes.
-              className={`relative flex flex-1 flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition-colors ${
+              className={`relative flex flex-1 items-center justify-center transition-colors ${
                 active ? "text-accent-strong" : "text-muted"
               }`}
+              /* ⚠️ Le nom quitte l'ÉCRAN, pas l'accessibilité. Une barre
+                 d'icônes nues sans nom accessible est muette au lecteur
+                 d'écran : `aria-label` porte le libellé que l'œil ne voit
+                 plus. (`aria-current` est déjà posé plus haut.) */
+              aria-label={tab.label}
             >
-              {/* La boîte de la pastille reste ici, vide : c'est elle qui donne sa
-                  place à l'icône. La couleur, elle, est peinte par l'unique
-                  pastille glissante posée derrière. */}
+              {/* La boîte de la pastille reste ici : c'est elle qui donne sa
+                  place à l'icône. La couleur est peinte par l'unique pastille
+                  glissante posée derrière. */}
               <span className="flex h-7 w-12 items-center justify-center">
                 <Icon active={active} />
               </span>
-              {tab.label}
             </Link>
           );
         })}
@@ -159,7 +163,7 @@ function SlidingPill({ index, count }: { index: number; count: number }) {
   return (
     <div className="pointer-events-none absolute inset-0 flex" aria-hidden>
       <div
-        className="flex flex-col items-center justify-center gap-1 pt-1.5 text-[11px] font-semibold transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
         // La largeur vient du NOMBRE d'onglets, pas d'une classe `w-1/5` figée :
         // le jour où l'on en ajoute ou en retire un — c'est arrivé — la pastille
         // se serait décalée en silence sur tous les onglets sauf le premier.
@@ -169,9 +173,6 @@ function SlidingPill({ index, count }: { index: number; count: number }) {
         }}
       >
         <span className="h-7 w-12 rounded-full bg-accent-soft" />
-        {/* Cale invisible : elle occupe la ligne du libellé pour que le
-            centrage vertical soit celui des onglets, au pixel près. */}
-        <span className="invisible">A</span>
       </div>
     </div>
   );

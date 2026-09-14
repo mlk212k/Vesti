@@ -48,7 +48,10 @@
   /* Hauteur de la barre de navigation basse. La barre étant maintenant dans le
      flux, plus rien n'a besoin de réserver la place — mais la valeur reste ici
      pour que la hauteur des onglets se règle en un seul endroit. */
-  --bottom-nav-height: 60px;
+  /* Sans libellé sous l'icône, 60 px laissaient un vide sous la barre.
+     56 reste très au-dessus des 44 px de cible tactile : la zone cliquable
+     est la cellule entière, pas l'icône. */
+  --bottom-nav-height: 56px;
 
   /*
     ── L'ANGLE DROIT, PARTOUT ──────────────────────────────────────────────

@@ -77,17 +77,6 @@ export default async function ShoppingPage() {
         <ProductSearch />
 
         <AdvicePanel />
-
-        <div className="flex flex-col gap-2 panel p-5">
-          <span className="text-sm font-semibold">Ou laisse Vesti décider</span>
-          <p className="text-xs leading-relaxed text-muted">
-            Scanne ton dressing : Vesti repère ce qui te manque pour compléter
-            tes tenues, et te le propose ici.
-          </p>
-          <Link href="/dressing/scan">
-            <Button variant="secondary">Scanner mon dressing</Button>
-          </Link>
-        </div>
       </main>
     );
   }
