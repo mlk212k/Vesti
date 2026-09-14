@@ -3,30 +3,38 @@ import { cookies } from "next/headers";
 import { REFERRAL_COOKIE } from "@/proxy";
 import { normalizeReferralCode } from "@/lib/navigation";
 import { THEME_SCRIPT } from "@/lib/theme";
-import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
 import { env } from "@/lib/env";
 import { Analytics } from "@vercel/analytics/next";
 
 /*
-  Titres : la même famille que le logo, mais en graisses LÉGÈRES.
+  Titres : Bodoni Moda.
 
-  ⚠️ Elle n'était chargée qu'en 600/700/800 — « l'écho typographique des traits
-  épais du logo ». Sur un écran de 390 px, un titre en 800 très resserré occupe
-  la place d'une image et lit « application », jamais « mode ». Aucune enseigne
-  de prêt-à-porter n'écrit ses titres en gras : Zara, COS, Arket composent tous
-  en fin et en large, parce que le gras entre en concurrence avec la photo du
-  vêtement, qui est ce qu'on est venu regarder.
+  ⚠️ C'était Bricolage Grotesque — « l'écho typographique des traits épais du
+  logo ». Elle a été allégée de 800 à 400, puis rejetée quand même : « j'aime
+  pas la police d'écriture ». Le problème n'était pas la graisse, c'était la
+  FAMILLE. Bricolage est une grotesque de caractère, avec des formes qui
+  disent « studio », « produit tech », « jeune marque » — jamais « mode ».
 
-  Charger 300 à 600 coûte la même chose (c'est une variable) et donne le
-  registre complet : 400 pour les titres, 600 restant disponible là où il faut
-  encore appuyer. `display: swap` pour ne jamais bloquer le premier rendu.
+  Bodoni est la police des magazines de mode depuis deux siècles, et c'est
+  encore celle de Vogue et de Harper's. Son très fort contraste entre pleins et
+  déliés est exactement ce qu'aucune interface d'application n'a — donc
+  exactement ce qui sort Vesti du registre applicatif.
+
+  ⚠️ RÉSERVÉE AUX TITRES, et c'est structurel, pas esthétique. Les déliés de
+  Bodoni sont des cheveux : sous 24 px ils se brisent, et sur un écran à faible
+  densité ils disparaissent. Elle ne sert qu'aux `h1`/`h2`/`h3`, jamais au
+  texte courant ni aux micro-libellés.
+
+  Le texte courant reste sur Plus Jakarta Sans : rien ne se lit mieux à 15 px
+  sur un téléphone, et ce n'est pas elle qu'on remarque.
 */
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const display = Bodoni_Moda({
+  variable: "--font-display-family",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -114,7 +122,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${bricolage.variable} ${jakarta.variable} h-full`}
+      className={`${display.variable} ${jakarta.variable} h-full`}
       // Le script ci-dessous modifie cet élément avant que React ne s'y
       // attache : sans cette annotation, React signalerait un écart entre le
       // HTML du serveur et celui du navigateur.

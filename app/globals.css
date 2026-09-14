@@ -217,7 +217,7 @@
   /* Bricolage Grotesque pour les titres : ses graisses lourdes ont l'épaisseur
      des traits du logo. Plus Jakarta Sans pour le texte courant, plus ouverte
      et plus lisible à 15px sur mobile. */
-  --font-display: var(--font-bricolage);
+  --font-display: var(--font-display-family);
   --font-sans: var(--font-jakarta);
 }
 

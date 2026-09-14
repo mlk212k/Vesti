@@ -271,7 +271,7 @@ function ScanResults({
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">
+        <h2 className="label text-muted">
           {result.garments.length} pièce{result.garments.length > 1 ? "s" : ""} ajoutée
           {result.garments.length > 1 ? "s" : ""}
         </h2>

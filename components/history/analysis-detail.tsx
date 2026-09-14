@@ -2,6 +2,8 @@
 
 import { GarmentThumb } from "@/components/analyze/garment-thumb";
 import { CheckIcon } from "@/components/ui/check-icon";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { ScoreHeader } from "@/components/analyze/score-header";
 import type { GarmentView } from "@/components/analyze/verdict-card";
 
 /**
@@ -35,31 +37,16 @@ export function AnalysisDetail({
 }) {
   return (
     <div className="flex flex-col gap-6">
-      <section className="overflow-hidden panel">
-        <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
-          <span className="font-display text-[64px] font-semibold leading-none tracking-[-0.05em] tabular-nums">
-            {score ?? "—"}
-          </span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-75">
-            sur 100
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-3 p-6 text-center">
-          <span className="text-xs text-muted">
-            {new Date(createdAt).toLocaleDateString("fr-FR", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
-          {verdict && <p className="text-[15px] leading-relaxed">{verdict}</p>}
-          {occasion && (
-            <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-strong">
-              {occasion}
-            </span>
-          )}
-        </div>
-      </section>
+      <ScoreHeader score={score} occasion={occasion}>
+        <span className="label text-muted">
+          {new Date(createdAt).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
+        {verdict && <p className="text-[15px] leading-relaxed">{verdict}</p>}
+      </ScoreHeader>
 
       {photoUrl && (
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft">
@@ -92,7 +79,7 @@ export function AnalysisDetail({
           <ul className="flex flex-col gap-2">
             {improvements.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
-                <span className="text-accent">→</span>
+                <ArrowIcon className="text-accent" />
                 <span>{item}</span>
               </li>
             ))}

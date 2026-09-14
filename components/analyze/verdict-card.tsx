@@ -3,6 +3,8 @@
 import type { CropBox } from "@/lib/claude/schemas";
 import { GarmentThumb } from "./garment-thumb";
 import { CheckIcon } from "@/components/ui/check-icon";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { ScoreHeader } from "./score-header";
 
 export interface ProductMatchView {
   title: string;
@@ -47,24 +49,9 @@ export function VerdictCard({
       {/* L'écran de récompense : c'est le seul endroit de l'app où le violet
           prend toute la carte. Le score y est le point de mire, le verdict se
           lit juste en dessous sur fond clair. */}
-      <section className="overflow-hidden panel">
-        <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
-          <span className="font-display text-[64px] font-semibold leading-none tracking-[-0.05em] tabular-nums">
-            {analysis.score}
-          </span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-75">
-            sur 100
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-3 p-6 text-center">
-          <p className="text-[15px] leading-relaxed">{analysis.verdict}</p>
-          {analysis.occasion && (
-            <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-strong">
-              {analysis.occasion}
-            </span>
-          )}
-        </div>
-      </section>
+      <ScoreHeader score={analysis.score} occasion={analysis.occasion || null}>
+        <p className="text-[15px] leading-relaxed">{analysis.verdict}</p>
+      </ScoreHeader>
 
       <section className="flex flex-col gap-3">
         <h2 className="label text-muted">Ce qui marche</h2>
@@ -83,7 +70,7 @@ export function VerdictCard({
         <ul className="flex flex-col gap-2">
           {analysis.improvements.map((item) => (
             <li key={item} className="flex gap-2 text-sm leading-relaxed">
-              <span className="text-accent">→</span>
+              <ArrowIcon className="text-accent" />
               <span>{item}</span>
             </li>
           ))}
@@ -92,7 +79,7 @@ export function VerdictCard({
 
       <section className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm ">
+          <h2 className="label text-muted">
             Pièces détectées ({analysis.garments.length})
           </h2>
           {analysis.savedToWardrobe && (

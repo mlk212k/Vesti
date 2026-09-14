@@ -70,7 +70,7 @@ export default async function BillingPage(props: PageProps<"/billing">) {
         giftUntil={giftUntil}
       />
 
-      <h2 className="text-sm ">
+      <h2 className="label text-muted">
         {currentPlan === "free" ? "Passer à la vitesse supérieure" : "Toutes les formules"}
       </h2>
 

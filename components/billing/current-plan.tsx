@@ -39,17 +39,20 @@ export function CurrentPlan({
           <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
             Ton plan
           </span>
-          <span className="font-[family-name:var(--font-bricolage)] text-2xl font-semibold leading-none">
+          <span className="font-[family-name:var(--font-display-family)] text-2xl font-semibold leading-none">
             {definition.name}
           </span>
         </div>
+        {/* Pastille colorée devenue micro-libellé : le statut se lit à la
+            couleur du TEXTE, sans poser un aplat de plus sur une page qui en
+            porte déjà un. Le statut reste distinct sans être une tache. */}
         <span
-          className={`flex-none rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`label flex-none ${
             gifted
-              ? "bg-accent-soft text-accent-strong"
+              ? "text-accent-strong"
               : plan === "free"
-                ? "border border-border-soft text-muted"
-                : "bg-success/12 text-success"
+                ? "text-muted"
+                : "text-success"
           }`}
         >
           {gifted ? "Offert" : plan === "free" ? "Gratuit" : formatPrice(plan)}

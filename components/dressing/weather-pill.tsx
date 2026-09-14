@@ -154,7 +154,7 @@ export function WeatherPill({ hasWardrobe }: { hasWardrobe: boolean }) {
         </span>
         <div className="flex min-w-0 flex-col">
           <span className="flex items-baseline gap-1.5">
-            <span className="font-[family-name:var(--font-bricolage)] text-2xl font-semibold leading-none tabular-nums">
+            <span className="font-[family-name:var(--font-display-family)] text-2xl font-semibold leading-none tabular-nums">
               {Math.round(weather.temperature)}°
             </span>
             <span className="truncate text-xs text-muted">
