@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { downscaleImage } from "@/lib/image/downscale";
 import { Button } from "@/components/ui/button";
 import { VerdictCard, type AnalysisView } from "./verdict-card";
+import { InstallInvite } from "@/components/install/install-invite";
 import { AnalysisProgress } from "./analysis-progress";
 
 type State =
@@ -228,6 +229,12 @@ export function Analyzer() {
         <Button variant="secondary" onClick={() => setState({ step: "idle" })}>
           Analyser une autre tenue
         </Button>
+
+        {/* L'invitation à installer vient APRÈS le verdict, jamais avant : c'est
+            le moment où la personne a reçu quelque chose et sait ce qu'elle
+            garderait. Elle ne s'affiche pas pour qui est déjà entré par l'icône,
+            et un « Plus tard » la retire pour de bon. */}
+        <InstallInvite />
       </div>
     );
   }
