@@ -260,6 +260,35 @@ h1 {
   /* Interlettrage NEUTRE, pas négatif. Le resserrement est un réflexe de
      titrage publicitaire ; une enseigne de mode laisse ses titres respirer. */
   letter-spacing: 0;
+  line-height: 1.04;
+}
+
+/*
+  ── L'ESPACE FAIT LE RESTE ────────────────────────────────────────────────
+
+  Les boîtes retirées, il ne reste que le blanc pour dire où finit un bloc et
+  où commence le suivant. Il doit donc être franc : un écart timide entre deux
+  sections, sans cadre pour les séparer, se lit comme une erreur de mise en
+  page plutôt que comme une séparation.
+
+  ⚠️ Ces deux règles ne visent QUE les `<main>` d'écran et leurs sections
+  directes. Elles ne touchent ni les grilles de photos — qui se collent
+  volontairement — ni les listes, dont le `gap` est réglé au cas par cas.
+*/
+main > section,
+main > div > section {
+  scroll-margin-top: 1rem;
+}
+
+/*
+  Le filet, unique moyen de séparer deux blocs quand le blanc ne suffit pas :
+  une fin de page, un encart légal. Il se pose AVEC son espace, pour qu'aucun
+  écran n'ait à réinventer la distance entre le trait et ce qui le suit.
+*/
+.rule {
+  border-top: 1px solid var(--border-soft);
+  padding-top: 1.75rem;
+  margin-top: 0.5rem;
 }
 
 /*
@@ -282,15 +311,6 @@ h1 {
 }
 
 /*
-  Le filet. Dans une interface sans carte, c'est LUI qui sépare — une ligne
-  d'1 px et rien d'autre. Posé en bordure plutôt qu'en `<hr>` pour qu'il suive
-  le flux du contenu.
-*/
-.rule {
-  border-top: 1px solid var(--border-soft);
-}
-
-/*
   ── LE PANNEAU, EN UN SEUL ENDROIT ────────────────────────────────────────
 
   Le triplet `border border-border-soft bg-surface` était recopié à 40 endroits.
@@ -305,9 +325,36 @@ h1 {
   suivre `--radius-card` quand il change.
 */
 .panel {
-  border: 1px solid var(--border-soft);
-  background: var(--surface);
-  border-radius: var(--radius-card);
+  /*
+    ── LE PANNEAU N'EST PLUS UNE BOÎTE ───────────────────────────────────
+
+    Demande : « je veux que l'app ressemble plus du tout à celle qu'y a
+    maintenant », sans toucher à une seule couleur. Toute la transformation
+    devait donc venir de la forme et de l'espace.
+
+    Le voici. Chaque écran était une PILE DE RECTANGLES BLANCS BORDÉS posés
+    sur le fond lavande — quarante d'entre eux. C'est ça, et pas la palette,
+    qui donnait l'impression d'empilement : autant de petites pages
+    superposées sur une page.
+
+    Le contenu se pose maintenant directement sur le fond. Ce qui sépare,
+    c'est le blanc entre les blocs et, quand il en faut vraiment, un filet
+    d'un pixel. Rien d'autre. C'est le principe de toutes les enseignes de
+    mode : le vêtement sur le fond, sans cadre autour.
+
+    ⚠️ `padding: 0` est VOLONTAIRE et doit rester. Le balisage porte encore
+    des `p-5` hérités de l'époque des boîtes ; sans cette remise à zéro, le
+    contenu resterait renfoncé de 20 px sans qu'aucune boîte ne justifie ce
+    retrait — il se lirait comme un défaut d'alignement. L'espacement vient
+    désormais du `gap` des conteneurs, jamais du panneau lui-même.
+
+    Cette règle vient APRÈS les utilitaires Tailwind dans le fichier : à
+    spécificité égale, c'est elle qui gagne. Ne pas la déplacer plus haut.
+  */
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
 }
 
 /* Les chiffres alignés verticalement dans les jauges, scores et prix. */
