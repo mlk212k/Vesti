@@ -12,18 +12,24 @@ import { env } from "@/lib/env";
  * Événement propre à Chromium : il n'existe dans aucune définition standard,
  * d'où la déclaration locale.
  */
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-export function InstallGuide() {
-  const environment = detectEnvironment({
-    userAgent: typeof navigator === "undefined" ? "" : navigator.userAgent,
-    maxTouchPoints:
-      typeof navigator === "undefined" ? 0 : navigator.maxTouchPoints,
-  });
-
+/**
+ * Tout ce que le navigateur veut bien nous dire sur l'installation.
+ *
+ * Extrait de `InstallGuide` pour être partagé avec l'invitation affichée après
+ * la première analyse (`InstallInvite`) : les deux surfaces ont besoin du même
+ * service worker, du même événement Chromium et du même signal « c'est
+ * installé ». Dupliquer cette mécanique, c'est se condamner à ne la corriger
+ * qu'à un seul des deux endroits.
+ */
+export function useInstallPrompt(): {
+  promptEvent: BeforeInstallPromptEvent | null;
+  installed: boolean;
+} {
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(
     null
   );
@@ -61,6 +67,46 @@ export function InstallGuide() {
     };
   }, []);
 
+  return { promptEvent, installed };
+}
+
+/**
+ * Le chemin d'installation qui correspond à CE navigateur, et lui seul.
+ *
+ * C'est le cœur du fichier : le navigateur intégré de TikTok ne sait pas
+ * installer d'app, iOS n'a pas d'invite automatique, et Safari range son bouton
+ * Partager là où l'utilisateur l'a décidé. Chaque branche porte le détail de ce
+ * qu'on ose affirmer — voir les commentaires de chacune.
+ */
+export function InstallSteps({
+  promptEvent,
+}: {
+  promptEvent: BeforeInstallPromptEvent | null;
+}) {
+  const environment = detectEnvironment({
+    userAgent: typeof navigator === "undefined" ? "" : navigator.userAgent,
+    maxTouchPoints:
+      typeof navigator === "undefined" ? 0 : navigator.maxTouchPoints,
+  });
+
+  return environment.inAppBrowser ? (
+    <LeaveInAppBrowser
+      appName={environment.inAppBrowser}
+      menuCorner={environment.inAppMenuCorner}
+      os={environment.os}
+    />
+  ) : environment.os === "ios" ? (
+    <IosSteps isSafari={environment.isIosSafari} />
+  ) : environment.os === "android" ? (
+    <AndroidSteps promptEvent={promptEvent} />
+  ) : (
+    <OpenOnPhone />
+  );
+}
+
+export function InstallGuide() {
+  const { promptEvent, installed } = useInstallPrompt();
+
   if (installed) return <InstalledConfirmation />;
 
   return (
@@ -79,19 +125,7 @@ export function InstallGuide() {
         </p>
       </header>
 
-      {environment.inAppBrowser ? (
-        <LeaveInAppBrowser
-          appName={environment.inAppBrowser}
-          menuCorner={environment.inAppMenuCorner}
-          os={environment.os}
-        />
-      ) : environment.os === "ios" ? (
-        <IosSteps isSafari={environment.isIosSafari} />
-      ) : environment.os === "android" ? (
-        <AndroidSteps promptEvent={promptEvent} />
-      ) : (
-        <OpenOnPhone />
-      )}
+      <InstallSteps promptEvent={promptEvent} />
 
       {/* Filet de sécurité de l'attribution : le code devrait voyager tout
           seul via le manifeste, mais un échec silencieux ne se verrait de
