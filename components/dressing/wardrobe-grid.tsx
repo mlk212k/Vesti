@@ -131,7 +131,12 @@ export function WardrobeGrid({
       */}
       <ul className="-mx-5 grid grid-cols-2 gap-px bg-border-soft">
         {visible.map((item) => (
-          <li key={item.id} className="flex flex-col bg-background">
+          /* ⚠️ UN SEUL FOND PAR CELLULE. La photo était posée sur `surface` et la
+                légende sur `background` : chaque cellule se lisait en deux morceaux,
+                avec une césure horizontale au milieu. Vue en grille, l'erreur saute
+                aux yeux — c'est le genre de défaut qu'aucun test ne rattrape et que
+                seul un rendu montre. */
+            <li key={item.id} className="flex flex-col bg-surface">
             {/*
               ── QUELLE PHOTO MONTRER ────────────────────────────────────────
 
@@ -152,25 +157,52 @@ export function WardrobeGrid({
               d'où le repli, qui reste le cas normal et non l'exception.
             */}
             {productImage(item) ? (
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface-sunken">
+              <div className="relative aspect-[3/4] w-full overflow-hidden p-[14%]">
+                {/* Une photo de fiche produit est DÉJÀ détourée sur fond blanc :
+                    `object-contain` la pose entière, sans la recadrer. La même
+                    marge que les découpes, pour que deux cellules voisines ne
+                    reçoivent pas deux traitements différents. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={productImage(item)!}
                   alt={`Pièce similaire à ${item.label}`}
                   loading="lazy"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
-                <span className="label absolute left-0 top-0 bg-background/90 px-2 py-1 text-muted">
+                <span className="label absolute left-3 top-3 text-muted">
                   Similaire
                 </span>
               </div>
             ) : (
-              <GarmentThumb
-                imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}
-                cropBox={item.crop_box}
-                alt={item.label}
-                frame="aspect-[3/4] w-full"
-              />
+              /*
+                ── L'APPROXIMATION CATALOGUE ─────────────────────────────────
+
+                La pièce ne remplit plus sa cellule : elle FLOTTE sur un fond
+                clair, avec de la marge autour. C'est la convention de toutes
+                les fiches produit, et c'est ce qui fait qu'une photo se lit
+                comme un article plutôt que comme un bout de photo de
+                quelqu'un.
+
+                ⚠️ CE N'EST PAS UN DÉTOURAGE, et il ne faut pas le présenter
+                comme tel. Le fond de la photo d'origine est toujours là,
+                simplement resserré autour du vêtement par le recadrage. Sur
+                une pièce cadrée serré l'effet est proche ; sur une photo prise
+                de loin, on verra le décor. Un vrai détourage suppose de
+                supprimer l'arrière-plan — API payante ou modèle chargé dans le
+                navigateur — ce qui est un autre chantier.
+
+                `p-[14%]` plutôt qu'une valeur en pixels : la marge doit rester
+                proportionnelle, la cellule faisant 180 px sur un téléphone et
+                davantage sur une tablette.
+              */
+              <div className="aspect-[3/4] w-full p-[14%]">
+                <GarmentThumb
+                  imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}
+                  cropBox={item.crop_box}
+                  alt={item.label}
+                  frame="h-full w-full"
+                />
+              </div>
             )}
 
             <div className="flex flex-col gap-1 px-3 pt-3 pb-5">
