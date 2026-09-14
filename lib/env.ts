@@ -1,3 +1,5 @@
+import { parseMerchantMap, type AffiliateConfig } from "./affiliate";
+
 /**
  * Accès centralisé aux variables d'environnement.
  *
@@ -92,6 +94,23 @@ export const env = {
       firstFilled(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ??
       SUPABASE_PROJECT.anonKey
     );
+  },
+
+  /**
+   * Affiliation sur les produits recommandés (plan Styliste).
+   *
+   * ⚠️ `NEXT_PUBLIC_` est correct ici, et ce n'est pas un relâchement : un
+   * identifiant d'affiliation VOYAGE dans l'URL sortante. Il est lisible par
+   * l'acheteur, par le marchand et par le réseau — le cacher côté serveur ne
+   * protégerait rien puisque son rôle est précisément d'être transmis.
+   *
+   * Les deux valeurs vides laissent chaque lien inchangé : voir `lib/affiliate.ts`.
+   */
+  get affiliate(): AffiliateConfig {
+    return {
+      awinAffiliateId: firstFilled(process.env.NEXT_PUBLIC_AWIN_AFFILIATE_ID),
+      merchants: parseMerchantMap(process.env.NEXT_PUBLIC_AWIN_MERCHANTS),
+    };
   },
 };
 

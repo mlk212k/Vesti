@@ -129,11 +129,30 @@ export default async function DressingPage() {
       {/* Le scan multi-photos reste réservé aux plans payants — c'est lui qui
           coûte cher en analyse. Le plan Découverte remplit sa garde-robe par
           les analyses de tenue, qui sont déjà comprises dans son offre : on
-          l'envoie donc là, et non vers une page qui le renverrait payer. */}
+          l'envoie donc là, et non vers une page qui le renverrait payer.
+
+          ⚠️ Le bouton s'appelait « Ajouter des pièces », et c'était le goulot
+          de tout le tunnel d'achat. Les suggestions de `/shopping` ne naissent
+          QUE du scan de dressing (`app/api/dressing/route.ts`) : sans lui,
+          l'onglet Acheter reste vide à vie. Or la garde-robe se remplit déjà
+          toute seule par les analyses de tenue — l'abonné le plus actif avait
+          53 pièces sans avoir jamais scanné. « Ajouter des pièces » ne lui
+          promettait donc rien qu'il n'ait déjà : il n'avait aucune raison
+          d'appuyer, et la fonction la plus chère du plan Styliste restait
+          inatteignable. Le bouton annonce maintenant ce qu'il DÉBLOQUE, pas le
+          travail qu'il demande. */}
       {limit === null ? (
-        <Link href="/dressing/scan">
-          <Button variant="secondary">Ajouter des pièces</Button>
-        </Link>
+        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+          <span className="text-sm font-semibold">Savoir ce qu&apos;il te manque</span>
+          <p className="text-xs leading-relaxed text-muted">
+            Photographie ta penderie : Vesti en tire l&apos;inventaire, repère
+            les pièces qui manquent pour composer plus de tenues, et te les
+            propose dans l&apos;onglet Acheter.
+          </p>
+          <Link href="/dressing/scan">
+            <Button>Scanner ma penderie</Button>
+          </Link>
+        </div>
       ) : rows.length < limit ? (
         <Link href="/analyze">
           <Button variant="secondary">Analyser une tenue</Button>

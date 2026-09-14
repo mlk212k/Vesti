@@ -6,6 +6,8 @@ import { SuggestionCard, type SuggestionView } from "@/components/shopping/sugge
 import { ProductSearch } from "@/components/shopping/product-search";
 import { AdvicePanel } from "@/components/shopping/advice-panel";
 import { Button } from "@/components/ui/button";
+import { affiliateDisclosure } from "@/lib/affiliate";
+import { env } from "@/lib/env";
 
 export default async function ShoppingPage() {
   const supabase = await createClient();
@@ -112,9 +114,13 @@ export default async function ShoppingPage() {
         ))}
       </ul>
 
+      {/* ⚠️ Cette mention est CALCULÉE, jamais écrite en dur. Elle annonçait
+          « Vesti ne touche aucune commission » : la phrase serait devenue
+          fausse à la seconde où les identifiants d'affiliation auraient été
+          posés, sans qu'aucune ligne de code ne change — donc sans que
+          personne ne pense à la corriger. Voir `lib/affiliate.ts`. */}
       <p className="text-center text-xs leading-relaxed text-muted">
-        Les liens proviennent d&apos;une recherche web réelle. Vesti ne touche
-        aucune commission et ne propose rien qu&apos;il n&apos;a pas trouvé.
+        {affiliateDisclosure(env.affiliate)}
       </p>
     </main>
   );
