@@ -115,7 +115,7 @@ export function ReferralStep({
 
   if (accepted) {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
+      <div className="flex flex-col items-center gap-2 panel p-6 text-center">
         <CheckIcon className="h-6 w-6 text-success" />
         <p className="text-sm font-medium">Code validé</p>
       </div>
@@ -128,7 +128,7 @@ export function ReferralStep({
   if (autoRunning) {
     return (
       <div
-        className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center"
+        className="flex flex-col items-center gap-2 panel p-6 text-center"
         role="status"
         aria-live="polite"
       >

@@ -67,12 +67,32 @@
     encadre des IMAGES, et qu'un coin rond mange la photo. C'est aussi, à
     lui seul, ce qui faisait « bloc généré » sur un écran de 390 px.
 
-    ⚠️ Conséquence pour qui édite : ne PAS réintroduire `rounded-*` en
-    Tailwind. La seule exception qui subsiste est la gélule des vraies
-    pastilles — puces, avatars — où le cercle est la forme, pas une finition.
+    ── CORRECTION APRÈS ESSAI : 8 et 6, pas 0 ────────────────────────────
+
+    Le zéro absolu a été essayé et rejeté — « j'aime pas trop en carré ». Il
+    avait raison : sur un bouton violet pleine largeur, l'angle vif ne lit pas
+    « épuré », il lit « brut ». Zara peut se le permettre parce que ses aplats
+    sont des PHOTOS ; un aplat de couleur à angle vif, lui, ressemble à un
+    élément pas terminé.
+
+    8 px pour les panneaux, 6 pour ce qui se touche. Deux valeurs choisies
+    pour être PRESQUE invisibles : assez pour adoucir l'arête, trop peu pour
+    qu'on les remarque. C'est là qu'est la différence avec les 14/10 d'avant,
+    où le coin se voyait avant le contenu.
+
+    ⚠️ LES PHOTOS RESTENT À L'ANGLE VIF, et c'est le point à ne pas casser.
+    La grille de garde-robe n'arrondit rien : un vêtement dans un coin rond
+    redevient une vignette d'application. Le rayon est pour les contrôles, pas
+    pour les images.
+
+    Le contrôle reste plus serré que le panneau : posé DANS un panneau, un coin
+    plus rond que son contenant déborde optiquement.
+
+    La gélule (`rounded-full`) reste réservée aux vraies pastilles — puces,
+    avatars — où le cercle est la forme, pas une finition.
   */
-  --radius-card: 0px;
-  --radius-control: 0px;
+  --radius-card: 8px;
+  --radius-control: 6px;
 
   /*
     Les ombres ne servent qu'à ce qui flotte VRAIMENT au-dessus de la page.
@@ -265,6 +285,26 @@ h1 {
 */
 .rule {
   border-top: 1px solid var(--border-soft);
+}
+
+/*
+  ── LE PANNEAU, EN UN SEUL ENDROIT ────────────────────────────────────────
+
+  Le triplet `border border-border-soft bg-surface` était recopié à 40 endroits.
+  Autrement dit : quarante copies d'une même décision de design, qui divergent
+  à la première retouche — exactement ce qui vient d'arriver au bouton, dont la
+  fonction et le composant portaient chacun leur chaîne de classes.
+
+  Une seule classe désormais. Adoucir le registre, retirer le fond, passer au
+  simple filet : c'est ici, et nulle part ailleurs.
+
+  ⚠️ Le rayon vient du jeton, pas d'une valeur écrite ici. Le panneau doit
+  suivre `--radius-card` quand il change.
+*/
+.panel {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border-radius: var(--radius-card);
 }
 
 /* Les chiffres alignés verticalement dans les jauges, scores et prix. */

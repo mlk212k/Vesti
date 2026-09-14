@@ -35,7 +35,7 @@ export function AnalysisDetail({
 }) {
   return (
     <div className="flex flex-col gap-6">
-      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
+      <section className="overflow-hidden panel">
         <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
           <span className="font-display text-[64px] font-semibold leading-none tracking-[-0.05em] tabular-nums">
             {score ?? "—"}
@@ -74,7 +74,7 @@ export function AnalysisDetail({
 
       {strengths.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm ">Ce qui marche</h2>
+          <h2 className="label text-muted">Ce qui marche</h2>
           <ul className="flex flex-col gap-2">
             {strengths.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
@@ -88,7 +88,7 @@ export function AnalysisDetail({
 
       {improvements.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm ">À ajuster</h2>
+          <h2 className="label text-muted">À ajuster</h2>
           <ul className="flex flex-col gap-2">
             {improvements.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
@@ -102,14 +102,14 @@ export function AnalysisDetail({
 
       {garments.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm ">
+          <h2 className="label text-muted">
             Pièces détectées ({garments.length})
           </h2>
           <ul className="flex flex-col gap-2">
             {garments.map((garment, index) => (
               <li
                 key={`${garment.label}-${index}`}
-                className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
+                className="flex gap-3 rounded-[var(--radius-control)] panel p-3"
               >
                 {photoUrl && (
                   <GarmentThumb

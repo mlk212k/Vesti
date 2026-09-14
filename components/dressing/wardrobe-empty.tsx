@@ -68,7 +68,7 @@ export function WardrobeEmpty({
         {PROMISES.map(({ title, body, icon: Icon }) => (
           <li
             key={title}
-            className="flex gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4"
+            className="flex gap-3 panel p-4"
           >
             <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-strong">
               <Icon />

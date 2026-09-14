@@ -76,9 +76,9 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
   }
 
   return (
-    <section className="flex flex-col gap-5 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <section className="flex flex-col gap-5 panel p-5">
       <div className="flex flex-col gap-1">
-        <h2 className="text-sm ">Parrainage</h2>
+        <h2 className="label text-muted">Parrainage</h2>
         <p className="text-xs leading-relaxed text-muted">
           Chaque personne qui utilise ton code et analyse une tenue te rapporte{" "}
           {STYLE_PER_REFERRAL} Style. À {STYLE_GIFT_THRESHOLD}, tu passes{" "}

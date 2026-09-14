@@ -33,7 +33,7 @@ export default async function ParrainagePage() {
       ) : (
         // Le solde se lit par une fonction SQL : si elle échoue, mieux vaut le
         // dire que d'afficher un zéro qui ferait croire à une perte de gains.
-        <p className="rounded-[var(--radius-card)] border border-border-soft bg-surface p-4 text-sm leading-relaxed text-muted">
+        <p className="panel p-4 text-sm leading-relaxed text-muted">
           Impossible de charger ton parrainage pour le moment. Reviens dans un
           instant — rien n&apos;est perdu, le compte est tenu côté serveur.
         </p>

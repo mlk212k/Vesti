@@ -57,7 +57,7 @@ export default async function BillingPage(props: PageProps<"/billing">) {
       )}
 
       {checkout === "cancelled" && (
-        <p className="rounded-[var(--radius-control)] border border-border-soft bg-surface px-4 py-3 text-sm text-muted">
+        <p className="rounded-[var(--radius-control)] panel px-4 py-3 text-sm text-muted">
           Paiement annulé, rien n&apos;a été débité.
         </p>
       )}

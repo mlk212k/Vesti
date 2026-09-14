@@ -326,8 +326,8 @@ function AndroidSteps({
 
 function OpenOnPhone() {
   return (
-    <div className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 text-center">
-      <h2 className="text-sm ">Vesti est fait pour ton téléphone</h2>
+    <div className="flex flex-col gap-3 panel p-5 text-center">
+      <h2 className="label text-muted">Vesti est fait pour ton téléphone</h2>
       <p className="text-sm leading-relaxed text-muted">
         Tu vas photographier tes tenues : autant le faire depuis l&apos;appareil
         qui a l&apos;appareil photo. Ouvre{" "}
@@ -366,7 +366,7 @@ function InstalledConfirmation() {
 
 function StepList({ children }: { children: ReactNode }) {
   return (
-    <ol className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <ol className="flex flex-col gap-3 panel p-5">
       {children}
     </ol>
   );

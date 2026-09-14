@@ -29,7 +29,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ touchAction: "manipulation" }}
-        className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3 transition hover:border-accent active:scale-[0.99]"
+        className="flex gap-3 rounded-[var(--radius-control)] panel p-3 transition hover:border-accent active:scale-[0.99]"
       >
         {/* Beaucoup de fiches produit ne publient pas de photo : la carte doit
             tenir sans, plutôt que de réserver un carré vide. */}

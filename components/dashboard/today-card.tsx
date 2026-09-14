@@ -126,9 +126,9 @@ export function TodayCard({ hasLocation }: { hasLocation: boolean }) {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <section className="flex flex-col gap-4 panel p-5">
       <div className="flex items-baseline justify-between gap-2">
-        <h2 className="text-sm ">Aujourd&apos;hui</h2>
+        <h2 className="label text-muted">Aujourd&apos;hui</h2>
         {state.step === "done" && (
           <span className="text-xs text-muted">{state.suggestion.weather.summary}</span>
         )}

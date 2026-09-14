@@ -53,9 +53,13 @@ export function Button({
     <button
       {...props}
       /*
-        Angle droit, capitales, interlettrage ouvert : le bouton d'une enseigne
-        de mode, pas d'une application. Trois détails qui font la différence et
-        qu'on perd si on les touche isolément.
+        Capitales, interlettrage ouvert, coin à peine adouci : le bouton d'une
+        enseigne de mode, pas d'une application. Trois détails qui font la
+        différence et qu'on perd si on les touche isolément.
+
+        L'angle VIF a été essayé puis rejeté : sur un aplat de couleur pleine
+        largeur, il lit « pas terminé » plutôt qu'« épuré ». 6 px suffisent à
+        casser l'arête sans qu'on remarque le coin.
 
         `tracking-[0.1em]` + `uppercase` : sans ça, un bouton à angle droit lit
         simplement « bouton pas fini ». C'est l'espacement qui le rend
@@ -92,6 +96,6 @@ export const buttonClasses = (
   block = true,
   className = ""
 ) =>
-  `inline-flex min-h-[52px] items-center justify-center gap-2 px-6 text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors duration-150 disabled:cursor-not-allowed ${
+  `inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[var(--radius-control)] px-6 text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors duration-150 disabled:cursor-not-allowed ${
     VARIANTS[variant]
   } ${block ? "w-full" : ""} ${className}`;

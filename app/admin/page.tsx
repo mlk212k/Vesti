@@ -59,7 +59,7 @@ export default async function AdminPage() {
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Activité</h2>
+        <h2 className="label text-muted">Activité</h2>
         <div className="grid grid-cols-2 gap-3">
           <StatTile label="Inscrits" value={overview.signups} />
           <StatTile label="Dont 30 derniers jours" value={overview.signups30d} />
@@ -73,8 +73,8 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Revenu</h2>
-        <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+        <h2 className="label text-muted">Revenu</h2>
+        <div className="panel p-5">
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-muted">MRR estimé</span>
             <span className="font-display text-[28px] font-semibold tabular-nums">{euro(overview.mrr)} €</span>
@@ -91,7 +91,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Coût du modèle</h2>
+        <h2 className="label text-muted">Coût du modèle</h2>
         <div className="grid grid-cols-2 gap-3">
           <StatTile label="Analyses" value={usage.analyses} />
           <StatTile label="Dont 30 jours" value={usage.analyses30d} />
@@ -114,7 +114,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Codes partenaires</h2>
+        <h2 className="label text-muted">Codes partenaires</h2>
         {codes.length === 0 ? (
           <p className="text-sm text-muted">
             Aucun code enregistré. Insère-les dans la table{" "}

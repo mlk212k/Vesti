@@ -108,7 +108,7 @@ export default async function DressingPage() {
       </section>
 
       {missing.length > 0 && (
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
+        <div className="flex flex-col gap-2 panel p-4">
           <span className="text-sm font-semibold">
             Il te manque {missing.join(" et ")}
           </span>
@@ -142,7 +142,7 @@ export default async function DressingPage() {
           inatteignable. Le bouton annonce maintenant ce qu'il DÉBLOQUE, pas le
           travail qu'il demande. */}
       {limit === null ? (
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+        <div className="flex flex-col gap-2 panel p-5">
           <span className="text-sm font-semibold">Savoir ce qu&apos;il te manque</span>
           <p className="text-xs leading-relaxed text-muted">
             Photographie ta penderie : Vesti en tire l&apos;inventaire, repère

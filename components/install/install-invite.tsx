@@ -85,7 +85,7 @@ export function InstallInvite() {
 
   if (installed) {
     return (
-      <section className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 text-center">
+      <section className="flex flex-col items-center gap-2 panel p-5 text-center">
         <LogoMark size={40} />
         <p className="text-sm font-semibold">Vesti est sur ton écran d&apos;accueil</p>
         <p className="text-[13px] leading-relaxed text-muted">
@@ -97,7 +97,7 @@ export function InstallInvite() {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <section className="flex flex-col gap-4 panel p-5">
       <div className="flex items-start gap-3">
         <LogoMark size={40} />
         <div className="flex flex-col gap-1">

@@ -78,7 +78,7 @@ export default async function ShoppingPage() {
 
         <AdvicePanel />
 
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+        <div className="flex flex-col gap-2 panel p-5">
           <span className="text-sm font-semibold">Ou laisse Vesti décider</span>
           <p className="text-xs leading-relaxed text-muted">
             Scanne ton dressing : Vesti repère ce qui te manque pour compléter
@@ -106,7 +106,7 @@ export default async function ShoppingPage() {
 
       <AdvicePanel />
 
-      <h2 className="text-sm ">Repéré dans ton dressing</h2>
+      <h2 className="label text-muted">Repéré dans ton dressing</h2>
 
       <ul className="flex flex-col gap-3">
         {suggestions.map((suggestion) => (

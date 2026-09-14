@@ -129,7 +129,7 @@ export default async function DashboardPage() {
       {recent.length > 0 && (
         <section className="flex flex-col gap-3">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm ">Tes dernières tenues</h2>
+            <h2 className="label text-muted">Tes dernières tenues</h2>
             {hasFeature(plan, "history") && (
               <Link href="/history" className="text-xs font-medium underline underline-offset-2">
                 Tout voir
@@ -145,7 +145,7 @@ export default async function DashboardPage() {
               là où trois bordures complètes hurlaient une séparation qui
               n'existe pas. `divide-y` ne trace le trait qu'ENTRE les lignes,
               donc jamais sous la dernière. */}
-          <ul className="divide-y divide-border-soft overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
+          <ul className="divide-y divide-border-soft overflow-hidden panel">
             {recent.slice(0, 3).map((analysis) => (
               <li
                 key={analysis.id}
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
 
       {!hasFeature(plan, "history") && recent.length > 0 && (
         <Card tone="soft">
-          <h2 className="text-sm ">Garde une trace de tes progrès</h2>
+          <h2 className="label text-muted">Garde une trace de tes progrès</h2>
           <p className="text-sm leading-relaxed text-muted">
             Le plan Pro conserve ta garde-robe, ton historique complet et
             l&apos;évolution de tes scores.

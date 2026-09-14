@@ -102,7 +102,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </Field>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Tu t&apos;habilles plutôt en…</h2>
+        <h2 className="label text-muted">Tu t&apos;habilles plutôt en…</h2>
         <div className="flex flex-wrap gap-2">
           {GENDERS.map((option) => (
             <ChoiceChip
@@ -148,7 +148,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </p>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Ta morphologie</h2>
+        <h2 className="label text-muted">Ta morphologie</h2>
         <div className="flex flex-wrap gap-2">
           {MORPHOLOGIES.map((option) => (
             <ChoiceChip
@@ -165,7 +165,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Les styles qui te parlent</h2>
+        <h2 className="label text-muted">Les styles qui te parlent</h2>
         <div className="flex flex-wrap gap-2">
           {STYLES.map((style) => (
             <ChoiceChip

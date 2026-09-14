@@ -100,19 +100,19 @@ export default async function HistoryPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Ta progression</h2>
+        <h2 className="label text-muted">Ta progression</h2>
         <ScoreTrendChart trend={trend} />
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Ce que tu portes le plus</h2>
+        <h2 className="label text-muted">Ce que tu portes le plus</h2>
         <TopItems items={topItems} />
       </section>
 
       {/* Cette liste est aussi la vue tabulaire du graphique ci-dessus : chaque
           point y figure avec sa date et sa valeur exacte. */}
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm ">Toutes tes analyses</h2>
+        <h2 className="label text-muted">Toutes tes analyses</h2>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (
             <li key={row.id}>
@@ -122,7 +122,7 @@ export default async function HistoryPage() {
               <Link
                 href={`/history/${row.id}`}
                 style={{ touchAction: "manipulation" }}
-                className="flex flex-col gap-1 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4 transition hover:border-accent active:scale-[0.99]"
+                className="flex flex-col gap-1 rounded-[var(--radius-control)] panel p-4 transition hover:border-accent active:scale-[0.99]"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium">

@@ -34,7 +34,7 @@ export function BoneCard({
 }) {
   return (
     <div
-      className={`flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 ${className}`}
+      className={`flex flex-col gap-3 panel p-5 ${className}`}
       aria-hidden
     >
       {children}
