@@ -14,7 +14,14 @@ export interface WardrobeItem {
   brand_confidence: "logo_visible" | "suppose" | "inconnue" | null;
   crop_box: CropBox | null;
   source_image_path: string | null;
-  product_matches: { title: string; merchant: string; url: string; price: string | null }[];
+  product_matches: {
+    title: string;
+    merchant: string;
+    url: string;
+    price: string | null;
+    /** Photo de la fiche produit, relevée après coup. Souvent absente. */
+    image?: string | null;
+  }[];
   created_at: string;
 }
 
@@ -125,12 +132,46 @@ export function WardrobeGrid({
       <ul className="-mx-5 grid grid-cols-2 gap-px bg-border-soft">
         {visible.map((item) => (
           <li key={item.id} className="flex flex-col bg-background">
-            <GarmentThumb
-              imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}
-              cropBox={item.crop_box}
-              alt={item.label}
-              frame="aspect-[3/4] w-full"
-            />
+            {/*
+              ── QUELLE PHOTO MONTRER ────────────────────────────────────────
+
+              La photo d'une fiche produit quand on en a une, la découpe de la
+              photo de l'utilisateur sinon.
+
+              ⚠️ ET ELLE EST TOUJOURS ÉTIQUETÉE. Une photo catalogue n'est PAS
+              la pièce de l'utilisateur : c'est un article approchant, trouvé
+              par recherche web. L'afficher nue reviendrait à montrer le
+              vêtement de quelqu'un d'autre et à le faire passer pour le sien.
+              Le commentaire de la colonne `product_matches` en base le dit
+              déjà : « présentés comme pièces similaires, jamais comme la
+              référence exacte ».
+
+              Chercher la référence EXACTE n'est pas possible sur ces données :
+              sur 235 pièces, 185 n'ont aucune marque identifiée et 12 ne l'ont
+              que supposée. Une seule porte aujourd'hui une photo catalogue —
+              d'où le repli, qui reste le cas normal et non l'exception.
+            */}
+            {productImage(item) ? (
+              <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface-sunken">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={productImage(item)!}
+                  alt={`Pièce similaire à ${item.label}`}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+                <span className="label absolute left-0 top-0 bg-background/90 px-2 py-1 text-muted">
+                  Similaire
+                </span>
+              </div>
+            ) : (
+              <GarmentThumb
+                imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}
+                cropBox={item.crop_box}
+                alt={item.label}
+                frame="aspect-[3/4] w-full"
+              />
+            )}
 
             <div className="flex flex-col gap-1 px-3 pt-3 pb-5">
               <span className="truncate text-[14px] leading-snug">{item.label}</span>
@@ -154,7 +195,12 @@ export function WardrobeGrid({
                   rel="noopener noreferrer"
                   className="label mt-1 truncate text-accent-strong underline underline-offset-4"
                 >
-                  Pièce similaire
+                  {/* Quand la photo au-dessus EST déjà celle du produit, le
+                      lien nomme le marchand plutôt que de répéter
+                      « pièce similaire » que l'étiquette dit déjà. */}
+                  {productImage(item)
+                    ? item.product_matches[0].merchant || "Voir la pièce"
+                    : "Pièce similaire"}
                 </a>
               )}
             </div>
@@ -163,4 +209,17 @@ export function WardrobeGrid({
       </ul>
     </div>
   );
+}
+
+/**
+ * La photo de fiche produit, quand il y en a une d'exploitable.
+ *
+ * Isolée parce que deux endroits en dépendent — le cadre et le libellé du lien
+ * — et qu'ils doivent répondre la même chose. Une chaîne vide compte comme
+ * absente : `fetch-image.ts` rend `null` quand la page ne publie rien, mais un
+ * enregistrement ancien peut porter une chaîne vide.
+ */
+function productImage(item: WardrobeItem): string | null {
+  const image = item.product_matches?.[0]?.image;
+  return typeof image === "string" && image.trim().length > 0 ? image : null;
 }
