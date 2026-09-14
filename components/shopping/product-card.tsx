@@ -1,17 +1,31 @@
 "use client";
 
 import type { ProductMatch } from "@/lib/claude/schemas";
+import { affiliateUrl } from "@/lib/affiliate";
+import { env } from "@/lib/env";
 
 /**
  * Un produit trouvé en ligne. Partagée par la recherche libre et par les
  * suggestions tirées des analyses : deux dessins différents pour la même chose
  * feraient douter que ce soit la même chose.
+ *
+ * ── Le seul endroit où une URL produit devient un lien cliquable ────────────
+ *
+ * C'est donc ici que passe l'affiliation, et nulle part ailleurs. Transformer
+ * au moment du stockage aurait figé une décision commerciale dans des lignes
+ * qu'on ne peut plus corriger : la base garde l'URL d'origine, et chaque
+ * affichage repasse par la règle du moment. Voir `lib/affiliate.ts`.
+ *
+ * Sans configuration d'affiliation, `affiliateUrl` rend l'URL telle quelle —
+ * la carte se comporte exactement comme avant.
  */
 export function ProductCard({ match }: { match: ProductMatch }) {
+  const href = affiliateUrl(match.url, env.affiliate);
+
   return (
     <li>
       <a
-        href={match.url}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         style={{ touchAction: "manipulation" }}
