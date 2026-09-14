@@ -70,7 +70,7 @@ export default async function DashboardPage() {
         <Wordmark size={26} priority />
       </header>
 
-      <h1 className="text-[2rem] font-extrabold leading-[1.05]">
+      <h1 className="text-[2rem] leading-[1.05]">
         {greeting}
       </h1>
 
@@ -81,7 +81,7 @@ export default async function DashboardPage() {
 
       <Card className="gap-4">
         <div className="flex items-baseline justify-between">
-          <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent-strong">
+          <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-strong">
             {definition.name}
           </span>
           {quota && (
@@ -129,7 +129,7 @@ export default async function DashboardPage() {
       {recent.length > 0 && (
         <section className="flex flex-col gap-3">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold">Tes dernières tenues</h2>
+            <h2 className="text-sm ">Tes dernières tenues</h2>
             {hasFeature(plan, "history") && (
               <Link href="/history" className="text-xs font-medium underline underline-offset-2">
                 Tout voir
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
                     })}
                   </span>
                 </div>
-                <span className="font-display flex-none text-lg font-bold tabular-nums">
+                <span className="font-display flex-none text-lg font-semibold tabular-nums">
                   {analysis.score ?? "—"}
                 </span>
               </li>
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
 
       {!hasFeature(plan, "history") && recent.length > 0 && (
         <Card tone="soft">
-          <h2 className="text-sm font-semibold">Garde une trace de tes progrès</h2>
+          <h2 className="text-sm ">Garde une trace de tes progrès</h2>
           <p className="text-sm leading-relaxed text-muted">
             Le plan Pro conserve ta garde-robe, ton historique complet et
             l&apos;évolution de tes scores.

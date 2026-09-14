@@ -54,12 +54,12 @@ export default async function AdminPage() {
   return (
     <main className="flex flex-1 flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Admin</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Admin</h1>
         <p className="text-sm text-muted">{user?.email}</p>
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Activité</h2>
+        <h2 className="text-sm ">Activité</h2>
         <div className="grid grid-cols-2 gap-3">
           <StatTile label="Inscrits" value={overview.signups} />
           <StatTile label="Dont 30 derniers jours" value={overview.signups30d} />
@@ -73,11 +73,11 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Revenu</h2>
+        <h2 className="text-sm ">Revenu</h2>
         <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-muted">MRR estimé</span>
-            <span className="font-display text-[28px] font-extrabold tabular-nums">{euro(overview.mrr)} €</span>
+            <span className="font-display text-[28px] font-semibold tabular-nums">{euro(overview.mrr)} €</span>
           </div>
           <ul className="mt-3 flex flex-col gap-1 border-t border-border pt-3">
             {PLAN_ORDER.map((plan) => (
@@ -91,7 +91,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Coût du modèle</h2>
+        <h2 className="text-sm ">Coût du modèle</h2>
         <div className="grid grid-cols-2 gap-3">
           <StatTile label="Analyses" value={usage.analyses} />
           <StatTile label="Dont 30 jours" value={usage.analyses30d} />
@@ -114,7 +114,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Codes partenaires</h2>
+        <h2 className="text-sm ">Codes partenaires</h2>
         {codes.length === 0 ? (
           <p className="text-sm text-muted">
             Aucun code enregistré. Insère-les dans la table{" "}

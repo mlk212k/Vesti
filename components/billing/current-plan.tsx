@@ -36,15 +36,15 @@ export function CurrentPlan({
     <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-accent/30 bg-surface p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
             Ton plan
           </span>
-          <span className="font-[family-name:var(--font-bricolage)] text-2xl font-extrabold leading-none">
+          <span className="font-[family-name:var(--font-bricolage)] text-2xl font-semibold leading-none">
             {definition.name}
           </span>
         </div>
         <span
-          className={`flex-none rounded-full px-3 py-1 text-xs font-bold ${
+          className={`flex-none rounded-full px-3 py-1 text-xs font-semibold ${
             gifted
               ? "bg-accent-soft text-accent-strong"
               : plan === "free"

@@ -22,7 +22,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
         <Link href="/" aria-label="Vesti, accueil">
           <LogoMark size={64} priority />
         </Link>
-        <h1 className="text-[1.85rem] font-extrabold leading-tight">
+        <h1 className="text-[1.85rem] leading-tight">
           Ton styliste personnel
         </h1>
         <p className="max-w-[30ch] text-sm leading-relaxed text-muted">

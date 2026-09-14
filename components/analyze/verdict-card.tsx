@@ -2,6 +2,7 @@
 
 import type { CropBox } from "@/lib/claude/schemas";
 import { GarmentThumb } from "./garment-thumb";
+import { CheckIcon } from "@/components/ui/check-icon";
 
 export interface ProductMatchView {
   title: string;
@@ -48,7 +49,7 @@ export function VerdictCard({
           lit juste en dessous sur fond clair. */}
       <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
         <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
-          <span className="font-display text-[64px] font-extrabold leading-none tracking-[-0.05em] tabular-nums">
+          <span className="font-display text-[64px] font-semibold leading-none tracking-[-0.05em] tabular-nums">
             {analysis.score}
           </span>
           <span className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-75">
@@ -66,11 +67,11 @@ export function VerdictCard({
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Ce qui marche</h2>
+        <h2 className="text-sm ">Ce qui marche</h2>
         <ul className="flex flex-col gap-2">
           {analysis.strengths.map((item) => (
             <li key={item} className="flex gap-2 text-sm leading-relaxed">
-              <span className="text-success">✓</span>
+              <CheckIcon className="text-success" />
               <span>{item}</span>
             </li>
           ))}
@@ -78,7 +79,7 @@ export function VerdictCard({
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">À ajuster</h2>
+        <h2 className="text-sm ">À ajuster</h2>
         <ul className="flex flex-col gap-2">
           {analysis.improvements.map((item) => (
             <li key={item} className="flex gap-2 text-sm leading-relaxed">
@@ -91,7 +92,7 @@ export function VerdictCard({
 
       <section className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold">
+          <h2 className="text-sm ">
             Pièces détectées ({analysis.garments.length})
           </h2>
           {analysis.savedToWardrobe && (

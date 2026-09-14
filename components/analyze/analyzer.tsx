@@ -246,7 +246,7 @@ export function Analyzer() {
   if (state.step === "error") {
     return (
       <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
-        <h2 className="text-lg font-semibold">{state.title}</h2>
+        <h2 className="text-lg ">{state.title}</h2>
         <p className="text-sm leading-relaxed text-muted">{state.body}</p>
         {state.cta === "upgrade" ? (
           <Link href="/billing" className="w-full">
@@ -275,7 +275,7 @@ export function Analyzer() {
   return (
     <div className="flex flex-1 flex-col justify-center gap-6 py-10 text-center">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Montre-moi ta tenue</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Montre-moi ta tenue</h1>
         <p className="text-sm leading-relaxed text-muted">
           Une photo en pied, ou la tenue posée à plat. Chaussures comprises.
         </p>

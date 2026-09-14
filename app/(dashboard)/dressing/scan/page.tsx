@@ -26,7 +26,7 @@ export default async function DressingScanPage() {
     const needed = requiredPlanFor("dressing");
     return (
       <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Scanne ton dressing</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Scanne ton dressing</h1>
         <p className="text-sm leading-relaxed text-muted">
           Photographie ta penderie : Vesti fait l&apos;inventaire, compose des
           tenues avec ce que tu as déjà, et repère ce qui te manque. Inclus à

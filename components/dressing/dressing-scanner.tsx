@@ -156,7 +156,7 @@ export function DressingScanner() {
   if (state.step === "error") {
     return (
       <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
-        <h2 className="text-lg font-semibold">{state.title}</h2>
+        <h2 className="text-lg ">{state.title}</h2>
         <p className="text-sm leading-relaxed text-muted">{state.body}</p>
         {state.upgrade ? (
           <Link href="/billing">
@@ -187,7 +187,7 @@ export function DressingScanner() {
   return (
     <div className="flex flex-1 flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Scanne ton dressing</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Scanne ton dressing</h1>
         <p className="text-sm leading-relaxed text-muted">
           Prends ta penderie, tes tiroirs ouverts, ou tes pièces posées à plat.
           Jusqu&apos;à {MAX_PHOTOS} photos — plus elles sont lisibles, meilleur est
@@ -266,12 +266,12 @@ function ScanResults({
   return (
     <div className="flex flex-col gap-7">
       <section className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
-        <h1 className="text-lg font-semibold">Ton dressing</h1>
+        <h1 className="text-lg ">Ton dressing</h1>
         <p className="text-sm leading-relaxed text-muted">{result.summary}</p>
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">
+        <h2 className="text-sm ">
           {result.garments.length} pièce{result.garments.length > 1 ? "s" : ""} ajoutée
           {result.garments.length > 1 ? "s" : ""}
         </h2>
@@ -306,7 +306,7 @@ function ScanResults({
 
       {result.outfits.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">Tenues possibles dès maintenant</h2>
+          <h2 className="text-sm ">Tenues possibles dès maintenant</h2>
           <ul className="flex flex-col gap-3">
             {result.outfits.map((outfit) => (
               <li
@@ -342,7 +342,7 @@ function ScanResults({
 
       {result.gaps.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">Ce qui te manque</h2>
+          <h2 className="text-sm ">Ce qui te manque</h2>
           <ul className="flex flex-col gap-2">
             {result.gaps.map((gap) => (
               <li

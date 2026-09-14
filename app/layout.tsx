@@ -9,12 +9,24 @@ import { InstallGate } from "@/components/install/install-gate";
 import { env } from "@/lib/env";
 import { Analytics } from "@vercel/analytics/next";
 
-/* Titres : graisses lourdes, largeur variable — l'écho typographique des traits
-   épais du logo. `display: swap` pour ne jamais bloquer le premier rendu. */
+/*
+  Titres : la même famille que le logo, mais en graisses LÉGÈRES.
+
+  ⚠️ Elle n'était chargée qu'en 600/700/800 — « l'écho typographique des traits
+  épais du logo ». Sur un écran de 390 px, un titre en 800 très resserré occupe
+  la place d'une image et lit « application », jamais « mode ». Aucune enseigne
+  de prêt-à-porter n'écrit ses titres en gras : Zara, COS, Arket composent tous
+  en fin et en large, parce que le gras entre en concurrence avec la photo du
+  vêtement, qui est ce qu'on est venu regarder.
+
+  Charger 300 à 600 coûte la même chose (c'est une variable) et donne le
+  registre complet : 400 pour les titres, 600 restant disponible là où il faut
+  encore appuyer. `display: swap` pour ne jamais bloquer le premier rendu.
+*/
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 

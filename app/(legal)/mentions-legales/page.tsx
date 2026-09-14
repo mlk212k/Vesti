@@ -7,10 +7,10 @@ export const metadata: Metadata = { title: `Mentions légales — ${SITE_NAME}` 
 export default function MentionsLegalesPage() {
   return (
     <>
-      <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Mentions légales</h1>
+      <h1 className="text-[1.9rem] leading-[1.05]">Mentions légales</h1>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Éditeur du site</h2>
+        <h2 className="text-base ">Éditeur du site</h2>
         <p>
           {LEGAL.editeur} — {LEGAL.statut}
           <br />
@@ -26,12 +26,12 @@ export default function MentionsLegalesPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Directeur de la publication</h2>
+        <h2 className="text-base ">Directeur de la publication</h2>
         <p>{LEGAL.directeurPublication}</p>
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Hébergement</h2>
+        <h2 className="text-base ">Hébergement</h2>
         <ul className="flex flex-col gap-1">
           {LEGAL.hebergeurs.map((h) => (
             <li key={h.nom}>
@@ -42,7 +42,7 @@ export default function MentionsLegalesPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Propriété intellectuelle</h2>
+        <h2 className="text-base ">Propriété intellectuelle</h2>
         <p>
           L&apos;ensemble des contenus du site ({SITE_NAME}, son interface, ses
           textes et ses visuels) est protégé par le droit d&apos;auteur. Les
@@ -53,7 +53,7 @@ export default function MentionsLegalesPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Signaler un contenu</h2>
+        <h2 className="text-base ">Signaler un contenu</h2>
         <p>
           Toute demande relative à un contenu publié ou à un compte peut être
           adressée à {LEGAL.email}.

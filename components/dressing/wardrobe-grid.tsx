@@ -28,6 +28,44 @@ const CATEGORIES = [
   { value: "accessoire", label: "Accessoires" },
 ];
 
+/**
+ * La garde-robe, en rayon.
+ *
+ * ── Ce que c'était, et pourquoi ça ne pouvait pas marcher ───────────────────
+ *
+ * Une LISTE VERTICALE de lignes encadrées, chacune portant une vignette de
+ * 64 px à gauche et trois lignes de texte à droite. Autrement dit : un tableau
+ * de données qui se trouve contenir des habits. La photo y était une pièce
+ * justificative de 4 % de la surface, le reste étant du texte et des bordures.
+ *
+ * Aucune enseigne de vêtement ne présente ses pièces comme ça, et pour une
+ * raison qui n'est pas de goût : on ne choisit pas un vêtement en lisant son
+ * libellé, on le choisit en le VOYANT. Zara, COS, Arket, Uniqlo montrent tous
+ * la même chose — deux colonnes, portrait, image jusqu'aux bords, légende
+ * minuscule en dessous.
+ *
+ * ── Les quatre décisions ────────────────────────────────────────────────────
+ *
+ * 1. DEUX COLONNES, PORTRAIT 3:4. Le portrait est le format du vêtement porté ;
+ *    le carré coupe les jambes et les manches. Deux colonnes sur 390 px donnent
+ *    des photos d'environ 180 px de large — assez pour reconnaître une pièce
+ *    d'un coup d'œil, ce que 64 px ne permettait pas.
+ *
+ * 2. AUCUNE CARTE. Pas de bordure, pas de fond, pas de coin arrondi autour
+ *    d'une pièce. La photo EST l'objet ; l'encadrer revenait à mettre un
+ *    cadre autour d'un cadre. C'est aussi ce qui produisait l'impression de
+ *    « gros blocs ».
+ *
+ * 3. UN FILET D'1 PX ENTRE LES CELLULES, obtenu par un fond de grille qui
+ *    transparaît dans le `gap`. Une seule ligne sépare deux photos, comme les
+ *    rayonnages d'une boutique — et non douze bordures fermées.
+ *
+ * 4. LA LÉGENDE PASSE SOUS LA PHOTO, en deux niveaux : le nom en bas de casse,
+ *    la matière et la couleur en micro-libellé capitales. La marque ne
+ *    s'affiche que si elle est CERTAINE (logo lu sur la photo) : une marque
+ *    supposée imprimée en capitales sous une pièce se lit comme une
+ *    affirmation, ce qu'elle n'est pas.
+ */
 export function WardrobeGrid({
   items,
   urls,
@@ -45,55 +83,78 @@ export function WardrobeGrid({
     category === "all" ? items : items.filter((item) => item.category === category);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1">
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            type="button"
-            onClick={() => setCategory(tab.value)}
-            className={`min-h-[38px] flex-none rounded-full border px-4 text-sm font-medium transition ${
-              category === tab.value
-                ? "border-accent bg-accent text-accent-foreground"
-                : "border-border bg-surface text-foreground"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <div className="flex flex-col gap-5">
+      {/*
+        Le filtre : du texte souligné, pas des gélules colorées.
+
+        Une rangée de pastilles violettes en haut d'une grille de photos
+        détourne l'œil de ce qu'on est venu regarder. Le trait sous l'onglet
+        actif suffit à dire où l'on est — c'est le rayon d'une boutique, pas
+        une barre d'outils. Le trait est posé sur toute la rangée, et seul
+        l'onglet actif le porte en accent.
+      */}
+      <div className="-mx-5 overflow-x-auto px-5">
+        <div className="flex min-w-max gap-6 border-b border-border-soft">
+          {tabs.map((tab) => (
+            <button
+              key={tab.value}
+              type="button"
+              onClick={() => setCategory(tab.value)}
+              aria-pressed={category === tab.value}
+              // 44 px de haut : la cible tactile reste réglementaire même si le
+              // texte, lui, ne fait que 11 px.
+              className={`label min-h-[44px] flex-none border-b-2 pb-1 transition-colors ${
+                category === tab.value
+                  ? "border-accent text-foreground"
+                  : "border-transparent text-muted"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <ul className="flex flex-col gap-2">
+      {/*
+        La grille. `gap-px` sur un fond de bordure : c'est le fond qui
+        transparaît entre les cellules et dessine le filet, sans qu'aucune
+        cellule ne porte de bordure à elle. Les marges négatives portent la
+        grille jusqu'aux bords de l'écran — une photo qui s'arrête à 20 px du
+        bord n'est plus une photo de rayon, c'est une image dans un document.
+      */}
+      <ul className="-mx-5 grid grid-cols-2 gap-px bg-border-soft">
         {visible.map((item) => (
-          <li
-            key={item.id}
-            className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
-          >
+          <li key={item.id} className="flex flex-col bg-background">
             <GarmentThumb
               imageUrl={item.source_image_path ? (urls[item.source_image_path] ?? "") : ""}
               cropBox={item.crop_box}
               alt={item.label}
+              frame="aspect-[3/4] w-full"
             />
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <span className="truncate text-sm font-semibold">{item.label}</span>
-              <span className="text-xs text-muted">
-                {[item.color, item.material].filter(Boolean).join(" · ")}
-              </span>
-              {item.brand && item.brand_confidence !== "inconnue" && (
-                <span className="text-xs text-muted">
-                  {item.brand_confidence === "logo_visible"
-                    ? item.brand
-                    : `${item.brand} (non confirmé)`}
+
+            <div className="flex flex-col gap-1 px-3 pt-3 pb-5">
+              <span className="truncate text-[14px] leading-snug">{item.label}</span>
+
+              {(item.color || item.material) && (
+                <span className="label truncate text-muted">
+                  {[item.color, item.material].filter(Boolean).join(" · ")}
                 </span>
               )}
+
+              {/* Marque affichée seulement quand le logo a été lu. Une marque
+                  supposée devient une affirmation dès qu'on l'imprime. */}
+              {item.brand && item.brand_confidence === "logo_visible" && (
+                <span className="label truncate text-foreground">{item.brand}</span>
+              )}
+
               {item.product_matches?.length > 0 && (
                 <a
                   href={item.product_matches[0].url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate text-xs font-medium underline underline-offset-2"
+                  className="label mt-1 truncate text-accent-strong underline underline-offset-4"
                 >
-                  Pièce similaire : {item.product_matches[0].title}
+                  Pièce similaire
                 </a>
               )}
             </div>

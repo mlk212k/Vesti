@@ -22,7 +22,7 @@ export function CommunityStep() {
     <div className="flex flex-col gap-7">
       <div className="flex flex-col gap-3">
         <DiscordMark />
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+        <h1 className="text-[1.9rem] leading-[1.05]">
           Rejoins la communauté
         </h1>
         <p className="text-sm leading-relaxed text-muted">

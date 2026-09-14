@@ -80,7 +80,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
   return (
     <div className="flex flex-col gap-7">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Trois infos et on te connaît</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Trois infos et on te connaît</h1>
         <p className="text-sm leading-relaxed text-muted">
           Tout est optionnel. Ça sert uniquement à rendre les conseils plus
           justes — jamais à te juger.
@@ -102,7 +102,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </Field>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Tu t&apos;habilles plutôt en…</h2>
+        <h2 className="text-sm ">Tu t&apos;habilles plutôt en…</h2>
         <div className="flex flex-wrap gap-2">
           {GENDERS.map((option) => (
             <ChoiceChip
@@ -148,7 +148,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </p>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Ta morphologie</h2>
+        <h2 className="text-sm ">Ta morphologie</h2>
         <div className="flex flex-wrap gap-2">
           {MORPHOLOGIES.map((option) => (
             <ChoiceChip
@@ -165,7 +165,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Les styles qui te parlent</h2>
+        <h2 className="text-sm ">Les styles qui te parlent</h2>
         <div className="flex flex-wrap gap-2">
           {STYLES.map((style) => (
             <ChoiceChip

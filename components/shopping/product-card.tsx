@@ -46,7 +46,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
           <span className="line-clamp-2 text-sm font-semibold">{match.title}</span>
           <span className="text-xs text-muted">{match.merchant}</span>
           {match.price && (
-            <span className="text-sm font-bold tabular-nums">{match.price}</span>
+            <span className="text-sm font-semibold tabular-nums">{match.price}</span>
           )}
         </div>
       </a>

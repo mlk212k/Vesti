@@ -19,7 +19,7 @@ export default async function ParrainagePage() {
       <div className="flex flex-col gap-3">
         <BackLink href="/compte" label="Paramètres" />
         <div className="flex flex-col gap-1">
-          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+          <h1 className="text-[1.9rem] leading-[1.05]">
             Parrainage
           </h1>
           <p className="text-sm leading-relaxed text-muted">

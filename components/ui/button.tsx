@@ -25,8 +25,10 @@ const VARIANTS: Record<Variant, string> = {
   // d'opacité reste un bouton violet, et se clique.
   primary:
     "bg-accent text-accent-foreground hover:bg-accent-strong disabled:bg-surface-sunken disabled:text-muted",
+  // Contour seul, sans aplat : dans une page sans carte, un fond blanc sur un
+  // fond blanc ne dit rien. C'est le trait qui porte le bouton.
   secondary:
-    "bg-surface text-foreground border border-border hover:border-accent hover:text-accent-strong disabled:opacity-40",
+    "text-foreground border border-border hover:border-accent hover:text-accent-strong disabled:opacity-40",
   ghost: "text-muted hover:bg-accent-soft hover:text-accent-strong disabled:opacity-40",
   // Jeton dédié plutôt que `text-white` : en mode sombre le rouge s'éclaircit
   // pour se détacher du fond, et un blanc figé dessus tomberait sous le seuil
@@ -50,15 +52,46 @@ export function Button({
   return (
     <button
       {...props}
-      className={`inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[var(--radius-control)] px-5 text-[15px] font-semibold tracking-[-0.01em] transition duration-150 active:scale-[0.99] disabled:cursor-not-allowed disabled:active:scale-100 ${
-        VARIANTS[variant]
-      } ${block ? "w-full" : ""} ${className}`}
+      /*
+        Angle droit, capitales, interlettrage ouvert : le bouton d'une enseigne
+        de mode, pas d'une application. Trois détails qui font la différence et
+        qu'on perd si on les touche isolément.
+
+        `tracking-[0.1em]` + `uppercase` : sans ça, un bouton à angle droit lit
+        simplement « bouton pas fini ». C'est l'espacement qui le rend
+        délibéré.
+
+        `text-[13px]` alors que le texte courant est à 15 : en capitales, 13
+        occupe la hauteur d'un 15 en bas de casse. Le bouton ne crie plus.
+
+        ⚠️ `active:scale` a disparu. Il déplaçait les bords du bouton à chaque
+        appui — un effet visible, et interdit par la règle « états de pression
+        sans changement de gabarit ». Le retour se fait maintenant par la
+        couleur, qui ne bouge rien.
+      */
+      className={buttonClasses(variant, block, className)}
     />
   );
 }
 
-/** Même dessin que `Button`, pour les liens qui agissent comme des boutons. */
-export const buttonClasses = (variant: Variant = "primary", block = true) =>
-  `inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[var(--radius-control)] px-5 text-[15px] font-semibold tracking-[-0.01em] transition duration-150 active:scale-[0.99] ${
+/**
+ * Le dessin du bouton, en UN seul endroit.
+ *
+ * ⚠️ Cette fonction et le composant `Button` portaient chacun leur propre copie
+ * de la chaîne de classes, sous un commentaire qui affirmait « même dessin ».
+ * Ça a tenu jusqu'à la première modification : le composant est passé en
+ * capitales à angle droit, la fonction est restée en gélule bas de casse, et
+ * la page d'accueil — qui utilise la fonction — a gardé l'ancien bouton. Le
+ * défaut n'était visible qu'à l'écran, pas dans le diff.
+ *
+ * Deux copies d'une décision de design divergent toujours. Il n'y en a plus
+ * qu'une, et `Button` l'appelle comme tout le monde.
+ */
+export const buttonClasses = (
+  variant: Variant = "primary",
+  block = true,
+  className = ""
+) =>
+  `inline-flex min-h-[52px] items-center justify-center gap-2 px-6 text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors duration-150 disabled:cursor-not-allowed ${
     VARIANTS[variant]
-  } ${block ? "w-full" : ""}`;
+  } ${block ? "w-full" : ""} ${className}`;

@@ -101,7 +101,7 @@ export function InstallInvite() {
       <div className="flex items-start gap-3">
         <LogoMark size={40} />
         <div className="flex flex-col gap-1">
-          <h2 className="text-[15px] font-bold leading-tight">
+          <h2 className="text-[15px] leading-tight">
             Garde Vesti à portée de main
           </h2>
           <p className="text-[13px] leading-relaxed text-muted">

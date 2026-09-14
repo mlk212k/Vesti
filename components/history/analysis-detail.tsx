@@ -1,6 +1,7 @@
 "use client";
 
 import { GarmentThumb } from "@/components/analyze/garment-thumb";
+import { CheckIcon } from "@/components/ui/check-icon";
 import type { GarmentView } from "@/components/analyze/verdict-card";
 
 /**
@@ -36,7 +37,7 @@ export function AnalysisDetail({
     <div className="flex flex-col gap-6">
       <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
         <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
-          <span className="font-display text-[64px] font-extrabold leading-none tracking-[-0.05em] tabular-nums">
+          <span className="font-display text-[64px] font-semibold leading-none tracking-[-0.05em] tabular-nums">
             {score ?? "—"}
           </span>
           <span className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-75">
@@ -73,11 +74,11 @@ export function AnalysisDetail({
 
       {strengths.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">Ce qui marche</h2>
+          <h2 className="text-sm ">Ce qui marche</h2>
           <ul className="flex flex-col gap-2">
             {strengths.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
-                <span className="text-success">✓</span>
+                <CheckIcon className="text-success" />
                 <span>{item}</span>
               </li>
             ))}
@@ -87,7 +88,7 @@ export function AnalysisDetail({
 
       {improvements.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">À ajuster</h2>
+          <h2 className="text-sm ">À ajuster</h2>
           <ul className="flex flex-col gap-2">
             {improvements.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
@@ -101,7 +102,7 @@ export function AnalysisDetail({
 
       {garments.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">
+          <h2 className="text-sm ">
             Pièces détectées ({garments.length})
           </h2>
           <ul className="flex flex-col gap-2">

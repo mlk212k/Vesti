@@ -53,7 +53,7 @@ export function WardrobeEmpty({
   return (
     <main className="flex flex-1 flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-2">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ta garde-robe</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Ta garde-robe</h1>
         <p className="text-sm leading-relaxed text-muted">
           Elle est vide pour l&apos;instant. Une fois remplie, Vesti travaille
           avec tes vêtements plutôt qu&apos;en général.

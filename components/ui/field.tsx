@@ -11,9 +11,9 @@ export function Field({
 }) {
   return (
     <label className="flex flex-col gap-2">
-      <span className="text-[13px] font-semibold tracking-[-0.01em] text-foreground">
-        {label}
-      </span>
+      {/* Micro-libellé capitales : même registre que les titres de section, pour
+          qu'un formulaire ne soit pas un îlot typographique dans la page. */}
+      <span className="label text-muted">{label}</span>
       {children}
       {hint && <span className="text-xs leading-relaxed text-muted">{hint}</span>}
     </label>
@@ -24,7 +24,20 @@ export function Input({ className = "", ...props }: InputHTMLAttributes<HTMLInpu
   return (
     <input
       {...props}
-      className={`min-h-[52px] w-full rounded-[var(--radius-control)] border border-border bg-surface px-4 text-foreground outline-none transition placeholder:text-muted/60 focus:border-accent focus:ring-4 focus:ring-accent/15 ${className}`}
+      /*
+        Un trait bas, pas une boîte.
+
+        Le champ encadré posait un rectangle blanc sur un fond presque blanc :
+        invisible sans sa bordure, et c'est justement cette bordure qui était
+        à 1,62:1. Le trait bas règle les deux — il porte tout le contraste
+        (3,80:1) sur une seule ligne, et il donne la forme qu'ont les
+        formulaires de prêt-à-porter.
+
+        ⚠️ `border-b-2` au focus, pas un anneau : un anneau de 4 px autour d'un
+        champ sans boîte flotterait dans le vide. L'épaississement du trait
+        suffit, et `:focus-visible` global garde l'anneau pour le clavier.
+      */
+      className={`min-h-[52px] w-full border-b border-border bg-transparent px-0 text-foreground outline-none transition-colors placeholder:text-muted/60 focus:border-b-2 focus:border-accent ${className}`}
     />
   );
 }

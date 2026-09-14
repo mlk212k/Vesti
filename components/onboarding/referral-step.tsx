@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
+import { CheckIcon } from "@/components/ui/check-icon";
 import { submitReferralCode } from "@/app/(auth)/onboarding/actions";
 
 const MESSAGES: Record<string, string> = {
@@ -115,7 +116,7 @@ export function ReferralStep({
   if (accepted) {
     return (
       <div className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-6 text-center">
-        <span className="text-3xl">✓</span>
+        <CheckIcon className="h-6 w-6 text-success" />
         <p className="text-sm font-medium">Code validé</p>
       </div>
     );
@@ -139,7 +140,7 @@ export function ReferralStep({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Tu as un code ?</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Tu as un code ?</h1>
         <p className="text-sm leading-relaxed text-muted">
           Si on t&apos;a donné un code, saisis-le ici.
         </p>

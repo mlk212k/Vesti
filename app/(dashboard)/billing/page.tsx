@@ -44,7 +44,7 @@ export default async function BillingPage(props: PageProps<"/billing">) {
       <div className="flex flex-col gap-3">
         <BackLink href="/compte" label="Paramètres" />
         <header className="flex flex-col gap-1">
-          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton abonnement</h1>
+          <h1 className="text-[1.9rem] leading-[1.05]">Ton abonnement</h1>
           <p className="text-sm text-muted">Sans engagement, résiliable à tout moment.</p>
         </header>
       </div>
@@ -70,7 +70,7 @@ export default async function BillingPage(props: PageProps<"/billing">) {
         giftUntil={giftUntil}
       />
 
-      <h2 className="text-sm font-semibold">
+      <h2 className="text-sm ">
         {currentPlan === "free" ? "Passer à la vitesse supérieure" : "Toutes les formules"}
       </h2>
 

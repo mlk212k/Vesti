@@ -40,7 +40,7 @@ export function ReferralKeepsake() {
     <section className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
       <span className="text-sm font-semibold">Ton code d&apos;invitation</span>
       <div className="flex items-center justify-between gap-3 rounded-[var(--radius-control)] bg-surface-sunken px-4 py-3">
-        <span className="font-[family-name:var(--font-bricolage)] text-xl font-extrabold tracking-[0.18em]">
+        <span className="font-[family-name:var(--font-bricolage)] text-xl font-semibold tracking-[0.18em]">
           {code}
         </span>
         <button
