@@ -12,6 +12,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+
+    // Outillage d'assistant, pas du code d'application : les skills installés
+    // sous `.claude/` embarquent leurs propres scripts (`.cjs`, Python) écrits
+    // selon d'autres conventions. Sans cette ligne, `npm run lint` sort 15
+    // erreurs qui ne concernent pas Vesti et que personne ici ne peut corriger
+    // — elles appartiennent au dépôt d'origine du skill.
+    ".claude/**",
   ]),
 ]);
 
