@@ -1,6 +1,9 @@
 "use client";
 
 import { GarmentThumb } from "@/components/analyze/garment-thumb";
+import { CheckIcon } from "@/components/ui/check-icon";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { ScoreHeader } from "@/components/analyze/score-header";
 import type { GarmentView } from "@/components/analyze/verdict-card";
 
 /**
@@ -34,31 +37,16 @@ export function AnalysisDetail({
 }) {
   return (
     <div className="flex flex-col gap-6">
-      <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
-        <div className="flex flex-col items-center gap-1 bg-accent px-6 py-7 text-accent-foreground">
-          <span className="font-display text-[64px] font-extrabold leading-none tracking-[-0.05em] tabular-nums">
-            {score ?? "—"}
-          </span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-75">
-            sur 100
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-3 p-6 text-center">
-          <span className="text-xs text-muted">
-            {new Date(createdAt).toLocaleDateString("fr-FR", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
-          {verdict && <p className="text-[15px] leading-relaxed">{verdict}</p>}
-          {occasion && (
-            <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-strong">
-              {occasion}
-            </span>
-          )}
-        </div>
-      </section>
+      <ScoreHeader score={score} occasion={occasion}>
+        <span className="label text-muted">
+          {new Date(createdAt).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
+        {verdict && <p className="text-[15px] leading-relaxed">{verdict}</p>}
+      </ScoreHeader>
 
       {photoUrl && (
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-border-soft">
@@ -73,11 +61,11 @@ export function AnalysisDetail({
 
       {strengths.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">Ce qui marche</h2>
+          <h2 className="label text-muted">Ce qui marche</h2>
           <ul className="flex flex-col gap-2">
             {strengths.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
-                <span className="text-success">✓</span>
+                <CheckIcon className="text-success" />
                 <span>{item}</span>
               </li>
             ))}
@@ -87,11 +75,11 @@ export function AnalysisDetail({
 
       {improvements.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">À ajuster</h2>
+          <h2 className="label text-muted">À ajuster</h2>
           <ul className="flex flex-col gap-2">
             {improvements.map((item) => (
               <li key={item} className="flex gap-2 text-sm leading-relaxed">
-                <span className="text-accent">→</span>
+                <ArrowIcon className="text-accent" />
                 <span>{item}</span>
               </li>
             ))}
@@ -101,14 +89,14 @@ export function AnalysisDetail({
 
       {garments.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold">
+          <h2 className="label text-muted">
             Pièces détectées ({garments.length})
           </h2>
           <ul className="flex flex-col gap-2">
             {garments.map((garment, index) => (
               <li
                 key={`${garment.label}-${index}`}
-                className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3"
+                className="flex gap-3 rounded-[var(--radius-control)] panel p-3"
               >
                 {photoUrl && (
                   <GarmentThumb

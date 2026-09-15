@@ -10,7 +10,7 @@ export default function CgvPage() {
 
   return (
     <>
-      <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+      <h1 className="text-[1.9rem] leading-[1.05]">
         Conditions générales de vente
       </h1>
       <p className="text-xs text-muted">
@@ -18,7 +18,7 @@ export default function CgvPage() {
       </p>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">1. Objet</h2>
+        <h2 className="label text-muted">1. Objet</h2>
         <p>
           Les présentes conditions régissent la vente des abonnements à{" "}
           {SITE_NAME}, service en ligne d&apos;analyse vestimentaire assistée par
@@ -29,7 +29,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">2. Le service</h2>
+        <h2 className="label text-muted">2. Le service</h2>
         <p>
           {SITE_NAME} analyse des photographies de tenues transmises par
           l&apos;utilisateur et lui restitue un avis, des conseils et un
@@ -41,7 +41,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">3. Formules et prix</h2>
+        <h2 className="label text-muted">3. Formules et prix</h2>
         <p>
           L&apos;offre gratuite donne accès à un nombre limité d&apos;analyses
           par mois. Les formules payantes, sans engagement de durée, sont :
@@ -67,7 +67,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">4. Souscription et paiement</h2>
+        <h2 className="label text-muted">4. Souscription et paiement</h2>
         <p>
           Le paiement s&apos;effectue par carte bancaire via Stripe. {SITE_NAME}{" "}
           n&apos;a jamais accès aux coordonnées bancaires. L&apos;abonnement est
@@ -77,7 +77,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">5. Droit de rétractation</h2>
+        <h2 className="label text-muted">5. Droit de rétractation</h2>
         <p>
           Conformément aux articles L221-18 et suivants du code de la
           consommation, l&apos;abonné dispose d&apos;un délai de{" "}
@@ -93,7 +93,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">6. Résiliation</h2>
+        <h2 className="label text-muted">6. Résiliation</h2>
         <p>
           L&apos;abonné peut résilier à tout moment depuis son espace de
           facturation. La résiliation prend effet à la fin de la période en
@@ -105,7 +105,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">7. Obligations de l&apos;utilisateur</h2>
+        <h2 className="label text-muted">7. Obligations de l&apos;utilisateur</h2>
         <p>
           L&apos;utilisateur s&apos;engage à ne transmettre que des photographies
           dont il détient les droits et sur lesquelles ne figure aucun tiers sans
@@ -116,7 +116,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">8. Disponibilité et responsabilité</h2>
+        <h2 className="label text-muted">8. Disponibilité et responsabilité</h2>
         <p>
           {SITE_NAME} met en œuvre les moyens raisonnables pour assurer la
           continuité du service, sans garantie d&apos;absence
@@ -129,7 +129,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">9. Données personnelles</h2>
+        <h2 className="label text-muted">9. Données personnelles</h2>
         <p>
           Le traitement des données, y compris des photographies transmises, est
           décrit dans la politique de confidentialité, qui fait partie intégrante
@@ -138,7 +138,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">10. Médiation de la consommation</h2>
+        <h2 className="label text-muted">10. Médiation de la consommation</h2>
         <p>
           {LEGAL.mediateur ? (
             <>
@@ -171,7 +171,7 @@ export default function CgvPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">11. Droit applicable</h2>
+        <h2 className="label text-muted">11. Droit applicable</h2>
         <p>
           Les présentes conditions sont soumises au droit français. À défaut de
           résolution amiable, les tribunaux français sont compétents, sans

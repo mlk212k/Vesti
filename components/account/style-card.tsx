@@ -76,9 +76,9 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
   }
 
   return (
-    <section className="flex flex-col gap-5 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <section className="flex flex-col gap-5 panel p-5">
       <div className="flex flex-col gap-1">
-        <h2 className="text-sm font-semibold">Parrainage</h2>
+        <h2 className="label text-muted">Parrainage</h2>
         <p className="text-xs leading-relaxed text-muted">
           Chaque personne qui utilise ton code et analyse une tenue te rapporte{" "}
           {STYLE_PER_REFERRAL} Style. À {STYLE_GIFT_THRESHOLD}, tu passes{" "}
@@ -88,7 +88,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
 
       {/* Le solde : le chiffre qu'on revient regarder. */}
       <div className="flex items-baseline gap-2">
-        <span className="font-[family-name:var(--font-bricolage)] text-[2.6rem] font-extrabold leading-none text-accent-strong">
+        <span className="font-display text-[2.6rem] font-semibold leading-none text-accent-strong">
           {balance}
         </span>
         <span className="text-sm font-semibold text-muted">
@@ -134,7 +134,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
           <span className="text-xs font-semibold text-muted">
             Tes gains ({Math.round(COMMISSION_RATE * 100)} % de ce qu&apos;ils paient)
           </span>
-          <span className="font-[family-name:var(--font-bricolage)] text-xl font-extrabold tabular-nums">
+          <span className="font-display text-xl font-semibold tabular-nums">
             {formatCents(status.earningsCents)}
           </span>
         </div>
@@ -151,7 +151,7 @@ export function StyleCard({ status, siteUrl }: { status: StyleStatus; siteUrl: s
           <div className="flex items-center justify-between gap-3 rounded-[var(--radius-control)] bg-surface-sunken px-4 py-3">
             {/* Chiffres tabulaires et lettres espacées : ce code se recopie
                 depuis une story, souvent de mémoire. */}
-            <span className="font-[family-name:var(--font-bricolage)] text-xl font-extrabold tracking-[0.18em] tabular-nums">
+            <span className="font-display text-xl font-semibold tracking-[0.18em] tabular-nums">
               {status.code}
             </span>
             <button

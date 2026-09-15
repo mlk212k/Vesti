@@ -136,7 +136,7 @@ export function WeatherPill({ hasWardrobe }: { hasWardrobe: boolean }) {
         type="button"
         onClick={locate}
         style={{ touchAction: "manipulation" }}
-        className="flex items-center gap-2 self-start rounded-full border border-border-soft bg-surface px-4 py-2 text-xs font-semibold text-muted transition hover:border-accent hover:text-accent-strong"
+        className="flex items-center gap-2 self-start rounded-full panel px-4 py-2 text-xs font-semibold text-muted transition hover:border-accent hover:text-accent-strong"
       >
         <CloudIcon />
         Voir la météo chez toi
@@ -147,14 +147,14 @@ export function WeatherPill({ hasWardrobe }: { hasWardrobe: boolean }) {
   const { weather } = state;
 
   return (
-    <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
+    <section className="flex flex-col gap-3 panel p-4">
       <div className="flex items-center gap-3">
         <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-strong">
           <CloudIcon />
         </span>
         <div className="flex min-w-0 flex-col">
           <span className="flex items-baseline gap-1.5">
-            <span className="font-[family-name:var(--font-bricolage)] text-2xl font-extrabold leading-none tabular-nums">
+            <span className="font-display text-2xl font-semibold leading-none tabular-nums">
               {Math.round(weather.temperature)}°
             </span>
             <span className="truncate text-xs text-muted">

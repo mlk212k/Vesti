@@ -86,7 +86,7 @@ export default async function ParametresPage() {
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Paramètres</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Paramètres</h1>
         <p className="truncate text-sm text-muted">{user.email}</p>
       </header>
 

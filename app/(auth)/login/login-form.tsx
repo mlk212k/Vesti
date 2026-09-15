@@ -311,7 +311,7 @@ export function LoginForm({ next }: { next: string }) {
     return (
       <form onSubmit={saveNewPassword} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 text-center">
-          <h2 className="text-lg font-bold">Choisis ton mot de passe</h2>
+          <h2 className="text-lg ">Choisis ton mot de passe</h2>
           <p className="text-sm leading-relaxed text-muted">
             Il te servira à te reconnecter, sans passer par ta boîte mail.
           </p>
@@ -351,7 +351,7 @@ export function LoginForm({ next }: { next: string }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 text-center">
-          <h2 className="text-lg font-bold">Entre ton code</h2>
+          <h2 className="text-lg ">Entre ton code</h2>
           <p className="text-sm leading-relaxed text-muted">
             On a envoyé un code à{" "}
             <span className="font-semibold text-foreground">{status.email}</span>.
@@ -379,7 +379,7 @@ export function LoginForm({ next }: { next: string }) {
               setCode(normalizeOtp(event.target.value));
               setCodeError(null);
             }}
-            className="text-center font-display text-[26px] font-extrabold tracking-[0.22em]"
+            className="text-center font-display text-[26px] font-semibold tracking-[0.22em]"
           />
 
           {codeError && (

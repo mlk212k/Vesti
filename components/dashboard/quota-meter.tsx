@@ -21,7 +21,7 @@ export function QuotaMeter({
         <span className="text-[13px] font-semibold">
           {unlimited ? "Analyses ce mois-ci" : "Analyses restantes"}
         </span>
-        <span className="font-display text-[13px] font-bold tabular-nums text-muted">
+        <span className="font-display text-[13px] font-semibold tabular-nums text-muted">
           {unlimited ? used : `${remaining} / ${limit}`}
         </span>
       </div>

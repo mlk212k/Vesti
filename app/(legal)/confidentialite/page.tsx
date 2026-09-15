@@ -7,12 +7,12 @@ export const metadata: Metadata = { title: `Politique de confidentialité — ${
 export default function ConfidentialitePage() {
   return (
     <>
-      <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+      <h1 className="text-[1.9rem] leading-[1.05]">
         Politique de confidentialité
       </h1>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Responsable du traitement</h2>
+        <h2 className="label text-muted">Responsable du traitement</h2>
         <p>
           {LEGAL.editeur} ({LEGAL.siret}), {LEGAL.adresse}. Pour toute question
           ou demande relative à tes données : {LEGAL.emailRgpd}.
@@ -20,7 +20,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Ce que nous collectons</h2>
+        <h2 className="label text-muted">Ce que nous collectons</h2>
         <ul className="flex flex-col gap-1">
           <li>
             <strong>Ton email</strong>, pour créer ton compte et t&apos;y
@@ -52,7 +52,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Pourquoi, et sur quelle base</h2>
+        <h2 className="label text-muted">Pourquoi, et sur quelle base</h2>
         <p>
           Ces données servent exclusivement à fournir le service auquel tu as
           souscrit : analyser tes tenues, tenir ta garde-robe, gérer ton
@@ -68,7 +68,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Qui y a accès</h2>
+        <h2 className="label text-muted">Qui y a accès</h2>
         <p>
           Nous faisons appel aux prestataires suivants, uniquement pour faire
           fonctionner le service :
@@ -90,7 +90,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Combien de temps</h2>
+        <h2 className="label text-muted">Combien de temps</h2>
         <ul className="flex flex-col gap-1">
           <li>Compte, photographies et garde-robe : conservés tant que ton compte existe.</li>
           <li>
@@ -105,7 +105,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Tes droits</h2>
+        <h2 className="label text-muted">Tes droits</h2>
         <p>
           Tu disposes d&apos;un droit d&apos;accès, de rectification,
           d&apos;effacement, de limitation, d&apos;opposition et de portabilité
@@ -125,7 +125,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Cookies</h2>
+        <h2 className="label text-muted">Cookies</h2>
         <p>
           {SITE_NAME} ne dépose que les cookies nécessaires à son fonctionnement :
           ta session de connexion, et le code éventuellement transmis à ton
@@ -136,7 +136,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold">Mineurs</h2>
+        <h2 className="label text-muted">Mineurs</h2>
         <p>
           Le service n&apos;est pas destiné aux personnes de moins de quinze ans.
           Si tu constates qu&apos;un compte a été créé par un mineur de moins de

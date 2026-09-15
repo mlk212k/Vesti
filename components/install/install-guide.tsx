@@ -113,7 +113,7 @@ export function InstallGuide() {
     <main className="flex min-h-dvh flex-1 flex-col gap-7 px-6 pt-12 pb-10">
       <header className="flex flex-col items-center gap-4 text-center">
         <LogoMark size={88} priority />
-        <h1 className="text-[2rem] font-extrabold leading-[1.05]">
+        <h1 className="text-[2rem] leading-[1.05]">
           Installe Vesti sur
           <br />
           ton écran d&apos;accueil
@@ -185,7 +185,7 @@ function LeaveInAppBrowser({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-accent/25 bg-accent-soft p-5">
-        <h2 className="text-sm font-bold text-accent-strong">
+        <h2 className="text-sm text-accent-strong">
           D&apos;abord, sors du navigateur de {appName}
         </h2>
         <p className="text-sm leading-relaxed text-foreground/80">
@@ -232,7 +232,7 @@ function LeaveInAppBrowser({
 
       <div className="flex flex-col gap-2">
         <Button variant="secondary" onClick={copyLink}>
-          {copied ? "Lien copié ✓" : "Copier le lien"}
+          {copied ? "Lien copié" : "Copier le lien"}
         </Button>
         <p className="text-center text-xs text-muted">
           Tu peux aussi coller le lien dans{" "}
@@ -326,8 +326,8 @@ function AndroidSteps({
 
 function OpenOnPhone() {
   return (
-    <div className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5 text-center">
-      <h2 className="text-sm font-bold">Vesti est fait pour ton téléphone</h2>
+    <div className="flex flex-col gap-3 panel p-5 text-center">
+      <h2 className="label text-muted">Vesti est fait pour ton téléphone</h2>
       <p className="text-sm leading-relaxed text-muted">
         Tu vas photographier tes tenues : autant le faire depuis l&apos;appareil
         qui a l&apos;appareil photo. Ouvre{" "}
@@ -351,7 +351,7 @@ function InstalledConfirmation() {
   return (
     <main className="flex min-h-dvh flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
       <LogoMark size={88} />
-      <h1 className="text-[2rem] font-extrabold leading-[1.05]">
+      <h1 className="text-[2rem] leading-[1.05]">
         C&apos;est installé.
       </h1>
       <p className="max-w-[30ch] text-[15px] leading-relaxed text-muted">
@@ -366,7 +366,7 @@ function InstalledConfirmation() {
 
 function StepList({ children }: { children: ReactNode }) {
   return (
-    <ol className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+    <ol className="flex flex-col gap-3 panel p-5">
       {children}
     </ol>
   );
@@ -383,7 +383,7 @@ function Step({
 }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-accent text-[13px] font-bold text-accent-foreground">
+      <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-accent text-[13px] font-semibold text-accent-foreground">
         {index}
       </span>
       <span className="flex-1 text-sm leading-relaxed">{children}</span>
@@ -403,7 +403,7 @@ function Strong({ children }: { children: ReactNode }) {
 /** Symbole d'interface cité dans une phrase, annoncé aux lecteurs d'écran. */
 function Glyph({ children, label }: { children: ReactNode; label: string }) {
   return (
-    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-accent-soft px-1.5 align-middle text-[15px] font-bold leading-none text-accent-strong">
+    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-accent-soft px-1.5 align-middle text-[15px] font-semibold leading-none text-accent-strong">
       <span aria-hidden>{children}</span>
       <span className="sr-only">{label}</span>
     </span>

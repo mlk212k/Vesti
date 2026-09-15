@@ -29,7 +29,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ touchAction: "manipulation" }}
-        className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface p-3 transition hover:border-accent active:scale-[0.99]"
+        className="flex gap-3 rounded-[var(--radius-control)] panel p-3 transition hover:border-accent active:scale-[0.99]"
       >
         {/* Beaucoup de fiches produit ne publient pas de photo : la carte doit
             tenir sans, plutôt que de réserver un carré vide. */}
@@ -46,7 +46,7 @@ export function ProductCard({ match }: { match: ProductMatch }) {
           <span className="line-clamp-2 text-sm font-semibold">{match.title}</span>
           <span className="text-xs text-muted">{match.merchant}</span>
           {match.price && (
-            <span className="text-sm font-bold tabular-nums">{match.price}</span>
+            <span className="text-sm font-semibold tabular-nums">{match.price}</span>
           )}
         </div>
       </a>

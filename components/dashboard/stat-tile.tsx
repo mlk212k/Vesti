@@ -17,10 +17,10 @@ export function StatTile({
   suffix?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
+    <div className="flex flex-col gap-1 panel p-4">
       <span className="text-xs font-medium text-muted">{label}</span>
       <span className="flex items-baseline gap-1">
-        <span className="font-display text-[28px] font-extrabold leading-none tracking-[-0.03em] tabular-nums">
+        <span className="font-display text-[28px] font-semibold leading-none tracking-[-0.03em] tabular-nums">
           {value}
         </span>
         {suffix && <span className="text-xs text-muted">{suffix}</span>}

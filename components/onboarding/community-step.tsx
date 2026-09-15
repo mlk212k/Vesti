@@ -22,7 +22,7 @@ export function CommunityStep() {
     <div className="flex flex-col gap-7">
       <div className="flex flex-col gap-3">
         <DiscordMark />
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+        <h1 className="text-[1.9rem] leading-[1.05]">
           Rejoins la communauté
         </h1>
         <p className="text-sm leading-relaxed text-muted">
@@ -85,7 +85,7 @@ export function CommunityStep() {
 
 function Perk({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <li className="flex gap-3 rounded-[var(--radius-control)] border border-border-soft bg-surface px-4 py-3">
+    <li className="flex gap-3 rounded-[var(--radius-control)] panel px-4 py-3">
       <span className="mt-1.5 h-1.5 w-1.5 flex-none rounded-full bg-accent" aria-hidden />
       <span className="flex flex-col gap-0.5">
         <span className="text-sm font-semibold">{title}</span>

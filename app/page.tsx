@@ -51,7 +51,7 @@ export default async function LandingPage() {
           {/* Coupes explicites : trois lignes équilibrées, la chute en violet.
               Laissé au navigateur, le titre casse après « 30 » et sépare le
               chiffre de son unité. */}
-          <h1 className="text-[2.45rem] font-extrabold leading-[1.02]">
+          <h1 className="text-[2.45rem] leading-[1.02]">
             Ta tenue,
             <br />
             jugée en

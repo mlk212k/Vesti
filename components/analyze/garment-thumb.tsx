@@ -12,28 +12,37 @@ import type { CropBox } from "@/lib/claude/schemas";
  *
  * Le zoom = 100/largeur : on agrandit l'image pour que la boîte remplisse le
  * cadre, puis on la décale pour amener la boîte à l'origine.
+ *
+ * ── Pourquoi le cadre est devenu réglable ───────────────────────────────────
+ *
+ * La taille était écrite en dur — `h-16 w-16`, un carré de 64 px. Ça convient à
+ * une ligne de liste, et à rien d'autre. La garde-robe est maintenant une
+ * grille de photos en portrait qui occupent toute leur cellule : c'est la photo
+ * qui doit porter l'écran, pas une vignette posée à côté d'un texte.
+ *
+ * `frame` porte donc les classes du CADRE, et `frame` seul. Le recadrage
+ * interne, lui, ne change pas d'un cas à l'autre — c'est le même calcul.
  */
 export function GarmentThumb({
   imageUrl,
   cropBox,
   alt,
+  frame = "h-16 w-16 flex-none",
 }: {
   imageUrl: string;
   cropBox: CropBox | null;
   alt: string;
+  /** Classes du cadre. Défaut : la vignette carrée des listes. */
+  frame?: string;
 }) {
   if (!imageUrl) {
-    return <div className="h-16 w-16 flex-none rounded-[var(--radius-control)] bg-border" />;
+    return <div className={`${frame} bg-surface-sunken`} />;
   }
 
   if (!cropBox) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={imageUrl}
-        alt={alt}
-        className="h-16 w-16 flex-none rounded-[var(--radius-control)] object-cover"
-      />
+      <img src={imageUrl} alt={alt} className={`${frame} object-cover`} />
     );
   }
 
@@ -41,7 +50,7 @@ export function GarmentThumb({
   const scaleY = 100 / Math.max(cropBox.height, 1);
 
   return (
-    <div className="h-16 w-16 flex-none overflow-hidden rounded-[var(--radius-control)] bg-border">
+    <div className={`${frame} overflow-hidden bg-surface-sunken`}>
       <div className="relative h-full w-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

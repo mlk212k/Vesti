@@ -44,7 +44,7 @@ export function Wordmark({
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <LogoMark size={size} priority={priority} />
       <span
-        className="font-display font-extrabold leading-none tracking-[-0.045em]"
+        className="font-display font-semibold leading-none tracking-[-0.045em]"
         style={{ fontSize: size * 0.82 }}
       >
         Vesti

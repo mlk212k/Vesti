@@ -25,10 +25,10 @@ export function SettingsGroup({
 }) {
   return (
     <section className="flex flex-col gap-2">
-      <h2 className="px-1 text-xs font-bold uppercase tracking-[0.08em] text-muted">
+      <h2 className="px-1 text-xs uppercase tracking-[0.08em] text-muted">
         {title}
       </h2>
-      <div className="divide-y divide-border-soft overflow-hidden rounded-[var(--radius-card)] border border-border-soft bg-surface">
+      <div className="divide-y divide-border-soft overflow-hidden panel">
         {children}
       </div>
       {footnote && (

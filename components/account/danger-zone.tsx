@@ -51,8 +51,8 @@ export function DangerZone() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
-        <h2 className="text-sm font-semibold">Récupérer mes données</h2>
+      <section className="flex flex-col gap-3 panel p-5">
+        <h2 className="label text-muted">Récupérer mes données</h2>
         <p className="text-sm leading-relaxed text-muted">
           Télécharge tout ce que Vesti sait de toi : profil, analyses,
           garde-robe, abonnement, et des liens pour récupérer tes photos.
@@ -72,7 +72,7 @@ export function DangerZone() {
       </section>
 
       <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-danger/25 bg-danger-soft p-5">
-        <h2 className="text-sm font-semibold text-danger">Supprimer mon compte</h2>
+        <h2 className="text-sm text-danger">Supprimer mon compte</h2>
         <p className="text-sm leading-relaxed text-muted">
           Ton compte, tes photos, ta garde-robe et ton historique sont effacés
           définitivement. Ton abonnement est annulé au passage.{" "}

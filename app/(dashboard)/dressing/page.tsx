@@ -13,7 +13,7 @@ import { WardrobeGrid, type WardrobeItem } from "@/components/dressing/wardrobe-
 import { WardrobeEmpty } from "@/components/dressing/wardrobe-empty";
 import { WardrobeLock } from "@/components/dressing/wardrobe-lock";
 import { WeatherPill } from "@/components/dressing/weather-pill";
-import { missingEssentials, summarizeWardrobe } from "@/lib/wardrobe";
+import { missingEssentials } from "@/lib/wardrobe";
 import { Button } from "@/components/ui/button";
 
 export default async function DressingPage() {
@@ -72,13 +72,12 @@ export default async function DressingPage() {
   if (rows.length === 0)
     return <WardrobeEmpty weather={showWeather} canScan={limit === null} />;
 
-  const counts = summarizeWardrobe(rows);
   const missing = missingEssentials(rows);
 
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ta garde-robe</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Ta garde-robe</h1>
         <p className="text-sm text-muted">
           {rows.length} pièce{rows.length > 1 ? "s" : ""} enregistrée
           {rows.length > 1 ? "s" : ""}
@@ -86,40 +85,31 @@ export default async function DressingPage() {
         </p>
       </header>
 
-      {/* La grille montre ce qu'on possède ; elle ne dit pas où on en est.
-          Cette ligne donne la répartition d'un coup d'œil, y compris les
-          catégories à zéro — un « 0 chaussures » est une information, une
-          ligne absente n'en est pas une. */}
       {showWeather && <WeatherPill hasWardrobe />}
 
-      <section className="flex flex-wrap gap-2">
-        {counts.map((category) => (
-          <span
-            key={category.value}
-            className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
-              category.count > 0
-                ? "bg-accent-soft text-accent-strong"
-                : "border border-border-soft text-muted"
-            }`}
-          >
-            {category.count} {category.label.toLowerCase()}
-          </span>
-        ))}
-      </section>
+      {/*
+        ⚠️ LA RANGÉE DE PASTILLES A DISPARU.
 
+        Elle comptait chaque catégorie — « 4 hauts », « 0 chaussures » — en
+        pastilles violettes, juste au-dessus d'une grille de photos. Deux
+        problèmes : elle disait en chiffres ce que la grille montre en images
+        deux centimètres plus bas, et une ligne de taches colorées au-dessus de
+        photos de vêtements détourne l'œil de ce qu'on est venu regarder. Le
+        décompte total reste dans l'en-tête, où il suffit.
+
+        Le manque, lui, reste — mais en une ligne de texte et un lien, plus
+        dans un panneau encadré. C'est une remarque, pas un objet.
+      */}
       {missing.length > 0 && (
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-4">
-          <span className="text-sm font-semibold">
-            Il te manque {missing.join(" et ")}
-          </span>
-          <p className="text-xs leading-relaxed text-muted">
-            Sans ça, Vesti ne peut pas composer de tenue complète à partir de ta
-            penderie.
-          </p>
-          <Link href="/shopping" className="text-xs font-semibold text-accent-strong underline underline-offset-2">
+        <p className="rule pt-5 text-sm leading-relaxed text-muted">
+          Il te manque {missing.join(" et ")} pour composer une tenue complète.{" "}
+          <Link
+            href="/shopping"
+            className="text-accent-strong underline underline-offset-4"
+          >
             Voir quoi acheter
           </Link>
-        </div>
+        </p>
       )}
 
       <WardrobeGrid items={rows} urls={Object.fromEntries(signedUrls)} />
@@ -142,7 +132,7 @@ export default async function DressingPage() {
           inatteignable. Le bouton annonce maintenant ce qu'il DÉBLOQUE, pas le
           travail qu'il demande. */}
       {limit === null ? (
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
+        <div className="flex flex-col gap-2 panel p-5">
           <span className="text-sm font-semibold">Savoir ce qu&apos;il te manque</span>
           <p className="text-xs leading-relaxed text-muted">
             Photographie ta penderie : Vesti en tire l&apos;inventaire, repère

@@ -19,7 +19,7 @@ export default async function ParrainagePage() {
       <div className="flex flex-col gap-3">
         <BackLink href="/compte" label="Paramètres" />
         <div className="flex flex-col gap-1">
-          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">
+          <h1 className="text-[1.9rem] leading-[1.05]">
             Parrainage
           </h1>
           <p className="text-sm leading-relaxed text-muted">
@@ -33,7 +33,7 @@ export default async function ParrainagePage() {
       ) : (
         // Le solde se lit par une fonction SQL : si elle échoue, mieux vaut le
         // dire que d'afficher un zéro qui ferait croire à une perte de gains.
-        <p className="rounded-[var(--radius-card)] border border-border-soft bg-surface p-4 text-sm leading-relaxed text-muted">
+        <p className="panel p-4 text-sm leading-relaxed text-muted">
           Impossible de charger ton parrainage pour le moment. Reviens dans un
           instant — rien n&apos;est perdu, le compte est tenu côté serveur.
         </p>

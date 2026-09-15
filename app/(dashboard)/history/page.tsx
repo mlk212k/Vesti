@@ -35,7 +35,7 @@ export default async function HistoryPage() {
     const needed = requiredPlanFor("history");
     return (
       <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton historique</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Ton historique</h1>
         <p className="text-sm leading-relaxed text-muted">
           Retrouve toutes tes tenues analysées et vois tes scores progresser au
           fil des semaines. Inclus à partir du plan {PLANS[needed].name}.
@@ -68,7 +68,7 @@ export default async function HistoryPage() {
   if (rows.length === 0) {
     return (
       <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton historique</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Ton historique</h1>
         <p className="text-sm text-muted">
           Il se remplira dès ta première tenue analysée.
         </p>
@@ -82,7 +82,7 @@ export default async function HistoryPage() {
   return (
     <main className="flex flex-1 flex-col gap-7 px-5 py-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Ton historique</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Ton historique</h1>
         <p className="text-sm text-muted">
           {rows.length} tenue{rows.length > 1 ? "s" : ""} analysée
           {rows.length > 1 ? "s" : ""}
@@ -100,19 +100,19 @@ export default async function HistoryPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Ta progression</h2>
+        <h2 className="label text-muted">Ta progression</h2>
         <ScoreTrendChart trend={trend} />
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Ce que tu portes le plus</h2>
+        <h2 className="label text-muted">Ce que tu portes le plus</h2>
         <TopItems items={topItems} />
       </section>
 
       {/* Cette liste est aussi la vue tabulaire du graphique ci-dessus : chaque
           point y figure avec sa date et sa valeur exacte. */}
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold">Toutes tes analyses</h2>
+        <h2 className="label text-muted">Toutes tes analyses</h2>
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (
             <li key={row.id}>
@@ -122,13 +122,13 @@ export default async function HistoryPage() {
               <Link
                 href={`/history/${row.id}`}
                 style={{ touchAction: "manipulation" }}
-                className="flex flex-col gap-1 rounded-[var(--radius-control)] border border-border-soft bg-surface p-4 transition hover:border-accent active:scale-[0.99]"
+                className="flex flex-col gap-1 rounded-[var(--radius-control)] panel p-4 transition hover:border-accent active:scale-[0.99]"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium">
                     {row.occasion || "Tenue analysée"}
                   </span>
-                  <span className="flex-none text-base font-bold tabular-nums">
+                  <span className="flex-none text-base font-semibold tabular-nums">
                     {row.score ?? "—"}
                   </span>
                 </div>

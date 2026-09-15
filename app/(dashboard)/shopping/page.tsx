@@ -28,7 +28,7 @@ export default async function ShoppingPage() {
     const needed = requiredPlanFor("shopping");
     return (
       <main className="flex flex-1 flex-col justify-center gap-4 px-6 py-10 text-center">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Quoi acheter</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Quoi acheter</h1>
         <p className="text-sm leading-relaxed text-muted">
           À partir des manques repérés dans ton dressing, Vesti te dit quoi
           acheter en priorité et cherche de vraies options en ligne. Inclus dans
@@ -67,7 +67,7 @@ export default async function ShoppingPage() {
     return (
       <main className="flex flex-1 flex-col gap-6 px-5 py-8">
         <header className="flex flex-col gap-1">
-          <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Quoi acheter</h1>
+          <h1 className="text-[1.9rem] leading-[1.05]">Quoi acheter</h1>
           <p className="text-sm leading-relaxed text-muted">
             Dis ce que tu cherches : Vesti va trouver de vraies pièces en ligne,
             choisies pour ta morphologie et ton style.
@@ -77,17 +77,6 @@ export default async function ShoppingPage() {
         <ProductSearch />
 
         <AdvicePanel />
-
-        <div className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-border-soft bg-surface p-5">
-          <span className="text-sm font-semibold">Ou laisse Vesti décider</span>
-          <p className="text-xs leading-relaxed text-muted">
-            Scanne ton dressing : Vesti repère ce qui te manque pour compléter
-            tes tenues, et te le propose ici.
-          </p>
-          <Link href="/dressing/scan">
-            <Button variant="secondary">Scanner mon dressing</Button>
-          </Link>
-        </div>
       </main>
     );
   }
@@ -95,7 +84,7 @@ export default async function ShoppingPage() {
   return (
     <main className="flex flex-1 flex-col gap-5 px-5 py-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-[1.9rem] font-extrabold leading-[1.05]">Quoi acheter</h1>
+        <h1 className="text-[1.9rem] leading-[1.05]">Quoi acheter</h1>
         <p className="text-sm leading-relaxed text-muted">
           Ce qui manque à ton dressing pour débloquer plus de tenues, du plus
           utile au moins pressé.
@@ -106,7 +95,7 @@ export default async function ShoppingPage() {
 
       <AdvicePanel />
 
-      <h2 className="text-sm font-semibold">Repéré dans ton dressing</h2>
+      <h2 className="label text-muted">Repéré dans ton dressing</h2>
 
       <ul className="flex flex-col gap-3">
         {suggestions.map((suggestion) => (
