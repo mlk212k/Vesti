@@ -117,13 +117,16 @@ describe("l'adresse IP", () => {
 
 describe("les plafonds", () => {
   /**
-   * ⚠️ Les défauts sont bas EXPRÈS. 150 essais par jour ≈ 6 $ : une somme qu'on
-   * peut perdre sans que ça change rien. Un défaut généreux se découvrirait sur
-   * une facture, pas dans une alerte — et l'erreur dans ce sens ne se rattrape
-   * pas.
+   * ⚠️ Les défauts sont bas EXPRÈS, et calés sur les comptes réels : zéro
+   * abonné payant, 4,24 $ de dépense modèle sur le mois. 50 essais ≈ 2 $ par
+   * jour, donc de l'argent qui sort d'une poche sans rien en face.
+   *
+   * La borne de ce test est à 60 et non à 200 : un défaut relevé « au cas où »
+   * ne se découvrirait que sur une facture. Le relever suppose de toucher CE
+   * test, donc de relire pourquoi il est là — c'est tout son intérêt.
    */
   it("restent modestes tant que personne ne les a relevés", () => {
-    expect(MAX_TRIALS_PER_DAY).toBeLessThanOrEqual(200);
+    expect(MAX_TRIALS_PER_DAY).toBeLessThanOrEqual(60);
     expect(MAX_TRIALS_PER_IP_PER_DAY).toBeLessThanOrEqual(5);
   });
 

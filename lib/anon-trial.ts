@@ -38,15 +38,34 @@ export const ANON_TRIAL_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 /**
  * Les plafonds, réglables sans redéploiement.
  *
- * ⚠️ Les valeurs par défaut sont VOLONTAIREMENT BASSES. 150 essais par jour,
- * c'est environ 6 $ — une somme qu'on peut perdre sans que ça change quoi que
- * ce soit. Sur la dernière campagne (700 visiteurs en un jour, 28 clics), 150
- * essais représenteraient déjà cinq fois le nombre de gens qui franchissaient
- * la porte. Le plafond se relève quand on aura vu ce que ça donne ; il ne se
- * relève pas « au cas où », parce que l'erreur dans ce sens se paie en argent
- * réel et se découvre sur une facture.
+ * ── D'où vient le 50, et pourquoi pas plus ──────────────────────────────────
+ *
+ * 50 essais ≈ 2 $ par jour. Le chiffre vient des comptes réels, pas d'une
+ * intuition : à ce jour, ZÉRO abonné payant sur 39 comptes, et 4,24 $ de
+ * dépense modèle sur tout le mois. Chaque euro sort donc de la poche de
+ * l'éditeur, sans rien en face.
+ *
+ * ⚠️ Un premier jet portait ce plafond à 150, soit ~6 $/jour — c'est-à-dire
+ * PLUS, chaque jour, que ce que le produit entier avait coûté depuis le début
+ * du mois. Le chiffre avait été choisi pour être « perdable » sans regarder
+ * s'il y avait un revenu en face. Il n'y en a pas.
+ *
+ * Ce que ce plafond achète est une information : est-ce que montrer le produit
+ * avant de demander le compte fait s'inscrire ? 50 essais dont 15 comptes créés
+ * donnent 30 % contre les 3,7 % mesurés — un écart qu'on ne confond pas avec du
+ * bruit. Il n'en faut pas davantage pour décider.
+ *
+ * ⚠️ ET LE PLAFOND GLOBAL PEUT SE RETOURNER CONTRE NOUS. Quelqu'un qui brûle
+ * les essais de la nuit laisse la campagne du lendemain matin sans rien à
+ * offrir. La limite par IP rend la manœuvre pénible, pas impossible. C'est une
+ * raison de plus de ne pas confondre « plafond haut » et « protection » : le
+ * plafond borne la casse, il ne l'empêche pas.
+ *
+ * Il se relève en variable d'environnement, après avoir regardé ce que la
+ * veille a coûté — jamais « au cas où ». L'erreur dans ce sens se découvre sur
+ * une facture, et ne se rattrape pas.
  */
-export const MAX_TRIALS_PER_DAY = readCap("ANON_TRIAL_MAX_PER_DAY", 150);
+export const MAX_TRIALS_PER_DAY = readCap("ANON_TRIAL_MAX_PER_DAY", 50);
 export const MAX_TRIALS_PER_IP_PER_DAY = readCap("ANON_TRIAL_MAX_PER_IP", 3);
 
 function readCap(name: string, fallback: number): number {
