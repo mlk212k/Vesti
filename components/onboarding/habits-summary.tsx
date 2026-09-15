@@ -96,10 +96,10 @@ export function HabitsSummary({
             Le prix, en gros, au même corps que les chiffres du dessus.
 
             ⚠️ C'est un affrontement de tailles, et il est volontaire : les
-            lignes précédentes posent « 576 € » en Bodoni 46, celle-ci répond
-            avec « 8,99 € » dans le même corps. Le mensuel écrit en petit sous
-            un paragraphe ne produit rien ; à taille égale, l'écart se voit
-            avant de se lire.
+            lignes précédentes posent « 576 € » à 46 px, celle-ci répond avec
+            « 8,99 € » dans le même corps. Le mensuel écrit en petit sous un
+            paragraphe ne produit rien ; à taille égale, l'écart se voit avant
+            de se lire.
 
             Et la période est écrite À CÔTÉ du nombre, pas reléguée plus bas :
             comparer un prix mensuel à un gaspillage annuel est honnête tant
@@ -113,8 +113,8 @@ export function HabitsSummary({
             </span>
             {/* ⚠️ La période, toujours écrite, jamais sous-entendue. Elle est
                 juste séparée du nombre : collée à lui (« 8,99 €/mois »), la
-                barre oblique et le mot occupent en Bodoni autant de place que
-                le chiffre et l'écrasent. */}
+                barre oblique et le mot occupent autant de place que le chiffre
+                et l'écrasent. */}
             <span className="text-sm leading-relaxed">par mois</span>
           </p>
 

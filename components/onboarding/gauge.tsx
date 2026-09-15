@@ -73,15 +73,15 @@ export function Gauge({
         moment précis où le doigt est dessus.
 
         ⚠️ Quand rien n'est répondu, on écrit la consigne et pas un tiret. Un
-        « — » en Bodoni à 44 px ne se lit pas comme « pas de réponse » : il se
-        lit comme un filet de séparation posé là par erreur. Essayé, vu à
-        l'écran, remplacé.
+        « — » à 44 px ne se lit pas comme « pas de réponse » : il se lit comme
+        un filet de séparation posé là par erreur. Essayé, vu à l'écran,
+        remplacé.
       */}
       <div className="flex min-h-[46px] items-end">
         {answered ? (
           // `<output>` et pas `<span>` : c'est l'élément qui existe pour
-          // « résultat d'un contrôle », et il est annoncé comme tel. En Bodoni
-          // parce que c'est le seul chiffre de l'écran.
+          // « résultat d'un contrôle », et il est annoncé comme tel. Dans la
+          // police de titre, parce que c'est le seul chiffre de l'écran.
           <output
             htmlFor={labelledBy}
             className="font-display text-[42px] leading-none tabular-nums"

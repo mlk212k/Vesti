@@ -21,8 +21,8 @@ import type { ReactNode } from "react";
  * posée sur une page ; bord à bord, il se lit comme un moment. Même règle que
  * la grille de garde-robe : ce qui est l'objet principal ne s'encadre pas.
  *
- * Le score est en Bodoni à 68 px — la seule occasion de l'app où la police de
- * titre a assez de place pour montrer ses déliés.
+ * Le score est à 68 px dans la police de titre — la seule occasion de l'app où
+ * elle a assez de place pour se déployer.
  */
 export function ScoreHeader({
   score,

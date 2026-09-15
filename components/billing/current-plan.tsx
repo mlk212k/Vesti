@@ -39,7 +39,7 @@ export function CurrentPlan({
           <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
             Ton plan
           </span>
-          <span className="font-[family-name:var(--font-display-family)] text-2xl font-semibold leading-none">
+          <span className="font-display text-2xl font-semibold leading-none">
             {definition.name}
           </span>
         </div>

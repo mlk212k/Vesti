@@ -3,38 +3,42 @@ import { cookies } from "next/headers";
 import { REFERRAL_COOKIE } from "@/proxy";
 import { normalizeReferralCode } from "@/lib/navigation";
 import { THEME_SCRIPT } from "@/lib/theme";
-import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { InstallGate } from "@/components/install/install-gate";
 import { env } from "@/lib/env";
 import { Analytics } from "@vercel/analytics/next";
 
 /*
-  Titres : Bodoni Moda.
+  Titres : Bricolage Grotesque — l'écho typographique des traits épais du logo.
 
-  ⚠️ C'était Bricolage Grotesque — « l'écho typographique des traits épais du
-  logo ». Elle a été allégée de 800 à 400, puis rejetée quand même : « j'aime
-  pas la police d'écriture ». Le problème n'était pas la graisse, c'était la
-  FAMILLE. Bricolage est une grotesque de caractère, avec des formes qui
-  disent « studio », « produit tech », « jeune marque » — jamais « mode ».
+  ── L'aller-retour, pour qu'il ne se refasse pas ────────────────────────────
 
-  Bodoni est la police des magazines de mode depuis deux siècles, et c'est
-  encore celle de Vogue et de Harper's. Son très fort contraste entre pleins et
-  déliés est exactement ce qu'aucune interface d'application n'a — donc
-  exactement ce qui sort Vesti du registre applicatif.
+  Elle a été allégée de 800 à 400 pendant la refonte, puis remplacée par Bodoni
+  Moda — la police des magazines de mode — sur le raisonnement que le problème
+  venait de la FAMILLE et non de la graisse. Essayée à l'écran, puis rejetée :
+  « remets celle du début ».
 
-  ⚠️ RÉSERVÉE AUX TITRES, et c'est structurel, pas esthétique. Les déliés de
-  Bodoni sont des cheveux : sous 24 px ils se brisent, et sur un écran à faible
-  densité ils disparaissent. Elle ne sert qu'aux `h1`/`h2`/`h3`, jamais au
-  texte courant ni aux micro-libellés.
+  ⚠️ La leçon à retenir n'est pas « Bodoni est mauvaise ». C'est que la police
+  de titre porte l'identité de Vesti, pas une intention de designer, et que
+  celle-ci se décide en la regardant — pas en argumentant depuis ce qu'écrit
+  Vogue. Deux tentatives ont été nécessaires pour revenir ici ; la prochaine
+  proposition de changement de famille se juge sur une capture d'écran, avant
+  d'être écrite.
+
+  `weight` est volontairement omis : Bricolage est une police VARIABLE, et
+  l'omission charge l'axe complet (200-800). L'original figeait ["600","700",
+  "800"], ce qui suffisait aux titres — mais les grands nombres ajoutés depuis
+  (le score, les jauges d'inscription) s'affichent en graisse normale, et une
+  graisse absente du fichier fait fabriquer au navigateur un faux maigre,
+  déformé. Une variable les couvre toutes sans second fichier.
 
   Le texte courant reste sur Plus Jakarta Sans : rien ne se lit mieux à 15 px
   sur un téléphone, et ce n'est pas elle qu'on remarque.
 */
-const display = Bodoni_Moda({
-  variable: "--font-display-family",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -122,7 +126,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${display.variable} ${jakarta.variable} h-full`}
+      className={`${bricolage.variable} ${jakarta.variable} h-full`}
       // Le script ci-dessous modifie cet élément avant que React ne s'y
       // attache : sans cette annotation, React signalerait un écart entre le
       // HTML du serveur et celui du navigateur.

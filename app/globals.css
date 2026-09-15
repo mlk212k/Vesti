@@ -217,7 +217,7 @@
   /* Bricolage Grotesque pour les titres : ses graisses lourdes ont l'épaisseur
      des traits du logo. Plus Jakarta Sans pour le texte courant, plus ouverte
      et plus lisible à 15px sur mobile. */
-  --font-display: var(--font-display-family);
+  --font-display: var(--font-bricolage);
   --font-sans: var(--font-jakarta);
 }
 
@@ -242,17 +242,28 @@ body {
   Sans carte ni ombre, il ne reste que le texte et le blanc pour dire ce qui
   compte. D'où deux registres, et deux seulement.
 
-  1. LE TITRE. Même famille qu'avant — Bricolage Grotesque, c'est la marque —
-     mais en graisse 600 au lieu de 800, et sans le resserrement agressif.
-     Le 800 cognait : sur un écran de 390 px, un titre très gras et très
-     serré occupe la place d'une image et lit « application », pas « mode ».
-     Une enseigne de prêt-à-porter écrit ses titres en fin et en large.
+  1. LE TITRE. Bricolage Grotesque, c'est la marque — et en GRAISSE LOURDE,
+     comme à l'origine.
+
+     ⚠️ Cette ligne a fait un aller-retour complet, à ne pas refaire. La
+     refonte avait allégé les titres à 400 au motif qu'un titre très gras
+     « occupe la place d'une image et lit application, pas mode ». Le 400 a
+     été rejeté, la famille a été changée pour Bodoni, Bodoni a été rejetée
+     aussi, et la consigne finale est « remets celle du début ».
+
+     Le début, c'est Bricolage en gras : la police n'était pas chargée sous
+     600, et les titres prenaient donc le `bold` du navigateur. Revenir à la
+     famille en gardant le 400 aurait rendu exactement la version déjà
+     refusée. La graisse fait partie de la police ; on remet les deux.
+
+     Ce qui N'EST PAS revenu : le resserrement à -0,035em. Il n'a jamais été
+     remis en cause, et l'interlettrage n'est pas la police.
 */
 h1,
 h2,
 h3 {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: -0.005em;
 }
 
