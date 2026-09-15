@@ -2,8 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LegalLinks } from "@/components/legal-links";
-import { LogoMark, Wordmark } from "@/components/brand/logo";
+import { Wordmark } from "@/components/brand/logo";
 import { buttonClasses } from "@/components/ui/button";
+import { VerdictPreview } from "@/components/landing/verdict-preview";
 
 /**
  * Le premier écran après un lien TikTok. Le logo y est joué en grand : c'est la
@@ -33,39 +34,50 @@ export default async function LandingPage() {
   if (user) redirect("/dashboard");
 
   return (
-    <main className="flex flex-1 flex-col px-6 pb-10 pt-8">
-      <Wordmark size={30} priority className="self-start" />
+    <main className="flex flex-1 flex-col gap-5 px-6 pb-8 pt-6">
+      <Wordmark size={28} priority className="self-start" />
 
-      <div className="flex flex-1 flex-col justify-center gap-9 py-10">
-        <div className="relative flex justify-center">
-          {/* Halo : le violet du logo, diffusé, pour asseoir le disque sans
-              ajouter de cadre autour. */}
-          <div
-            aria-hidden
-            className="absolute inset-0 m-auto h-52 w-52 rounded-full bg-accent/25 blur-3xl"
-          />
-          <LogoMark size={148} priority className="relative drop-shadow-xl" />
-        </div>
+      <div className="flex flex-col gap-3">
+        {/* Coupes explicites : deux lignes, la chute en violet. Laissé au
+            navigateur, le titre casse après « 30 » et sépare le chiffre de son
+            unité.
 
-        <div className="flex flex-col gap-4 text-center">
-          {/* Coupes explicites : trois lignes équilibrées, la chute en violet.
-              Laissé au navigateur, le titre casse après « 30 » et sépare le
-              chiffre de son unité. */}
-          <h1 className="text-[2.45rem] leading-[1.02]">
-            Ta tenue,
-            <br />
-            jugée en
-            <br />
-            <span className="text-accent">30 secondes.</span>
-          </h1>
-          <p className="mx-auto max-w-[32ch] text-[15px] leading-relaxed text-muted">
-            Envoie une photo. Reçois un avis argumenté sur les couleurs, les
-            coupes et la cohérence — et quoi changer.
-          </p>
-        </div>
+            ⚠️ Le titre est passé de 2,45 à 2,05 rem et de trois lignes à deux :
+            avec l'aperçu de verdict ajouté en dessous, le bouton d'appel
+            tombait sous la ligne de flottaison. Un titre plus gros qui pousse
+            le bouton hors de l'écran coûte plus qu'il ne rapporte. */}
+        {/* ⚠️ L'espace entre « 30 » et « secondes » est INSÉCABLE. Sans lui, la
+            ligne casse pile entre le chiffre et son unité — le défaut que le
+            découpage manuel d'origine existait pour éviter, et que le passage à
+            deux lignes avait réintroduit. Vu à l'écran. */}
+        <h1 className="text-[2.05rem] leading-[1.04]">
+          Ta tenue, jugée en{" "}
+          <span className="text-accent">30&nbsp;secondes.</span>
+        </h1>
+        <p className="max-w-[36ch] text-[15px] leading-relaxed text-muted">
+          Envoie une photo, reçois un avis argumenté — et quoi changer.
+        </p>
       </div>
 
-      <div className="flex flex-col gap-4">
+      {/*
+        ⚠️ ICI SE TROUVAIT LE LOGO EN 148 px, AVEC SON HALO. Il est parti, et ce
+        n'est pas un arbitrage de goût.
+
+        Mesuré sur huit jours : 758 visiteurs sur cette page, 28 ont appuyé sur
+        le bouton. 3,7 %. Ceux qui passent vont au bout — 57 % de `/login`
+        arrivent dans l'app — donc la perte est ici, pas à l'inscription.
+
+        Un logo de 148 px ne dit rien à quelqu'un qui arrive de TikTok : il ne
+        connaît pas la marque, c'est un disque violet. Il occupait la moitié de
+        l'écran du seul écran où il fallait montrer ce que fait le produit. La
+        place revient donc au verdict, qui est la seule réponse à la question
+        que se pose le visiteur : « ça rend quoi, concrètement ? »
+
+        Le wordmark en haut porte la marque, et il suffit.
+      */}
+      <VerdictPreview />
+
+      <div className="mt-auto flex flex-col gap-3">
         <Link href="/login" className={buttonClasses()}>
           Analyser ma tenue
         </Link>
@@ -74,7 +86,7 @@ export default async function LandingPage() {
         </p>
       </div>
 
-      <LegalLinks className="mt-8" />
+      <LegalLinks />
     </main>
   );
 }
