@@ -4,7 +4,10 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ChoiceChip, Field, Input } from "@/components/ui/field";
 import { CommunityStep } from "@/components/onboarding/community-step";
+import { HabitsStep } from "@/components/onboarding/habits-step";
+import { HabitsSummary } from "@/components/onboarding/habits-summary";
 import { ReferralStep } from "@/components/onboarding/referral-step";
+import { EMPTY_HABITS, type Habits } from "@/lib/habits";
 import {
   GENDERS,
   HEIGHT_CM,
@@ -15,13 +18,37 @@ import {
   type Gender,
   type Morphology,
 } from "@/lib/profile";
-import { saveOnboarding, skipOnboarding, type OnboardingInput } from "./actions";
+import {
+  saveHabits,
+  saveOnboarding,
+  skipOnboarding,
+  type OnboardingInput,
+} from "./actions";
 
+/**
+ * Le parcours d'inscription, dans l'ordre.
+ *
+ * 1. `referral`  — le code de parrainage, capté avant tout le reste : c'est la
+ *                  seule étape dont l'oubli coûte de l'argent à quelqu'un.
+ * 2. `habits`    — les cinq jauges. Elles ne servent presque pas au produit ;
+ *                  elles servent à ce que la personne calcule son problème.
+ * 3. `summary`   — ses chiffres, multipliés et rendus.
+ * 4. `profile`   — prénom, morphologie, styles : les renseignements.
+ * 5. `community` — le Discord.
+ *
+ * ⚠️ L'ordre n'est pas arbitraire. Les jauges passent AVANT le profil parce
+ * qu'elles sont faciles (un curseur) et qu'elles donnent quelque chose en
+ * retour, là où le profil ne fait que demander. Commencer par réclamer une
+ * taille et un poids, c'est ouvrir par le moment le plus intrusif du parcours.
+ *
+ * Chaque étape enregistre ce qu'elle a collecté au moment où elle se termine :
+ * fermer l'app entre deux écrans ne perd jamais l'écran précédent.
+ */
+type Step = "referral" | "habits" | "summary" | "profile" | "community";
 
 export function OnboardingForm({ initialReferralCode }: { initialReferralCode: string }) {
-  const [step, setStep] = useState<"referral" | "profile" | "community">(
-    "referral"
-  );
+  const [step, setStep] = useState<Step>("referral");
+  const [habits, setHabits] = useState<Habits>(EMPTY_HABITS);
   const [firstName, setFirstName] = useState("");
   const [gender, setGender] = useState<Gender | null>(null);
   const [height, setHeight] = useState("");
@@ -35,9 +62,35 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
     return (
       <ReferralStep
         initialCode={initialReferralCode}
-        onDone={() => setStep("profile")}
+        onDone={() => setStep("habits")}
       />
     );
+  }
+
+  if (step === "habits") {
+    return (
+      <HabitsStep
+        pending={pending}
+        // Passer les jauges saute AUSSI le récapitulatif : il n'aurait rien à
+        // récapituler, et proposer un écran vide comme récompense d'un refus
+        // serait insultant.
+        onSkip={() => setStep("profile")}
+        onDone={(answers) => {
+          setHabits(answers);
+          startTransition(async () => {
+            // ⚠️ Le résultat n'est volontairement pas testé : l'écriture ne
+            // débloque rien et n'ouvre aucun accès. Bloquer une inscription
+            // sur son échec coûterait un compte pour cinq entiers.
+            await saveHabits(answers);
+            setStep("summary");
+          });
+        }}
+      />
+    );
+  }
+
+  if (step === "summary") {
+    return <HabitsSummary habits={habits} onContinue={() => setStep("profile")} />;
   }
 
   // Dernière étape, atteinte que le formulaire ait été rempli ou passé. Le

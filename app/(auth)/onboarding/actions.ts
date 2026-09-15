@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { profileSchema, type ProfileInput } from "@/lib/profile-schema";
+import { habitsSchema, type Habits } from "@/lib/habits";
 
 export type OnboardingInput = ProfileInput;
 
@@ -63,6 +64,44 @@ export async function submitReferralCode(code: string): Promise<ReferralResult> 
   }
 
   return { accepted: false, reason: partnerRow?.reason ?? "unknown_code" };
+}
+
+/**
+ * Enregistre les réponses aux jauges.
+ *
+ * ── Pourquoi une action à part, et pas un champ de plus dans `saveOnboarding` ─
+ *
+ * Parce qu'elle s'exécute BIEN AVANT. Les jauges sont répondues, puis vient le
+ * récapitulatif, puis seulement le formulaire de profil. Entre les deux, la
+ * personne peut fermer l'app — c'est même l'endroit le plus probable pour le
+ * faire, puisque l'écran de récapitulatif se lit comme une fin. Repoussées dans
+ * `saveOnboarding`, ses réponses seraient perdues à ce moment-là.
+ *
+ * ⚠️ Cette action ne touche PAS `onboarded_at`. Répondre aux jauges ne termine
+ * pas l'inscription : le marquer ici ferait rediriger vers le tableau de bord
+ * au rechargement, en sautant le profil pour toujours.
+ *
+ * L'échec est silencieux et c'est voulu : aucune de ces cinq colonnes n'ouvre
+ * un accès ni ne bloque un écran. Interrompre une inscription pour signaler
+ * qu'on n'a pas pu enregistrer « 20 minutes » coûterait un compte pour rien.
+ */
+export async function saveHabits(input: Habits) {
+  const parsed = habitsSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  const { error } = await supabase
+    .from("profiles")
+    .update(parsed.data)
+    .eq("id", user.id);
+
+  return { ok: !error };
 }
 
 export async function saveOnboarding(input: OnboardingInput) {

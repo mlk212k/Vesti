@@ -375,6 +375,27 @@ main > div > section {
   border-radius: 4px;
 }
 
+/*
+  Exception : le curseur des jauges d'inscription.
+
+  ⚠️ Ce n'est pas un anneau de focus retiré, c'est un anneau DÉPLACÉ. Le champ
+  fait 44 px de haut pour que le pouce l'attrape, alors que la barre visible en
+  fait 4 : l'anneau de la règle ci-dessus dessinait donc un grand rectangle
+  violet autour de 40 px de vide, sans rien entourer de ce qu'on voit. Vu à
+  l'écran, pas déduit. Le repère est reposé sur le pouce lui-même dans
+  `components/onboarding/gauge.tsx`, qui reste parfaitement utilisable au
+  clavier.
+
+  Et il est ici plutôt que dans le composant parce que la règle ci-dessus n'est
+  dans AUCUNE couche : elle bat n'importe quelle utilitaire Tailwind, qui vit
+  dans `@layer utilities`, quelle que soit la spécificité. Un
+  `focus-visible:outline-none` sur le champ a été essayé et n'a rien fait. Les
+  couches ne se contournent qu'en restant dans la même.
+*/
+input[type="range"]:focus-visible {
+  outline: none;
+}
+
 /* Évite le zoom automatique de Safari iOS au focus d'un champ : il se déclenche
    sous 16px, et le trafic est très majoritairement mobile. */
 input,
