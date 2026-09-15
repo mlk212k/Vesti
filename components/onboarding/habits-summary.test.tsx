@@ -21,6 +21,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { EMPTY_HABITS, vestiEurPerYear, type Habits } from "@/lib/habits";
+import { formatAmount } from "@/lib/plans";
 import { HabitsSummary } from "./habits-summary";
 
 afterEach(cleanup);
@@ -66,9 +67,26 @@ describe("les chiffres rendus", () => {
 });
 
 describe("la comparaison au prix de l'abonnement", () => {
-  it("s'affiche quand le gaspillage déclaré dépasse le prix", () => {
+  /**
+   * ⚠️ C'est le prix MENSUEL qui est mis en face du gaspillage annuel, et c'est
+   * voulu : « 108 € contre 576 € » se comprend sans se ressentir, « 8,99 €
+   * contre 576 € » se ressent avant de se comprendre.
+   */
+  it("met en avant le prix mensuel", () => {
     show({ clothing_budget_eur: 80, worn_out_of_ten: 4 });
-    expect(pageText()).toContain(`${vestiEurPerYear()} €`);
+    expect(pageText()).toContain(formatAmount("pro"));
+  });
+
+  /**
+   * ⚠️ Le garde-fou du raccourci ci-dessus. Comparer un prix mensuel à un
+   * gaspillage annuel est honnête tant que les DEUX périodes sont nommées, et
+   * malhonnête à la seconde où l'une disparaît. « 8,99 € » sans « par mois », ou
+   * « 576 € » sans « par an », serait une unité escamotée.
+   */
+  it("nomme les deux périodes", () => {
+    show({ clothing_budget_eur: 80, worn_out_of_ten: 4 });
+    expect(pageText()).toMatch(/par mois/);
+    expect(pageText()).toMatch(/576 € par an/);
   });
 
   /**
@@ -78,8 +96,8 @@ describe("la comparaison au prix de l'abonnement", () => {
    */
   it("disparaît quand elle joue contre nous", () => {
     show({ clothing_budget_eur: 10, worn_out_of_ten: 9 });
+    expect(pageText()).not.toContain(formatAmount("pro"));
     expect(pageText()).not.toContain(`${vestiEurPerYear()} €`);
-    expect(pageText()).not.toMatch(/une année de vesti/i);
   });
 
   /**

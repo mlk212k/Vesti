@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { insightsFrom, wasteComparison, type Habits } from "@/lib/habits";
+import { formatAmount } from "@/lib/plans";
 
 /**
  * Le récapitulatif : on rend à la personne ses propres chiffres, multipliés.
@@ -90,13 +91,42 @@ export function HabitsSummary({
       </ul>
 
       {comparison && (
-        <section className="flex flex-col gap-3 rounded-[var(--radius-card)] bg-accent-soft p-5 text-accent-strong">
-          <p className="text-sm leading-relaxed">
-            Une année de Vesti coûte {comparison.price} €. D&apos;après toi, tu
-            laisses {comparison.wasted.toLocaleString("fr-FR")} € par an dans des
-            vêtements qui restent dans le placard
-            {comparison.ratio > 1 ? ` — ${comparison.ratio} fois le prix` : ""}.
+        <section className="flex flex-col gap-4 rounded-[var(--radius-card)] bg-accent-soft p-5 text-accent-strong">
+          {/*
+            Le prix, en gros, au même corps que les chiffres du dessus.
+
+            ⚠️ C'est un affrontement de tailles, et il est volontaire : les
+            lignes précédentes posent « 576 € » en Bodoni 46, celle-ci répond
+            avec « 8,99 € » dans le même corps. Le mensuel écrit en petit sous
+            un paragraphe ne produit rien ; à taille égale, l'écart se voit
+            avant de se lire.
+
+            Et la période est écrite À CÔTÉ du nombre, pas reléguée plus bas :
+            comparer un prix mensuel à un gaspillage annuel est honnête tant
+            qu'on nomme les deux périodes, et malhonnête à la seconde où l'une
+            des deux disparaît.
+          */}
+          <p className="flex flex-col gap-1">
+            <span className="text-sm leading-relaxed">Vesti, c&apos;est</span>
+            <span className="font-display text-[46px] leading-none tabular-nums">
+              {formatAmount("pro")}
+            </span>
+            {/* ⚠️ La période, toujours écrite, jamais sous-entendue. Elle est
+                juste séparée du nombre : collée à lui (« 8,99 €/mois »), la
+                barre oblique et le mot occupent en Bodoni autant de place que
+                le chiffre et l'écrasent. */}
+            <span className="text-sm leading-relaxed">par mois</span>
           </p>
+
+          <p className="text-sm leading-relaxed">
+            Contre {comparison.wasted.toLocaleString("fr-FR")} € par an qui
+            dorment dans ton placard
+            {comparison.ratio > 1
+              ? ` — sur un an, l'abonnement reste ${comparison.ratio} fois moins cher que ce que tu laisses dedans`
+              : ""}
+            .
+          </p>
+
           {/*
             ⚠️ La phrase qui empêche cet écran de devenir une promesse.
             « Vesti te fait économiser 576 € » serait le slogan évident, et il

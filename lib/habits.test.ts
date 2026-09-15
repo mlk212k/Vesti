@@ -172,8 +172,24 @@ describe("la comparaison au prix de l'abonnement", () => {
     const result = wasteComparison(answered({ clothing_budget_eur: 80, worn_out_of_ten: 4 }));
     expect(result).not.toBeNull();
     expect(result?.wasted).toBe(576);
-    expect(result?.price).toBe(vestiEurPerYear());
+    expect(result?.yearly).toBe(vestiEurPerYear());
     expect(result?.ratio).toBe(5); // 576 / 108 = 5,33 → 5, arrondi vers le bas.
+  });
+
+  /**
+   * ⚠️ Le seuil d'affichage se mesure sur le prix ANNUEL, alors que l'écran
+   * MET EN AVANT le mensuel. Le confondre ferait tomber la barre de 108 € à
+   * 9 € : presque tout le monde la franchirait, et une barre que tout le monde
+   * franchit ne protège plus de rien.
+   */
+  it("se compare à l'année, même si elle met en avant le mois", () => {
+    const result = wasteComparison(answered({ clothing_budget_eur: 80, worn_out_of_ten: 4 }));
+    expect(result?.monthly).toBe(PLANS.pro.priceEur);
+    expect(result?.monthly).toBeLessThan(result!.yearly);
+
+    // 30 € par mois, 9 sur 10 portés → 36 € gaspillés : au-dessus du prix
+    // mensuel, en dessous du prix annuel. C'est le cas qui distingue les deux.
+    expect(wasteComparison(answered({ clothing_budget_eur: 30, worn_out_of_ten: 9 }))).toBeNull();
   });
 
   it("n'existe pas sans réponse", () => {

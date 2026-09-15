@@ -315,25 +315,46 @@ export function insightsFrom(habits: Habits): Insight[] {
 }
 
 /**
- * La comparaison finale : ce que le gaspillage déclaré représente en années
- * d'abonnement.
+ * La comparaison finale : le gaspillage déclaré, en face du prix.
+ *
+ * ── Pourquoi le chiffre mis en avant est le MENSUEL ─────────────────────────
+ *
+ * L'écran annonçait « une année de Vesti coûte 108 € ». Rigoureux — deux
+ * montants annuels, comparables — et sans effet : 108 contre 576, c'est un
+ * rapport qu'on comprend sans le ressentir. 8,99 contre 576 se ressent avant
+ * d'être compris.
+ *
+ * ⚠️ Le piège de ce raccourci est de comparer un prix mensuel à un gaspillage
+ * annuel sans le dire. C'est pour ça que les DEUX périodes descendent d'ici :
+ * `monthly` porte le chiffre qui frappe, `yearly` sert le rapport (`ratio`),
+ * et l'écran nomme la période de chacun. Le choc vient de l'écart réel, pas
+ * d'une unité escamotée.
  *
  * ⚠️ Rendue `null` dès que la comparaison ne tient pas — pas de gaspillage
- * chiffré, ou un gaspillage inférieur au prix. « Tu gaspilles 40 € par an,
- * l'abonnement coûte 108 € » est un argument CONTRE nous ; le taire serait
+ * chiffré, ou un gaspillage inférieur au prix annuel. « Tu gaspilles 40 € par
+ * an, l'abonnement coûte 108 € » est un argument CONTRE nous ; le taire serait
  * malhonnête, mais l'habiller en argument pour le serait davantage. On ne
  * montre donc la comparaison que quand elle est vraie, et sinon rien.
+ *
+ * Et c'est bien au prix ANNUEL qu'on se compare pour décider d'afficher :
+ * retenir le mensuel ferait passer le seuil de 108 à 9 €, et presque tout le
+ * monde franchirait une barre placée là pour être franchissable.
  */
 export function wasteComparison(
   habits: Habits
-): { wasted: number; price: number; ratio: number } | null {
+): { wasted: number; yearly: number; monthly: number; ratio: number } | null {
   const { clothing_budget_eur, worn_out_of_ten } = habits;
   if (clothing_budget_eur === null || worn_out_of_ten === null) return null;
   if (clothing_budget_eur === 0 || worn_out_of_ten >= WORN_OUT_OF_TEN.max) return null;
 
   const wasted = wastedEurPerYear(clothing_budget_eur, worn_out_of_ten);
-  const price = vestiEurPerYear();
-  if (wasted < price) return null;
+  const yearly = vestiEurPerYear();
+  if (wasted < yearly) return null;
 
-  return { wasted, price, ratio: Math.floor(wasted / price) };
+  return {
+    wasted,
+    yearly,
+    monthly: PLANS.pro.priceEur,
+    ratio: Math.floor(wasted / yearly),
+  };
 }

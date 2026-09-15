@@ -160,3 +160,22 @@ export function formatPrice(plan: Plan): string {
     ? "Gratuit"
     : `${priceEur.toFixed(2).replace(".", ",")} €/mois`;
 }
+
+/**
+ * Le montant seul, sans la période : « 8,99 € ».
+ *
+ * ⚠️ À n'employer que là où la période est écrite JUSTE à côté, en toutes
+ * lettres. Un prix sans période est un prix incomplet, et l'écart entre
+ * « 8,99 € par mois » et « 8,99 € » tout court est exactement ce qu'un client
+ * découvre à sa deuxième facture.
+ *
+ * Sa raison d'être est typographique : sur l'écran d'inscription, le montant
+ * est posé en gros caractères face au gaspillage annuel déclaré, et le
+ * « /mois » de `formatPrice` collé au nombre y prend autant de place que lui —
+ * la barre oblique et le mot mangent le chiffre qu'on veut rendre frappant.
+ * Découpé, le nombre garde le corps et la période passe en dessous, lisible.
+ */
+export function formatAmount(plan: Plan): string {
+  const { priceEur } = PLANS[plan];
+  return priceEur === 0 ? "Gratuit" : `${priceEur.toFixed(2).replace(".", ",")} €`;
+}

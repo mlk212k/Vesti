@@ -10,10 +10,25 @@ const FEATURE_LABELS: { key: keyof (typeof PLANS)["free"]["features"]; label: st
   { key: "shopping", label: "Recherche d'achat et pièces similaires" },
 ];
 
-export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
+/**
+ * ⚠️ `currentPlan` accepte `null`, et ce n'est pas un « plan inconnu ».
+ *
+ * C'est le cas de l'inscription, où personne n'a encore de plan. Avec `"free"`,
+ * l'écran d'offre de fin d'onboarding entourait la carte Découverte d'une
+ * bordure violette et y inscrivait « Ton plan actuel » : sur une page dont le
+ * seul but est de vendre, la mise en avant allait donc à l'option gratuite, et
+ * la seule carte marquée comme acquise était celle qui ne rapporte rien. Vu à
+ * l'écran.
+ *
+ * `null` dit « cette personne ne vient pas d'un abonnement » : aucune carte
+ * n'est marquée comme sienne, et la mise en avant va à Pro.
+ */
+export function PlanPicker({ currentPlan }: { currentPlan: Plan | null }) {
   const [pending, setPending] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const subscribed = currentPlan !== "free";
+  const subscribed = currentPlan !== null && currentPlan !== "free";
+  // Sans plan en cours, c'est l'offre conseillée qui porte la bordure d'accent.
+  const highlighted: Plan = currentPlan ?? "pro";
 
   async function subscribe(plan: Exclude<Plan, "free">) {
     setPending(plan);
@@ -56,13 +71,15 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
     <div className="flex flex-col gap-4">
       {PLAN_ORDER.map((plan) => {
         const definition = PLANS[plan];
-        const isCurrent = plan === currentPlan;
+        const isCurrent = currentPlan !== null && plan === currentPlan;
 
         return (
           <div
             key={plan}
             className={`flex flex-col gap-3 rounded-[var(--radius-card)] border p-5 ${
-              isCurrent ? "border-accent bg-surface" : "border-border-soft bg-surface"
+              plan === highlighted
+                ? "border-accent bg-surface"
+                : "border-border-soft bg-surface"
             }`}
           >
             <div className="flex items-baseline justify-between gap-2">
@@ -112,7 +129,16 @@ export function PlanPicker({ currentPlan }: { currentPlan: Plan }) {
               <span className="text-center text-sm font-medium text-success">
                 Ton plan actuel
               </span>
-            ) : plan === "free" ? null : (
+            ) : plan === "free" ? (
+              // Sans plan en cours (inscription), la carte gratuite n'a ni
+              // bouton ni mention : elle resterait muette. On dit donc ce
+              // qu'elle est — le point de départ, pas un achat à faire.
+              currentPlan === null ? (
+                <span className="text-center text-sm text-muted">
+                  Ton point de départ, sans rien payer
+                </span>
+              ) : null
+            ) : (
               <Button
                 // Déjà abonné : un changement de formule passe par le portail,
                 // pas par un nouvel achat — sinon deux abonnements tournent en

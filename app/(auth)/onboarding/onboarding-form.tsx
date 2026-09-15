@@ -6,6 +6,7 @@ import { ChoiceChip, Field, Input } from "@/components/ui/field";
 import { CommunityStep } from "@/components/onboarding/community-step";
 import { HabitsStep } from "@/components/onboarding/habits-step";
 import { HabitsSummary } from "@/components/onboarding/habits-summary";
+import { PaywallStep } from "@/components/onboarding/paywall-step";
 import { ReferralStep } from "@/components/onboarding/referral-step";
 import { EMPTY_HABITS, type Habits } from "@/lib/habits";
 import {
@@ -34,17 +35,25 @@ import {
  *                  elles servent à ce que la personne calcule son problème.
  * 3. `summary`   — ses chiffres, multipliés et rendus.
  * 4. `profile`   — prénom, morphologie, styles : les renseignements.
- * 5. `community` — le Discord.
+ * 5. `paywall`   — l'offre, avec son chiffre à elle rappelé en face du prix.
+ * 6. `community` — le Discord.
  *
- * ⚠️ L'ordre n'est pas arbitraire. Les jauges passent AVANT le profil parce
- * qu'elles sont faciles (un curseur) et qu'elles donnent quelque chose en
- * retour, là où le profil ne fait que demander. Commencer par réclamer une
- * taille et un poids, c'est ouvrir par le moment le plus intrusif du parcours.
+ * ⚠️ L'ordre n'est pas arbitraire, et deux places en particulier :
+ *
+ * Les jauges passent AVANT le profil parce qu'elles sont faciles (un curseur)
+ * et qu'elles donnent quelque chose en retour, là où le profil ne fait que
+ * demander. Commencer par réclamer une taille et un poids, c'est ouvrir par le
+ * moment le plus intrusif du parcours.
+ *
+ * Le paywall passe AVANT le Discord parce que l'étape communauté se termine par
+ * un lien sortant : accepter l'invitation ouvre une autre application et ne
+ * ramène pas ici. Placé après, le paywall ne serait jamais vu par les plus
+ * motivés.
  *
  * Chaque étape enregistre ce qu'elle a collecté au moment où elle se termine :
  * fermer l'app entre deux écrans ne perd jamais l'écran précédent.
  */
-type Step = "referral" | "habits" | "summary" | "profile" | "community";
+type Step = "referral" | "habits" | "summary" | "profile" | "paywall" | "community";
 
 export function OnboardingForm({ initialReferralCode }: { initialReferralCode: string }) {
   const [step, setStep] = useState<Step>("referral");
@@ -93,6 +102,10 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
     return <HabitsSummary habits={habits} onContinue={() => setStep("profile")} />;
   }
 
+  if (step === "paywall") {
+    return <PaywallStep habits={habits} onLater={() => setStep("community")} />;
+  }
+
   // Dernière étape, atteinte que le formulaire ait été rempli ou passé. Le
   // profil est déjà enregistré ici : cet écran ne retient plus rien.
   if (step === "community") return <CommunityStep />;
@@ -126,7 +139,7 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
         setError(result.error);
         return;
       }
-      setStep("community");
+      setStep("paywall");
     });
   }
 
@@ -244,7 +257,10 @@ export function OnboardingForm({ initialReferralCode }: { initialReferralCode: s
           onClick={() =>
             startTransition(async () => {
               await skipOnboarding();
-              setStep("community");
+              // Passer le formulaire ne fait pas sauter l'offre : celui qui ne
+              // veut pas donner sa morphologie peut très bien vouloir
+              // s'abonner. Le paywall a sa propre sortie.
+              setStep("paywall");
             })
           }
         >
