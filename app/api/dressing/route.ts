@@ -71,7 +71,11 @@ export async function POST(request: Request) {
   try {
     // L'ordre est significatif : il détermine `source_index`, donc la photo dans
     // laquelle chaque vignette sera découpée.
-    const images = await Promise.all(imagePaths.map(loadImageForClaude));
+    // ⚠️ La lambda est nécessaire : `map(loadImageForClaude)` passerait l'INDEX
+    // comme second argument, qui est devenu le choix du client (session ou
+    // admin) depuis que l'essai sans compte existe. TypeScript l'a refusé —
+    // sans lui, on aurait appelé la fonction avec `as = 0`, silencieusement.
+    const images = await Promise.all(imagePaths.map((path) => loadImageForClaude(path)));
     const { analysis, usage, model } = await analyzeDressing(images, profile);
 
     const admin = createAdminClient();
