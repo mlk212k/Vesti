@@ -77,12 +77,22 @@ export default async function LandingPage() {
       */}
       <VerdictPreview />
 
+      {/*
+        ⚠️ LE BOUTON MÈNE MAINTENANT À L'ANALYSE, PAS À LA CONNEXION.
+
+        Il disait « Analyser ma tenue » et ouvrait un écran d'inscription : la
+        promesse du bouton n'était pas tenue au premier clic. Mesuré, c'est là
+        que 96 % des visiteurs s'arrêtaient.
+
+        Il tient désormais parole — photo, verdict, et le compte proposé ensuite,
+        quand la personne sait ce qu'elle achèterait.
+      */}
       <div className="mt-auto flex flex-col gap-3">
-        <Link href="/login" className={buttonClasses()}>
+        <Link href="/essai" className={buttonClasses()}>
           Analyser ma tenue
         </Link>
         <p className="text-center text-xs text-muted">
-          3 analyses offertes, sans carte bancaire.
+          Sans inscription. Une analyse offerte, tout de suite.
         </p>
       </div>
 

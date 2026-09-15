@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { env } from "@/lib/env";
 import type { ImageInput } from "@/lib/claude/analyze-outfit";
 
@@ -27,9 +28,26 @@ export async function createSignedUploadUrl(path: string) {
  * quand Supabase tourne en local : l'URL pointerait alors sur un hôte que les
  * serveurs d'Anthropic ne peuvent pas joindre. Dans ce cas on bascule en
  * base64, ce qui garde le développement local fonctionnel.
+ *
+ * ── `as` : qui signe l'URL de lecture ───────────────────────────────────────
+ *
+ * Par défaut, la session du visiteur — c'est la RLS qui garantit alors qu'on ne
+ * peut pas faire lire la photo de quelqu'un d'autre, même en devinant son
+ * chemin. C'est la protection, pas une formalité.
+ *
+ * ⚠️ `"admin"` la contourne, et n'a qu'un seul usage légitime : l'essai sans
+ * compte, où le visiteur n'a par définition aucune session. Le chemin est alors
+ * vérifié EN AMONT contre le jeton d'essai (`pathBelongsToTrial`), faute de
+ * quoi on offrirait à n'importe qui la lecture de n'importe quelle photo.
+ * Passer `"admin"` sans cette vérification est le trou de sécurité que cette
+ * option rend possible.
  */
-export async function loadImageForClaude(path: string): Promise<ImageInput> {
-  const supabase = await createClient();
+export async function loadImageForClaude(
+  path: string,
+  as: "session" | "admin" = "session"
+): Promise<ImageInput> {
+  const supabase =
+    as === "admin" ? createAdminClient() : await createClient();
   const { data, error } = await supabase.storage
     .from(OUTFITS_BUCKET)
     .createSignedUrl(path, SIGNED_URL_TTL_SECONDS);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { downscaleImage } from "@/lib/image/downscale";
@@ -22,7 +22,39 @@ type State =
       resumePath?: string;
     };
 
-export function Analyzer() {
+/**
+ * Où l'analyse est envoyée, et ce qu'on propose une fois le verdict rendu.
+ *
+ * ⚠️ UN SEUL COMPOSANT POUR LES DEUX PARCOURS, et c'est délibéré. L'essai sans
+ * compte a besoin exactement du même écran : le même bouton photo, la même
+ * réduction d'image avant envoi, les mêmes trois tentatives avec temporisation,
+ * la même reprise après coupure réseau. Ce sont des mois de correctifs sur un
+ * réseau mobile — cette session en a encore ajouté — et une copie les perdrait
+ * tous silencieusement, du côté le moins regardé.
+ *
+ * Trois duplications ont déjà été payées dans ce code (la chaîne du bouton, le
+ * triplet du panneau, le bandeau de score). Ce qui diffère entre les deux
+ * parcours tient en trois valeurs : on les passe, on ne recopie pas le reste.
+ */
+const ROUTES = {
+  compte: { uploadUrl: "/api/upload-url", analyze: "/api/analyze" },
+  essai: { uploadUrl: "/api/essai/upload-url", analyze: "/api/essai/analyze" },
+} as const;
+
+export function Analyzer({
+  mode = "compte",
+  afterVerdict,
+}: {
+  mode?: keyof typeof ROUTES;
+  /**
+   * Ce qui s'affiche sous le verdict. En mode compte, l'invitation à installer
+   * l'app ; en mode essai, la proposition de créer le compte. Passé par le
+   * parent plutôt que choisi ici : ce composant sait analyser une photo, pas ce
+   * qu'on vend ensuite.
+   */
+  afterVerdict?: ReactNode;
+}) {
+  const routes = ROUTES[mode];
   const inputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<State>({ step: "idle" });
   const [photoUrl, setPhotoUrl] = useState<string>("");
@@ -43,7 +75,7 @@ export function Analyzer() {
       const { file } = await downscaleImage(original);
       const extension = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
 
-      const urlResponse = await fetch("/api/upload-url", {
+      const urlResponse = await fetch(routes.uploadUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ extension }),
@@ -184,7 +216,7 @@ export function Analyzer() {
       const timeout = setTimeout(() => controller.abort(), 100_000);
 
       try {
-        return await fetch("/api/analyze", {
+        return await fetch(routes.analyze, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ imagePath: path }),
@@ -226,15 +258,21 @@ export function Analyzer() {
             Recherche de pièces similaires en cours…
           </p>
         )}
-        <Button variant="secondary" onClick={() => setState({ step: "idle" })}>
-          Analyser une autre tenue
-        </Button>
+        {/* ⚠️ Pas de « Analyser une autre tenue » en mode essai : il n'y en a
+            qu'un. Le bouton relancerait la route, qui rendrait le même verdict
+            déjà calculé — on promettrait une seconde analyse pour afficher la
+            première, ce qui se lit comme une panne. */}
+        {mode === "compte" && (
+          <Button variant="secondary" onClick={() => setState({ step: "idle" })}>
+            Analyser une autre tenue
+          </Button>
+        )}
 
-        {/* L'invitation à installer vient APRÈS le verdict, jamais avant : c'est
-            le moment où la personne a reçu quelque chose et sait ce qu'elle
-            garderait. Elle ne s'affiche pas pour qui est déjà entré par l'icône,
-            et un « Plus tard » la retire pour de bon. */}
-        <InstallInvite />
+        {/* Ce qui suit le verdict dépend du parcours et vient du parent. Par
+            défaut, l'invitation à installer : elle arrive APRÈS le verdict,
+            jamais avant, parce que c'est le moment où la personne a reçu
+            quelque chose et sait ce qu'elle garderait. */}
+        {afterVerdict ?? <InstallInvite />}
       </div>
     );
   }

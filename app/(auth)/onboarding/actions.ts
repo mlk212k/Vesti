@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { profileSchema, type ProfileInput } from "@/lib/profile-schema";
 import { habitsSchema, type Habits } from "@/lib/habits";
+import { claimTrialForCurrentUser } from "@/lib/anon-trial-claim";
 
 export type OnboardingInput = ProfileInput;
 
@@ -136,6 +137,11 @@ export async function saveOnboarding(input: OnboardingInput) {
     return { error: "Impossible d'enregistrer ton profil pour le moment." as const };
   }
 
+  // L'essai fait avant l'inscription rejoint le compte ici. Voir
+  // `claimTrialForCurrentUser` : c'est ce qui rend vraie la phrase « garde ce
+  // verdict » affichée à la fin de l'essai.
+  await claimTrialForCurrentUser();
+
   // ⚠️ Plus de `redirect("/dashboard")` ici, et c'est volontaire : une dernière
   // étape suit — le Discord de la communauté. Rediriger depuis le serveur la
   // sauterait purement et simplement, sans erreur nulle part.
@@ -160,6 +166,12 @@ export async function skipOnboarding() {
     .from("profiles")
     .update({ onboarded_at: new Date().toISOString() })
     .eq("id", user.id);
+
+  // ⚠️ Ici AUSSI. Passer le formulaire ne fait pas renoncer à son essai : c'est
+  // la seconde sortie de l'onboarding, et l'oublier perdrait le verdict de tous
+  // ceux qui sautent le questionnaire — c'est-à-dire des plus pressés, ceux qui
+  // viennent justement de TikTok.
+  await claimTrialForCurrentUser();
 
   // Passer le formulaire ne veut pas dire passer l'invitation : celui qui ne
   // veut pas donner sa morphologie peut très bien vouloir rejoindre le Discord.
