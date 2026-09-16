@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { BottomNav } from "@/components/nav/bottom-nav";
+import { DockNav } from "@/components/nav/dock-nav";
 
 /**
  * Garde des routes privées.
@@ -41,7 +41,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       <div className="vesti-pages flex flex-1 flex-col overflow-y-auto overscroll-contain">
         {children}
       </div>
-      <BottomNav />
+      <DockNav />
     </div>
   );
 }
