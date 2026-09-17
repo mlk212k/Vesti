@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { requireUser } from "@/lib/auth";
+import { canManage, requireUser } from "@/lib/auth";
 import { eventKindLabel, formatDate } from "@/lib/format";
 
 export default async function DashboardPage() {
@@ -41,6 +41,23 @@ export default async function DashboardPage() {
         <StatCard label="Annonces" value={(announcements ?? []).length} />
         <StatCard label="Membres" value={memberCount ?? 0} />
       </section>
+
+      {canManage(user.role) && (
+        <Link
+          href="/training"
+          className="flex items-center justify-between rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 transition hover:bg-accent/10"
+        >
+          <div>
+            <div className="font-medium text-accent-strong">
+              Préparer un entraînement (IA)
+            </div>
+            <div className="text-sm text-muted">
+              Génère une séance détaillée selon la spécificité et le thème.
+            </div>
+          </div>
+          <span className="text-accent-strong">→</span>
+        </Link>
+      )}
 
       <section className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-3">
