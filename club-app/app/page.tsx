@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/auth";
 
-const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "Mon Club";
+const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "US Guentrange";
 
 export default async function LandingPage() {
   const user = await getSessionUser();
@@ -9,9 +10,18 @@ export default async function LandingPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6 py-16">
       <div className="max-w-xl w-full text-center space-y-8">
+        <Image
+          src="/logo.jpg"
+          alt={`Logo ${clubName}`}
+          width={140}
+          height={140}
+          priority
+          className="mx-auto rounded-full ring-2 ring-border shadow-lg"
+        />
+
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs uppercase tracking-wide text-muted">
           <span className="h-2 w-2 rounded-full bg-accent" />
-          Club sportif
+          Club de football · Thionville · depuis 1920
         </div>
 
         <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight">
@@ -19,10 +29,18 @@ export default async function LandingPage() {
         </h1>
 
         <p className="text-muted text-lg leading-relaxed">
-          Toute la vie du club au même endroit&nbsp;: liste des membres,
-          calendrier des matchs et entraînements, annonces, messagerie
-          interne.
+          L&apos;espace membres du club&nbsp;: annuaire, calendrier des matchs
+          et entraînements, annonces et messagerie interne.
         </p>
+
+        <div>
+          <Link
+            href="/club"
+            className="text-sm text-muted hover:text-foreground underline underline-offset-4"
+          >
+            Découvrir le club →
+          </Link>
+        </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           {user ? (

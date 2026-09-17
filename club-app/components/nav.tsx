@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import type { Role } from "@/lib/auth";
 import { roleLabel } from "@/lib/format";
 
-const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "Mon Club";
+import Image from "next/image";
+
+const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "US Guentrange";
 
 const links = [
   { href: "/dashboard", label: "Accueil" },
@@ -13,6 +15,7 @@ const links = [
   { href: "/members", label: "Membres" },
   { href: "/announcements", label: "Annonces" },
   { href: "/chat", label: "Chat" },
+  { href: "/club", label: "Le Club" },
 ];
 
 export function Nav({
@@ -28,8 +31,19 @@ export function Nav({
     <header className="border-b border-border bg-surface">
       <div className="mx-auto max-w-5xl px-4 py-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="font-semibold tracking-tight">
-            <span className="text-accent">●</span> {clubName}
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 font-semibold tracking-tight"
+          >
+            <Image
+              src="/logo.jpg"
+              alt=""
+              width={28}
+              height={28}
+              className="rounded-full ring-1 ring-border"
+              priority
+            />
+            {clubName}
           </Link>
           <nav className="flex flex-wrap gap-1 text-sm">
             {links.map((link) => {

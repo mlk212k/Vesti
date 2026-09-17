@@ -35,7 +35,8 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute =
     url.pathname === "/login" ||
     url.pathname.startsWith("/auth/") ||
-    url.pathname === "/";
+    url.pathname === "/" ||
+    url.pathname === "/club";
 
   if (!user && !isAuthRoute) {
     const redirect = url.clone();

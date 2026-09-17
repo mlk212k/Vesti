@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "Mon Club";
+const clubName = process.env.NEXT_PUBLIC_CLUB_NAME ?? "US Guentrange";
 
 export const metadata: Metadata = {
   title: {
