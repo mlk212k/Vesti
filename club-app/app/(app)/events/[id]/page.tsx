@@ -80,7 +80,7 @@ export default async function EventDetailPage({
                 type="submit"
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
                   myRsvp === status
-                    ? "bg-accent text-black"
+                    ? "bg-accent text-white"
                     : "border border-border bg-surface hover:bg-surface-2"
                 }`}
               >
@@ -97,7 +97,7 @@ export default async function EventDetailPage({
 
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">Réponses de l&apos;équipe</h2>
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2">
           {(["yes", "maybe", "no"] as const).map((status) => (
             <div
               key={status}
@@ -132,7 +132,7 @@ export default async function EventDetailPage({
             <input type="hidden" name="event_id" value={event.id} />
             <button
               type="submit"
-              className="rounded-lg border border-red-500/40 px-4 py-2 text-sm text-red-300 hover:bg-red-500/10"
+              className="rounded-lg border border-accent/30 px-4 py-2 text-sm text-accent-strong hover:bg-accent/5"
             >
               Supprimer cet événement
             </button>

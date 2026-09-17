@@ -15,83 +15,88 @@ export default async function MembersPage() {
 
   return (
     <div className="space-y-6">
-      <header className="flex items-baseline justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Membres</h1>
-          <p className="text-sm text-muted">
-            {(members ?? []).length} membre{(members ?? []).length > 1 ? "s" : ""} au club.
-          </p>
-        </div>
+      <header>
+        <h1 className="text-2xl font-semibold">Membres</h1>
+        <p className="text-sm text-muted">
+          {(members ?? []).length} membre
+          {(members ?? []).length > 1 ? "s" : ""} au club.
+        </p>
       </header>
 
-      <div className="overflow-hidden rounded-lg border border-border bg-surface">
-        <table className="w-full text-sm">
-          <thead className="bg-surface-2 text-left text-xs uppercase tracking-wide text-muted">
-            <tr>
-              <th className="px-4 py-3">Nom</th>
-              <th className="px-4 py-3">Rôle</th>
-              <th className="px-4 py-3">N°</th>
-              <th className="px-4 py-3">Poste</th>
-              <th className="px-4 py-3">Contact</th>
-              {me.role === "admin" && <th className="px-4 py-3">Actions</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {(members ?? []).map((m) => (
-              <tr key={m.id} className="border-t border-border">
-                <td className="px-4 py-3 font-medium">{m.full_name}</td>
-                <td className="px-4 py-3">
-                  <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-muted">
-                    {roleLabel(m.role)}
-                  </span>
-                </td>
-                <td className="px-4 py-3">{m.jersey_number ?? "—"}</td>
-                <td className="px-4 py-3">{m.position ?? "—"}</td>
-                <td className="px-4 py-3 text-muted">{m.phone ?? "—"}</td>
-                {me.role === "admin" && (
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <form action={setMemberRoleAction} className="flex gap-1">
-                        <input type="hidden" name="member_id" value={m.id} />
-                        <select
-                          name="role"
-                          defaultValue={m.role}
-                          className="rounded border border-border bg-surface-2 px-2 py-1 text-xs"
-                        >
-                          <option value="member">Membre</option>
-                          <option value="coach">Coach</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                        <button
-                          type="submit"
-                          className="rounded border border-border px-2 py-1 text-xs hover:bg-surface-2"
-                        >
-                          OK
-                        </button>
-                      </form>
-                      {m.id !== me.id && (
-                        <form action={removeMemberAction}>
-                          <input
-                            type="hidden"
-                            name="member_id"
-                            value={m.id}
-                          />
-                          <button
-                            type="submit"
-                            className="rounded border border-red-500/40 px-2 py-1 text-xs text-red-300 hover:bg-red-500/10"
-                          >
-                            Retirer
-                          </button>
-                        </form>
-                      )}
-                    </div>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ul className="space-y-2">
+        {(members ?? []).map((m) => {
+          const initial = m.full_name.trim().charAt(0).toUpperCase() || "?";
+          const details = [
+            m.jersey_number != null ? `N°${m.jersey_number}` : null,
+            m.position,
+          ]
+            .filter(Boolean)
+            .join(" · ");
+
+          return (
+            <li
+              key={m.id}
+              className="rounded-xl border border-border bg-surface p-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent-strong">
+                  {initial}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="truncate font-medium">
+                      {m.full_name}
+                    </span>
+                    <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
+                      {roleLabel(m.role)}
+                    </span>
+                  </div>
+                  <div className="truncate text-xs text-muted">
+                    {details || m.phone || "—"}
+                  </div>
+                </div>
+              </div>
+
+              {me.role === "admin" && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+                  <form
+                    action={setMemberRoleAction}
+                    className="flex flex-1 gap-1.5"
+                  >
+                    <input type="hidden" name="member_id" value={m.id} />
+                    <select
+                      name="role"
+                      defaultValue={m.role}
+                      className="flex-1 rounded border border-border bg-background px-2 py-1.5 text-xs"
+                    >
+                      <option value="member">Membre</option>
+                      <option value="coach">Coach</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    <button
+                      type="submit"
+                      className="rounded border border-border px-2.5 py-1.5 text-xs hover:bg-surface-2"
+                    >
+                      OK
+                    </button>
+                  </form>
+                  {m.id !== me.id && (
+                    <form action={removeMemberAction}>
+                      <input type="hidden" name="member_id" value={m.id} />
+                      <button
+                        type="submit"
+                        className="rounded border border-accent/30 px-2.5 py-1.5 text-xs text-accent-strong hover:bg-accent/5"
+                      >
+                        Retirer
+                      </button>
+                    </form>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export function LoginForm({
       </label>
 
       {state?.error && (
-        <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+        <p className="rounded-lg border border-accent/30 bg-accent/5 px-3 py-2 text-sm text-accent-strong">
           {state.error}
         </p>
       )}
@@ -64,7 +64,7 @@ export function LoginForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-black hover:bg-accent-strong transition disabled:opacity-60"
+        className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-white hover:bg-accent-strong transition disabled:opacity-60"
       >
         {pending
           ? "…"

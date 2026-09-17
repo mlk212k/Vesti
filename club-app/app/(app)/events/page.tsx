@@ -100,7 +100,7 @@ export default async function EventsPage() {
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="rounded bg-accent px-4 py-2 font-medium text-black hover:bg-accent-strong"
+                className="rounded bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
               >
                 Créer
               </button>

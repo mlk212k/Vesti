@@ -16,14 +16,14 @@ export default async function ClubPage() {
   return (
     <main className="min-h-screen">
       <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4 text-sm">
+        <div className="mx-auto flex max-w-md items-center justify-between px-6 py-4 text-sm">
           <Link href="/" className="text-muted hover:text-foreground">
             ← Accueil
           </Link>
           {user ? (
             <Link
               href="/dashboard"
-              className="rounded-md bg-accent px-3 py-1.5 font-medium text-black hover:bg-accent-strong"
+              className="rounded-md bg-accent px-3 py-1.5 font-medium text-white hover:bg-accent-strong"
             >
               Mon espace
             </Link>
@@ -38,13 +38,13 @@ export default async function ClubPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-6 py-12 space-y-12">
+      <div className="mx-auto max-w-md px-6 py-12 space-y-12">
         <section className="text-center space-y-6">
           <Image
             src="/logo.jpg"
             alt={`Logo ${clubName}`}
-            width={160}
-            height={160}
+            width={120}
+            height={120}
             priority
             className="mx-auto rounded-full ring-2 ring-border shadow-lg"
           />
@@ -52,7 +52,7 @@ export default async function ClubPage() {
             <p className="text-xs uppercase tracking-[0.2em] text-muted">
               Union Sportive de Guentrange
             </p>
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight">
+            <h1 className="text-3xl font-semibold tracking-tight">
               US Guentrange
             </h1>
             <p className="text-lg text-muted">
@@ -64,7 +64,7 @@ export default async function ClubPage() {
 
         <section className="space-y-4">
           <SectionTitle>Le club en bref</SectionTitle>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 grid-cols-2">
             <FactCard label="Fondation" value="1920" />
             <FactCard label="Couleurs" value="Rouge & blanc" />
             <FactCard label="Ville" value="Thionville (Moselle)" />
@@ -140,7 +140,7 @@ export default async function ClubPage() {
             {user ? (
               <Link
                 href="/dashboard"
-                className="rounded-lg bg-accent px-4 py-2 font-medium text-black hover:bg-accent-strong"
+                className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
               >
                 Ouvrir mon espace
               </Link>
@@ -148,7 +148,7 @@ export default async function ClubPage() {
               <>
                 <Link
                   href="/login?mode=signup"
-                  className="rounded-lg bg-accent px-4 py-2 font-medium text-black hover:bg-accent-strong"
+                  className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
                 >
                   Créer un compte
                 </Link>
