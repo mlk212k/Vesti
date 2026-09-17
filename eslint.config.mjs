@@ -19,6 +19,12 @@ const eslintConfig = defineConfig([
     // erreurs qui ne concernent pas Vesti et que personne ici ne peut corriger
     // — elles appartiennent au dépôt d'origine du skill.
     ".claude/**",
+
+    // club-app/ is a separate, independent Next.js project (its own
+    // package.json, tsconfig, eslint config) that happens to live in this
+    // repo. It lints and type-checks itself; the root config must not walk
+    // into it.
+    "club-app/**",
   ]),
 ]);
 
