@@ -5,9 +5,16 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 
 const credentialsSchema = z.object({
-  email: z.string().email("Email invalide"),
+  // Mobile keyboards (iOS autocorrect/autocomplete especially) routinely
+  // append a trailing space after accepting a suggestion — trim before
+  // validating so that doesn't fail email format checks.
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .pipe(z.string().email("Email invalide")),
   password: z.string().min(6, "Mot de passe trop court (min. 6 caractères)"),
-  full_name: z.string().min(1).max(120).optional(),
+  full_name: z.string().trim().min(1).max(120).optional(),
   next: z.string().startsWith("/").optional(),
 });
 
