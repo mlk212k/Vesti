@@ -15,6 +15,9 @@ const credentialsSchema = z.object({
     .pipe(z.string().email("Email invalide")),
   password: z.string().min(6, "Mot de passe trop court (min. 6 caractères)"),
   full_name: z.string().trim().min(1).max(120).optional(),
+  // Only member/coach are offered at signup — admin is never self-selected,
+  // the handle_new_user() trigger clamps this too as a second guard.
+  role: z.enum(["member", "coach"]).optional(),
   next: z.string().startsWith("/").optional(),
 });
 
@@ -51,6 +54,7 @@ export async function signUpAction(
     email: formData.get("email"),
     password: formData.get("password"),
     full_name: formData.get("full_name"),
+    role: formData.get("role") || undefined,
     next: formData.get("next") || undefined,
   });
   if (!parsed.success) {
@@ -65,10 +69,14 @@ export async function signUpAction(
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
-      data: { full_name: parsed.data.full_name },
+      data: {
+        full_name: parsed.data.full_name,
+        role: parsed.data.role ?? "member",
+      },
     },
   });
   if (error) return { error: error.message };
 
-  redirect(parsed.data.next ?? "/dashboard");
+  // First-time setup: pick a category, optionally add a photo.
+  redirect("/onboarding");
 }

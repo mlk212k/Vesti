@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { signInAction, signUpAction, type AuthResult } from "./actions";
 
 export function LoginForm({
@@ -15,21 +15,59 @@ export function LoginForm({
     action,
     undefined,
   );
+  const [role, setRole] = useState<"member" | "coach">("member");
 
   return (
     <form action={formAction} className="space-y-4">
       {next ? <input type="hidden" name="next" value={next} /> : null}
 
       {isSignUp && (
-        <label className="block space-y-1">
-          <span className="text-sm text-muted">Nom complet</span>
-          <input
-            required
-            name="full_name"
-            autoComplete="name"
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
-          />
-        </label>
+        <>
+          <label className="block space-y-1">
+            <span className="text-sm text-muted">Nom complet</span>
+            <input
+              required
+              name="full_name"
+              autoComplete="name"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+          </label>
+
+          <div className="space-y-1.5">
+            <span className="text-sm text-muted">Tu es…</span>
+            <input type="hidden" name="role" value={role} />
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setRole("member")}
+                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
+                  role === "member"
+                    ? "border-accent bg-accent/5"
+                    : "border-border bg-surface"
+                }`}
+              >
+                <div className="font-medium">Membre</div>
+                <div className="text-xs text-muted">
+                  Calendrier, chat, annonces
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("coach")}
+                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
+                  role === "coach"
+                    ? "border-accent bg-accent/5"
+                    : "border-border bg-surface"
+                }`}
+              >
+                <div className="font-medium">Coach</div>
+                <div className="text-xs text-muted">
+                  + créer des événements et des annonces
+                </div>
+              </button>
+            </div>
+          </div>
+        </>
       )}
 
       <label className="block space-y-1">

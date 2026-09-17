@@ -1,4 +1,6 @@
+import { AvatarUploader } from "@/components/avatar-uploader";
 import { requireUser } from "@/lib/auth";
+import { CATEGORIES, categoryLabel } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 import { roleLabel } from "@/lib/format";
 import { updateProfileAction } from "./actions";
@@ -9,7 +11,7 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, jersey_number, position, phone")
+    .select("full_name, jersey_number, position, phone, category, avatar_url")
     .eq("id", me.id)
     .single();
 
@@ -19,8 +21,23 @@ export default async function ProfilePage() {
         <h1 className="text-2xl font-semibold">Mon profil</h1>
         <p className="text-sm text-muted">
           Rôle&nbsp;: <span className="text-foreground">{roleLabel(me.role)}</span>
+          {profile?.category && (
+            <>
+              {" · "}
+              Catégorie&nbsp;:{" "}
+              <span className="text-foreground">
+                {categoryLabel(profile.category)}
+              </span>
+            </>
+          )}
         </p>
       </header>
+
+      <AvatarUploader
+        userId={me.id}
+        fullName={profile?.full_name ?? me.full_name}
+        currentAvatarUrl={profile?.avatar_url ?? null}
+      />
 
       <form
         action={updateProfileAction}
@@ -34,6 +51,21 @@ export default async function ProfilePage() {
             defaultValue={profile?.full_name ?? me.full_name}
             className="w-full rounded border border-border bg-background px-3 py-2"
           />
+        </label>
+        <label className="space-y-1">
+          <span className="text-xs text-muted">Catégorie</span>
+          <select
+            name="category"
+            defaultValue={profile?.category ?? ""}
+            className="w-full rounded border border-border bg-background px-3 py-2"
+          >
+            <option value="">—</option>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {categoryLabel(c)}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="space-y-1">
           <span className="text-xs text-muted">Numéro de maillot</span>

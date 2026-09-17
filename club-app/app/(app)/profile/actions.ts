@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
+import { CATEGORIES } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 
 const profileSchema = z.object({
   full_name: z.string().min(1).max(120),
+  category: z.enum(CATEGORIES).optional().nullable(),
   jersey_number: z
     .string()
     .optional()
@@ -29,6 +31,7 @@ export async function updateProfileAction(formData: FormData) {
 
   const parsed = profileSchema.safeParse({
     full_name: formData.get("full_name"),
+    category: formData.get("category") || null,
     jersey_number: formData.get("jersey_number") || undefined,
     position: nullableString(formData.get("position")),
     phone: nullableString(formData.get("phone")),
@@ -44,6 +47,7 @@ export async function updateProfileAction(formData: FormData) {
     .from("profiles")
     .update({
       full_name: parsed.data.full_name,
+      category: parsed.data.category,
       jersey_number: parsed.data.jersey_number,
       position: parsed.data.position,
       phone: parsed.data.phone,

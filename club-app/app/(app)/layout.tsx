@@ -12,7 +12,11 @@ export default async function AppLayout({
   return (
     <div className="flex min-h-screen justify-center bg-surface">
       <div className="flex min-h-screen w-full max-w-md flex-col bg-background sm:border-x sm:border-border">
-        <TopBar fullName={user.full_name} role={user.role} />
+        <TopBar
+          fullName={user.full_name}
+          role={user.role}
+          avatarUrl={user.avatar_url}
+        />
         <main className="flex-1 px-4 py-6">{children}</main>
         <BottomNav />
       </div>

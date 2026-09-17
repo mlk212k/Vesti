@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { requireUser } from "@/lib/auth";
+import { categoryLabel } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 import { roleLabel } from "@/lib/format";
 import { removeMemberAction, setMemberRoleAction } from "./actions";
@@ -9,7 +11,9 @@ export default async function MembersPage() {
 
   const { data: members = [] } = await supabase
     .from("profiles")
-    .select("id, full_name, role, jersey_number, position, phone, created_at")
+    .select(
+      "id, full_name, role, category, jersey_number, position, phone, avatar_url, created_at",
+    )
     .order("role", { ascending: true })
     .order("full_name", { ascending: true });
 
@@ -27,6 +31,7 @@ export default async function MembersPage() {
         {(members ?? []).map((m) => {
           const initial = m.full_name.trim().charAt(0).toUpperCase() || "?";
           const details = [
+            m.category ? categoryLabel(m.category) : null,
             m.jersey_number != null ? `N°${m.jersey_number}` : null,
             m.position,
           ]
@@ -39,8 +44,19 @@ export default async function MembersPage() {
               className="rounded-xl border border-border bg-surface p-3"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent-strong">
-                  {initial}
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/10 text-sm font-semibold text-accent-strong">
+                  {m.avatar_url ? (
+                    <Image
+                      src={m.avatar_url}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    initial
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
