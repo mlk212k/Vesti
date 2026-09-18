@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireUser, canManage } from "@/lib/auth";
+import { CATEGORIES, categoryLabel } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 import { eventKindLabel, formatDate } from "@/lib/format";
 import { createEventAction } from "./actions";
@@ -12,12 +13,12 @@ export default async function EventsPage() {
   const [{ data: upcoming = [] }, { data: past = [] }] = await Promise.all([
     supabase
       .from("events")
-      .select("id, title, kind, starts_at, location, opponent")
+      .select("id, title, kind, category, starts_at, location, opponent, score_home, score_away")
       .gte("starts_at", nowIso)
       .order("starts_at", { ascending: true }),
     supabase
       .from("events")
-      .select("id, title, kind, starts_at, location, opponent")
+      .select("id, title, kind, category, starts_at, location, opponent, score_home, score_away")
       .lt("starts_at", nowIso)
       .order("starts_at", { ascending: false })
       .limit(10),
@@ -55,6 +56,21 @@ export default async function EventsPage() {
                 <option value="training">Entraînement</option>
                 <option value="meeting">Réunion</option>
                 <option value="other">Autre</option>
+              </select>
+            </label>
+            <label className="space-y-1">
+              <span className="text-xs text-muted">Catégorie (optionnel)</span>
+              <select
+                name="category"
+                defaultValue=""
+                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+              >
+                <option value="">Toutes / non précisé</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {categoryLabel(c)}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="space-y-1">
@@ -139,9 +155,12 @@ function EventList({
     id: string;
     title: string;
     kind: string;
+    category: string | null;
     starts_at: string;
     location: string | null;
     opponent: string | null;
+    score_home: number | null;
+    score_away: number | null;
   }>;
 }) {
   return (
@@ -155,6 +174,7 @@ function EventList({
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs uppercase tracking-wide text-muted">
                 {eventKindLabel(ev.kind)}
+                {ev.category ? ` · ${categoryLabel(ev.category)}` : ""}
               </span>
               <span className="text-xs text-muted">
                 {formatDate(ev.starts_at)}
@@ -165,6 +185,11 @@ function EventList({
               {ev.opponent ? (
                 <span className="text-muted"> vs {ev.opponent}</span>
               ) : null}
+              {ev.score_home != null && ev.score_away != null && (
+                <span className="ml-2 text-accent-strong">
+                  {ev.score_home} – {ev.score_away}
+                </span>
+              )}
             </div>
             {ev.location && (
               <div className="text-sm text-muted">📍 {ev.location}</div>

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireRole, requireUser } from "@/lib/auth";
+import { CATEGORIES } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 
 const kindSchema = z.enum(["match", "training", "meeting", "other"]);
@@ -12,6 +13,7 @@ const createSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(2000).optional().nullable(),
   kind: kindSchema,
+  category: z.enum(CATEGORIES).optional().nullable(),
   location: z.string().max(200).optional().nullable(),
   opponent: z.string().max(200).optional().nullable(),
   starts_at: z.string().min(1),
@@ -37,6 +39,7 @@ export async function createEventAction(formData: FormData) {
     title: formData.get("title"),
     description: nullableString(formData.get("description")),
     kind: formData.get("kind"),
+    category: formData.get("category") || null,
     location: nullableString(formData.get("location")),
     opponent: nullableString(formData.get("opponent")),
     starts_at: formData.get("starts_at"),
@@ -53,6 +56,7 @@ export async function createEventAction(formData: FormData) {
       title: parsed.data.title,
       description: parsed.data.description,
       kind: parsed.data.kind,
+      category: parsed.data.category,
       location: parsed.data.location,
       opponent: parsed.data.opponent,
       starts_at: toIso(parsed.data.starts_at),
@@ -102,4 +106,45 @@ export async function setRsvpAction(formData: FormData) {
 
   revalidatePath(`/events/${eventId}`);
   revalidatePath("/events");
+}
+
+export async function setScoreAction(formData: FormData) {
+  await requireRole("admin", "coach");
+  const eventId = z.string().uuid().parse(formData.get("event_id"));
+  const scoreHome = z.coerce.number().int().min(0).max(99).parse(formData.get("score_home"));
+  const scoreAway = z.coerce.number().int().min(0).max(99).parse(formData.get("score_away"));
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("events")
+    .update({ score_home: scoreHome, score_away: scoreAway })
+    .eq("id", eventId);
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/events/${eventId}`);
+  revalidatePath("/events");
+}
+
+export async function toggleCallupAction(formData: FormData) {
+  const staff = await requireRole("admin", "coach");
+  const eventId = z.string().uuid().parse(formData.get("event_id"));
+  const memberId = z.string().uuid().parse(formData.get("member_id"));
+  const called = formData.get("called") === "true";
+
+  const supabase = await createClient();
+  if (called) {
+    const { error } = await supabase
+      .from("event_callups")
+      .delete()
+      .eq("event_id", eventId)
+      .eq("user_id", memberId);
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase
+      .from("event_callups")
+      .insert({ event_id: eventId, user_id: memberId, called_by: staff.id });
+    if (error) throw new Error(error.message);
+  }
+
+  revalidatePath(`/events/${eventId}`);
 }
