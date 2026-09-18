@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { canManage, requireUser } from "@/lib/auth";
+import { canManage, isCoach, requireUser } from "@/lib/auth";
 import { categoryLabel } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
 import { eventKindLabel, formatDate } from "@/lib/format";
@@ -212,7 +212,7 @@ export default async function EventDetailPage({
                     className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-2"
                   >
                     <span className="text-sm">{member.full_name}</span>
-                    {canManage(me.role) ? (
+                    {isCoach(me.role) ? (
                       <form action={toggleCallupAction}>
                         <input type="hidden" name="event_id" value={event.id} />
                         <input

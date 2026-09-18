@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireRole, requireUser } from "@/lib/auth";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, categoryLabel } from "@/lib/categories";
+import { formatDate } from "@/lib/format";
+import { sendPushToUser } from "@/lib/push/send";
 import { createClient } from "@/lib/supabase/server";
 
 const kindSchema = z.enum(["match", "training", "meeting", "other"]);
@@ -126,7 +128,9 @@ export async function setScoreAction(formData: FormData) {
 }
 
 export async function toggleCallupAction(formData: FormData) {
-  const staff = await requireRole("admin", "coach");
+  // Team selection is a coaching call, not an admin/officer one — even an
+  // admin doesn't get this button (see the read-only fallback in the UI).
+  const coach = await requireRole("coach");
   const eventId = z.string().uuid().parse(formData.get("event_id"));
   const memberId = z.string().uuid().parse(formData.get("member_id"));
   const called = formData.get("called") === "true";
@@ -142,8 +146,23 @@ export async function toggleCallupAction(formData: FormData) {
   } else {
     const { error } = await supabase
       .from("event_callups")
-      .insert({ event_id: eventId, user_id: memberId, called_by: staff.id });
+      .insert({ event_id: eventId, user_id: memberId, called_by: coach.id });
     if (error) throw new Error(error.message);
+
+    const { data: event } = await supabase
+      .from("events")
+      .select("title, category, starts_at, location, opponent")
+      .eq("id", eventId)
+      .single();
+    if (event) {
+      const parts = [formatDate(event.starts_at)];
+      if (event.location) parts.push(event.location);
+      await sendPushToUser(memberId, {
+        title: `Convocation${event.category ? ` · ${categoryLabel(event.category)}` : ""}`,
+        body: `${event.title}${event.opponent ? ` vs ${event.opponent}` : ""} — ${parts.join(" · ")}`,
+        url: `/events/${eventId}`,
+      });
+    }
   }
 
   revalidatePath(`/events/${eventId}`);

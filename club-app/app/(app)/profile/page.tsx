@@ -1,4 +1,5 @@
 import { AvatarUploader } from "@/components/avatar-uploader";
+import { NotificationOptIn } from "@/components/notification-opt-in";
 import { requireUser } from "@/lib/auth";
 import { CATEGORIES, categoryLabel } from "@/lib/categories";
 import { createClient } from "@/lib/supabase/server";
@@ -38,6 +39,8 @@ export default async function ProfilePage() {
         fullName={profile?.full_name ?? me.full_name}
         currentAvatarUrl={profile?.avatar_url ?? null}
       />
+
+      <NotificationOptIn />
 
       <form
         action={updateProfileAction}

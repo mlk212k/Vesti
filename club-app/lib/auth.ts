@@ -56,3 +56,7 @@ export async function requireRole(...roles: Role[]): Promise<SessionUser> {
 export function canManage(role: Role): boolean {
   return role === "admin" || role === "coach";
 }
+
+export function isCoach(role: Role): boolean {
+  return role === "coach";
+}
