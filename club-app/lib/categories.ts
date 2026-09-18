@@ -12,6 +12,7 @@ export const CATEGORIES = [
   "u16",
   "u17",
   "u18_u19",
+  "seniors",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -30,6 +31,7 @@ const LABELS: Record<Category, string> = {
   u16: "U16",
   u17: "U17",
   u18_u19: "U18/U19",
+  seniors: "Seniors",
 };
 
 export function categoryLabel(category: string | null | undefined): string {
