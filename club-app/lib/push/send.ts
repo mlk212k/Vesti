@@ -6,10 +6,16 @@ import { VAPID_PUBLIC_KEY } from "./config";
 const VAPID_SUBJECT = "https://guentrange.vercel.app";
 
 let configured = false;
-function ensureConfigured(privateKey: string) {
-  if (configured) return;
+
+// Returns false when VAPID_PRIVATE_KEY isn't set — callers should treat
+// that as "notifications are off" and skip sending, not as an error.
+export function configureWebPush(): boolean {
+  if (configured) return true;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  if (!privateKey) return false;
   webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, privateKey);
   configured = true;
+  return true;
 }
 
 export type PushPayload = {
@@ -24,21 +30,41 @@ type PushSubscriptionRow = {
   auth: string;
 };
 
+// Sends to one already-known subscription (no DB lookup) — used both by
+// sendPushToUser below and directly by the training-reminders cron, which
+// fetches subscriptions in bulk via its own RPC. Never throws: the caller
+// decides what a dead subscription means for its own DB access path.
+export async function sendPushPayload(
+  subscription: PushSubscriptionRow,
+  payload: PushPayload,
+): Promise<{ ok: boolean; dead: boolean }> {
+  try {
+    await webpush.sendNotification(
+      {
+        endpoint: subscription.endpoint,
+        keys: { p256dh: subscription.p256dh, auth: subscription.auth },
+      },
+      JSON.stringify(payload),
+    );
+    return { ok: true, dead: false };
+  } catch (err) {
+    const statusCode = (err as { statusCode?: number }).statusCode;
+    return { ok: false, dead: statusCode === 404 || statusCode === 410 };
+  }
+}
+
 // Best-effort: a notification failing to send must never break the action
 // that triggered it (e.g. convoking a player), so every failure mode here
-// is swallowed rather than thrown. `supabase` is whichever client fits the
-// caller's context — the cookie-based one for a request made on behalf of
-// a signed-in member (e.g. a coach convoking a player), or the service-role
-// admin client for a session-less job (the training-reminders cron).
+// is swallowed rather than thrown. `supabase` is the cookie-based client
+// for the signed-in member's request (e.g. a coach convoking a player) —
+// looks up that user's subscriptions via RLS-gated RPC first.
 export async function sendPushToUser(
   supabase: SupabaseClient,
   userId: string,
   payload: PushPayload,
 ) {
   try {
-    const privateKey = process.env.VAPID_PRIVATE_KEY;
-    if (!privateKey) return;
-    ensureConfigured(privateKey);
+    if (!configureWebPush()) return;
 
     const { data: subs } = await supabase.rpc("get_push_subscriptions", {
       target_user_id: userId,
@@ -47,21 +73,11 @@ export async function sendPushToUser(
 
     await Promise.all(
       (subs as PushSubscriptionRow[]).map(async (sub) => {
-        try {
-          await webpush.sendNotification(
-            {
-              endpoint: sub.endpoint,
-              keys: { p256dh: sub.p256dh, auth: sub.auth },
-            },
-            JSON.stringify(payload),
-          );
-        } catch (err) {
-          const statusCode = (err as { statusCode?: number }).statusCode;
-          if (statusCode === 404 || statusCode === 410) {
-            await supabase.rpc("delete_push_subscription", {
-              p_endpoint: sub.endpoint,
-            });
-          }
+        const { dead } = await sendPushPayload(sub, payload);
+        if (dead) {
+          await supabase.rpc("delete_push_subscription", {
+            p_endpoint: sub.endpoint,
+          });
         }
       }),
     );
