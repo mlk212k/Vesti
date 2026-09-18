@@ -73,42 +73,54 @@ export default async function MembersPage() {
                 </div>
               </div>
 
-              {me.role === "admin" && (
-                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                  <form
-                    action={setMemberRoleAction}
-                    className="flex flex-1 gap-1.5"
-                  >
-                    <input type="hidden" name="member_id" value={m.id} />
-                    <select
-                      name="role"
-                      defaultValue={m.role}
-                      className="flex-1 rounded border border-border bg-background px-2 py-1.5 text-xs"
-                    >
-                      <option value="member">Membre</option>
-                      <option value="coach">Coach</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                    <button
-                      type="submit"
-                      className="rounded border border-border px-2.5 py-1.5 text-xs hover:bg-surface-2"
-                    >
-                      OK
-                    </button>
-                  </form>
-                  {m.id !== me.id && (
-                    <form action={removeMemberAction}>
-                      <input type="hidden" name="member_id" value={m.id} />
-                      <button
-                        type="submit"
-                        className="rounded border border-accent/30 px-2.5 py-1.5 text-xs text-accent-strong hover:bg-accent/5"
+              {(() => {
+                const canChangeRole = me.role === "admin" && m.id !== me.id;
+                const canRemove =
+                  m.id !== me.id &&
+                  (me.role === "admin" ||
+                    (me.role === "coach" && m.role !== "admin"));
+
+                if (!canChangeRole && !canRemove) return null;
+
+                return (
+                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+                    {canChangeRole && (
+                      <form
+                        action={setMemberRoleAction}
+                        className="flex flex-1 gap-1.5"
                       >
-                        Retirer
-                      </button>
-                    </form>
-                  )}
-                </div>
-              )}
+                        <input type="hidden" name="member_id" value={m.id} />
+                        <select
+                          name="role"
+                          defaultValue={m.role}
+                          className="flex-1 rounded border border-border bg-background px-2 py-1.5 text-xs"
+                        >
+                          <option value="member">Membre</option>
+                          <option value="coach">Coach</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                        <button
+                          type="submit"
+                          className="rounded border border-border px-2.5 py-1.5 text-xs hover:bg-surface-2"
+                        >
+                          OK
+                        </button>
+                      </form>
+                    )}
+                    {canRemove && (
+                      <form action={removeMemberAction}>
+                        <input type="hidden" name="member_id" value={m.id} />
+                        <button
+                          type="submit"
+                          className="rounded border border-accent/30 px-2.5 py-1.5 text-xs text-accent-strong hover:bg-accent/5"
+                        >
+                          Retirer
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                );
+              })()}
             </li>
           );
         })}

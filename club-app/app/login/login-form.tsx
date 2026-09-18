@@ -62,7 +62,7 @@ export function LoginForm({
               >
                 <div className="font-medium">Coach</div>
                 <div className="text-xs text-muted">
-                  + créer des événements et des annonces
+                  + événements, annonces, retirer un membre
                 </div>
               </button>
             </div>
