@@ -76,7 +76,7 @@ export function OnboardingWizard({
           disabled={!category || saving}
           className="clay-accent clay-presse w-full py-3 font-medium disabled:opacity-50"
         >
-          {saving ? "…" : "Continuer"}
+          {saving ? <span className="clay-caret">▌</span> : "Continuer"}
         </button>
       </div>
     );

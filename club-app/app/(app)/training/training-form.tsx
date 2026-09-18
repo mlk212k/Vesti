@@ -93,7 +93,13 @@ export function TrainingForm() {
           disabled={pending}
           className="clay-accent clay-presse px-5 py-2.5 font-medium disabled:opacity-60"
         >
-          {pending ? "Génération…" : "Générer la séance"}
+          {pending ? (
+            <>
+              Génération <span className="clay-caret">▌</span>
+            </>
+          ) : (
+            "Générer la séance"
+          )}
         </button>
       </form>
 

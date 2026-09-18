@@ -252,7 +252,49 @@ html.pwa-installed .install-gate {
 
 @media (prefers-reduced-motion: reduce) {
   .pate-a,
-  .pate-b {
+  .pate-b,
+  .clay-skeleton {
     animation: none !important;
   }
+  .clay-presse,
+  .clay-vivant {
+    transition: none;
+  }
+}
+
+/* Loading-skeleton shimmer, for each route's loading.tsx fallback —
+   shown instantly on navigation while the page's server data is still
+   in flight, then swapped for the real content once it resolves. */
+@keyframes clay-shimmer {
+  0% {
+    background-position: -340px 0;
+  }
+  to {
+    background-position: 340px 0;
+  }
+}
+
+.clay-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-3) 50%,
+    var(--surface) 100%
+  );
+  background-size: 340px 100%;
+  border-radius: 22px;
+  animation: 1.5s linear infinite clay-shimmer;
+}
+
+/* A blinking terminal-style cursor for "in progress" text (e.g. the AI
+   training-plan generator). Left animating under reduced-motion, same
+   as the reference — a small opacity flicker, unlike positional motion,
+   isn't considered disorienting. */
+@keyframes clay-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.clay-caret {
+  animation: 1s steps(1) infinite clay-caret;
 }

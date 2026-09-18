@@ -104,11 +104,13 @@ export function LoginForm({
         disabled={pending}
         className="clay-accent clay-presse w-full py-3 font-medium disabled:opacity-60"
       >
-        {pending
-          ? "…"
-          : isSignUp
-            ? "Créer mon compte"
-            : "Se connecter"}
+        {pending ? (
+          <span className="clay-caret">▌</span>
+        ) : isSignUp ? (
+          "Créer mon compte"
+        ) : (
+          "Se connecter"
+        )}
       </button>
     </form>
   );
