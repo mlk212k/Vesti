@@ -39,12 +39,9 @@ export default async function MembersPage() {
             .join(" · ");
 
           return (
-            <li
-              key={m.id}
-              className="rounded-xl border border-border bg-surface p-3"
-            >
+            <li key={m.id} className="clay p-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/10 text-sm font-semibold text-accent-strong">
+                <div className="clay-galet flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden text-sm font-semibold text-accent-strong">
                   {m.avatar_url ? (
                     <Image
                       src={m.avatar_url}
@@ -63,7 +60,7 @@ export default async function MembersPage() {
                     <span className="truncate font-medium">
                       {m.full_name}
                     </span>
-                    <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
+                    <span className="clay-galet shrink-0 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
                       {roleLabel(m.role)}
                     </span>
                   </div>
@@ -93,7 +90,7 @@ export default async function MembersPage() {
                         <select
                           name="role"
                           defaultValue={m.role}
-                          className="flex-1 rounded border border-border bg-background px-2 py-1.5 text-xs"
+                          className="clay-creux flex-1 px-2 py-1.5 text-xs"
                         >
                           <option value="member">Membre</option>
                           <option value="coach">Coach</option>
@@ -101,7 +98,7 @@ export default async function MembersPage() {
                         </select>
                         <button
                           type="submit"
-                          className="rounded border border-border px-2.5 py-1.5 text-xs hover:bg-surface-2"
+                          className="clay-galet clay-presse px-3 py-1.5 text-xs"
                         >
                           OK
                         </button>
@@ -112,7 +109,7 @@ export default async function MembersPage() {
                         <input type="hidden" name="member_id" value={m.id} />
                         <button
                           type="submit"
-                          className="rounded border border-accent/30 px-2.5 py-1.5 text-xs text-accent-strong hover:bg-accent/5"
+                          className="clay-creux clay-presse px-3 py-1.5 text-xs text-accent-strong"
                         >
                           Retirer
                         </button>

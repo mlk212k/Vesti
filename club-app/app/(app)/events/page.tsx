@@ -31,7 +31,7 @@ export default async function EventsPage() {
       </header>
 
       {canManage(me.role) && (
-        <section className="rounded-lg border border-border bg-surface p-4">
+        <section className="clay p-4">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
             Créer un événement
           </h2>
@@ -42,7 +42,7 @@ export default async function EventsPage() {
                 required
                 name="title"
                 placeholder="Match vs FC Voisin"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="space-y-1">
@@ -50,7 +50,7 @@ export default async function EventsPage() {
               <select
                 name="kind"
                 defaultValue="training"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               >
                 <option value="match">Match</option>
                 <option value="training">Entraînement</option>
@@ -63,7 +63,7 @@ export default async function EventsPage() {
               <select
                 name="category"
                 defaultValue=""
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               >
                 <option value="">Toutes / non précisé</option>
                 {CATEGORIES.map((c) => (
@@ -82,7 +82,7 @@ export default async function EventsPage() {
               <span className="text-xs text-muted">Adversaire (optionnel)</span>
               <input
                 name="opponent"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="space-y-1">
@@ -91,7 +91,7 @@ export default async function EventsPage() {
                 required
                 type="datetime-local"
                 name="starts_at"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="space-y-1">
@@ -99,7 +99,7 @@ export default async function EventsPage() {
               <input
                 type="datetime-local"
                 name="ends_at"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="space-y-1 sm:col-span-2">
@@ -107,7 +107,7 @@ export default async function EventsPage() {
               <input
                 name="location"
                 placeholder="Stade municipal"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="space-y-1 sm:col-span-2">
@@ -115,13 +115,13 @@ export default async function EventsPage() {
               <textarea
                 name="description"
                 rows={3}
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="rounded bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+                className="clay-accent clay-presse px-5 py-2.5 font-medium"
               >
                 Créer
               </button>
@@ -133,7 +133,7 @@ export default async function EventsPage() {
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">À venir</h2>
         {(upcoming ?? []).length === 0 ? (
-          <p className="rounded-lg border border-dashed border-border bg-surface/50 px-4 py-6 text-center text-sm text-muted">
+          <p className="clay-vide px-4 py-6 text-center text-sm text-muted">
             Rien de prévu pour le moment.
           </p>
         ) : (
@@ -174,7 +174,7 @@ function EventList({
         <li key={ev.id}>
           <Link
             href={`/events/${ev.id}`}
-            className="block rounded-lg border border-border bg-surface px-4 py-3 hover:bg-surface-2 transition"
+            className="clay clay-vivant clay-presse block px-4 py-3"
           >
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs uppercase tracking-wide text-muted">

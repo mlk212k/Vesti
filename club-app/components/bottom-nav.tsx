@@ -22,8 +22,8 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="safe-bottom sticky bottom-0 z-20 border-t border-border bg-background/95 backdrop-blur">
-      <div className="flex items-stretch justify-between px-1">
+    <nav className="safe-bottom sticky bottom-0 z-20 px-3 pb-2">
+      <div className="clay-galet flex items-stretch justify-between px-1 shadow-lg">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (

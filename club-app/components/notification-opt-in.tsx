@@ -71,7 +71,7 @@ export function NotificationOptIn() {
   if (status === "checking") return null;
 
   return (
-    <div className="rounded-lg border border-border bg-surface p-4">
+    <div className="clay p-4">
       <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-muted">
         Notifications
       </h2>
@@ -99,7 +99,7 @@ export function NotificationOptIn() {
             type="button"
             onClick={enable}
             disabled={pending}
-            className="rounded bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-strong disabled:opacity-60"
+            className="clay-accent clay-presse px-4 py-2 text-sm font-medium disabled:opacity-60"
           >
             {pending ? "Activation…" : "Activer les notifications"}
           </button>

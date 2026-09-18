@@ -69,7 +69,7 @@ export function InstallGate() {
         alt=""
         width={72}
         height={72}
-        className="rounded-2xl shadow-lg"
+        className="rounded-2xl shadow-lg ring-2 ring-gold/40"
       />
       <div className="space-y-2">
         <h1 className="text-xl font-semibold">
@@ -90,7 +90,7 @@ export function InstallGate() {
       )}
 
       {!installed && platform === "ios" && (
-        <ol className="max-w-xs space-y-2 text-left text-sm text-foreground">
+        <ol className="clay-creux max-w-xs space-y-2 p-4 text-left text-sm text-foreground">
           <li>
             1. Appuie sur le bouton <strong>Partager</strong> (le carré avec
             la flèche) en bas de Safari.
@@ -108,12 +108,12 @@ export function InstallGate() {
             <button
               type="button"
               onClick={handleInstallClick}
-              className="rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent-strong"
+              className="clay-accent clay-presse px-6 py-3 text-sm font-medium"
             >
               Installer l&apos;app
             </button>
           ) : (
-            <ol className="max-w-xs space-y-2 text-left text-sm text-foreground">
+            <ol className="clay-creux max-w-xs space-y-2 p-4 text-left text-sm text-foreground">
               <li>1. Ouvre le menu ⋮ en haut à droite de Chrome.</li>
               <li>
                 2. Choisis <strong>« Installer l&apos;application »</strong>{" "}

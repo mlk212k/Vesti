@@ -1,14 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #17181b;
+  --background: #fdfbf8;
+  --foreground: #1d1712;
   --accent: #e11d2e;
   --accent-strong: #b0122a;
-  --muted: #6b7280;
-  --surface: #f7f7f8;
-  --surface-2: #eeeef1;
-  --border: #e6e6ea;
+  --gold: #c9a24a;
+  --gold-dim: #a3803a;
+  --gold-pale: #f1e2bd;
+  --muted: #7a6f63;
+  --surface: #f8f4ee;
+  --surface-2: #f0e9de;
+  --surface-3: #e7ddc9;
+  --border: #e8ddca;
+
+  /* --font-display / --font-ui come from next/font (see app/layout.tsx),
+     applied as classes on <html> — not redeclared here to avoid a
+     specificity/ordering fight with next/font's own stylesheet. */
+
+  /* Soft "clay" shadow pair — a light highlight and a warm, muted shadow
+     (never pure black) so raised/indented panels read as sculpted rather
+     than smudged on a light background. */
+  --clay-lum: #ffffff;
+  --clay-creux: rgba(75, 55, 25, 0.14);
+  --clay-porte: rgba(75, 55, 25, 0.2);
 }
 
 @theme inline {
@@ -16,19 +31,33 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
+  --color-gold: var(--gold);
+  --color-gold-dim: var(--gold-dim);
+  --color-gold-pale: var(--gold-pale);
   --color-muted: var(--muted);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-border: var(--border);
+  --font-sans: var(--font-ui);
+  --font-display: var(--font-display);
 }
 
 html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
   min-height: 100%;
   color-scheme: light;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
 
 * {
@@ -53,4 +82,177 @@ html {
    users never see it flash. */
 html.pwa-installed .install-gate {
   display: none;
+}
+
+/* Clay design system --------------------------------------------------
+   A raised, sculpted "clay" surface: a soft gradient plus layered
+   inset/outset shadows instead of a flat border. .clay-creux is the
+   inverse (pressed-in — right for inputs). .clay-galet is the fully
+   pill-shaped version for chips/avatars/small buttons. .clay-accent and
+   .clay-gold are the two colored CTA treatments. .clay-presse adds a
+   tactile press state, .clay-vivant a hover lift. */
+
+.clay {
+  background: linear-gradient(
+    148deg,
+    var(--surface) 0%,
+    var(--surface-2) 100%
+  );
+  box-shadow:
+    inset 1px 1px 2px var(--clay-lum),
+    inset -2px -3px 6px var(--clay-creux),
+    8px 10px 22px -12px var(--clay-porte),
+    2px 3px 8px -6px rgba(75, 55, 25, 0.1);
+  border-radius: 22px;
+}
+
+.clay-creux {
+  background: linear-gradient(
+    148deg,
+    var(--surface-2) 0%,
+    var(--surface) 100%
+  );
+  box-shadow:
+    inset 3px 4px 7px var(--clay-creux),
+    inset -1px -1px 2px var(--clay-lum);
+  border-radius: 16px;
+}
+
+.clay-galet {
+  background: linear-gradient(
+    148deg,
+    var(--surface-3) 0%,
+    var(--surface-2) 100%
+  );
+  box-shadow:
+    inset 1px 1px 2px var(--clay-lum),
+    inset -1px -2px 3px var(--clay-creux),
+    3px 4px 10px -6px var(--clay-porte);
+  border-radius: 999px;
+}
+
+/* Edge-to-edge bars (top/bottom nav) — a soft directional shadow instead
+   of a flat border, so the bar reads as gently lifted off the page. */
+.clay-bar {
+  box-shadow: 0 10px 24px -16px rgba(75, 55, 25, 0.22);
+}
+
+.clay-bar-top {
+  box-shadow: 0 -10px 24px -16px rgba(75, 55, 25, 0.22);
+}
+
+.clay-vide {
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: 20px;
+}
+
+.clay-accent {
+  background: linear-gradient(148deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: #fff;
+  box-shadow:
+    inset 1px 2px 2px rgba(255, 255, 255, 0.35),
+    inset -2px -3px 5px rgba(0, 0, 0, 0.2),
+    6px 8px 18px -8px rgba(225, 29, 46, 0.5);
+  border-radius: 999px;
+}
+
+.clay-gold {
+  background: linear-gradient(
+    148deg,
+    var(--gold-pale) 0%,
+    var(--gold) 55%,
+    var(--gold-dim) 100%
+  );
+  color: #3d2e0d;
+  box-shadow:
+    inset 1px 2px 3px rgba(255, 255, 255, 0.55),
+    inset -2px -3px 5px rgba(90, 60, 10, 0.25),
+    6px 8px 18px -8px rgba(201, 162, 74, 0.45);
+  border-radius: 999px;
+}
+
+.clay-presse {
+  transition:
+    box-shadow 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.clay-presse:active {
+  box-shadow: inset 3px 4px 8px rgba(0, 0, 0, 0.25);
+  transform: scale(0.975) translateY(1px);
+}
+
+.clay-vivant {
+  transition:
+    box-shadow 0.24s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .clay-vivant:hover {
+    box-shadow:
+      inset 1px 1px 2px var(--clay-lum),
+      inset -2px -3px 6px var(--clay-creux),
+      11px 14px 28px -12px var(--clay-porte),
+      0 0 0 1px rgba(201, 162, 74, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+/* Ambient floating blobs — a faint red/gold wash drifting behind the UI,
+   the same idea as the reference app but tuned to the club's colors. */
+.pate {
+  filter: blur(90px);
+  pointer-events: none;
+  border-radius: 50%;
+  position: fixed;
+  z-index: -1;
+}
+
+.pate-a {
+  background: radial-gradient(circle, rgba(225, 29, 46, 0.07), transparent 68%);
+  width: 60vw;
+  max-width: 620px;
+  height: 60vw;
+  max-height: 620px;
+  animation: 26s ease-in-out infinite alternate derive-a;
+  top: -22vh;
+  left: -18vw;
+}
+
+.pate-b {
+  background: radial-gradient(circle, rgba(201, 162, 74, 0.1), transparent 68%);
+  width: 52vw;
+  max-width: 520px;
+  height: 52vw;
+  max-height: 520px;
+  animation: 32s ease-in-out infinite alternate derive-b;
+  bottom: -18vh;
+  right: -14vw;
+}
+
+@keyframes derive-a {
+  0% {
+    transform: translate(0) scale(1);
+  }
+  to {
+    transform: translate(7vw, 6vh) scale(1.12);
+  }
+}
+
+@keyframes derive-b {
+  0% {
+    transform: translate(0) scale(1.08);
+  }
+  to {
+    transform: translate(-6vw, -5vh) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pate-a,
+  .pate-b {
+    animation: none !important;
+  }
 }

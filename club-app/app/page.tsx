@@ -16,10 +16,10 @@ export default async function LandingPage() {
           width={112}
           height={112}
           priority
-          className="mx-auto rounded-full ring-1 ring-border"
+          className="mx-auto rounded-full shadow-lg ring-2 ring-gold/50"
         />
 
-        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] uppercase tracking-wide text-muted">
+        <div className="clay-galet inline-flex items-center gap-2 px-3 py-1 text-[11px] uppercase tracking-wide text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           Thionville · depuis 1920
         </div>
@@ -35,7 +35,7 @@ export default async function LandingPage() {
           {user ? (
             <Link
               href="/dashboard"
-              className="block w-full rounded-xl bg-accent px-5 py-3 font-medium text-white transition hover:bg-accent-strong"
+              className="clay-accent clay-presse block w-full py-3 font-medium"
             >
               Ouvrir mon espace
             </Link>
@@ -43,13 +43,13 @@ export default async function LandingPage() {
             <>
               <Link
                 href="/login"
-                className="block w-full rounded-xl bg-accent px-5 py-3 font-medium text-white transition hover:bg-accent-strong"
+                className="clay-accent clay-presse block w-full py-3 font-medium"
               >
                 Se connecter
               </Link>
               <Link
                 href="/login?mode=signup"
-                className="block w-full rounded-xl border border-border bg-surface px-5 py-3 font-medium transition hover:bg-surface-2"
+                className="clay-galet clay-presse block w-full py-3 font-medium"
               >
                 Créer un compte
               </Link>

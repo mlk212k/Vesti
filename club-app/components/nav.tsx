@@ -17,18 +17,18 @@ export function TopBar({
   const initial = fullName.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <header className="safe-top sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
+    <header className="safe-top clay-bar sticky top-0 z-20 bg-background/90 backdrop-blur-md">
       <div className="flex items-center justify-between px-4 py-3">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 font-semibold tracking-tight"
+          className="flex items-center gap-2 font-display font-semibold tracking-tight"
         >
           <Image
             src="/logo.jpg"
             alt=""
             width={28}
             height={28}
-            className="rounded-full ring-1 ring-border"
+            className="clay-galet"
             priority
           />
           <span className="text-[15px]">{clubName}</span>
@@ -36,11 +36,11 @@ export function TopBar({
 
         <Link href="/profile" aria-label="Mon profil" className="flex items-center gap-2">
           {role !== "member" && (
-            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-strong">
+            <span className="clay-gold px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
               {roleLabel(role)}
             </span>
           )}
-          <span className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent text-sm font-semibold text-white">
+          <span className="clay-accent relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden text-sm font-semibold">
             {avatarUrl ? (
               <Image
                 src={avatarUrl}

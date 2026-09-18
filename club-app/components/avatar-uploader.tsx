@@ -75,7 +75,7 @@ export function AvatarUploader({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/10 text-lg font-semibold text-accent-strong ring-1 ring-border"
+        className="clay-galet relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden text-lg font-semibold text-accent-strong"
         aria-label="Changer la photo de profil"
       >
         {preview ? (
@@ -96,7 +96,7 @@ export function AvatarUploader({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={pending}
-          className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm hover:bg-surface-2 disabled:opacity-60"
+          className="clay-galet clay-presse px-3 py-1.5 text-sm disabled:opacity-60"
         >
           {pending ? "Envoi…" : preview ? "Changer la photo" : "Ajouter une photo"}
         </button>

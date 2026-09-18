@@ -29,7 +29,7 @@ export function LoginForm({
               required
               name="full_name"
               autoComplete="name"
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+              className="clay-creux w-full px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/60"
             />
           </label>
 
@@ -40,10 +40,10 @@ export function LoginForm({
               <button
                 type="button"
                 onClick={() => setRole("member")}
-                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
+                className={`clay-presse rounded-2xl px-3 py-2.5 text-left text-sm transition ${
                   role === "member"
-                    ? "border-accent bg-accent/5"
-                    : "border-border bg-surface"
+                    ? "clay ring-2 ring-accent/50"
+                    : "clay-creux"
                 }`}
               >
                 <div className="font-medium">Membre</div>
@@ -54,10 +54,10 @@ export function LoginForm({
               <button
                 type="button"
                 onClick={() => setRole("coach")}
-                className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
+                className={`clay-presse rounded-2xl px-3 py-2.5 text-left text-sm transition ${
                   role === "coach"
-                    ? "border-accent bg-accent/5"
-                    : "border-border bg-surface"
+                    ? "clay ring-2 ring-gold/60"
+                    : "clay-creux"
                 }`}
               >
                 <div className="font-medium">Coach</div>
@@ -77,7 +77,7 @@ export function LoginForm({
           type="email"
           name="email"
           autoComplete="email"
-          className="w-full rounded-lg border border-border bg-surface px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          className="clay-creux w-full px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/60"
         />
       </label>
 
@@ -89,12 +89,12 @@ export function LoginForm({
           type="password"
           name="password"
           autoComplete={isSignUp ? "new-password" : "current-password"}
-          className="w-full rounded-lg border border-border bg-surface px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          className="clay-creux w-full px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/60"
         />
       </label>
 
       {state?.error && (
-        <p className="rounded-lg border border-accent/30 bg-accent/5 px-3 py-2 text-sm text-accent-strong">
+        <p className="rounded-2xl bg-accent/8 px-3 py-2.5 text-sm text-accent-strong ring-1 ring-accent/15">
           {state.error}
         </p>
       )}
@@ -102,7 +102,7 @@ export function LoginForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-white hover:bg-accent-strong transition disabled:opacity-60"
+        className="clay-accent clay-presse w-full py-3 font-medium disabled:opacity-60"
       >
         {pending
           ? "…"

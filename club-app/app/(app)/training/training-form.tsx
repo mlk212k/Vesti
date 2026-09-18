@@ -19,17 +19,14 @@ export function TrainingForm() {
 
   return (
     <div className="space-y-6">
-      <form
-        action={formAction}
-        className="grid gap-3 rounded-lg border border-border bg-surface p-4"
-      >
+      <form action={formAction} className="clay grid gap-3 p-4">
         <label className="space-y-1">
           <span className="text-xs text-muted">Équipe / catégorie</span>
           <input
             required
             name="team"
             placeholder="U15, Seniors A…"
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
 
@@ -38,7 +35,7 @@ export function TrainingForm() {
           <select
             name="specificity"
             defaultValue="general"
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           >
             {SPECIFICITIES.map((s) => (
               <option key={s.value} value={s.value}>
@@ -58,7 +55,7 @@ export function TrainingForm() {
               min={20}
               max={180}
               defaultValue={90}
-              className="w-full rounded border border-border bg-background px-3 py-2"
+              className="clay-creux w-full px-3 py-2.5"
             />
           </label>
           <label className="space-y-1">
@@ -69,7 +66,7 @@ export function TrainingForm() {
               min={1}
               max={40}
               placeholder="16"
-              className="w-full rounded border border-border bg-background px-3 py-2"
+              className="clay-creux w-full px-3 py-2.5"
             />
           </label>
         </div>
@@ -81,12 +78,12 @@ export function TrainingForm() {
             name="theme"
             rows={3}
             placeholder="Possession de balle, transitions défense-attaque, jeu dans les 30 derniers mètres…"
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
 
         {state && "error" in state && (
-          <p className="rounded-lg border border-accent/30 bg-accent/5 px-3 py-2 text-sm text-accent-strong">
+          <p className="rounded-2xl bg-accent/8 px-3 py-2.5 text-sm text-accent-strong ring-1 ring-accent/15">
             {state.error}
           </p>
         )}
@@ -94,7 +91,7 @@ export function TrainingForm() {
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong disabled:opacity-60"
+          className="clay-accent clay-presse px-5 py-2.5 font-medium disabled:opacity-60"
         >
           {pending ? "Génération…" : "Générer la séance"}
         </button>
@@ -107,7 +104,7 @@ export function TrainingForm() {
 
 function PlanOutput({ text }: { text: string }) {
   return (
-    <div className="space-y-2 rounded-lg border border-border bg-surface p-4">
+    <div className="clay space-y-2 p-4">
       {text.split("\n").map((line, i) => {
         const trimmed = line.trim();
         if (trimmed.startsWith("## ")) {

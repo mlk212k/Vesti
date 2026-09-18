@@ -110,7 +110,7 @@ export function ChatPanel({
   }
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="clay flex flex-col overflow-hidden">
       <div
         ref={listRef}
         className="h-[60vh] space-y-3 overflow-y-auto px-4 py-4"
@@ -128,11 +128,7 @@ export function ChatPanel({
               className={`flex ${mine ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl px-3 py-2 ${
-                  mine
-                    ? "bg-accent text-white"
-                    : "bg-surface-2 text-foreground"
-                }`}
+                className={`max-w-[80%] px-3 py-2 ${mine ? "clay-accent" : "clay"}`}
               >
                 <div className="flex items-baseline gap-2 text-xs opacity-70">
                   <span className="font-medium">
@@ -157,7 +153,7 @@ export function ChatPanel({
       </div>
 
       {error && (
-        <p className="border-t border-accent/20 bg-accent/5 px-4 py-2 text-xs text-accent-strong">
+        <p className="border-t border-border bg-accent/8 px-4 py-2 text-xs text-accent-strong">
           {error}
         </p>
       )}
@@ -171,12 +167,12 @@ export function ChatPanel({
           onChange={(e) => setBody(e.target.value)}
           maxLength={2000}
           placeholder="Écris un message…"
-          className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          className="clay-creux flex-1 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/60"
         />
         <button
           type="submit"
           disabled={pending || body.trim().length === 0}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-strong disabled:opacity-50"
+          className="clay-accent clay-presse px-5 py-2.5 text-sm font-medium disabled:opacity-50"
         >
           Envoyer
         </button>

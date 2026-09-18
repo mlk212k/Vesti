@@ -1,7 +1,20 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import { InstallGate } from "@/components/install-gate";
 import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-ui",
+  display: "swap",
+});
 
 // Runs before hydration so an already-installed user never sees the
 // install gate flash on open — it tags <html> synchronously, and
@@ -36,13 +49,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html
+      lang="fr"
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <Script
           id="detect-standalone"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: detectStandaloneScript }}
         />
+        <div className="pate pate-a" aria-hidden="true" />
+        <div className="pate pate-b" aria-hidden="true" />
         <InstallGate />
         {children}
       </body>

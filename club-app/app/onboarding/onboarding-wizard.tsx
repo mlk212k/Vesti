@@ -57,10 +57,10 @@ export function OnboardingWizard({
               key={c}
               type="button"
               onClick={() => setCategory(c)}
-              className={`rounded-lg border px-2 py-2.5 text-sm font-medium transition ${
+              className={`clay-presse px-2 py-2.5 text-sm font-medium ${
                 category === c
-                  ? "border-accent bg-accent/5 text-accent-strong"
-                  : "border-border bg-surface"
+                  ? "clay ring-2 ring-accent/50 text-accent-strong"
+                  : "clay-creux"
               }`}
             >
               {categoryLabel(c)}
@@ -74,7 +74,7 @@ export function OnboardingWizard({
           type="button"
           onClick={handleContinue}
           disabled={!category || saving}
-          className="w-full rounded-xl bg-accent px-5 py-3 font-medium text-white transition hover:bg-accent-strong disabled:opacity-50"
+          className="clay-accent clay-presse w-full py-3 font-medium disabled:opacity-50"
         >
           {saving ? "…" : "Continuer"}
         </button>
@@ -106,7 +106,7 @@ export function OnboardingWizard({
         <button
           type="button"
           onClick={() => setStep(3)}
-          className="w-full rounded-xl bg-accent px-5 py-3 font-medium text-white transition hover:bg-accent-strong"
+          className="clay-accent clay-presse w-full py-3 font-medium"
         >
           Continuer
         </button>
@@ -133,7 +133,7 @@ export function OnboardingWizard({
       <button
         type="button"
         onClick={() => router.push("/dashboard")}
-        className="w-full rounded-xl bg-accent px-5 py-3 font-medium text-white transition hover:bg-accent-strong"
+        className="clay-accent clay-presse w-full py-3 font-medium"
       >
         Terminer
       </button>

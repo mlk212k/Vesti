@@ -45,17 +45,17 @@ export default async function DashboardPage() {
       {canManage(user.role) && (
         <Link
           href="/training"
-          className="flex items-center justify-between rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 transition hover:bg-accent/10"
+          className="clay-gold clay-vivant clay-presse flex items-center justify-between px-4 py-3"
         >
           <div>
-            <div className="font-medium text-accent-strong">
+            <div className="font-display font-medium">
               Préparer un entraînement (IA)
             </div>
-            <div className="text-sm text-muted">
+            <div className="text-sm opacity-80">
               Génère une séance détaillée selon la spécificité et le thème.
             </div>
           </div>
-          <span className="text-accent-strong">→</span>
+          <span>→</span>
         </Link>
       )}
 
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
                 <li key={ev.id}>
                   <Link
                     href={`/events/${ev.id}`}
-                    className="block rounded-lg border border-border bg-surface px-4 py-3 hover:bg-surface-2 transition"
+                    className="clay clay-vivant clay-presse block px-4 py-3"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs uppercase tracking-wide text-muted">
@@ -111,10 +111,7 @@ export default async function DashboardPage() {
           ) : (
             <ul className="space-y-2">
               {(announcements ?? []).map((a) => (
-                <li
-                  key={a.id}
-                  className="rounded-lg border border-border bg-surface px-4 py-3"
-                >
+                <li key={a.id} className="clay px-4 py-3">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-medium">
                       {a.pinned && "📌 "}
@@ -139,9 +136,9 @@ export default async function DashboardPage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-border bg-surface p-4">
+    <div className="clay p-4">
       <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
-      <div className="mt-1 text-2xl font-semibold">{value}</div>
+      <div className="font-display mt-1 text-2xl font-semibold">{value}</div>
     </div>
   );
 }
@@ -167,7 +164,7 @@ function SectionHeader({
 
 function EmptyCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-dashed border-border bg-surface/50 px-4 py-6 text-center text-sm text-muted">
+    <div className="clay-vide px-4 py-6 text-center text-sm text-muted">
       {children}
     </div>
   );

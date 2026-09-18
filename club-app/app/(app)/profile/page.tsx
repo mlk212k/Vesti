@@ -42,17 +42,14 @@ export default async function ProfilePage() {
 
       <NotificationOptIn />
 
-      <form
-        action={updateProfileAction}
-        className="grid gap-3 rounded-lg border border-border bg-surface p-4"
-      >
+      <form action={updateProfileAction} className="clay grid gap-3 p-4">
         <label className="space-y-1">
           <span className="text-xs text-muted">Nom complet</span>
           <input
             required
             name="full_name"
             defaultValue={profile?.full_name ?? me.full_name}
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
         <label className="space-y-1">
@@ -60,7 +57,7 @@ export default async function ProfilePage() {
           <select
             name="category"
             defaultValue={profile?.category ?? ""}
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           >
             <option value="">—</option>
             {CATEGORIES.map((c) => (
@@ -78,7 +75,7 @@ export default async function ProfilePage() {
             max={99}
             name="jersey_number"
             defaultValue={profile?.jersey_number ?? ""}
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
         <label className="space-y-1">
@@ -87,7 +84,7 @@ export default async function ProfilePage() {
             name="position"
             placeholder="Gardien, ailier, …"
             defaultValue={profile?.position ?? ""}
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
         <label className="space-y-1">
@@ -95,13 +92,13 @@ export default async function ProfilePage() {
           <input
             name="phone"
             defaultValue={profile?.phone ?? ""}
-            className="w-full rounded border border-border bg-background px-3 py-2"
+            className="clay-creux w-full px-3 py-2.5"
           />
         </label>
         <div>
           <button
             type="submit"
-            className="rounded bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+            className="clay-accent clay-presse px-5 py-2.5 font-medium"
           >
             Enregistrer
           </button>
@@ -111,7 +108,7 @@ export default async function ProfilePage() {
       <form action="/logout" method="post" className="pt-2">
         <button
           type="submit"
-          className="w-full rounded-lg border border-border px-4 py-2.5 text-sm text-muted hover:bg-surface"
+          className="clay-creux clay-presse w-full px-4 py-2.5 text-sm text-muted"
         >
           Déconnexion
         </button>

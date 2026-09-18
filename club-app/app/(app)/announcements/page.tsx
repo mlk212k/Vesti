@@ -23,7 +23,7 @@ export default async function AnnouncementsPage() {
       </header>
 
       {canManage(me.role) && (
-        <section className="rounded-lg border border-border bg-surface p-4">
+        <section className="clay p-4">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
             Publier une annonce
           </h2>
@@ -33,7 +33,7 @@ export default async function AnnouncementsPage() {
               <input
                 required
                 name="title"
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="block space-y-1">
@@ -42,7 +42,7 @@ export default async function AnnouncementsPage() {
                 required
                 name="body"
                 rows={4}
-                className="w-full rounded border border-border bg-surface-2 px-3 py-2"
+                className="clay-creux w-full px-3 py-2.5"
               />
             </label>
             <label className="flex items-center gap-2 text-sm">
@@ -51,7 +51,7 @@ export default async function AnnouncementsPage() {
             </label>
             <button
               type="submit"
-              className="rounded bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+              className="clay-accent clay-presse px-5 py-2.5 font-medium"
             >
               Publier
             </button>
@@ -61,7 +61,7 @@ export default async function AnnouncementsPage() {
 
       <section className="space-y-3">
         {(announcements ?? []).length === 0 ? (
-          <p className="rounded-lg border border-dashed border-border bg-surface/50 px-4 py-6 text-center text-sm text-muted">
+          <p className="clay-vide px-4 py-6 text-center text-sm text-muted">
             Aucune annonce pour l&apos;instant.
           </p>
         ) : (
@@ -72,10 +72,7 @@ export default async function AnnouncementsPage() {
                   ?.full_name ?? "—";
               const canDelete = canManage(me.role);
               return (
-                <li
-                  key={a.id}
-                  className="rounded-lg border border-border bg-surface p-4"
-                >
+                <li key={a.id} className="clay p-4">
                   <div className="flex items-baseline justify-between gap-2">
                     <h3 className="font-medium">
                       {a.pinned && "📌 "}
@@ -97,7 +94,7 @@ export default async function AnnouncementsPage() {
                         />
                         <button
                           type="submit"
-                          className="rounded border border-border px-2 py-1 hover:bg-surface-2"
+                          className="clay-galet clay-presse px-2.5 py-1"
                         >
                           Supprimer
                         </button>

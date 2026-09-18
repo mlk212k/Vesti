@@ -15,7 +15,7 @@ export default async function ClubPage() {
 
   return (
     <main className="min-h-screen">
-      <header className="border-b border-border bg-surface">
+      <header className="clay-bar bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-md items-center justify-between px-6 py-4 text-sm">
           <Link href="/" className="text-muted hover:text-foreground">
             ← Accueil
@@ -23,14 +23,14 @@ export default async function ClubPage() {
           {user ? (
             <Link
               href="/dashboard"
-              className="rounded-md bg-accent px-3 py-1.5 font-medium text-white hover:bg-accent-strong"
+              className="clay-accent clay-presse px-3 py-1.5 text-sm font-medium"
             >
               Mon espace
             </Link>
           ) : (
             <Link
               href="/login"
-              className="rounded-md border border-border bg-surface px-3 py-1.5 font-medium hover:bg-surface-2"
+              className="clay-galet clay-presse px-3 py-1.5 text-sm font-medium"
             >
               Se connecter
             </Link>
@@ -46,7 +46,7 @@ export default async function ClubPage() {
             width={120}
             height={120}
             priority
-            className="mx-auto rounded-full ring-2 ring-border shadow-lg"
+            className="mx-auto rounded-full shadow-lg ring-2 ring-gold/50"
           />
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.2em] text-muted">
@@ -107,7 +107,7 @@ export default async function ClubPage() {
 
         <section className="space-y-4">
           <SectionTitle>Où nous trouver</SectionTitle>
-          <div className="rounded-lg border border-border bg-surface p-5 space-y-3">
+          <div className="clay space-y-3 p-5">
             <div>
               <div className="text-xs uppercase tracking-wide text-muted">
                 Adresse
@@ -140,7 +140,7 @@ export default async function ClubPage() {
             {user ? (
               <Link
                 href="/dashboard"
-                className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+                className="clay-accent clay-presse px-4 py-2 font-medium"
               >
                 Ouvrir mon espace
               </Link>
@@ -148,13 +148,13 @@ export default async function ClubPage() {
               <>
                 <Link
                   href="/login?mode=signup"
-                  className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+                  className="clay-accent clay-presse px-4 py-2 font-medium"
                 >
                   Créer un compte
                 </Link>
                 <Link
                   href="/login"
-                  className="rounded-lg border border-border bg-surface px-4 py-2 font-medium hover:bg-surface-2"
+                  className="clay-galet clay-presse px-4 py-2 font-medium"
                 >
                   Se connecter
                 </Link>
@@ -186,7 +186,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function FactCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-border bg-surface px-4 py-3">
+    <div className="clay px-4 py-3">
       <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
       <div className="mt-1 font-medium">{value}</div>
     </div>
