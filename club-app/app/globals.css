@@ -46,3 +46,11 @@ html {
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* The install gate is shown by default (SSR-safe) and hidden purely by
+   CSS once the blocking inline script (see app/layout.tsx) detects
+   standalone mode and tags <html> — before first paint, so installed
+   users never see it flash. */
+html.pwa-installed .install-gate {
+  display: none;
+}
