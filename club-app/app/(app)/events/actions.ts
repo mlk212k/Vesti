@@ -157,7 +157,7 @@ export async function toggleCallupAction(formData: FormData) {
     if (event) {
       const parts = [formatDate(event.starts_at)];
       if (event.location) parts.push(event.location);
-      await sendPushToUser(memberId, {
+      await sendPushToUser(supabase, memberId, {
         title: `Convocation${event.category ? ` · ${categoryLabel(event.category)}` : ""}`,
         body: `${event.title}${event.opponent ? ` vs ${event.opponent}` : ""} — ${parts.join(" · ")}`,
         url: `/events/${eventId}`,

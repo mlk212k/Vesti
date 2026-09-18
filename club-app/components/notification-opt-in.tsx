@@ -92,7 +92,8 @@ export function NotificationOptIn() {
       {status === "off" && (
         <>
           <p className="mb-3 text-sm text-muted">
-            Reçois une notification dès que tu es convoqué à un match.
+            Reçois une notification dès que tu es convoqué à un match, et
+            un rappel le jour de chaque entraînement.
           </p>
           <button
             type="button"

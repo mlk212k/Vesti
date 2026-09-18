@@ -73,6 +73,11 @@ export default async function EventsPage() {
                 ))}
               </select>
             </label>
+            <p className="text-xs text-muted sm:col-span-2">
+              Pour un entraînement, les membres de cette catégorie (ou tout
+              le monde si non précisé) reçoivent un rappel automatique le
+              jour même, s&apos;ils ont activé les notifications.
+            </p>
             <label className="space-y-1">
               <span className="text-xs text-muted">Adversaire (optionnel)</span>
               <input

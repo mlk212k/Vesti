@@ -1,6 +1,6 @@
 import "server-only";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import webpush from "web-push";
-import { createClient } from "@/lib/supabase/server";
 import { VAPID_PUBLIC_KEY } from "./config";
 
 const VAPID_SUBJECT = "https://guentrange.vercel.app";
@@ -26,14 +26,20 @@ type PushSubscriptionRow = {
 
 // Best-effort: a notification failing to send must never break the action
 // that triggered it (e.g. convoking a player), so every failure mode here
-// is swallowed rather than thrown.
-export async function sendPushToUser(userId: string, payload: PushPayload) {
+// is swallowed rather than thrown. `supabase` is whichever client fits the
+// caller's context — the cookie-based one for a request made on behalf of
+// a signed-in member (e.g. a coach convoking a player), or the service-role
+// admin client for a session-less job (the training-reminders cron).
+export async function sendPushToUser(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PushPayload,
+) {
   try {
     const privateKey = process.env.VAPID_PRIVATE_KEY;
     if (!privateKey) return;
     ensureConfigured(privateKey);
 
-    const supabase = await createClient();
     const { data: subs } = await supabase.rpc("get_push_subscriptions", {
       target_user_id: userId,
     });
