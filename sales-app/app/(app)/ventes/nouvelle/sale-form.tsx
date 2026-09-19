@@ -116,17 +116,17 @@ export function SaleForm({
       {/* Récapitulatif : c'est exactement ce que la base va calculer. */}
       <div className="panneau-creux grid grid-cols-3 gap-2 p-4">
         <div>
-          <p className="surtitre">Montant</p>
+          <p className="surtitre-serre">Montant</p>
           <p className="chiffre mt-1 text-xl">{formatCents(totalCents)}</p>
         </div>
         <div>
-          <p className="surtitre">Commission</p>
+          <p className="surtitre-serre">Commission</p>
           <p className="chiffre mt-1 text-xl text-faint">
             {formatCents(commissionCents)}
           </p>
         </div>
         <div>
-          <p className="surtitre">Mon net</p>
+          <p className="surtitre-serre">Mon net</p>
           <p className="chiffre mt-1 bg-gradient-to-br from-[#c4b5fd] to-[#ff8ec0] bg-clip-text text-xl text-transparent">
             {formatCents(netCents)}
           </p>

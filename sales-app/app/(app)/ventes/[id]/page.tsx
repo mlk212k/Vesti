@@ -104,7 +104,7 @@ export default async function SalePage({
         {sale.notes ? (
           <div className="panneau p-4">
             <p className="surtitre">Notes</p>
-            <p className="mt-1.5 text-sm whitespace-pre-wrap text-dim">
+            <p className="texte-libre mt-1.5 text-sm whitespace-pre-wrap text-dim">
               {sale.notes}
             </p>
           </div>

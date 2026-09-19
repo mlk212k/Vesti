@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Inter } from "next/font/google";
+import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
 // Archivo : grotesque très grasse, excellente en capitales serrées — c'est
@@ -39,6 +40,9 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  // `cover` est ce qui fait exister env(safe-area-inset-*) : sans lui, la
+  // barre du bas passe sous l'indicateur d'accueil de l'iPhone.
+  viewportFit: "cover",
   themeColor: "#07070a",
   colorScheme: "dark",
 };
@@ -55,7 +59,10 @@ export default function RootLayout({
             est une propriété du document, pas de chaque écran. */}
         <div className="halo halo-violet" aria-hidden="true" />
         <div className="halo halo-magenta" aria-hidden="true" />
+        <div className="grille" aria-hidden="true" />
+        <div className="scanline" aria-hidden="true" />
         <div className="relative z-10">{children}</div>
+        <EnregistreServiceWorker />
       </body>
     </html>
   );

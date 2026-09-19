@@ -8,6 +8,10 @@ const PUBLIC_PATHS = [
   "/mot-de-passe-oublie",
   "/nouveau-mot-de-passe",
   "/auth/callback",
+  // Servie par le service worker quand le réseau manque : elle doit
+  // s'afficher sans session, sinon on redirige vers un /login lui aussi
+  // injoignable.
+  "/hors-ligne",
 ];
 
 function isPublic(pathname: string): boolean {

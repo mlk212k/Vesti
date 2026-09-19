@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { IconChevron } from "@/components/icons";
-import { Avatar, Jauge, Section, Stat, StatutJournee, Vide } from "@/components/ui";
+import { FiligraneNFC } from "@/components/nfc";
+import {
+  Avatar,
+  Bandeau,
+  Jauge,
+  Section,
+  Stat,
+  StatutJournee,
+  Vide,
+} from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate } from "@/lib/money";
 import type { TeamRow } from "@/lib/queries";
@@ -43,11 +52,25 @@ export function DashboardEquipe({
     (a, b) => (b.day?.revenue_cents ?? 0) - (a.day?.revenue_cents ?? 0),
   );
 
+  const meilleur = classement.find((row) => (row.day?.revenue_cents ?? 0) > 0);
+
+  const bandeau = [
+    `CA du jour ${formatCentsShort(caJour)}`,
+    `${cartesVendues} cartes vendues`,
+    `${actifs} en tournée`,
+    `${objectifsAtteints} objectif${objectifsAtteints > 1 ? "s" : ""} atteint${objectifsAtteints > 1 ? "s" : ""}`,
+    meilleur
+      ? `En tête : ${meilleur.profile.full_name.split(" ")[0]} · ${formatCentsShort(meilleur.day?.revenue_cents ?? 0)}`
+      : "Personne n'a encore vendu",
+    `Dépôt ${stock.in_warehouse} cartes`,
+  ];
+
   return (
     <div className="space-y-6">
-      <header className="montee">
+      <header className="montee relative overflow-hidden">
+        <FiligraneNFC />
         <p className="surtitre">Aujourd&apos;hui · {settings.team_name}</p>
-        <h1 className="titre mt-1 text-3xl sm:text-4xl">
+        <h1 className="titre-vitesse mt-1 text-4xl sm:text-5xl">
           {estAdmin ? "Poste de commandement" : "Supervision"}
         </h1>
         <p className="mt-1.5 text-sm text-faint">
@@ -56,6 +79,12 @@ export function DashboardEquipe({
           {rows.length > 1 ? "s" : ""}.
         </p>
       </header>
+
+      {/* Le bandeau : les chiffres du jour qui défilent, comme un tableau de
+          cotations. Il ne remplace aucune information — il donne le pouls. */}
+      <div className="montee retard-1">
+        <Bandeau items={bandeau} />
+      </div>
 
       <div className="montee retard-1 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat
@@ -104,9 +133,14 @@ export function DashboardEquipe({
             </Vide>
           ) : (
             <ul className="space-y-2">
-              {classement.map((row) => (
+              {classement.map((row, index) => (
                 <li key={row.profile.id}>
-                  <LigneEquipe row={row} estAdmin={estAdmin} />
+                  <LigneEquipe
+                    row={row}
+                    estAdmin={estAdmin}
+                    objectifParDefaut={settings.default_daily_goal}
+                    rang={(row.day?.revenue_cents ?? 0) > 0 ? index + 1 : null}
+                  />
                 </li>
               ))}
             </ul>
@@ -134,9 +168,22 @@ export function DashboardEquipe({
   );
 }
 
-function LigneEquipe({ row, estAdmin }: { row: TeamRow; estAdmin: boolean }) {
+function LigneEquipe({
+  row,
+  estAdmin,
+  objectifParDefaut,
+  rang,
+}: {
+  row: TeamRow;
+  estAdmin: boolean;
+  objectifParDefaut: number;
+  rang: number | null;
+}) {
   const { profile, day, cards } = row;
-  const objectif = day?.goal_cards ?? profile.daily_goal_override ?? 0;
+  // Quelqu'un qui n'a pas ouvert sa journée n'a pas d'objectif figé : on
+  // affiche celui qui s'appliquera, plutôt qu'un tiret.
+  const objectif =
+    day?.goal_cards ?? profile.daily_goal_override ?? objectifParDefaut;
   const vendues = day?.cards_sold ?? 0;
 
   return (
@@ -145,7 +192,16 @@ function LigneEquipe({ row, estAdmin }: { row: TeamRow; estAdmin: boolean }) {
       className="panneau block p-4 transition-transform active:scale-[0.99]"
     >
       <div className="flex items-center gap-3">
-        <Avatar nom={profile.full_name} />
+        <div className="relative shrink-0">
+          <Avatar nom={profile.full_name} />
+          {rang ? (
+            <span
+              className={`tag-rang absolute -top-1.5 -left-1.5 ${rang === 1 ? "tag-rang-or" : ""}`}
+            >
+              {rang}
+            </span>
+          ) : null}
+        </div>
 
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium">{profile.full_name}</p>
@@ -171,7 +227,7 @@ function LigneEquipe({ row, estAdmin }: { row: TeamRow; estAdmin: boolean }) {
 
       <div className="mt-3 flex items-center gap-3">
         <span className="chiffre w-14 shrink-0 text-sm text-dim">
-          {vendues} / {objectif || "—"}
+          {vendues} / {objectif}
         </span>
         <div className="flex-1">
           {objectif > 0 ? <Jauge valeur={vendues} objectif={objectif} /> : null}

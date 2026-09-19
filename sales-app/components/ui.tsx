@@ -57,7 +57,7 @@ export function Stat({
           aria-hidden="true"
         />
       ) : null}
-      <p className="surtitre">{label}</p>
+      <p className="surtitre whitespace-nowrap">{label}</p>
       <p
         className={`chiffre mt-2 text-2xl sm:text-3xl ${
           accent
@@ -188,6 +188,31 @@ export function LigneLien({
       <div className="min-w-0 flex-1">{children}</div>
       <IconChevron className="h-4 w-4 shrink-0 text-faint" />
     </Link>
+  );
+}
+
+// Bandeau défilant des chiffres du jour. Le contenu est dupliqué à
+// l'identique : la piste translate de -50 %, donc la boucle se referme sans
+// saut visible. Purement CSS, rendu sur le serveur.
+export function Bandeau({ items }: { items: string[] }) {
+  if (items.length === 0) return null;
+
+  const piste = [...items, ...items];
+
+  return (
+    <div className="marquee panneau-plat py-2.5" aria-hidden="true">
+      <div className="marquee-piste">
+        {piste.map((item, index) => (
+          <span
+            key={index}
+            className="surtitre flex shrink-0 items-center gap-3 px-4 text-dim"
+          >
+            {item}
+            <span className="inline-block h-1 w-1 rounded-full bg-[var(--magenta)]" />
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
 

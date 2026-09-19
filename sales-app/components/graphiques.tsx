@@ -36,7 +36,7 @@ export function Histogramme({
   return (
     <div className="panneau p-4">
       <div
-        className="flex items-end gap-[2px]"
+        className="flex items-stretch gap-[2px]"
         style={{ height: hauteur }}
         role="img"
         aria-label={`Graphique de ${points.length} valeurs`}
@@ -46,7 +46,7 @@ export function Histogramme({
           return (
             <div
               key={`${point.label}-${index}`}
-              className="group relative flex flex-1 flex-col justify-end"
+              className="group relative flex h-full flex-1 flex-col justify-end"
               style={{ width: `${largeurBarre}%` }}
             >
               <span

@@ -9,6 +9,6 @@ export const config = {
   matcher: [
     // Tout sauf les assets statiques et les icônes : y rediriger vers /login
     // ne sert à rien et casse le manifeste PWA.
-    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

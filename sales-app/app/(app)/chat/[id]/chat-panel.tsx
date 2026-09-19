@@ -114,7 +114,7 @@ export function ChatPanel({
                       : "panneau rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm"
                   }
                 >
-                  <p className="whitespace-pre-wrap break-words">{message.body}</p>
+                  <p className="texte-libre whitespace-pre-wrap">{message.body}</p>
                 </div>
                 <p className="mt-1 text-[10px] text-faint">
                   {formatTime(message.created_at)}

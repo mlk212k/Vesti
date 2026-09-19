@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { IconChevron, IconClock, IconPlus, IconTarget } from "@/components/icons";
+import { FiligraneNFC, IconNFC } from "@/components/nfc";
 import { Jauge, Section, Stat, StatutJournee, Vide } from "@/components/ui";
 import { formatDuration, formatTime } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate, percentOf } from "@/lib/money";
@@ -49,19 +50,28 @@ export function DashboardMembre({
     <div className="space-y-6">
       <header className="montee">
         <p className="surtitre">{salutation()}</p>
-        <h1 className="titre mt-1 text-3xl sm:text-4xl">{user.full_name}</h1>
+        <h1 className="titre-vitesse mt-1 text-4xl sm:text-5xl">
+          {user.full_name}
+        </h1>
       </header>
 
       {/* Le panneau de la journée : tout ce qu'un commercial a besoin de voir
-          en ouvrant l'app, sans faire défiler. */}
-      <section className="panneau-heros diagonale montee retard-1 p-5 sm:p-6">
+          en ouvrant l'app, sans faire défiler. Le liseré néon ne tourne que
+          sur celui-ci — c'est ce qui en fait LE point d'attention. */}
+      <section
+        className={`panneau-heros diagonale montee retard-1 p-5 sm:p-6 ${
+          statut === "in_progress" ? "neon-bord" : ""
+        }`}
+      >
+        <FiligraneNFC />
+
         <div className="mb-4 flex items-center justify-between gap-3">
           <p className="surtitre">Ma journée</p>
           <StatutJournee statut={statut} />
         </div>
 
         <div className="mb-2 flex items-end gap-3">
-          <span className="chiffre text-6xl sm:text-7xl">{vendues}</span>
+          <span className="chiffre chrome text-6xl sm:text-7xl">{vendues}</span>
           <span className="chiffre pb-2 text-2xl text-faint">/ {objectif}</span>
           <span className="pb-2.5 text-sm text-dim">cartes</span>
         </div>
@@ -83,20 +93,20 @@ export function DashboardMembre({
 
         <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
           <div className="panneau-creux p-3">
-            <p className="surtitre">CA</p>
+            <p className="surtitre-serre">CA</p>
             <p className="chiffre mt-1.5 text-xl sm:text-2xl">
               {formatCentsShort(day?.revenue_cents ?? 0)}
             </p>
           </div>
           <div className="panneau-creux p-3">
-            <p className="surtitre">Commission</p>
+            <p className="surtitre-serre">Commission</p>
             <p className="chiffre mt-1.5 text-xl text-faint sm:text-2xl">
               {formatCentsShort(day?.commission_cents ?? 0)}
             </p>
           </div>
           <div className="panneau-creux p-3">
-            <p className="surtitre">Mon net</p>
-            <p className="chiffre mt-1.5 bg-gradient-to-br from-[#c4b5fd] to-[#ff8ec0] bg-clip-text text-xl text-transparent sm:text-2xl">
+            <p className="surtitre-serre">Mon net</p>
+            <p className="chiffre chrome-cash mt-1.5 text-xl sm:text-2xl">
               {formatCentsShort(day?.net_cents ?? 0)}
             </p>
           </div>
@@ -133,7 +143,16 @@ export function DashboardMembre({
       {/* Cartes en main : le commercial doit savoir ce qu'il lui reste à
           vendre avant de sonner à la prochaine porte. */}
       <div className="montee retard-2 grid grid-cols-3 gap-3">
-        <Stat label="En main" valeur={cards.held} accent />
+        <Stat
+          label="En main"
+          valeur={
+            <span className="flex items-center gap-2">
+              <IconNFC className="h-5 w-5 text-[var(--nfc)]" />
+              {cards.held}
+            </span>
+          }
+          accent
+        />
         <Stat label="Attribuées" valeur={cards.allocated} />
         <Stat label="Vendues" valeur={cards.sold} />
       </div>

@@ -120,7 +120,7 @@ export default async function HistoryPage({
               ) : null}
 
               {day.notes ? (
-                <p className="mt-2 text-xs whitespace-pre-wrap text-faint">
+                <p className="texte-libre mt-2 text-xs whitespace-pre-wrap text-faint">
                   {day.notes}
                 </p>
               ) : null}

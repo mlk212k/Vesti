@@ -36,6 +36,11 @@
   --danger: #ff3b3b;
   --success: #2ee6a8;
   --warn: #ffb020;
+  /* Troisième accent, réservé au signal NFC : c'est la couleur du « sans
+     contact » dans l'imaginaire collectif. Elle n'apparaît que sur les ondes
+     et les détails techniques — jamais sur un bouton, sinon la hiérarchie
+     violet/magenta s'effondre. */
+  --nfc: #29e0ff;
 
   /* Liserés : un blanc très dilué, jamais une couleur franche. */
   --line: rgba(255, 255, 255, 0.07);
@@ -63,6 +68,7 @@
   --color-danger: var(--danger);
   --color-success: var(--success);
   --color-warn: var(--warn);
+  --color-nfc: var(--nfc);
   --color-line: var(--line);
   --font-sans: var(--font-ui);
   --font-display: var(--font-display);
@@ -72,19 +78,87 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ===========================================================================
+   TENUE EN APPLICATION INSTALLÉE
+   ---------------------------------------------------------------------------
+   Une PWA n'a plus de barre d'URL pour absorber les gestes : tout ce qui
+   dépasse ou rebondit se voit immédiatement et fait « site web mal installé ».
+   D'où, dans l'ordre :
+
+   - `overscroll-behavior: none` sur html ET body : plus de « tirer pour
+     rafraîchir » ni d'élastique quand on arrive en bas ;
+   - `overflow-x: clip` : un seul élément trop large suffirait à rendre toute
+     l'app glissable vers la gauche ;
+   - `text-size-adjust` : iOS grossit sinon le texte à la rotation ;
+   - `touch-action: manipulation` sur ce qui se touche : supprime le délai de
+     300 ms et le zoom au double-tap.
+   =========================================================================== */
+
 html {
-  overscroll-behavior-y: contain;
+  overscroll-behavior: none;
   color-scheme: dark;
   scrollbar-color: var(--surface-3) transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
 body {
   min-height: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior: none;
   background: var(--ink);
   color: var(--text);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Les éléments d'interface ne se sélectionnent pas au appui long (ça ouvre
+   la loupe iOS en plein geste). Le contenu, lui, reste copiable : un numéro
+   de téléphone de commerce doit pouvoir être sélectionné. */
+button,
+a,
+label,
+nav,
+.titre,
+.surtitre,
+.chiffre,
+.pastille {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+p,
+textarea,
+input,
+.selectionnable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Un mot trop long (URL collée dans une note, nom de commerce à rallonge) ne
+   doit jamais élargir la page.
+   `break-word` et surtout PAS `anywhere` : `anywhere` entre aussi dans le
+   calcul de la largeur minimale d'un élément, ce qui fait rétrécir les
+   colonnes d'une grille et coupe « COMMISSION » en « COMMISSI / ON ».
+   `break-word` ne casse un mot qu'en dernier recours, quand il déborderait
+   vraiment. */
+p,
+h1,
+h2,
+h3,
+span,
+li {
+  overflow-wrap: break-word;
+}
+
+/* Le contenu saisi par des humains, lui, mérite la coupe agressive : une URL
+   de 300 caractères collée dans une note n'a aucune espace où se casser. */
+.texte-libre {
+  overflow-wrap: anywhere;
 }
 
 body {
@@ -165,6 +239,19 @@ h3 {
   letter-spacing: 0.18em;
   font-size: 0.65rem;
   color: var(--text-faint);
+}
+
+/* Variante resserrée, pour les colonnes étroites : « COMMISSION » ne rentre
+   pas dans un tiers d'écran de 390 px avec l'interlettrage normal, et se
+   couperait en deux. Moins d'air entre les lettres, même graisse. */
+.surtitre-serre {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
 /* Chiffres : tabulaires, pour que les colonnes ne dansent pas quand une
@@ -687,4 +774,266 @@ select.champ {
 ::selection {
   background: rgba(139, 92, 246, 0.35);
   color: #fff;
+}
+
+/* ===========================================================================
+   COUCHE « NFC / RUE »
+   ---------------------------------------------------------------------------
+   Ce qui suit donne son caractère à l'app : une grille technique en fond, des
+   ondes sans contact, du chrome sur les gros chiffres, un liseré néon qui
+   tourne, et des étiquettes posées de travers comme des autocollants.
+
+   Règle que tout ça respecte : un seul de ces effets par écran au maximum
+   pour les plus forts (néon, chrome, marquee). Empilés, ils s'annulent et
+   l'interface devient illisible — c'est la différence entre une identité et
+   une décoration.
+   =========================================================================== */
+
+/* Grille technique. Très sombre, fixe, sous tout le contenu : elle donne une
+   profondeur « plan d'architecte / circuit imprimé » sans jamais se lire. */
+.grille {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(
+    ellipse 120% 80% at 50% 0%,
+    #000 0%,
+    rgba(0, 0, 0, 0.35) 55%,
+    transparent 100%
+  );
+}
+
+/* Balayage horizontal très lent, comme un vieux moniteur. Deux pixels de
+   lumière qui traversent l'écran en trente secondes : on ne le remarque pas,
+   on le sent. */
+.scanline {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(41, 224, 255, 0.12),
+    rgba(139, 92, 246, 0.16),
+    transparent
+  );
+  animation: balaie-ecran 26s linear infinite;
+}
+
+@keyframes balaie-ecran {
+  0% { transform: translateY(0); opacity: 0; }
+  6% { opacity: 1; }
+  94% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Chrome. Un dégradé clair traversé d'une bande blanche : les gros montants
+   prennent un reflet métallique au lieu d'être un aplat blanc. */
+.chrome {
+  background: linear-gradient(
+    172deg,
+    #ffffff 0%,
+    #d6d2e4 26%,
+    #8f8aa6 44%,
+    #ffffff 52%,
+    #cfc9e0 62%,
+    #7e7898 82%,
+    #efeaf7 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Variante « argent qui rentre » : le chrome vire violet/magenta. */
+.chrome-cash {
+  background: linear-gradient(
+    168deg,
+    #f4e9ff 0%,
+    #c9a9ff 22%,
+    #8b5cf6 42%,
+    #ffffff 52%,
+    #ff7ab3 68%,
+    #ff2d86 88%,
+    #ffd9ea 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Liseré néon qui tourne autour d'un panneau. Le dégradé conique pivote,
+   un masque ne laisse voir que l'épaisseur du bord. */
+@property --angle-neon {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.neon-bord {
+  position: relative;
+  isolation: isolate;
+}
+
+.neon-bord::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle-neon),
+    transparent 0%,
+    rgba(41, 224, 255, 0.9) 8%,
+    rgba(139, 92, 246, 0.95) 18%,
+    rgba(255, 45, 134, 0.9) 26%,
+    transparent 38%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: tourne-neon 7s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes tourne-neon {
+  to { --angle-neon: 360deg; }
+}
+
+/* Onde NFC : les trois arcs du sans-contact, posés en filigrane dans un coin
+   de panneau. C'est le motif de la marque — le produit vendu, littéralement. */
+.onde-nfc {
+  position: absolute;
+  pointer-events: none;
+  color: var(--nfc);
+  opacity: 0.14;
+}
+
+.onde-nfc-arc {
+  animation: pulse-onde 3.2s ease-in-out infinite;
+}
+
+.onde-nfc-arc:nth-child(2) { animation-delay: 0.25s; }
+.onde-nfc-arc:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes pulse-onde {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* Étiquette autocollante : coin coupé, légèrement de travers, bord dur. */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  background: linear-gradient(135deg, #ffffff, #cfc9e0);
+  clip-path: polygon(0 0, 100% 0, 100% 62%, calc(100% - 9px) 100%, 0 100%);
+  transform: rotate(-1.6deg);
+}
+
+.sticker-vif {
+  color: #fff;
+  background: linear-gradient(135deg, var(--violet), var(--magenta));
+}
+
+.sticker-nfc {
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--nfc), #7af0ff);
+}
+
+/* Numéro de classement, façon dossard. */
+.tag-rang {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  padding: 0.18rem 0.45rem;
+  border-radius: 5px;
+  color: var(--text-faint);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.tag-rang-or {
+  color: var(--ink);
+  background: linear-gradient(135deg, #ffe9a8, #e0b64a);
+  border-color: rgba(255, 233, 168, 0.5);
+}
+
+/* Bandeau défilant. Le contenu est dupliqué et la piste translate de -50 % :
+   la boucle est invisible parce que la seconde moitié est identique. */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-piste {
+  display: flex;
+  width: max-content;
+  animation: defile 34s linear infinite;
+}
+
+.marquee:hover .marquee-piste {
+  animation-play-state: paused;
+}
+
+@keyframes defile {
+  to { transform: translateX(-50%); }
+}
+
+/* Titre « en vitesse » : légèrement penché, comme un logo de course. À garder
+   pour un seul titre par écran. */
+.titre-vitesse {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+}
+
+/* Filet lumineux horizontal, pour séparer sans tracer une ligne grise. */
+.filet {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.5),
+    rgba(255, 45, 134, 0.35),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanline,
+  .marquee-piste,
+  .neon-bord::before,
+  .onde-nfc-arc {
+    animation: none;
+  }
+  .scanline { opacity: 0; }
 }
