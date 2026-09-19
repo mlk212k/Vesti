@@ -1,0 +1,690 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   DIRECTION ARTISTIQUE
+   ---------------------------------------------------------------------------
+   Noir profond, anthracite, blanc cassé. Deux accents seulement — un violet
+   électrique et un magenta — plus un rouge réservé au danger et aux pics
+   d'intensité. La lumière ne vient jamais d'un aplat : elle vient de dégradés
+   très sourds, d'un liseré clair en haut des panneaux, et de deux halos fixes
+   derrière toute l'interface.
+
+   L'énergie « affiche de combat » tient à trois choses et pas à des images :
+   une typo display très grasse en capitales serrées, des chiffres énormes, et
+   des diagonales (barres d'accent inclinées, entailles dans les coins). Rien
+   n'est emprunté à un jeu existant.
+   =========================================================================== */
+
+:root {
+  /* Fonds, du plus profond au plus clair. */
+  --ink: #07070a;
+  --ink-2: #0b0b10;
+  --surface: #121219;
+  --surface-2: #181822;
+  --surface-3: #21212d;
+
+  /* Texte. Jamais de blanc pur : il vibre sur du noir. */
+  --text: #f4f2ef;
+  --text-dim: #a8a3b5;
+  --text-faint: #6f6a80;
+
+  /* Accents. */
+  --violet: #8b5cf6;
+  --violet-deep: #5b21b6;
+  --magenta: #ff2d86;
+  --magenta-deep: #b0125a;
+  --danger: #ff3b3b;
+  --success: #2ee6a8;
+  --warn: #ffb020;
+
+  /* Liserés : un blanc très dilué, jamais une couleur franche. */
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.13);
+  --line-glow: rgba(255, 255, 255, 0.22);
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 26px;
+
+  /* --font-ui / --font-display viennent de next/font (app/layout.tsx). */
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-text: var(--text);
+  --color-dim: var(--text-dim);
+  --color-faint: var(--text-faint);
+  --color-violet: var(--violet);
+  --color-magenta: var(--magenta);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-line: var(--line);
+  --font-sans: var(--font-ui);
+  --font-display: var(--font-display);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  overscroll-behavior-y: contain;
+  color-scheme: dark;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  /* Le grain. Un bruit SVG très faible, posé une fois sur tout le document :
+     c'est lui qui empêche les grands aplats noirs de faire « plastique » et
+     qui donne le côté imprimé/urbain. */
+  position: relative;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Halos fixes. Deux taches de couleur très diffuses, derrière tout le reste :
+   la profondeur vient de là, pas des ombres des cartes. */
+.halo {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.halo-violet {
+  top: -14vh;
+  right: -18vw;
+  width: 62vw;
+  height: 62vw;
+  max-width: 620px;
+  max-height: 620px;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.24) 0%,
+    rgba(139, 92, 246, 0) 70%
+  );
+}
+
+.halo-magenta {
+  bottom: -20vh;
+  left: -22vw;
+  width: 68vw;
+  height: 68vw;
+  max-width: 660px;
+  max-height: 660px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 45, 134, 0.18) 0%,
+    rgba(255, 45, 134, 0) 70%
+  );
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Titres de section : capitales serrées, très grasses. C'est la signature. */
+.titre {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+}
+
+.surtitre {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.65rem;
+  color: var(--text-faint);
+}
+
+/* Chiffres : tabulaires, pour que les colonnes ne dansent pas quand une
+   valeur change. */
+.chiffre {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.tabulaire {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===========================================================================
+   PANNEAUX
+   Verre sombre : un dégradé qui s'éclaircit vers le haut, un liseré clair au
+   sommet (comme une arête qui capte la lumière), et un flou d'arrière-plan.
+   =========================================================================== */
+
+.panneau {
+  position: relative;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.055) 0%,
+      rgba(255, 255, 255, 0.015) 38%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    var(--surface);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.panneau-plat {
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.panneau-creux {
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Le panneau « héros » : celui du haut du tableau de bord. Même verre, mais
+   la lumière violette y est admise. */
+.panneau-heros {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      120% 90% at 100% 0%,
+      rgba(139, 92, 246, 0.28) 0%,
+      rgba(139, 92, 246, 0) 58%
+    ),
+    radial-gradient(
+      100% 80% at 0% 100%,
+      rgba(255, 45, 134, 0.16) 0%,
+      rgba(255, 45, 134, 0) 60%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+    var(--surface);
+  border: 1px solid var(--line-strong);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 30px 60px -30px rgba(0, 0, 0, 1);
+}
+
+/* La diagonale. Une barre inclinée, très pâle, qui traverse un panneau : le
+   détail qui fait « affiche » plutôt que « carte de SaaS ». */
+.diagonale::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10%;
+  background: linear-gradient(
+    104deg,
+    transparent 0%,
+    transparent 44%,
+    rgba(255, 255, 255, 0.035) 45%,
+    rgba(255, 255, 255, 0.035) 49%,
+    transparent 50%,
+    transparent 56%,
+    rgba(255, 255, 255, 0.02) 57%,
+    rgba(255, 255, 255, 0.02) 60%,
+    transparent 61%
+  );
+  pointer-events: none;
+}
+
+/* Entaille : coin supérieur droit coupé en biseau. */
+.entaille {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+/* ===========================================================================
+   BOUTONS
+   =========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.7rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  transition:
+    transform 0.14s cubic-bezier(0.2, 0.9, 0.3, 1),
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* CTA principal : le dégradé violet -> magenta, avec une lueur portée qui
+   s'intensifie au survol. Jamais plus d'un par écran. */
+.btn-primaire {
+  border: none;
+  background: linear-gradient(120deg, var(--violet) 0%, var(--magenta) 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow:
+    0 10px 30px -12px rgba(139, 92, 246, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.btn-primaire:hover {
+  box-shadow:
+    0 14px 38px -12px rgba(255, 45, 134, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-danger {
+  border: 1px solid rgba(255, 59, 59, 0.45);
+  background: rgba(255, 59, 59, 0.12);
+  color: #ff8b8b;
+}
+
+.btn-fantome {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+}
+
+.btn-fantome:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ===========================================================================
+   FORMULAIRES
+   Champs creusés dans le noir, focus violet. Taille de police >= 16px sur
+   mobile : en dessous, Safari zoome tout seul à chaque focus.
+   =========================================================================== */
+
+.champ {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid var(--line);
+  padding: 0.7rem 0.85rem;
+  font-size: 1rem;
+  color: var(--text);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.champ::placeholder {
+  color: var(--text-faint);
+}
+
+.champ:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.65);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.45),
+    0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+
+.champ:disabled {
+  opacity: 0.5;
+}
+
+select.champ {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-faint) 50%),
+    linear-gradient(135deg, var(--text-faint) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 2px),
+    calc(100% - 13px) calc(50% - 2px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.2rem;
+}
+
+.libelle {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  margin-bottom: 0.4rem;
+}
+
+/* ===========================================================================
+   PASTILLES ET ÉTATS
+   =========================================================================== */
+
+.pastille {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pastille-succes {
+  border-color: rgba(46, 230, 168, 0.35);
+  background: rgba(46, 230, 168, 0.1);
+  color: var(--success);
+}
+
+.pastille-alerte {
+  border-color: rgba(255, 176, 32, 0.35);
+  background: rgba(255, 176, 32, 0.1);
+  color: var(--warn);
+}
+
+.pastille-danger {
+  border-color: rgba(255, 59, 59, 0.35);
+  background: rgba(255, 59, 59, 0.1);
+  color: #ff7a7a;
+}
+
+.pastille-vive {
+  border-color: rgba(139, 92, 246, 0.45);
+  background: rgba(139, 92, 246, 0.14);
+  color: #c4b5fd;
+}
+
+/* Point « en direct » qui respire. */
+.point-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 0 rgba(46, 230, 168, 0.65);
+  animation: pulse 2.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 230, 168, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(46, 230, 168, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 230, 168, 0);
+  }
+}
+
+/* ===========================================================================
+   JAUGE D'OBJECTIF
+   Le « ████████░░░░ » de la maquette, en version soignée : des segments
+   distincts, un par carte, qui s'allument. On lit 8/10 d'un coup d'œil sans
+   lire le chiffre.
+   =========================================================================== */
+
+.jauge {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+}
+
+.jauge-segment {
+  flex: 1;
+  height: 12px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: background 0.35s ease;
+}
+
+.jauge-segment-plein {
+  background: linear-gradient(180deg, #a78bfa, var(--violet));
+  box-shadow:
+    0 0 10px -2px rgba(139, 92, 246, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.jauge-segment-fini {
+  background: linear-gradient(180deg, #ff7ab3, var(--magenta));
+  box-shadow:
+    0 0 12px -2px rgba(255, 45, 134, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Barre continue, pour les listes compactes. */
+.barre {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.barre-remplie {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet), var(--magenta));
+  transition: width 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* ===========================================================================
+   NAVIGATION
+   =========================================================================== */
+
+.barre-nav {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 18, 25, 0.82),
+    rgba(7, 7, 10, 0.96)
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  border-top: 1px solid var(--line);
+}
+
+.onglet-actif {
+  color: var(--text);
+}
+
+.onglet-actif .onglet-marque {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.onglet-marque {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet), var(--magenta));
+  opacity: 0;
+  transform: scaleX(0.3);
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.lien-lateral {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.lien-lateral:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.lien-lateral-actif {
+  color: var(--text);
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.18),
+    rgba(255, 45, 134, 0.06)
+  );
+  border-color: rgba(139, 92, 246, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ===========================================================================
+   ANIMATIONS
+   Discrètes et courtes. Une interface qui fait attendre paraît lente.
+   =========================================================================== */
+
+@keyframes montee {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.montee {
+  animation: montee 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.retard-1 { animation-delay: 0.05s; }
+.retard-2 { animation-delay: 0.1s; }
+.retard-3 { animation-delay: 0.15s; }
+.retard-4 { animation-delay: 0.2s; }
+
+@keyframes apparition {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.apparition {
+  animation: apparition 0.3s ease both;
+}
+
+/* Balayage lumineux des squelettes de chargement. */
+@keyframes balayage {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.squelette {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.squelette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  animation: balayage 1.4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===========================================================================
+   DIVERS
+   =========================================================================== */
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Masque de fondu en bas des listes scrollables. */
+.fondu-bas {
+  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: #fff;
+}
