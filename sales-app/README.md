@@ -174,6 +174,26 @@ au vrai projet.
 
 ---
 
+## Déploiement
+
+Projet Vercel `arena-cartes`, **racine `sales-app`** (le dépôt contient
+plusieurs applications — sans ce réglage, Vercel construit la mauvaise).
+
+Les quatre variables `NEXT_PUBLIC_*` sont lues au moment du BUILD, pas à
+l'exécution : après les avoir changées, il faut relancer un déploiement,
+sinon l'ancienne valeur reste figée dans le bundle.
+
+`SUPABASE_SERVICE_ROLE_KEY`, elle, est lue à l'exécution. Tant qu'elle
+n'est pas renseignée, l'app tourne normalement mais deux choses restent
+inertes, par conception plutôt que par accident :
+
+- la création de comptes et la réinitialisation de mot de passe depuis la
+  page Membres (l'API d'auth refuse de créer quelqu'un d'autre avec une clé
+  publique) ;
+- le comptage des tentatives de connexion ratées, qui laisse alors passer
+  plutôt que de bloquer tout le monde. Supabase applique de toute façon ses
+  propres quotas.
+
 ## Variables d'environnement
 
 | Variable | Rôle |
