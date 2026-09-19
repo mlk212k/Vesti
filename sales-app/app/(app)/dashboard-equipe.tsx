@@ -70,7 +70,9 @@ export function DashboardEquipe({
       <header className="montee relative overflow-hidden">
         <FiligraneNFC />
         <p className="surtitre">Aujourd&apos;hui · {settings.team_name}</p>
-        <h1 className="titre-vitesse mt-1 text-4xl sm:text-5xl">
+        {/* « Poste de commandement » en italique grasse déborde d'un écran de
+            390 px à partir de text-4xl : on commence plus petit sur mobile. */}
+        <h1 className="titre-vitesse mt-1 text-[1.75rem] sm:text-5xl">
           {estAdmin ? "Poste de commandement" : "Supervision"}
         </h1>
         <p className="mt-1.5 text-sm text-faint">
