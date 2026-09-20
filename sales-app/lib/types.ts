@@ -216,11 +216,11 @@ export function displayDayStatus(
 }
 
 export const DAY_STATUS_LABEL: Record<DisplayDayStatus, string> = {
-  not_started: "PAS COMMENCÉ",
-  in_progress: "EN COURS",
-  goal_reached: "OBJECTIF ATTEINT",
-  goal_missed: "OBJECTIF NON ATTEINT",
-  validated: "JOURNÉE VALIDÉE",
+  not_started: "Pas commencé",
+  in_progress: "En cours",
+  goal_reached: "Objectif atteint",
+  goal_missed: "Objectif manqué",
+  validated: "Journée validée",
 };
 
 export const ROLE_LABEL: Record<Role, string> = {

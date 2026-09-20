@@ -98,7 +98,7 @@ export function SaleForm({
             +
           </button>
         </div>
-        <p className={`mt-1.5 text-xs ${trop ? "text-braise" : "text-faint"}`}>
+        <p className={`mt-1.5 text-sm ${trop ? "text-peche" : "text-faint"}`}>
           {trop
             ? `Tu n'as que ${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main.`
             : `${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main`}
@@ -141,7 +141,7 @@ export function SaleForm({
         </div>
         <div className="flex items-baseline justify-between pt-1">
           <span className="surtitre">Mon net</span>
-          <span className="chiffre text-2xl text-braise">{formatCents(netCents)}</span>
+          <span className="chiffre text-2xl text-peche">{formatCents(netCents)}</span>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export function SaleForm({
         </select>
         <Link
           href="/commerces/nouveau"
-          className="mt-2 inline-flex items-center gap-1.5 text-xs text-faint hover:text-dim"
+          className="mt-2 inline-flex items-center gap-1.5 text-sm text-faint hover:text-dim"
         >
           <IconPlus className="h-3.5 w-3.5" />
           Créer une fiche commerce

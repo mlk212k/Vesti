@@ -88,7 +88,7 @@ export default async function BusinessesPage({
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-medium">{business.name}</p>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-xs text-faint">
+                    <p className="mt-0.5 flex items-center gap-1.5 text-sm text-faint">
                       <IconMap className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
                         {[business.city, business.category]
@@ -102,7 +102,7 @@ export default async function BusinessesPage({
                   </span>
                 </div>
 
-                <p className="mt-2 text-[11px] text-faint">
+                <p className="mt-2 text-sm text-faint">
                   {staff ? `${noms.get(business.member_id) ?? "—"} · ` : ""}
                   visité le {formatDateShort(business.visited_at)}
                   {business.next_action ? ` · à faire : ${business.next_action}` : ""}

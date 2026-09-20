@@ -71,18 +71,18 @@ export default async function ChatPage() {
                     <p className="truncate font-medium">
                       {conversation.kind === "team" ? `# ${nom}` : nom}
                     </p>
-                    <span className="shrink-0 text-[11px] text-faint">
+                    <span className="shrink-0 text-sm text-faint">
                       {formatRelative(conversation.last_message_at)}
                     </span>
                   </div>
-                  <p className="truncate text-xs text-faint">
+                  <p className="truncate text-sm text-faint">
                     {conversation.last_body
                       ? `${conversation.last_author ? `${conversation.last_author.split(" ")[0]} : ` : ""}${conversation.last_body}`
                       : "Aucun message"}
                   </p>
                 </div>
                 {conversation.unread > 0 ? (
-                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-sm bg-braise px-1.5 text-[11px] font-bold text-white">
+                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-sm bg-peche px-1.5 text-sm text-white">
                     {conversation.unread}
                   </span>
                 ) : null}
@@ -108,7 +108,7 @@ export default async function ChatPage() {
                     <span className="flex-1 truncate text-sm">
                       {profile.full_name}
                     </span>
-                    <span className="text-xs text-faint">Écrire</span>
+                    <span className="text-sm text-faint">Écrire</span>
                   </button>
                 </form>
               </li>

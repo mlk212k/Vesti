@@ -52,13 +52,13 @@ export function ValiderJournee({
       <input type="hidden" name="day_id" value={dayId} />
 
       {!objectifAtteint && penaliteSuggereeCents > 0 ? (
-        <p className="text-xs text-braise">
+        <p className="text-sm text-peche">
           Objectif non atteint. La règle configurée prévoit une retenue de{" "}
           {formatCents(penaliteSuggereeCents)} — à appliquer, ajuster, ou
           laisser à zéro.
         </p>
       ) : (
-        <p className="text-xs text-faint">
+        <p className="text-sm text-faint">
           Valider fige la journée : elle ne pourra plus être rouverte.
         </p>
       )}

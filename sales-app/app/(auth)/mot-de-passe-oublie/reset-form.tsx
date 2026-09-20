@@ -49,7 +49,7 @@ export function ResetForm() {
 
       <Submit pendingLabel="Envoi…">Envoyer le lien</Submit>
 
-      <p className="pt-1 text-center text-xs text-faint">
+      <p className="pt-1 text-center text-sm text-faint">
         <Link href="/login" className="transition-colors hover:text-dim">
           Revenir à la connexion
         </Link>

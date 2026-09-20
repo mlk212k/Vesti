@@ -40,7 +40,7 @@ export function SettingsForm({ settings }: { settings: AppSettings }) {
           defaultValue={(settings.commission_rate_bp / 100).toString()}
           className="champ chiffre text-xl"
         />
-        <p className="mt-1.5 text-xs text-faint">
+        <p className="mt-1.5 text-sm text-faint">
           Appliquée à chaque nouvelle vente. Les ventes déjà enregistrées
           gardent le taux qui avait cours au moment où elles ont été faites —
           changer ce nombre ne réécrit jamais le passé.
@@ -61,7 +61,7 @@ export function SettingsForm({ settings }: { settings: AppSettings }) {
             defaultValue={settings.default_daily_goal}
             className="champ chiffre text-xl"
           />
-          <p className="mt-1.5 text-xs text-faint">
+          <p className="mt-1.5 text-sm text-faint">
             Valeur par défaut. Un objectif personnel défini sur une fiche
             membre passe devant.
           </p>
@@ -79,7 +79,7 @@ export function SettingsForm({ settings }: { settings: AppSettings }) {
             defaultValue={(settings.default_card_price_cents / 100).toString()}
             className="champ chiffre text-xl"
           />
-          <p className="mt-1.5 text-xs text-faint">
+          <p className="mt-1.5 text-sm text-faint">
             Pré-remplit le formulaire de vente ; le commercial peut le changer
             au cas par cas.
           </p>
@@ -97,7 +97,7 @@ export function SettingsForm({ settings }: { settings: AppSettings }) {
           defaultValue={(settings.missed_goal_penalty_cents / 100).toString()}
           className="champ"
         />
-        <p className="mt-1.5 text-xs text-faint">
+        <p className="mt-1.5 text-sm text-faint">
           Ce montant n&apos;est JAMAIS prélevé automatiquement. Il est proposé
           au manager au moment de valider une journée, qui peut l&apos;appliquer,
           le modifier ou le laisser à zéro. Mets 0 pour ne rien suggérer.

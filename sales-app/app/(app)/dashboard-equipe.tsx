@@ -71,7 +71,7 @@ export function DashboardEquipe({
           sur {rows.length} membre{rows.length > 1 ? "s" : ""}
         </p>
 
-        <p className="chiffre relative mt-6 text-[clamp(3.4rem,20vw,7rem)] text-os">
+        <p className="chiffre relative mt-6 text-[clamp(3.4rem,20vw,7rem)] text-craie">
           {formatCentsShort(caJour)}
         </p>
         <p className="surtitre relative mt-3">
@@ -116,12 +116,12 @@ export function DashboardEquipe({
         <div className="min-w-0 flex-1">
           <p className="surtitre">Planning du jour</p>
           <p className="mt-2 text-sm">
-            <span className="chiffre text-os">{attendus.length}</span> attendu
+            <span className="chiffre text-craie">{attendus.length}</span> attendu
             {attendus.length > 1 ? "s" : ""}
             {manquants.length > 0 ? (
               <>
                 {" · "}
-                <span className="chiffre text-braise">{manquants.length}</span> pas
+                <span className="chiffre text-peche">{manquants.length}</span> pas
                 encore en route
               </>
             ) : (
@@ -132,7 +132,7 @@ export function DashboardEquipe({
         <span className={manquants.length > 0 ? "pastille pastille-vive" : "pastille"}>
           {manquants.length > 0 ? "À relancer" : "Complet"}
         </span>
-        <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1" />
+        <IconChevron className="h-4 w-4 shrink-0 text-fumee transition-transform duration-500 group-hover:translate-x-1" />
       </Link>
 
       {/* --- L'ÉQUIPE ------------------------------------------------------ */}
@@ -140,7 +140,7 @@ export function DashboardEquipe({
         <Section
           titre="L'équipe aujourd'hui"
           action={
-            <Link href="/equipe" className="surtitre hover:text-os">
+            <Link href="/equipe" className="surtitre hover:text-craie">
               Vue détaillée
             </Link>
           }
@@ -171,7 +171,7 @@ export function DashboardEquipe({
         <Section
           titre="Stock de cartes"
           action={
-            <Link href="/stock" className="surtitre hover:text-os">
+            <Link href="/stock" className="surtitre hover:text-craie">
               Gérer
             </Link>
           }
@@ -213,7 +213,7 @@ function LigneEquipe({
       <div className="flex items-center gap-4">
         {/* Le rang n'est pas une médaille collée sur l'avatar : c'est un
             numéro d'ordre, en petit, à sa place — à gauche de la ligne. */}
-        <span className="w-4 shrink-0 font-mono text-[11px] text-cendre">
+        <span className="w-4 shrink-0 text-sm text-fumee">
           {rang ?? "·"}
         </span>
         <Avatar nom={profile.full_name} />
@@ -235,17 +235,17 @@ function LigneEquipe({
           ) : null}
         </div>
 
-        <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1" />
+        <IconChevron className="h-4 w-4 shrink-0 text-fumee transition-transform duration-500 group-hover:translate-x-1" />
       </div>
 
       <div className="mt-4 flex items-center gap-4 pl-8">
-        <span className="w-12 shrink-0 font-mono text-[11px] text-faint">
+        <span className="w-12 shrink-0 text-sm text-faint">
           {vendues}/{objectif}
         </span>
         <div className="flex-1">
           {objectif > 0 ? <Jauge valeur={vendues} objectif={objectif} /> : null}
         </div>
-        <span className="w-12 shrink-0 text-right font-mono text-[11px] text-faint">
+        <span className="w-12 shrink-0 text-right text-sm text-faint">
           {day ? formatDuration(day.duration_seconds) : ""}
         </span>
         <StatutJournee statut={displayDayStatus(day)} />

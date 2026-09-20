@@ -37,7 +37,7 @@ export function RestockForm() {
   return (
     <form action={action} className="panneau space-y-3 p-5">
       <h3 className="titre text-lg">Entrée de stock</h3>
-      <p className="text-xs text-faint">
+      <p className="text-sm text-faint">
         Des cartes arrivent au dépôt : commande reçue, réassort.
       </p>
 
@@ -96,7 +96,7 @@ export function AllocateForm({ membres }: { membres: Profile[] }) {
   return (
     <form action={action} className="panneau space-y-3 p-5">
       <h3 className="titre text-lg">Attribuer des cartes</h3>
-      <p className="text-xs text-faint">
+      <p className="text-sm text-faint">
         Le dépôt baisse, le commercial les a en main. Il reçoit une notification.
       </p>
 
@@ -157,7 +157,7 @@ export function ReturnForm({ membres }: { membres: Profile[] }) {
     <div className="panneau space-y-5 p-5">
       <div>
         <h3 className="titre text-lg">Retours et pertes</h3>
-        <p className="mt-1 text-xs text-faint">
+        <p className="mt-1 text-sm text-faint">
           Un retour remet les cartes au dépôt. Une perte les sort du circuit
           sans y revenir — les comptes restent justes dans les deux cas.
         </p>
@@ -224,7 +224,7 @@ export function AdjustForm() {
   return (
     <form action={action} className="panneau space-y-3 p-5">
       <h3 className="titre text-lg">Recomptage du dépôt</h3>
-      <p className="text-xs text-faint">
+      <p className="text-sm text-faint">
         Écart constaté entre le carton et l&apos;application. Positif si on en
         trouve plus que prévu, négatif sinon. La justification est obligatoire.
       </p>

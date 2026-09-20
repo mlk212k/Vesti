@@ -53,7 +53,7 @@ export function LoginForm({ next }: { next?: string }) {
 
       <Submit pendingLabel="Connexion…">Entrer</Submit>
 
-      <p className="pt-1 text-center text-xs text-faint">
+      <p className="pt-1 text-center text-sm text-faint">
         <Link
           href="/mot-de-passe-oublie"
           className="transition-colors hover:text-dim"

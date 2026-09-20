@@ -96,21 +96,21 @@ export function DashboardMembre({
                 d'autre. Une carte de crédit ne porte pas un tableau. */}
             <div className="flex h-full flex-col justify-between p-[7%]">
               <div className="flex items-start justify-between">
-                <span className="surtitre text-[0.55rem]">{settings.team_name}</span>
+                <span className="surtitre text-sm">{settings.team_name}</span>
                 <StatutJournee statut={statut} />
               </div>
               <div className="flex items-end gap-2">
-                <span className="chiffre text-[clamp(3rem,17vw,4.5rem)] text-os">
+                <span className="chiffre text-[clamp(3rem,17vw,4.5rem)] text-craie">
                   {vendues}
                 </span>
-                <span className="chiffre pb-1.5 text-xl text-cendre">/ {objectif}</span>
+                <span className="chiffre pb-1.5 text-xl text-fumee">/ {objectif}</span>
               </div>
             </div>
           </ObjetJournee>
         </div>
 
-        <p className="mt-6 text-center font-mono text-[11px] text-faint">
-          <span className="text-os">{pourcentage} %</span>
+        <p className="mt-6 text-center text-sm text-faint">
+          <span className="text-craie">{pourcentage} %</span>
           {restantes > 0
             ? ` · ${restantes} carte${restantes > 1 ? "s" : ""} restante${restantes > 1 ? "s" : ""}`
             : " · objectif dépassé"}
@@ -125,10 +125,10 @@ export function DashboardMembre({
           ce qui explique sans être le sujet. */}
       <section className="montee retard-1 text-center">
         <p className="surtitre">Mon net</p>
-        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-braise">
+        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-peche">
           {formatCents(day?.net_cents ?? 0)}
         </p>
-        <p className="mt-3 font-mono text-[11px] text-faint">
+        <p className="mt-3 text-sm text-faint">
           CA {formatCents(day?.revenue_cents ?? 0)} · commission{" "}
           {formatRate(settings.commission_rate_bp)} −
           {formatCents(day?.commission_cents ?? 0)}
@@ -142,7 +142,7 @@ export function DashboardMembre({
           <BoutonTerminer />
         </div>
       ) : statut === "validated" ? (
-        <p className="montee retard-2 text-center font-mono text-xs text-faint">
+        <p className="montee retard-2 text-center text-sm text-faint">
           Journée validée par l&apos;encadrement.
           {day && day.penalty_cents > 0
             ? ` Retenue : ${formatCents(day.penalty_cents)}.`
@@ -164,7 +164,7 @@ export function DashboardMembre({
         <Section
           titre="Mes ventes du jour"
           action={
-            <Link href="/ventes" className="surtitre hover:text-os">
+            <Link href="/ventes" className="surtitre hover:text-craie">
               Tout voir
             </Link>
           }
@@ -223,7 +223,7 @@ function Raccourci({ href, titre }: { href: string; titre: string }) {
   return (
     <Link
       href={href}
-      className="surtitre transition-colors duration-300 hover:text-os"
+      className="surtitre transition-colors duration-300 hover:text-craie"
     >
       {titre}
     </Link>

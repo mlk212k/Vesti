@@ -29,7 +29,7 @@ export default async function MembersPage() {
                   <Avatar nom={profile.full_name} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{profile.full_name}</p>
-                    <p className="text-xs text-faint">
+                    <p className="text-sm text-faint">
                       {ROLE_LABEL[profile.role]}
                       {profile.daily_goal_override
                         ? ` · objectif ${profile.daily_goal_override}`

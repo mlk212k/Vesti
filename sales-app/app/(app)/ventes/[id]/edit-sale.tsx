@@ -161,7 +161,7 @@ export function EditSale({
         </Submit>
       </div>
 
-      <p className="text-xs text-faint">
+      <p className="text-sm text-faint">
         La correction laisse une trace : l&apos;ancien et le nouveau montant sont
         écrits dans le journal d&apos;audit, et le stock est ajusté par un
         mouvement de correction.

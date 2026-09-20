@@ -7,9 +7,10 @@ import { DAY_STATUS_LABEL, type DisplayDayStatus } from "@/lib/types";
 // les pages n'aient pas à le réinventer — et pour qu'un changement de
 // direction artistique se fasse ici, pas dans quinze fichiers.
 //
-// Règle de cette DA, valable pour tout ce fichier : RIEN N'EST DANS UNE
-// BOÎTE. Ce qui sépare deux informations, c'est du vide, une différence de
-// taille de texte ou un changement de profondeur — jamais un cadre.
+// Règle de cette DA, valable pour tout ce fichier : DOUX PARTOUT. Des
+// rayons larges, du verre dépoli, des étiquettes écrites comme des phrases —
+// jamais de capitales espacées, jamais de texte sous 13 px, jamais de
+// monospace. Si un élément ressemble à un écran de cotes, il est raté.
 
 export function EnTete({
   surtitre,
@@ -24,9 +25,7 @@ export function EnTete({
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
         {surtitre ? <p className="surtitre mb-3">{surtitre}</p> : null}
-        {/* Le titre déborde volontairement de sa colonne sur mobile : un mot
-            qui touche le bord de l'écran a l'air plus grand que l'écran. */}
-        <h1 className="titre text-[clamp(2.6rem,13vw,4.5rem)]">{titre}</h1>
+        <h1 className="titre text-[clamp(2.2rem,10vw,3.4rem)]">{titre}</h1>
       </div>
       {children ? <div className="flex items-center gap-2">{children}</div> : null}
     </div>
@@ -64,9 +63,8 @@ export function Mot({
  * Un chiffre et son libellé. Pas de tuile, pas de bordure : la hiérarchie
  * est entièrement typographique.
  *
- * `accent` réserve la braise au seul chiffre qui compte sur l'écran. S'ils
- * s'allument tous, plus aucun ne ressort — c'est la règle de l'accent
- * unique, appliquée ici.
+ * `accent` réserve la pêche au seul chiffre qui compte sur l'écran. S'ils
+ * s'allument tous, plus aucun ne ressort.
  */
 export function Stat({
   label,
@@ -86,12 +84,12 @@ export function Stat({
       <p className="surtitre-serre">{label}</p>
       <p
         className={`chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] ${
-          accent ? "text-braise" : "text-os"
+          accent ? "text-peche" : "text-craie"
         }`}
       >
         {valeur}
       </p>
-      {detail ? <p className="mt-1 text-xs text-faint">{detail}</p> : null}
+      {detail ? <p className="mt-1 text-sm text-faint">{detail}</p> : null}
     </div>
   );
 }
@@ -142,9 +140,8 @@ export function Jauge({
   );
 }
 
-// Un statut n'est pas une gommette : c'est un mot minuscule. Seul « en
-// cours » porte l'accent, et il est le seul à bouger — parce qu'il est le
-// seul à être vrai en ce moment même.
+// Le statut d'une journée. Une pastille douce et remplie ; le lilas est
+// réservé à ce qui est vrai EN CE MOMENT, et c'est le seul état qui bouge.
 const STATUT_CLASSE: Record<DisplayDayStatus, string> = {
   not_started: "pastille",
   in_progress: "pastille pastille-vive",
@@ -173,7 +170,7 @@ export function Vide({
 }) {
   return (
     <div className="px-2 py-14 text-center">
-      <p className="titre text-2xl text-cendre">{titre}</p>
+      <p className="titre text-2xl text-faint">{titre}</p>
       {children ? (
         <div className="mx-auto mt-3 max-w-xs text-sm text-faint">{children}</div>
       ) : null}
@@ -201,8 +198,8 @@ export function Section({
   );
 }
 
-// Une ligne cliquable : aucun cadre, une seule arête de lumière en bas, et
-// le chevron qui avance sous le doigt.
+// Une ligne cliquable : un filet très sourd en bas, et le chevron qui
+// avance sous le doigt.
 export function LigneLien({
   href,
   children,
@@ -216,7 +213,7 @@ export function LigneLien({
       className="group flex items-center gap-4 border-b border-trait py-4 transition-transform duration-300 active:scale-[0.985]"
     >
       <div className="min-w-0 flex-1">{children}</div>
-      <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1 group-hover:text-os" />
+      <IconChevron className="h-4 w-4 shrink-0 text-faint transition-transform duration-500 group-hover:translate-x-1 group-hover:text-craie" />
     </Link>
   );
 }
@@ -233,8 +230,8 @@ export function Avatar({
   taille?: "sm" | "md" | "lg";
 }) {
   const classes = {
-    sm: "h-8 w-8 text-[10px]",
-    md: "h-11 w-11 text-xs",
+    sm: "h-8 w-8 text-sm",
+    md: "h-11 w-11 text-sm",
     lg: "h-20 w-20 text-xl",
   }[taille];
 
@@ -260,7 +257,7 @@ export function Avatar({
 
   return (
     <span
-      className={`flex shrink-0 items-center justify-center rounded-full bg-beton font-mono tracking-widest text-dim ring-1 ring-white/[0.06] ${classes}`}
+      className={`flex shrink-0 items-center justify-center rounded-full bg-velours text-dim ring-1 ring-white/[0.06] ${classes}`}
     >
       {lettres}
     </span>

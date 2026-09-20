@@ -89,7 +89,7 @@ export default async function SalePage({
           <Link href={`/commerces/${commerce.id}`} className="panneau block p-4">
             <p className="surtitre">Commerce</p>
             <p className="mt-1 font-medium">{commerce.name}</p>
-            <p className="text-xs text-faint">
+            <p className="text-sm text-faint">
               {[commerce.address, commerce.city].filter(Boolean).join(" · ") ||
                 "Adresse non renseignée"}
             </p>

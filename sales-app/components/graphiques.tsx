@@ -73,7 +73,7 @@ export function Histogramme({
         })}
       </div>
 
-      <div className="mt-2 flex justify-between text-[10px] text-faint">
+      <div className="mt-2 flex justify-between text-sm text-faint">
         <span>{points[0]?.label}</span>
         {points.length > 2 ? (
           <span>{points[Math.floor(points.length / 2)]?.label}</span>
@@ -81,7 +81,7 @@ export function Histogramme({
         <span>{points[points.length - 1]?.label}</span>
       </div>
 
-      <div className="mt-1 flex justify-between text-[10px] text-faint">
+      <div className="mt-1 flex justify-between text-sm text-faint">
         <span>Max</span>
         <span className="chiffre text-dim">
           {format === "montant" ? formatCentsShort(max) : max}
@@ -132,7 +132,7 @@ export function Classement({
             />
           </div>
           {point.detail ? (
-            <p className="mt-1.5 text-[11px] text-faint">{point.detail}</p>
+            <p className="mt-1.5 text-sm text-faint">{point.detail}</p>
           ) : null}
         </li>
       ))}

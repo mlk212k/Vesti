@@ -24,7 +24,7 @@ export default function Error({
         travers — réessaie.
       </p>
       {error.digest ? (
-        <p className="mt-2 text-[11px] text-faint">Référence : {error.digest}</p>
+        <p className="mt-2 text-sm text-faint">Référence : {error.digest}</p>
       ) : null}
       <button type="button" onClick={reset} className="btn btn-primaire mt-5 px-6">
         Réessayer

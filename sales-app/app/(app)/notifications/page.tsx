@@ -50,7 +50,7 @@ export default async function NotificationsPage() {
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-medium">{notification.title}</p>
-                  <span className="shrink-0 text-[11px] text-faint">
+                  <span className="shrink-0 text-sm text-faint">
                     {formatRelative(notification.created_at)}
                   </span>
                 </div>

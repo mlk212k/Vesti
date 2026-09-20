@@ -202,7 +202,7 @@ export default async function MemberPage({
                     <p className="text-sm font-medium capitalize">
                       {formatDateLong(d.work_date)}
                     </p>
-                    <p className="text-xs text-faint">
+                    <p className="text-sm text-faint">
                       {d.cards_sold} / {d.goal_cards} cartes ·{" "}
                       {formatCentsShort(d.revenue_cents)} ·{" "}
                       {formatDuration(d.duration_seconds)}
@@ -212,7 +212,7 @@ export default async function MemberPage({
                 </div>
 
                 {d.penalty_cents > 0 ? (
-                  <p className="mt-2 text-xs text-braise">
+                  <p className="mt-2 text-sm text-peche">
                     Retenue : {formatCents(d.penalty_cents)}
                   </p>
                 ) : null}
@@ -250,7 +250,7 @@ export default async function MemberPage({
                     <p className="truncate text-sm">
                       {sale.businesses?.name ?? "Vente directe"}
                     </p>
-                    <p className="text-[11px] text-faint">
+                    <p className="text-sm text-faint">
                       {formatDateShort(sale.sold_at)}
                     </p>
                   </div>

@@ -29,7 +29,7 @@ export function Relance({
 
   if (state?.ok) {
     return (
-      <p className="font-mono text-[11px] tracking-wider text-braise uppercase">
+      <p className="text-sm text-peche">
         Relance envoyée à {nom.split(" ")[0]}
       </p>
     );
@@ -40,7 +40,7 @@ export function Relance({
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="btn btn-fantome w-full py-2 text-xs"
+        className="btn btn-fantome w-full py-2 text-sm"
       >
         Relancer {nom.split(" ")[0]}
       </button>
@@ -62,11 +62,11 @@ export function Relance({
         <button
           type="button"
           onClick={() => setOuvert(false)}
-          className="btn btn-fantome flex-1 py-2 text-xs"
+          className="btn btn-fantome flex-1 py-2 text-sm"
         >
           Annuler
         </button>
-        <Submit className="btn btn-primaire flex-1 py-2 text-xs" pendingLabel="…">
+        <Submit className="btn btn-primaire flex-1 py-2 text-sm" pendingLabel="…">
           Envoyer
         </Submit>
       </div>

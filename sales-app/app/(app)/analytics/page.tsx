@@ -97,7 +97,7 @@ export default async function AnalyticsPage({
               type="submit"
               name="periode"
               value={id}
-              className={`btn px-3 py-2 text-xs ${
+              className={`btn px-3 py-2 text-sm ${
                 periode === id ? "btn-primaire" : "btn-fantome"
               }`}
             >

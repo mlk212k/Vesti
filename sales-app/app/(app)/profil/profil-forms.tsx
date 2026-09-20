@@ -54,7 +54,7 @@ export function ProfilForm({ user }: { user: SessionUser }) {
         <p className="panneau-creux px-3.5 py-2.5 text-sm text-faint">
           {user.email ?? "—"}
         </p>
-        <p className="mt-1.5 text-xs text-faint">
+        <p className="mt-1.5 text-sm text-faint">
           Seul le chef peut changer l&apos;email d&apos;un compte.
         </p>
       </div>

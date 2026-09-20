@@ -4,6 +4,7 @@ import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { Alerte } from "@/components/alerte";
 import { IconSend } from "@/components/icons";
 import { Avatar } from "@/components/ui";
+import { appelerAction } from "@/lib/deploiement";
 import type { ActionResult } from "@/lib/errors";
 import { formatTime } from "@/lib/format";
 import { jouer } from "@/lib/sfx";
@@ -51,7 +52,14 @@ export function ChatPanel({
 
   const [state, action] = useActionState<ActionResult | undefined, FormData>(
     async (precedent: ActionResult | undefined, donnees: FormData) => {
-      const resultat = await sendMessageAction(precedent, donnees);
+      // `appelerAction` attrape le cas « l'app vient d'être redéployée » :
+      // la page ouverte appelle alors une action qui n'existe plus côté
+      // serveur, et sans lui on tombait sur un écran technique en anglais
+      // au lieu d'envoyer le message.
+      const resultat = await appelerAction<ActionResult>(
+        () => sendMessageAction(precedent, donnees),
+        (message) => ({ ok: false, error: message }),
+      );
       jouer(resultat.ok ? "pop" : "erreur");
       return resultat;
     },
@@ -161,14 +169,17 @@ export function ChatPanel({
         : [...courant, { message_id: messageId, user_id: moi, emoji }];
     });
     jouer("tick");
-    await toggleReactionAction(messageId, emoji);
+    await appelerAction<ActionResult>(
+      () => toggleReactionAction(messageId, emoji),
+      (message) => ({ ok: false, error: message }),
+    );
   }
 
   return (
     <div className="flex min-h-[62vh] flex-col">
       <div className="flex-1 space-y-1 pb-4">
         {messages.length === 0 ? (
-          <p className="py-12 text-center font-mono text-xs tracking-widest text-faint uppercase">
+          <p className="py-12 text-center text-sm text-faint">
             Aucun message
           </p>
         ) : null}
@@ -202,7 +213,7 @@ export function ChatPanel({
               {nouveauJour ? (
                 <div className="my-5 flex items-center gap-3">
                   <span className="h-px flex-1 bg-[var(--trait)]" />
-                  <span className="font-mono text-[10px] tracking-widest text-faint uppercase">
+                  <span className="text-sm text-faint">
                     {etiquetteJour(message.created_at)}
                   </span>
                   <span className="h-px flex-1 bg-[var(--trait)]" />
@@ -224,7 +235,7 @@ export function ChatPanel({
                       />
                       {message.author_id && enLigne.includes(message.author_id) ? (
                         <span
-                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-vide bg-braise"
+                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-nuit bg-peche"
                           title="En ligne"
                         />
                       ) : null}
@@ -234,7 +245,7 @@ export function ChatPanel({
 
                 <div className={`max-w-[76%] ${moiMeme ? "items-end" : ""}`}>
                   {!moiMeme && !suite ? (
-                    <p className="mb-1 font-mono text-[10px] tracking-wider text-faint uppercase">
+                    <p className="mb-1 text-sm text-faint">
                       {message.auteur?.nom ?? "Membre retiré"}
                     </p>
                   ) : null}
@@ -246,8 +257,8 @@ export function ChatPanel({
                     }
                     className={`block w-full text-left ${
                       moiMeme
-                        ? "rounded-[8px] rounded-br-[2px] bg-braise px-3.5 py-2.5 text-sm text-[var(--braise-encre)]"
-                        : "rounded-[8px] rounded-bl-[2px] border border-trait bg-beton px-3.5 py-2.5 text-sm"
+                        ? "rounded-[8px] rounded-br-[2px] bg-peche px-3.5 py-2.5 text-sm text-[var(--braise-encre)]"
+                        : "rounded-[8px] rounded-bl-[2px] border border-trait bg-velours px-3.5 py-2.5 text-sm"
                     }`}
                   >
                     <span className="texte-libre whitespace-pre-wrap">
@@ -264,17 +275,17 @@ export function ChatPanel({
                           key={emoji}
                           type="button"
                           onClick={() => reagir(message.id, emoji)}
-                          className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] ${
+                          className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-sm ${
                             auteurs.includes(moi)
-                              ? "border-braise bg-[rgba(204,255,0,0.12)]"
-                              : "border-trait bg-beton"
+                              ? "border-peche bg-[rgba(204,255,0,0.12)]"
+                              : "border-trait bg-velours"
                           }`}
                           title={auteurs
                             .map((id) => annuaire[id]?.nom ?? "?")
                             .join(", ")}
                         >
                           <span>{emoji}</span>
-                          <span className="font-mono text-faint">
+                          <span className="text-faint">
                             {auteurs.length}
                           </span>
                         </button>
@@ -291,7 +302,7 @@ export function ChatPanel({
                           key={emoji}
                           type="button"
                           onClick={() => reagir(message.id, emoji)}
-                          className="rounded-[6px] border border-trait bg-beton px-2 py-1 text-base transition-transform active:scale-90"
+                          className="rounded-[6px] border border-trait bg-velours px-2 py-1 text-base transition-transform active:scale-90"
                           aria-label={`Réagir ${emoji}`}
                         >
                           {emoji}
@@ -301,7 +312,7 @@ export function ChatPanel({
                   ) : null}
 
                   <p
-                    className={`mt-1 font-mono text-[10px] text-faint ${moiMeme ? "text-right" : ""}`}
+                    className={`mt-1  text-sm text-faint ${moiMeme ? "text-right" : ""}`}
                   >
                     {formatTime(message.created_at)}
                   </p>

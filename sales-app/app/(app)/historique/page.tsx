@@ -73,7 +73,7 @@ export default async function HistoryPage({
                   <p className="font-medium capitalize">
                     {formatDateLong(day.work_date)}
                   </p>
-                  <p className="text-xs text-faint">
+                  <p className="text-sm text-faint">
                     {staff ? `${noms.get(day.member_id) ?? "—"} · ` : ""}
                     {formatDuration(day.duration_seconds)} ·{" "}
                     {day.sale_count} vente{day.sale_count > 1 ? "s" : ""}
@@ -113,14 +113,14 @@ export default async function HistoryPage({
               </div>
 
               {day.penalty_cents > 0 ? (
-                <p className="mt-2 text-xs text-braise">
+                <p className="mt-2 text-sm text-peche">
                   Retenue validée par l&apos;encadrement :{" "}
                   {formatCents(day.penalty_cents)}
                 </p>
               ) : null}
 
               {day.notes ? (
-                <p className="texte-libre mt-2 text-xs whitespace-pre-wrap text-faint">
+                <p className="texte-libre mt-2 text-sm whitespace-pre-wrap text-faint">
                   {day.notes}
                 </p>
               ) : null}
@@ -128,7 +128,7 @@ export default async function HistoryPage({
               {staff ? (
                 <Link
                   href={`/equipe/${day.member_id}`}
-                  className="mt-2 inline-block text-xs text-faint hover:text-dim"
+                  className="mt-2 inline-block text-sm text-faint hover:text-dim"
                 >
                   Voir le profil →
                 </Link>

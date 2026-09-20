@@ -18,7 +18,7 @@ export function OndeNFC({
       width={taille}
       height={taille}
       fill="none"
-      className={`pointer-events-none absolute text-os ${className}`}
+      className={`pointer-events-none absolute text-craie ${className}`}
       aria-hidden="true"
     >
       {/* Le point d'émission, puis trois arcs de plus en plus larges. */}

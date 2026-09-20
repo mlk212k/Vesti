@@ -55,7 +55,7 @@ export function PlanningEditor({
 
       <div>
         <h2 className="titre text-xl">{titre}</h2>
-        <p className="mt-1 text-xs text-faint">
+        <p className="mt-1 text-sm text-faint">
           Sert à savoir qui est attendu sur le terrain. Quelqu&apos;un qui
           n&apos;a pas ouvert sa journée un jour où il n&apos;est pas dispo
           n&apos;est pas en retard — c&apos;est toute la différence.
@@ -63,14 +63,14 @@ export function PlanningEditor({
       </div>
 
       <div className="overflow-hidden rounded-[6px] border border-trait">
-        <div className="grid grid-cols-[auto_1fr_1fr] items-center border-b border-trait bg-beton">
-          <span className="px-3 py-2 font-mono text-[10px] tracking-widest text-faint uppercase">
+        <div className="grid grid-cols-[auto_1fr_1fr] items-center border-b border-trait bg-velours">
+          <span className="px-3 py-2 text-sm text-faint">
             Jour
           </span>
-          <span className="px-3 py-2 text-center font-mono text-[10px] tracking-widest text-faint uppercase">
+          <span className="px-3 py-2 text-center text-sm text-faint">
             Matin
           </span>
-          <span className="px-3 py-2 text-center font-mono text-[10px] tracking-widest text-faint uppercase">
+          <span className="px-3 py-2 text-center text-sm text-faint">
             Après-midi
           </span>
         </div>
@@ -80,7 +80,7 @@ export function PlanningEditor({
             key={jour.num}
             className="grid grid-cols-[auto_1fr_1fr] items-center border-b border-trait last:border-b-0"
           >
-            <span className="w-14 px-3 py-2.5 font-mono text-xs font-bold tracking-wider">
+            <span className="w-14 px-3 py-2.5 text-sm">
               {jour.court}
             </span>
             {(["am", "pm"] as const).map((slot) => (

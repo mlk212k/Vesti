@@ -63,7 +63,7 @@ export default async function StockPage() {
               <li key={row.member_id} className="panneau flex items-center gap-3 p-4">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{row.full_name}</p>
-                  <p className="text-xs text-faint">
+                  <p className="text-sm text-faint">
                     {row.allocated} attribuée{row.allocated > 1 ? "s" : ""} ·{" "}
                     {row.sold} vendue{row.sold > 1 ? "s" : ""} · {row.returned}{" "}
                     rendue{row.returned > 1 ? "s" : ""}
@@ -72,7 +72,7 @@ export default async function StockPage() {
                 </div>
                 <div className="text-right">
                   <p className="chiffre text-2xl">{row.held}</p>
-                  <p className="text-[10px] tracking-wider text-faint uppercase">
+                  <p className="text-sm text-faint">
                     en main
                   </p>
                 </div>
@@ -113,13 +113,13 @@ export default async function StockPage() {
                         <span className="text-faint"> · {movement.note}</span>
                       ) : null}
                     </p>
-                    <p className="text-[11px] text-faint">
+                    <p className="text-sm text-faint">
                       {formatDateTime(movement.created_at)}
                     </p>
                   </div>
                   <span
                     className={`chiffre text-base ${
-                      signe > 0 ? "text-braise" : "text-dim"
+                      signe > 0 ? "text-peche" : "text-dim"
                     }`}
                   >
                     {signe > 0 ? "+" : ""}

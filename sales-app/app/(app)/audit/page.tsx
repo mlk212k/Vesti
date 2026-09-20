@@ -74,16 +74,16 @@ export default async function AuditPage({
             <li key={log.id} className="panneau-plat px-4 py-3">
               <div className="flex items-baseline justify-between gap-3">
                 <p className="text-sm font-medium">{auditLabel(log.action)}</p>
-                <span className="shrink-0 text-[11px] text-faint">
+                <span className="shrink-0 text-sm text-faint">
                   {formatDateTime(log.created_at)}
                 </span>
               </div>
-              <p className="mt-0.5 text-xs text-faint">
+              <p className="mt-0.5 text-sm text-faint">
                 {log.actor_id ? (noms.get(log.actor_id) ?? "Compte supprimé") : "Système"}
                 {log.entity_type ? ` · ${log.entity_type}` : ""}
               </p>
               {Object.keys(log.metadata ?? {}).length > 0 ? (
-                <pre className="mt-2 overflow-x-auto rounded-lg bg-black/40 p-2.5 text-[11px] leading-relaxed text-dim">
+                <pre className="mt-2 overflow-x-auto rounded-lg bg-black/40 p-2.5 text-sm leading-relaxed text-dim">
                   {JSON.stringify(log.metadata, null, 2)}
                 </pre>
               ) : null}

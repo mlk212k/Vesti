@@ -84,7 +84,7 @@ export function AvatarUploader({
       )}
 
       <div className="min-w-0 flex-1">
-        <label className="btn btn-fantome cursor-pointer text-xs">
+        <label className="btn btn-fantome cursor-pointer text-sm">
           <IconCamera className="h-4 w-4" />
           {envoi ? "Envoi…" : apercu ? "Changer la photo" : "Ajouter une photo"}
           <input
@@ -97,9 +97,9 @@ export function AvatarUploader({
           />
         </label>
         {erreur ? (
-          <p className="mt-1.5 text-xs text-braise">{erreur}</p>
+          <p className="mt-1.5 text-sm text-peche">{erreur}</p>
         ) : (
-          <p className="mt-1.5 text-[11px] text-faint">
+          <p className="mt-1.5 text-sm text-faint">
             2 Mo maximum. Elle apparaît dans le chat et la vue d&apos;équipe.
           </p>
         )}

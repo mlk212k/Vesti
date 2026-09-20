@@ -98,7 +98,7 @@ export default async function SalesPage({
                   <p className="truncate text-sm font-medium">
                     {sale.businesses?.name ?? "Vente directe"}
                   </p>
-                  <p className="text-xs text-faint">
+                  <p className="text-sm text-faint">
                     {staff ? `${noms.get(sale.member_id) ?? "—"} · ` : ""}
                     {formatDateShort(sale.sold_at)} à {formatTime(sale.sold_at)}
                   </p>
@@ -108,7 +108,7 @@ export default async function SalesPage({
                   <p className="chiffre text-base">
                     {formatCentsShort(sale.amount_cents)}
                   </p>
-                  <p className="text-[11px] text-faint">
+                  <p className="text-sm text-faint">
                     {formatCents(sale.unit_price_cents)} / carte
                   </p>
                 </div>

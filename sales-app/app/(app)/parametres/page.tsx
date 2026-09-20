@@ -16,7 +16,7 @@ export default async function SettingsPage() {
 
       <SettingsForm settings={settings} />
 
-      <p className="text-xs text-faint">
+      <p className="text-sm text-faint">
         Dernière modification : {formatDateTime(settings.updated_at)}. Chaque
         changement est enregistré dans le journal d&apos;audit avec l&apos;avant
         et l&apos;après.

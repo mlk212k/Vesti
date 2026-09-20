@@ -78,7 +78,7 @@ export default async function ConversationPage({
           <h1 className="titre truncate text-2xl">
             {conversation.kind === "team" ? `# ${titre}` : titre}
           </h1>
-          <p className="font-mono text-[10px] tracking-widest text-faint uppercase">
+          <p className="text-sm text-faint">
             {membres.length} membre{membres.length > 1 ? "s" : ""}
           </p>
         </div>

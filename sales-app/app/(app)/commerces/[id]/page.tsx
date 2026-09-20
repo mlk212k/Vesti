@@ -89,7 +89,7 @@ export default async function BusinessPage({
           <p className="surtitre">Prochaine action</p>
           <p className="mt-1.5 text-sm">{business.next_action}</p>
           {business.next_action_at ? (
-            <p className="mt-0.5 text-xs text-faint">
+            <p className="mt-0.5 text-sm text-faint">
               prévue le {formatDateShort(business.next_action_at)}
             </p>
           ) : null}
@@ -119,7 +119,7 @@ export default async function BusinessPage({
                   <span className="chiffre w-8 text-center text-lg">
                     {sale.quantity}
                   </span>
-                  <span className="flex-1 text-xs text-faint">
+                  <span className="flex-1 text-sm text-faint">
                     {formatDateShort(sale.sold_at)} à {formatTime(sale.sold_at)}
                   </span>
                   <span className="chiffre text-base">

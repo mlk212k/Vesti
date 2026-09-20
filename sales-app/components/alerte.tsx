@@ -22,7 +22,7 @@ export function Alerte({
   return (
     <p
       className={`apparition rounded-[var(--r)] bg-black/30 px-4 py-3 text-sm ${
-        ton === "danger" ? "text-os" : "text-dim"
+        ton === "danger" ? "text-craie" : "text-dim"
       } ${arete}`}
       role={ton === "danger" ? "alert" : "status"}
     >

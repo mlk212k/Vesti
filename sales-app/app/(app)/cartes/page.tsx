@@ -51,14 +51,14 @@ export default async function MyCardsPage() {
                   {MOVEMENT_LABEL[movement.kind]}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] text-faint">
+                  <p className="text-sm text-faint">
                     {formatDateTime(movement.created_at)}
                     {movement.note ? ` · ${movement.note}` : ""}
                   </p>
                 </div>
                 <span
                   className={`chiffre text-base ${
-                    movement.member_delta > 0 ? "text-braise" : "text-dim"
+                    movement.member_delta > 0 ? "text-peche" : "text-dim"
                   }`}
                 >
                   {movement.member_delta > 0 ? "+" : ""}

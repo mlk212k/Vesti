@@ -19,7 +19,7 @@ export function MarkAllRead() {
 
   return (
     <form action={action}>
-      <Submit className="btn btn-fantome text-xs" pendingLabel="…">
+      <Submit className="btn btn-fantome text-sm" pendingLabel="…">
         Tout marquer comme lu
       </Submit>
     </form>

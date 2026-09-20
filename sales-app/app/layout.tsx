@@ -1,40 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
-// Deux voix, et c'est l'écart entre elles qui fait l'identité.
+// Deux polices, et plus une seule ligne de monospace.
 //
-//   Archivo, poussée à « wdth » 125 / « wght » 900 — large, massive, énergie
-//   d'affiche et de signalétique urbaine. Elle ne sert qu'aux très grands
-//   mots. En paragraphe elle serait illisible ; c'est voulu, elle n'y va
-//   jamais.
+//   Bricolage Grotesque — large, un peu de travers, éditoriale. C'est de
+//   l'affiche de quartier, pas du logiciel. Elle ne sert qu'aux grands mots
+//   et aux chiffres.
 //
-//   JetBrains Mono — la voix machine : libellés, heures, identifiants, en
-//   très petit et très espacé. Chasse fixe, donc un montant qui change ne
-//   décale jamais la colonne voisine.
+//   Plus Jakarta Sans — ronde, chaleureuse, très lisible. Elle porte TOUT
+//   le reste, y compris ce qui était avant en capitales monospace de 10 px :
+//   les étiquettes sont maintenant des phrases écrites normalement.
 //
-//   Inter Tight — le texte courant, celui qu'on lit vraiment. Neutre au
-//   point de disparaître, ce qui est exactement son travail ici.
-//
-// Archivo est une police variable : on demande explicitement l'axe de
-// largeur, sans quoi « wdth » n'aurait aucun effet et les titres
-// resteraient à la largeur normale.
-const archivo = Archivo({
+// Le monospace a disparu volontairement. Il donnait à l'app un air de
+// terminal ou de site de paris ; les chiffres gardent la chasse tabulaire,
+// ce qui suffit à ce qu'une colonne de montants ne danse pas.
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
-  axes: ["wdth"],
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
-
-const inter = Inter_Tight({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-ui",
   display: "swap",
@@ -64,7 +52,7 @@ export const viewport: Viewport = {
   // `cover` est ce qui fait exister env(safe-area-inset-*) : sans lui, la
   // barre du bas passe sous l'indicateur d'accueil de l'iPhone.
   viewportFit: "cover",
-  themeColor: "#0a0a0b",
+  themeColor: "#100e12",
   colorScheme: "dark",
 };
 
@@ -76,12 +64,12 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${archivo.variable} ${mono.variable} ${inter.variable}`}
+      className={`${bricolage.variable} ${jakarta.variable}`}
     >
-      <body className="min-h-screen bg-vide text-os antialiased">
-        {/* La source de lumière unique de l'app. Elle dérive très
-            lentement : c'est elle qui donne une direction d'éclairage, donc
-            un volume, à tout ce qui est posé au-dessus. */}
+      <body className="min-h-screen bg-nuit text-craie antialiased">
+        {/* Les deux lavis flous qui dérivent derrière la page, pêche en
+            haut, lilas en bas. C'est ce qui empêche le fond d'être un aplat
+            de noir mort. */}
         <div className="lampe" aria-hidden="true" />
         <div className="relative z-10">{children}</div>
         <EnregistreServiceWorker />

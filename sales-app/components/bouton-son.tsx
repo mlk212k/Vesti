@@ -21,13 +21,13 @@ export function BoutonSon() {
     >
       <span>
         <span className="titre text-lg">Sons</span>
-        <span className="mt-1 block text-xs text-faint">
+        <span className="mt-1 block text-sm text-faint">
           Le tiroir-caisse à chaque vente, le tampon en fin de journée.
         </span>
       </span>
       <span
-        className={`font-mono text-xs font-bold tracking-widest uppercase ${
-          actifs ? "text-braise" : "text-faint"
+        className={` text-sm    ${
+          actifs ? "text-peche" : "text-faint"
         }`}
       >
         {actifs ? "ON" : "OFF"}

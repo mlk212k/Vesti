@@ -42,7 +42,7 @@ export function CommissionPanel({
     <div className="panneau space-y-4 p-5">
       <div>
         <h3 className="titre text-lg">Commissions</h3>
-        <p className="mt-1 text-xs text-faint">
+        <p className="mt-1 text-sm text-faint">
           Fige la commission due sur une période, puis marque-la réglée quand
           l&apos;argent est encaissé.
         </p>
@@ -97,7 +97,7 @@ export function CommissionPanel({
                 <p className="chiffre text-lg">
                   {formatCents(payout.amount_cents)}
                 </p>
-                <p className="text-[11px] text-faint">
+                <p className="text-sm text-faint">
                   {formatDateShort(payout.period_start)} →{" "}
                   {formatDateShort(payout.period_end)}
                 </p>
@@ -108,7 +108,7 @@ export function CommissionPanel({
               ) : (
                 <form action={paidAction}>
                   <input type="hidden" name="payout_id" value={payout.id} />
-                  <Submit className="btn px-3 py-2 text-xs" pendingLabel="…">
+                  <Submit className="btn px-3 py-2 text-sm" pendingLabel="…">
                     Marquer réglée
                   </Submit>
                 </form>

@@ -38,10 +38,10 @@ export default async function ProfilePage() {
         <div className="my-4" />
 
         <p className="titre text-3xl">{user.full_name}</p>
-        <p className="mt-1 font-mono text-xs tracking-wider text-dim uppercase">
+        <p className="mt-1 text-sm text-dim">
           {ROLE_LABEL[user.role]}
         </p>
-        <p className="mt-1 font-mono text-[11px] text-faint">
+        <p className="mt-1 text-sm text-faint">
           Objectif {user.daily_goal_override ?? settings.default_daily_goal}{" "}
           cartes · commission {formatRate(settings.commission_rate_bp)}
         </p>

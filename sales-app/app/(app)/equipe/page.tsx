@@ -56,7 +56,7 @@ export default async function TeamPage() {
                     <Avatar nom={profile.full_name} />
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium">{profile.full_name}</p>
-                      <p className="text-xs text-faint">
+                      <p className="text-sm text-faint">
                         {ROLE_LABEL[profile.role]} · {cards?.held ?? 0} en main
                       </p>
                     </div>
@@ -72,7 +72,7 @@ export default async function TeamPage() {
                     <div className="flex-1">
                       <Jauge valeur={day?.cards_sold ?? 0} objectif={objectif} />
                     </div>
-                    <span className="w-14 shrink-0 text-right text-[11px] text-faint">
+                    <span className="w-14 shrink-0 text-right text-sm text-faint">
                       {day ? formatDuration(day.duration_seconds) : "—"}
                     </span>
                   </div>

@@ -87,17 +87,17 @@ export function CreateMemberForm() {
             minLength={8}
             value={motDePasse}
             onChange={(event) => setMotDePasse(event.target.value)}
-            className="champ font-mono"
+            className="champ"
           />
           <button
             type="button"
             onClick={() => setMotDePasse(motDePasseProvisoire())}
-            className="btn shrink-0 px-3 text-xs"
+            className="btn shrink-0 px-3 text-sm"
           >
             Regénérer
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-faint">
+        <p className="mt-1.5 text-sm text-faint">
           Note-le : il ne sera plus jamais affiché. La personne pourra le
           changer depuis son profil.
         </p>
@@ -184,7 +184,7 @@ export function EditMemberForm({
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="btn btn-fantome w-full py-2 text-xs"
+        className="btn btn-fantome w-full py-2 text-sm"
       >
         Modifier
       </button>
@@ -266,11 +266,11 @@ export function EditMemberForm({
           />
           Compte actif
           {estMoi ? (
-            <span className="text-xs text-faint">(toi-même)</span>
+            <span className="text-sm text-faint">(toi-même)</span>
           ) : null}
         </label>
 
-        <p className="text-xs text-faint">
+        <p className="text-sm text-faint">
           Un compte désactivé ne peut plus se connecter, mais ses ventes et son
           historique restent intacts — on ne supprime jamais un commercial,
           sinon la comptabilité du mois partirait avec lui.
@@ -304,10 +304,10 @@ export function EditMemberForm({
             minLength={8}
             value={nouveau}
             onChange={(event) => setNouveau(event.target.value)}
-            className="champ font-mono"
+            className="champ"
             placeholder="Nouveau mot de passe"
           />
-          <Submit className="btn shrink-0 px-3 text-xs" pendingLabel="…">
+          <Submit className="btn shrink-0 px-3 text-sm" pendingLabel="…">
             Appliquer
           </Submit>
         </div>

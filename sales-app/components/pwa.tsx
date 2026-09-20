@@ -22,6 +22,24 @@ export function EnregistreServiceWorker() {
 
     if (document.readyState === "complete") enregistrer();
     else window.addEventListener("load", enregistrer, { once: true });
+
+    // Quand une nouvelle version prend la main (le service worker fait
+    // `skipWaiting` puis `clients.claim`), la page ouverte tourne encore sur
+    // l'ancienne : ses appels au serveur visent du code qui n'existe plus.
+    // On recharge donc dès le changement de contrôleur. Le garde-fou évite
+    // la boucle si le navigateur enchaîne les événements.
+    let rechargement = false;
+    const surChangement = () => {
+      if (rechargement) return;
+      rechargement = true;
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener("controllerchange", surChangement);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener("controllerchange", surChangement);
+      window.removeEventListener("load", enregistrer);
+    };
   }, []);
 
   return null;
