@@ -30,7 +30,7 @@ export function Sidebar({
   const items = navFor(role);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-trait bg-[rgba(10,10,11,0.94)] backdrop-blur-md lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-[rgba(10,10,11,0.92)] shadow-[inset_-1px_0_0_0_var(--trait)] backdrop-blur-xl lg:flex">
       <div className="flex items-center gap-2.5 px-5 py-6">
         <Logo className="h-8 w-8" />
         <div>
@@ -56,9 +56,9 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="border-t border-trait p-3">
+      <div className="p-3 shadow-[inset_0_1px_0_0_var(--trait)]">
         <div className="mb-2 flex items-center gap-2.5 px-2 py-1.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ardoise-3 text-[11px] font-bold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-beton font-mono text-[10px] tracking-widest text-dim ring-1 ring-white/[0.06]">
             {initials(fullName)}
           </span>
           <span className="truncate text-sm text-dim">{fullName}</span>
@@ -66,7 +66,7 @@ export function Sidebar({
         <form action="/logout" method="post">
           <button
             type="submit"
-            className="lien-lateral w-full text-left text-faint hover:text-rouge"
+            className="lien-lateral w-full text-left text-faint hover:text-braise"
           >
             <IconLogout className="h-[18px] w-[18px]" />
             Se déconnecter
@@ -77,13 +77,28 @@ export function Sidebar({
   );
 }
 
+/**
+ * Le rail de caméra.
+ *
+ * Cinq positions, pas cinq pages. Aucune icône enfermée dans une boîte,
+ * aucun libellé partout : un trait par position, celui de la position
+ * courante s'allonge et prend l'accent, et son nom — un seul — s'affiche
+ * au-dessus.
+ *
+ * L'icône reste, en très discret : elle sert de repère mémoriel à quelqu'un
+ * qui utilise l'app tous les jours. Ce qu'on a supprimé, c'est le texte
+ * répété cinq fois, qui transformait le bas de l'écran en barre d'outils.
+ */
 export function BottomNav({ role }: { role: Role }) {
   const pathname = usePathname();
   const items = mobileNavFor(role);
+  const courant = items.find((item) => isActive(pathname, item.href));
 
   return (
-    <nav className="barre-nav safe-bottom fixed inset-x-0 bottom-0 z-30 lg:hidden">
-      <div className="mx-auto flex max-w-lg items-stretch">
+    <nav className="barre-nav safe-bottom fixed inset-x-0 bottom-0 z-30 pt-6 lg:hidden">
+      <p className="surtitre mb-3 text-center text-os">{courant?.label ?? ""}</p>
+
+      <div className="mx-auto flex max-w-xs items-stretch">
         {items.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item.href);
@@ -91,13 +106,14 @@ export function BottomNav({ role }: { role: Role }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-1 flex-col items-center gap-1 pt-2.5 pb-2 text-[10px] font-medium tracking-wide ${
-                active ? "onglet-actif" : "text-faint"
+              aria-label={item.label}
+              aria-current={active ? "page" : undefined}
+              className={`flex flex-1 flex-col items-center gap-2.5 pt-1 pb-3 transition-colors duration-500 ${
+                active ? "onglet-actif" : "text-cendre"
               }`}
             >
-              <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.1 : 1.6} />
-              <span className="uppercase">{item.short}</span>
-              <span className="onglet-marque w-6" />
+              <Icon className="h-[19px] w-[19px]" strokeWidth={active ? 1.9 : 1.5} />
+              <span className="onglet-marque" />
             </Link>
           );
         })}
@@ -115,7 +131,7 @@ export function TopBar({
   unread: number;
 }) {
   return (
-    <header className="safe-top sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between border-b border-trait bg-[rgba(7,7,10,0.72)] px-4 py-3 backdrop-blur-xl lg:hidden">
+    <header className="safe-top sticky top-0 z-20 -mx-4 mb-6 flex items-center justify-between bg-[rgba(10,10,11,0.62)] px-4 py-3 backdrop-blur-xl lg:hidden">
       <Link href="/" className="flex items-center gap-2">
         <Logo className="h-7 w-7" />
         <span className="titre text-base">{appName}</span>
@@ -123,16 +139,14 @@ export function TopBar({
 
       <Link
         href="/notifications"
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-trait bg-ardoise-2"
+        className="relative flex h-9 w-9 items-center justify-center"
         aria-label={
           unread > 0 ? `${unread} notification(s) non lue(s)` : "Notifications"
         }
       >
         <IconBell className="h-[18px] w-[18px] text-dim" />
         {unread > 0 ? (
-          <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-sm bg-lime px-1 text-[10px] font-bold text-[var(--lime-encre)]">
-            {unread > 9 ? "9+" : unread}
-          </span>
+          <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-braise" />
         ) : null}
       </Link>
     </header>
@@ -144,16 +158,14 @@ export function DesktopBell({ unread }: { unread: number }) {
   return (
     <Link
       href="/notifications"
-      className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-trait bg-ardoise-2 transition-colors hover:border-[var(--trait-fort)] lg:flex"
+      className="relative hidden h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/[0.04] lg:flex"
       aria-label={
         unread > 0 ? `${unread} notification(s) non lue(s)` : "Notifications"
       }
     >
       <IconBell className="h-5 w-5 text-dim" />
       {unread > 0 ? (
-        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-sm bg-lime px-1 text-[10px] font-bold text-[var(--lime-encre)]">
-          {unread > 9 ? "9+" : unread}
-        </span>
+        <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-braise" />
       ) : null}
     </Link>
   );

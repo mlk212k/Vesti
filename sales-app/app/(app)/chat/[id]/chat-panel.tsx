@@ -224,7 +224,7 @@ export function ChatPanel({
                       />
                       {message.author_id && enLigne.includes(message.author_id) ? (
                         <span
-                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-noir bg-lime"
+                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-vide bg-braise"
                           title="En ligne"
                         />
                       ) : null}
@@ -246,8 +246,8 @@ export function ChatPanel({
                     }
                     className={`block w-full text-left ${
                       moiMeme
-                        ? "rounded-[8px] rounded-br-[2px] bg-lime px-3.5 py-2.5 text-sm text-[var(--lime-encre)]"
-                        : "rounded-[8px] rounded-bl-[2px] border border-trait bg-ardoise-2 px-3.5 py-2.5 text-sm"
+                        ? "rounded-[8px] rounded-br-[2px] bg-braise px-3.5 py-2.5 text-sm text-[var(--braise-encre)]"
+                        : "rounded-[8px] rounded-bl-[2px] border border-trait bg-beton px-3.5 py-2.5 text-sm"
                     }`}
                   >
                     <span className="texte-libre whitespace-pre-wrap">
@@ -266,8 +266,8 @@ export function ChatPanel({
                           onClick={() => reagir(message.id, emoji)}
                           className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] ${
                             auteurs.includes(moi)
-                              ? "border-lime bg-[rgba(204,255,0,0.12)]"
-                              : "border-trait bg-ardoise-2"
+                              ? "border-braise bg-[rgba(204,255,0,0.12)]"
+                              : "border-trait bg-beton"
                           }`}
                           title={auteurs
                             .map((id) => annuaire[id]?.nom ?? "?")
@@ -291,7 +291,7 @@ export function ChatPanel({
                           key={emoji}
                           type="button"
                           onClick={() => reagir(message.id, emoji)}
-                          className="rounded-[6px] border border-trait bg-ardoise-2 px-2 py-1 text-base transition-transform active:scale-90"
+                          className="rounded-[6px] border border-trait bg-beton px-2 py-1 text-base transition-transform active:scale-90"
                           aria-label={`Réagir ${emoji}`}
                         >
                           {emoji}

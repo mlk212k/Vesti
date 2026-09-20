@@ -75,29 +75,60 @@ s'applique pas à lui.
 ## Design
 
 Le système visuel tient entièrement dans `app/globals.css` : classes
-`ticket`, `panneau`, `perfo`, `ligne-ticket`, `tampon`, `champ`,
-`btn-primaire`, `jauge-cran`, `pastille`, `titre`, `chiffre`, `surtitre`…
-Utiliser ces classes plutôt que de réinventer des utilitaires Tailwind au
-cas par cas — un changement de direction artistique doit se faire dans ce
-fichier, pas dans quinze composants.
+`panneau`, `panneau-plat`, `panneau-creux`, `dalle`, `champ`,
+`btn-primaire`, `jauge-cran`, `pastille`, `titre`, `mot`, `chiffre`,
+`surtitre`… Utiliser ces classes plutôt que de réinventer des utilitaires
+Tailwind au cas par cas — un changement de direction artistique doit se
+faire dans ce fichier, pas dans quinze composants.
+
+Trois règles de cette DA, qui ne sont pas des préférences :
+
+- **Un seul accent.** `--braise` a exactement trois usages : la tranche de
+  la dalle, le chiffre qui appartient à la personne qui regarde, ce qui
+  réclame une action maintenant. Ajouter une couleur (un vert de succès, un
+  rouge d'erreur) casse la DA. Une erreur se traite par la matière — voir
+  `components/alerte.tsx`.
+- **Aucune bordure qui fait le tour.** La séparation vient de la profondeur
+  (`inset 0 1px 0` en haut d'un plan, une ombre diffuse), pas d'un cadre.
+  Un `border` de quatre côtés sur un panneau est un bug de DA.
+- **Tout mouvement a une cause.** Une animation répond à un geste ou à un
+  changement d'état. Pas de glow décoratif, pas de dégradé gratuit.
 
 Deux pièges déjà rencontrés dans ce fichier, à ne pas réintroduire :
 
-- **Masques multi-couches.** Les crans de `.ticket` sont découpés au
-  `mask-image`. Une couche `repeat-x` ne couvre que la hauteur de sa tuile ;
-  composée en `intersect` avec une autre bande, elle ne laisse **rien**
-  d'opaque et le panneau disparaît entièrement. D'où l'aplat
-  `linear-gradient(#000, #000)` en couche du dessous et le `exclude` qui y
-  perce les trous. Toujours vérifier un masque à l'écran, pas seulement à la
-  lecture.
+- **Masques multi-couches.** Une couche `repeat-x` ne couvre que la hauteur
+  de sa tuile ; composée en `intersect` avec une autre bande, elle ne laisse
+  **rien** d'opaque et le panneau disparaît entièrement. Il faut un aplat
+  opaque en couche du dessous et un `exclude` qui y perce les trous.
+  Toujours vérifier un masque à l'écran, pas seulement à la lecture.
 - **Césure.** `overflow-wrap: break-word` est global pour que du texte saisi
   ne déborde pas, mais il couperait « COMMISSION » en « COMMISSI / ON ». Les
   libellés courts passent par `.surtitre-serre`, qui remet
-  `overflow-wrap: normal` et `word-break: keep-all` : le libellé passe à la
-  ligne entre deux mots, jamais au milieu d'un.
+  `overflow-wrap: normal` et `word-break: keep-all`.
 
-Pas de librairie d'icônes ni de graphiques : `components/icons.tsx` et
-`components/graphiques.tsx` sont maison, et rendus côté serveur.
+Pas de librairie d'icônes, de graphiques ni d'animation : `components/icons.tsx`
+et `components/graphiques.tsx` sont maison, et `components/dalle.tsx` fait
+ses gestes à la main.
+
+## L'objet
+
+`components/dalle.tsx` est le cœur de la DA. Trois choses à savoir avant d'y
+toucher :
+
+1. **Rien ne passe par `state`.** Un `setState` par `pointermove`, c'est
+   soixante rendus React par seconde pour un objet qui n'a aucune donnée à
+   recalculer. Tout s'écrit directement dans le style de l'élément et dans
+   des variables CSS (`--lx`, `--ly`, `--charge`, `--progression`).
+2. **L'inertie est une vraie intégration**, pas une transition CSS : on
+   mesure la vitesse angulaire de fin de geste et on la laisse décroître
+   dans une boucle `requestAnimationFrame` avant de rendre la main au
+   ressort CSS.
+3. **Les boucles d'images ne tournent que pendant le contact.** Une boucle
+   permanente pour surveiller un appui qui n'a pas commencé, c'est de la
+   batterie brûlée.
+
+La dalle ne calcule rien de métier : `charge` lui arrive déjà cuite depuis
+le serveur. Si un jour elle calcule un montant, c'est un bug.
 
 ## Sons
 

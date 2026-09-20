@@ -6,6 +6,10 @@ import { DAY_STATUS_LABEL, type DisplayDayStatus } from "@/lib/types";
 // Briques d'interface partagées. Elles portent le style du projet pour que
 // les pages n'aient pas à le réinventer — et pour qu'un changement de
 // direction artistique se fasse ici, pas dans quinze fichiers.
+//
+// Règle de cette DA, valable pour tout ce fichier : RIEN N'EST DANS UNE
+// BOÎTE. Ce qui sépare deux informations, c'est du vide, une différence de
+// taille de texte ou un changement de profondeur — jamais un cadre.
 
 export function EnTete({
   surtitre,
@@ -17,18 +21,53 @@ export function EnTete({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        {surtitre ? <p className="surtitre mb-2">{surtitre}</p> : null}
-        <h1 className="titre text-4xl sm:text-5xl">{titre}</h1>
+        {surtitre ? <p className="surtitre mb-3">{surtitre}</p> : null}
+        {/* Le titre déborde volontairement de sa colonne sur mobile : un mot
+            qui touche le bord de l'écran a l'air plus grand que l'écran. */}
+        <h1 className="titre text-[clamp(2.6rem,13vw,4.5rem)]">{titre}</h1>
       </div>
       {children ? <div className="flex items-center gap-2">{children}</div> : null}
     </div>
   );
 }
 
-// Tuile de chiffre. `accent` réserve le lime au chiffre qui compte le plus de
-// l'écran : s'ils s'allument tous, plus aucun ne ressort.
+/**
+ * Le mot-matière : un mot énorme posé DERRIÈRE le reste, qui déborde de
+ * l'écran et qu'on ne lit pas vraiment. Il donne l'échelle et le ton.
+ *
+ * Il n'y en a jamais deux sur le même écran, et il est toujours
+ * `aria-hidden` : c'est de la matière, pas de l'information. Ce qu'il dit
+ * est toujours écrit ailleurs, en lisible.
+ */
+export function Mot({
+  children,
+  plein = false,
+  className = "",
+}: {
+  children: React.ReactNode;
+  plein?: boolean;
+  className?: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`mot ${plein ? "mot-plein" : ""} ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+/**
+ * Un chiffre et son libellé. Pas de tuile, pas de bordure : la hiérarchie
+ * est entièrement typographique.
+ *
+ * `accent` réserve la braise au seul chiffre qui compte sur l'écran. S'ils
+ * s'allument tous, plus aucun ne ressort — c'est la règle de l'accent
+ * unique, appliquée ici.
+ */
 export function Stat({
   label,
   valeur,
@@ -43,25 +82,22 @@ export function Stat({
   className?: string;
 }) {
   return (
-    <div
-      className={`panneau overflow-hidden p-3.5 ${
-        accent ? "border-l-2 border-l-lime" : ""
-      } ${className}`}
-    >
+    <div className={`min-w-0 ${className}`}>
       <p className="surtitre-serre">{label}</p>
       <p
-        className={`chiffre mt-2 text-2xl sm:text-3xl ${accent ? "text-lime" : ""}`}
+        className={`chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] ${
+          accent ? "text-braise" : "text-os"
+        }`}
       >
         {valeur}
       </p>
-      {detail ? <p className="mt-1.5 text-xs text-faint">{detail}</p> : null}
+      {detail ? <p className="mt-1 text-xs text-faint">{detail}</p> : null}
     </div>
   );
 }
 
-// La jauge d'objectif : un cran par carte tant que ça reste lisible, une
-// barre continue au-delà. Les crans au-delà de l'objectif passent en orange —
-// le dépassement se voit, il ne disparaît pas dans une barre pleine.
+// Jauge secondaire, pour les listes où il n'y a pas la place d'un objet.
+// Sur l'écran d'accueil, la jauge est la tranche de la dalle — pas ceci.
 export function Jauge({
   valeur,
   objectif,
@@ -106,12 +142,15 @@ export function Jauge({
   );
 }
 
+// Un statut n'est pas une gommette : c'est un mot minuscule. Seul « en
+// cours » porte l'accent, et il est le seul à bouger — parce qu'il est le
+// seul à être vrai en ce moment même.
 const STATUT_CLASSE: Record<DisplayDayStatus, string> = {
-  not_started: "tampon tampon-gris",
-  in_progress: "tampon tampon-lime",
-  goal_reached: "tampon tampon-lime",
-  goal_missed: "tampon tampon-orange",
-  validated: "tampon tampon-lime",
+  not_started: "pastille",
+  in_progress: "pastille pastille-vive",
+  goal_reached: "pastille pastille-os",
+  goal_missed: "pastille",
+  validated: "pastille",
 };
 
 export function StatutJournee({ statut }: { statut: DisplayDayStatus }) {
@@ -123,6 +162,8 @@ export function StatutJournee({ statut }: { statut: DisplayDayStatus }) {
   );
 }
 
+// Le vide assumé : pas de panneau gris avec un texte au milieu, juste du
+// noir et deux lignes.
 export function Vide({
   titre,
   children,
@@ -131,10 +172,10 @@ export function Vide({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="panneau-plat px-5 py-9 text-center">
-      <p className="titre text-xl text-dim">{titre}</p>
+    <div className="px-2 py-14 text-center">
+      <p className="titre text-2xl text-cendre">{titre}</p>
       {children ? (
-        <div className="mt-2 text-sm text-faint">{children}</div>
+        <div className="mx-auto mt-3 max-w-xs text-sm text-faint">{children}</div>
       ) : null}
     </div>
   );
@@ -150,7 +191,7 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="space-y-3">
+    <section className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="surtitre">{titre}</h2>
         {action}
@@ -160,6 +201,8 @@ export function Section({
   );
 }
 
+// Une ligne cliquable : aucun cadre, une seule arête de lumière en bas, et
+// le chevron qui avance sous le doigt.
 export function LigneLien({
   href,
   children,
@@ -170,80 +213,16 @@ export function LigneLien({
   return (
     <Link
       href={href}
-      className="panneau flex items-center gap-3 p-3.5 transition-transform active:scale-[0.99]"
+      className="group flex items-center gap-4 border-b border-trait py-4 transition-transform duration-300 active:scale-[0.985]"
     >
       <div className="min-w-0 flex-1">{children}</div>
-      <IconChevron className="h-4 w-4 shrink-0 text-faint" />
+      <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1 group-hover:text-os" />
     </Link>
   );
 }
 
-// Bandeau défilant des chiffres du jour. La piste est dupliquée à
-// l'identique : elle translate de -50 %, donc la boucle se referme sans saut.
-export function Bandeau({ items }: { items: string[] }) {
-  if (items.length === 0) return null;
-  const piste = [...items, ...items];
-
-  return (
-    <div className="marquee panneau-plat py-2" aria-hidden="true">
-      <div className="marquee-piste">
-        {piste.map((item, index) => (
-          <span
-            key={index}
-            className="surtitre flex shrink-0 items-center gap-3 px-4 text-dim"
-          >
-            {item}
-            <span className="inline-block h-1 w-1 bg-lime" />
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// Code-barres. Les barres sont tirées de la chaîne passée : même entrée,
-// même dessin. Ce n'est pas un vrai EAN — c'est un ornement honnête, qui
-// signe le ticket sans prétendre être scannable.
-export function CodeBarres({
-  valeur,
-  className = "h-8",
-}: {
-  valeur: string;
-  className?: string;
-}) {
-  let graine = 0;
-  for (let i = 0; i < valeur.length; i += 1) {
-    graine = (graine * 31 + valeur.charCodeAt(i)) >>> 0;
-  }
-
-  const barres: number[] = [];
-  for (let i = 0; i < 44; i += 1) {
-    graine = (graine * 1103515245 + 12345) >>> 0;
-    barres.push(1 + ((graine >>> 16) % 3));
-  }
-
-  return (
-    <div
-      className={`flex items-end gap-[2px] ${className}`}
-      aria-hidden="true"
-      title={valeur}
-    >
-      {barres.map((largeur, index) => (
-        <span
-          key={index}
-          className="h-full bg-os"
-          style={{
-            width: `${largeur}px`,
-            opacity: index % 2 === 0 ? 0.75 : 0.25,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// Avatar : la photo si elle existe, les initiales sinon. Carré à coins
-// légèrement cassés — la DA n'a plus de cercles.
+// Avatar : la photo si elle existe, les initiales sinon. Rond, et posé sur
+// un creux plutôt que cerné d'un trait.
 export function Avatar({
   nom,
   url,
@@ -255,8 +234,8 @@ export function Avatar({
 }) {
   const classes = {
     sm: "h-8 w-8 text-[10px]",
-    md: "h-10 w-10 text-xs",
-    lg: "h-16 w-16 text-lg",
+    md: "h-11 w-11 text-xs",
+    lg: "h-20 w-20 text-xl",
   }[taille];
 
   const lettres = nom
@@ -270,18 +249,18 @@ export function Avatar({
     return (
       /* eslint-disable-next-line @next/next/no-img-element -- le bucket des
          avatars est public et déjà dimensionné ; passer par l'optimiseur
-         ajouterait un aller-retour pour une vignette de 40 px. */
+         ajouterait un aller-retour pour une vignette de 44 px. */
       <img
         src={url}
         alt={nom}
-        className={`shrink-0 rounded-[4px] border border-trait object-cover ${classes}`}
+        className={`shrink-0 rounded-full object-cover ring-1 ring-white/10 ${classes}`}
       />
     );
   }
 
   return (
     <span
-      className={`flex shrink-0 items-center justify-center rounded-[4px] border border-trait bg-ardoise-3 font-mono font-bold tracking-wide ${classes}`}
+      className={`flex shrink-0 items-center justify-center rounded-full bg-beton font-mono tracking-widest text-dim ring-1 ring-white/[0.06] ${classes}`}
     >
       {lettres}
     </span>

@@ -63,7 +63,7 @@ export function PlanningEditor({
       </div>
 
       <div className="overflow-hidden rounded-[6px] border border-trait">
-        <div className="grid grid-cols-[auto_1fr_1fr] items-center border-b border-trait bg-ardoise-2">
+        <div className="grid grid-cols-[auto_1fr_1fr] items-center border-b border-trait bg-beton">
           <span className="px-3 py-2 font-mono text-[10px] tracking-widest text-faint uppercase">
             Jour
           </span>
@@ -93,7 +93,7 @@ export function PlanningEditor({
                   name={`c-${jour.num}-${slot}`}
                   defaultChecked={coche(jour.num, slot)}
                   onChange={() => jouer("tick")}
-                  className="h-5 w-5 accent-[var(--lime)]"
+                  className="h-5 w-5 accent-[var(--braise)]"
                   aria-label={`${jour.court} ${slot === "am" ? "matin" : "après-midi"}`}
                 />
               </label>

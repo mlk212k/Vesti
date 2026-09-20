@@ -1,15 +1,6 @@
 import Link from "next/link";
 import { IconChevron } from "@/components/icons";
-import { FiligraneNFC } from "@/components/nfc";
-import {
-  Avatar,
-  Bandeau,
-  Jauge,
-  Section,
-  Stat,
-  StatutJournee,
-  Vide,
-} from "@/components/ui";
+import { Avatar, Jauge, Mot, Section, Stat, StatutJournee, Vide } from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate } from "@/lib/money";
 import type { LignePlanning, TeamRow } from "@/lib/queries";
@@ -20,9 +11,18 @@ import {
   type StockSummary,
 } from "@/lib/types";
 
-// Tableau de bord de l'encadrement. Admin et manager partagent la même vue ;
-// seule la colonne « commission » et les raccourcis d'administration sont
-// réservés à l'admin — c'est son argent et ses réglages.
+/**
+ * L'écran de l'encadrement.
+ *
+ * Admin et manager partagent la même vue ; seule la ligne « commission » et
+ * les raccourcis d'administration sont réservés à l'admin — c'est son
+ * argent et ses réglages.
+ *
+ * Ici l'objet central n'est pas une carte mais un CHIFFRE : le CA du jour,
+ * en très grand, seul au milieu du vide. Tout le reste descend derrière lui
+ * par ordre d'urgence : qui manque à l'appel, qui vend, ce qu'il reste au
+ * dépôt.
+ */
 export function DashboardEquipe({
   rows,
   settings,
@@ -50,55 +50,41 @@ export function DashboardEquipe({
   const objectifsAtteints = rows.filter((row) => row.day?.goal_reached).length;
   const journeesDuJour = rows.filter((row) => row.day).length;
 
-  // Les commerciaux en haut, triés par CA du jour : le tableau raconte la
+  // Les commerciaux en haut, triés par CA du jour : la liste raconte la
   // journée dès la première ligne.
   const classement = [...rows].sort(
     (a, b) => (b.day?.revenue_cents ?? 0) - (a.day?.revenue_cents ?? 0),
   );
 
-  const meilleur = classement.find((row) => (row.day?.revenue_cents ?? 0) > 0);
-
-  const bandeau = [
-    `CA du jour ${formatCentsShort(caJour)}`,
-    `${cartesVendues} cartes vendues`,
-    `${actifs} en tournée`,
-    `${objectifsAtteints} objectif${objectifsAtteints > 1 ? "s" : ""} atteint${objectifsAtteints > 1 ? "s" : ""}`,
-    meilleur
-      ? `En tête : ${meilleur.profile.full_name.split(" ")[0]} · ${formatCentsShort(meilleur.day?.revenue_cents ?? 0)}`
-      : "Personne n'a encore vendu",
-    `Dépôt ${stock.in_warehouse} cartes`,
-  ];
-
   return (
-    <div className="space-y-6">
-      <header className="montee relative overflow-hidden">
-        <FiligraneNFC />
-        <p className="surtitre">Aujourd&apos;hui · {settings.team_name}</p>
-        {/* « Poste de commandement » en italique grasse déborde d'un écran de
-            390 px à partir de text-4xl : on commence plus petit sur mobile. */}
-        <h1 className="titre mt-1 text-[1.75rem] sm:text-5xl">
-          {estAdmin ? "Poste de commandement" : "Supervision"}
-        </h1>
-        <p className="mt-1.5 text-sm text-faint">
-          Salut {prenom} — {journeesDuJour} journée{journeesDuJour > 1 ? "s" : ""}{" "}
-          ouverte{journeesDuJour > 1 ? "s" : ""} sur {rows.length} membre
-          {rows.length > 1 ? "s" : ""}.
+    <div className="space-y-14 pt-2">
+      {/* --- LE CHIFFRE ----------------------------------------------------
+          Un seul nombre, énorme, avec le mot-matière derrière. C'est la
+          seule chose qu'on doit voir en ouvrant l'app. */}
+      <section className="montee relative">
+        <div className="pointer-events-none absolute inset-x-0 top-16 flex justify-center overflow-hidden">
+          <Mot className="text-[clamp(5rem,28vw,12rem)]">{settings.team_name}</Mot>
+        </div>
+
+        <p className="surtitre relative">
+          Aujourd&apos;hui · {journeesDuJour} journée{journeesDuJour > 1 ? "s" : ""}{" "}
+          sur {rows.length} membre{rows.length > 1 ? "s" : ""}
         </p>
-      </header>
 
-      {/* Le bandeau : les chiffres du jour qui défilent, comme un tableau de
-          cotations. Il ne remplace aucune information — il donne le pouls. */}
-      <div className="montee retard-1">
-        <Bandeau items={bandeau} />
-      </div>
+        <p className="chiffre relative mt-6 text-[clamp(3.4rem,20vw,7rem)] text-os">
+          {formatCentsShort(caJour)}
+        </p>
+        <p className="surtitre relative mt-3">
+          Chiffre d&apos;affaires · {cartesVendues} carte
+          {cartesVendues > 1 ? "s" : ""} vendue{cartesVendues > 1 ? "s" : ""}
+        </p>
 
-      <div className="montee retard-1 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat
-          label="CA du jour"
-          valeur={formatCentsShort(caJour)}
-          detail={`${cartesVendues} carte${cartesVendues > 1 ? "s" : ""} vendue${cartesVendues > 1 ? "s" : ""}`}
-          accent
-        />
+        <p className="relative mt-8 text-sm text-faint">
+          Salut {prenom}.
+        </p>
+      </section>
+
+      <section className="montee retard-1 grid grid-cols-3 gap-5">
         {estAdmin ? (
           <Stat
             label="Ma commission"
@@ -106,69 +92,65 @@ export function DashboardEquipe({
             detail={`${formatRate(settings.commission_rate_bp)} du CA`}
           />
         ) : (
-          <Stat
-            label="Cartes vendues"
-            valeur={cartesVendues}
-            detail="aujourd'hui"
-          />
+          <Stat label="Cartes vendues" valeur={cartesVendues} detail="aujourd'hui" />
         )}
         <Stat
           label="En tournée"
           valeur={actifs}
-          detail={actifs > 0 ? "journée en cours" : "personne sur le terrain"}
+          detail={actifs > 0 ? "journée en cours" : "personne dehors"}
         />
         <Stat
           label="Objectifs atteints"
           valeur={`${objectifsAtteints}/${journeesDuJour}`}
-          detail={`objectif ${settings.default_daily_goal} cartes`}
+          detail={`objectif ${settings.default_daily_goal}`}
         />
-      </div>
+      </section>
 
-      {/* Qui est attendu aujourd'hui. Sans ça, l'encadrement ne sait pas si
-          une journée non ouverte est un retard ou un jour de repos. */}
-      <div className="montee retard-1">
-        <Link href="/planning" className="panneau block p-4">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="surtitre">Planning du jour</p>
-              <p className="mt-1.5 text-sm">
-                <span className="chiffre text-lime">{attendus.length}</span>{" "}
-                attendu{attendus.length > 1 ? "s" : ""}
-                {manquants.length > 0 ? (
-                  <>
-                    {" · "}
-                    <span className="chiffre text-orange">{manquants.length}</span>{" "}
-                    pas encore en route
-                  </>
-                ) : (
-                  " · tout le monde est parti"
-                )}
-              </p>
-            </div>
+      {/* --- QUI MANQUE ----------------------------------------------------
+          Sans cette ligne, l'encadrement ne sait pas si une journée non
+          ouverte est un retard ou un jour de repos. */}
+      <Link
+        href="/planning"
+        className="montee retard-1 group flex items-center gap-4 border-y border-trait py-5"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="surtitre">Planning du jour</p>
+          <p className="mt-2 text-sm">
+            <span className="chiffre text-os">{attendus.length}</span> attendu
+            {attendus.length > 1 ? "s" : ""}
             {manquants.length > 0 ? (
-              <span className="tampon tampon-orange">À relancer</span>
+              <>
+                {" · "}
+                <span className="chiffre text-braise">{manquants.length}</span> pas
+                encore en route
+              </>
             ) : (
-              <span className="tampon tampon-lime">Complet</span>
+              " · tout le monde est parti"
             )}
-          </div>
-        </Link>
-      </div>
+          </p>
+        </div>
+        <span className={manquants.length > 0 ? "pastille pastille-vive" : "pastille"}>
+          {manquants.length > 0 ? "À relancer" : "Complet"}
+        </span>
+        <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1" />
+      </Link>
 
+      {/* --- L'ÉQUIPE ------------------------------------------------------ */}
       <div className="montee retard-2">
         <Section
           titre="L'équipe aujourd'hui"
           action={
-            <Link href="/equipe" className="text-xs text-faint hover:text-dim">
+            <Link href="/equipe" className="surtitre hover:text-os">
               Vue détaillée
             </Link>
           }
         >
           {classement.length === 0 ? (
-            <Vide titre="Aucun membre">
+            <Vide titre="Personne">
               Crée les comptes de ton équipe depuis la page Membres.
             </Vide>
           ) : (
-            <ul className="space-y-2">
+            <ul>
               {classement.map((row, index) => (
                 <li key={row.profile.id}>
                   <LigneEquipe
@@ -184,16 +166,17 @@ export function DashboardEquipe({
         </Section>
       </div>
 
-      <div className="montee retard-3">
+      {/* --- LE STOCK ------------------------------------------------------ */}
+      <div className="montee retard-3 pb-4">
         <Section
           titre="Stock de cartes"
           action={
-            <Link href="/stock" className="text-xs text-faint hover:text-dim">
+            <Link href="/stock" className="surtitre hover:text-os">
               Gérer
             </Link>
           }
         >
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-5">
             <Stat label="Au dépôt" valeur={stock.in_warehouse} />
             <Stat label="En circulation" valeur={stock.held_by_members} />
             <Stat label="Vendues au total" valeur={stock.sold} />
@@ -225,25 +208,21 @@ function LigneEquipe({
   return (
     <Link
       href={`/equipe/${profile.id}`}
-      className="panneau block p-4 transition-transform active:scale-[0.99]"
+      className="group block border-b border-trait py-5 transition-transform duration-300 active:scale-[0.99]"
     >
-      <div className="flex items-center gap-3">
-        <div className="relative shrink-0">
-          <Avatar nom={profile.full_name} />
-          {rang ? (
-            <span
-              className={`tag-rang absolute -top-1.5 -left-1.5 ${rang === 1 ? "tag-rang-or" : ""}`}
-            >
-              {rang}
-            </span>
-          ) : null}
-        </div>
+      <div className="flex items-center gap-4">
+        {/* Le rang n'est pas une médaille collée sur l'avatar : c'est un
+            numéro d'ordre, en petit, à sa place — à gauche de la ligne. */}
+        <span className="w-4 shrink-0 font-mono text-[11px] text-cendre">
+          {rang ?? "·"}
+        </span>
+        <Avatar nom={profile.full_name} />
 
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium">{profile.full_name}</p>
-          <p className="text-xs text-faint">
+          <p className="truncate text-[15px]">{profile.full_name}</p>
+          <p className="surtitre mt-1">
             {ROLE_LABEL[profile.role]}
-            {cards ? ` · ${cards.held} carte${cards.held > 1 ? "s" : ""} en main` : ""}
+            {cards ? ` · ${cards.held} en main` : ""}
           </p>
         </div>
 
@@ -252,28 +231,23 @@ function LigneEquipe({
             {day ? formatCentsShort(day.revenue_cents) : "—"}
           </p>
           {estAdmin && day ? (
-            <p className="text-[11px] text-faint">
-              dont {formatCents(day.commission_cents)}
-            </p>
+            <p className="surtitre mt-1">dont {formatCents(day.commission_cents)}</p>
           ) : null}
         </div>
 
-        <IconChevron className="h-4 w-4 shrink-0 text-faint" />
+        <IconChevron className="h-4 w-4 shrink-0 text-cendre transition-transform duration-500 group-hover:translate-x-1" />
       </div>
 
-      <div className="mt-3 flex items-center gap-3">
-        <span className="chiffre w-14 shrink-0 text-sm text-dim">
-          {vendues} / {objectif}
+      <div className="mt-4 flex items-center gap-4 pl-8">
+        <span className="w-12 shrink-0 font-mono text-[11px] text-faint">
+          {vendues}/{objectif}
         </span>
         <div className="flex-1">
           {objectif > 0 ? <Jauge valeur={vendues} objectif={objectif} /> : null}
         </div>
-        <span className="w-14 shrink-0 text-right text-[11px] text-faint">
+        <span className="w-12 shrink-0 text-right font-mono text-[11px] text-faint">
           {day ? formatDuration(day.duration_seconds) : ""}
         </span>
-      </div>
-
-      <div className="mt-2.5">
         <StatutJournee statut={displayDayStatus(day)} />
       </div>
     </Link>

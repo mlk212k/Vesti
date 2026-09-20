@@ -98,7 +98,7 @@ export function SaleForm({
             +
           </button>
         </div>
-        <p className={`mt-1.5 text-xs ${trop ? "text-[#ff8a8a]" : "text-faint"}`}>
+        <p className={`mt-1.5 text-xs ${trop ? "text-braise" : "text-faint"}`}>
           {trop
             ? `Tu n'as que ${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main.`
             : `${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main`}
@@ -125,24 +125,23 @@ export function SaleForm({
         </div>
       </div>
 
-      {/* Récapitulatif, sous forme de ticket : c'est exactement ce que la
-          base va calculer. L'aperçu est un confort, pas une source. */}
-      <div className="panneau-creux space-y-2 p-4">
-        <div className="ligne-ticket">
-          <span className="text-dim">Montant</span>
-          <span className="ligne-ticket-points" />
-          <span className="tabulaire">{formatCents(totalCents)}</span>
+      {/* Aperçu. Trois nombres, sans cadre : l'écart de taille suffit à
+          dire lequel compte. Et c'est un CONFORT, pas une source — la base
+          recalcule tout à l'enregistrement, et c'est elle qui fait foi. */}
+      <div className="space-y-3 py-2">
+        <div className="flex items-baseline justify-between">
+          <span className="surtitre">Montant</span>
+          <span className="tabulaire text-sm text-dim">{formatCents(totalCents)}</span>
         </div>
-        <div className="ligne-ticket">
-          <span className="text-dim">Commission chef</span>
-          <span className="ligne-ticket-points" />
-          <span className="tabulaire">- {formatCents(commissionCents)}</span>
+        <div className="flex items-baseline justify-between">
+          <span className="surtitre">Commission chef</span>
+          <span className="tabulaire text-sm text-dim">
+            −{formatCents(commissionCents)}
+          </span>
         </div>
-        <div className="perfo my-1" />
-        <div className="ligne-ticket ligne-ticket-total">
-          <span>Mon net</span>
-          <span className="ligne-ticket-points" />
-          <span className="tabulaire">{formatCents(netCents)}</span>
+        <div className="flex items-baseline justify-between pt-1">
+          <span className="surtitre">Mon net</span>
+          <span className="chiffre text-2xl text-braise">{formatCents(netCents)}</span>
         </div>
       </div>
 

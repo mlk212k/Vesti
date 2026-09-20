@@ -83,7 +83,7 @@ export default async function MemberPage({
           Équipe
         </Link>
 
-        <div className="ticket p-5">
+        <div className="panneau p-5">
           <div className="flex items-center gap-4">
             <Avatar nom={profile.full_name} taille="lg" />
             <div className="min-w-0">
@@ -93,7 +93,7 @@ export default async function MemberPage({
                 {profile.phone ? ` · ${profile.phone}` : ""}
               </p>
               {!profile.is_active ? (
-                <span className="pastille pastille-rouge mt-1.5">
+                <span className="pastille pastille-vive mt-1.5">
                   Compte désactivé
                 </span>
               ) : null}
@@ -212,7 +212,7 @@ export default async function MemberPage({
                 </div>
 
                 {d.penalty_cents > 0 ? (
-                  <p className="mt-2 text-xs text-orange">
+                  <p className="mt-2 text-xs text-braise">
                     Retenue : {formatCents(d.penalty_cents)}
                   </p>
                 ) : null}

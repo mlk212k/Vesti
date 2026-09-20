@@ -48,7 +48,7 @@ export default async function BusinessPage({
           Commerces
         </Link>
 
-        <div className="ticket p-5">
+        <div className="panneau p-5">
           <span className="pastille">{BUSINESS_STATUS_LABEL[business.status]}</span>
           <h1 className="titre mt-3 text-3xl">{business.name}</h1>
           <p className="mt-1 text-sm text-dim">

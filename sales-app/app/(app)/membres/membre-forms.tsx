@@ -262,7 +262,7 @@ export function EditMemberForm({
             name="is_active"
             defaultChecked={profile.is_active}
             disabled={estMoi}
-            className="h-4 w-4 accent-[var(--lime)]"
+            className="h-4 w-4 accent-[var(--braise)]"
           />
           Compte actif
           {estMoi ? (

@@ -1,83 +1,92 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   DIRECTION ARTISTIQUE — « TICKET »
+   DIRECTION ARTISTIQUE — « MATIÈRE »
    ---------------------------------------------------------------------------
-   L'app ressemble à un terminal de caisse posé sur un établi : du noir
-   d'atelier, du papier thermique, de l'encre acide.
+   Règle unique, dont tout le reste découle :
 
-   Trois partis pris, et ce qu'ils remplacent :
+       On ne décore pas l'interface. On lui fait adopter le comportement
+       d'un objet.
 
-   1. VERT ACIDE au lieu du violet/magenta. Le violet fait « application
-      SaaS » ; le lime sur noir fait argent, néon de rue, gilet de chantier.
-      L'orange sert de second couteau, le rouge reste réservé au danger, et
-      le cyan ne sort que pour le signal NFC — le produit qu'on vend.
+   L'app n'est pas un tableau de bord : c'est un objet numérique posé dans le
+   noir, qu'on éclaire, qu'on enfonce, qu'on fait tourner. Cet objet est la
+   carte NFC — ce que l'équipe vend réellement — et son état EST l'état de la
+   journée. Le remplissage de sa tranche, c'est 8 cartes sur 10. Il n'y a pas
+   de jauge à côté : la jauge est l'objet.
 
-   2. ANGLES DROITS et OMBRES DURES au lieu du verre flouté. Un décalage net
-      de 4 px en noir plein, comme un autocollant mal collé ou une sérigraphie
-      décalée. Le flou de fond a disparu : il coûtait cher en rendu sur
-      téléphone et ramollissait tout.
+   Quatre partis pris, et ce qu'ils interdisent :
 
-   3. TYPOGRAPHIE À TROIS VOIX. Une grasse condensée en capitales pour les
-      titres (affiche), une monospace pour TOUT ce qui est chiffre ou
-      étiquette (caisse enregistreuse, ticket), une linéale pour le texte
-      courant (lisibilité). Les chiffres en monospace ne dansent jamais quand
-      une valeur change — et ils ont l'air comptés, pas décorés.
+   1. MONOCHROME + UN SEUL ACCENT. Cinq gris et un blanc cassé. Une seule
+      couleur, la braise (#ff4a1c), et trois usages autorisés : la tranche
+      qui se charge, le chiffre en cours, l'action possible maintenant.
+      Pas de vert de succès, pas de rouge de danger, pas de cyan : un
+      danger se signale par la MATIÈRE (elle se fissure, elle résiste), pas
+      par une teinte de plus.
 
-   Le motif conducteur est le TICKET DE CAISSE : bords dentelés, filets en
-   pointillés, codes-barres, tampons encrés. Il n'est pas décoratif — c'est
-   ce que produit le métier : des ventes, des reçus, de l'encaissement.
+   2. PAS DE CARTES, PAS DE BORDURES. La séparation vient de la profondeur —
+      un plan plus clair, une ombre diffuse, un liseré de lumière en haut —
+      jamais d'un trait qui fait le tour. Beaucoup de vide : ~80 % de
+      l'écran ne porte rien.
+
+   3. FORMES ORGANIQUES. Rayons larges et inégaux, contours qui respirent.
+      Rien n'est parfaitement géométrique, rien ne clignote.
+
+   4. CAMÉRA, PAS DE PAGES. Les transitions sont des mouvements d'appareil :
+      recul, mise au point, parallaxe. Jamais un slide, jamais un fondu sec.
+
+   Ce que ce fichier n'autorise pas, volontairement : un glow décoratif, un
+   dégradé sans raison, un effet de verre « parce que c'est joli ». Chaque
+   animation ci-dessous répond à un geste ou à un changement d'état.
    =========================================================================== */
 
 :root {
-  /* Fonds — noir d'atelier, jamais #000 pur : il écrase les ombres. */
-  --noir: #0a0a0b;
-  --ardoise: #121215;
-  --ardoise-2: #1a1a1e;
-  --ardoise-3: #26262c;
+  /* --- Les gris. Jamais #000 : le noir pur tue les ombres et fait trou. -- */
+  --vide: #0a0a0b;      /* le fond, charbon presque noir */
+  --fumee: #111113;     /* premier plan de profondeur */
+  --beton: #17171a;     /* deuxième plan */
+  --cendre: #212126;    /* arêtes, plans touchables */
+  --dim: #8b8b94;       /* texte secondaire */
+  --faint: #5c5c66;     /* texte technique */
+  --os: #edebe6;        /* texte principal, blanc cassé chaud */
 
-  /* Encre sur papier : un blanc cassé chaud, pas un blanc d'écran. */
-  --os: #f3f1ea;
-  --dim: #9c9aa5;
-  --faint: #67656f;
+  /* --- L'accent. Un seul. ------------------------------------------------ */
+  --braise: #ff4a1c;
+  --braise-sombre: #c2360f;
+  --braise-encre: #1a0600; /* texte posé SUR la braise */
 
-  /* Accents. */
-  --lime: #ccff00;
-  --lime-sombre: #9bc400;
-  --lime-encre: #0f1400;
-  --orange: #ff6a1a;
-  --rouge: #ff3131;
-  --succes: #37e07a;
-  /* Le cyan ne sert qu'au signal sans contact. Nulle part ailleurs. */
-  --nfc: #22dfff;
+  /* Le trait n'existe presque pas : il sert de liseré de lumière en haut
+     d'un plan, pas de contour. */
+  --trait: rgba(255, 255, 255, 0.055);
+  --trait-fort: rgba(255, 255, 255, 0.11);
 
-  --papier: #ece7da;
+  /* Rayons larges : une forme organique n'a pas d'angle vif. */
+  --r: 14px;
+  --r-lg: 24px;
+  --r-xl: 34px;
 
-  --trait: rgba(255, 255, 255, 0.09);
-  --trait-fort: rgba(255, 255, 255, 0.16);
+  /* Les deux seules courbes de l'app.
+     - caméra : départ franc, arrivée qui se pose. Tous les déplacements.
+     - élastique : dépasse puis revient. Tous les relâchements de doigt. */
+  --camera: cubic-bezier(0.16, 1, 0.3, 1);
+  --elastique: cubic-bezier(0.22, 1.35, 0.36, 1);
 
-  /* Angles presque droits : l'arrondi est un détail de finition, pas un
-     style. 4 px suffisent à ne pas couper le doigt. */
-  --r: 6px;
-  --r-lg: 10px;
+  /* Position de la lumière. Mise à jour au doigt par les composants
+     interactifs ; valeur au repos = au-dessus, légèrement à gauche. */
+  --lx: 38%;
+  --ly: 12%;
 
   /* --font-display / --font-mono / --font-ui viennent de next/font. */
 }
 
 @theme inline {
-  --color-noir: var(--noir);
-  --color-ardoise: var(--ardoise);
-  --color-ardoise-2: var(--ardoise-2);
-  --color-ardoise-3: var(--ardoise-3);
+  --color-vide: var(--vide);
+  --color-fumee: var(--fumee);
+  --color-beton: var(--beton);
+  --color-cendre: var(--cendre);
   --color-os: var(--os);
   --color-dim: var(--dim);
   --color-faint: var(--faint);
-  --color-lime: var(--lime);
-  --color-orange: var(--orange);
-  --color-rouge: var(--rouge);
-  --color-succes: var(--succes);
-  --color-nfc: var(--nfc);
-  --color-papier: var(--papier);
+  --color-braise: var(--braise);
   --color-trait: var(--trait);
   --font-sans: var(--font-ui);
   --font-display: var(--font-display);
@@ -91,13 +100,13 @@
 /* ===========================================================================
    TENUE EN APPLICATION INSTALLÉE
    Une PWA n'a plus de barre d'URL pour absorber les gestes : ce qui rebondit
-   ou dépasse se voit tout de suite et fait « site web mal emballé ».
+   ou dépasse se voit immédiatement et fait « site web mal emballé ».
    =========================================================================== */
 
 html {
   overscroll-behavior: none;
   color-scheme: dark;
-  scrollbar-color: var(--ardoise-3) transparent;
+  scrollbar-color: var(--cendre) transparent;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -108,7 +117,7 @@ body {
   max-width: 100%;
   overflow-x: clip;
   overscroll-behavior: none;
-  background: var(--noir);
+  background: var(--vide);
   color: var(--os);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
@@ -119,9 +128,9 @@ a,
 label,
 nav,
 .titre,
+.mot,
 .surtitre,
-.chiffre,
-.pastille {
+.chiffre {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
@@ -145,39 +154,44 @@ li {
   overflow-wrap: break-word;
 }
 
+/* Réservé au texte SAISI (nom de commerce, note, message) : lui seul a le
+   droit d'être coupé au milieu d'un mot, parce qu'il est imprévisible. */
 .texte-libre {
   overflow-wrap: anywhere;
 }
 
 /* ===========================================================================
-   FOND
-   Une trame de points (demi-teinte d'imprimerie) et un grain. Pas de halos
-   colorés : sur cette palette, le noir doit rester du noir.
+   LE FOND
+   Deux couches, aucune décorative :
+   - une lumière unique, très sourde, qui dérive lentement. C'est elle qui
+     donne à l'écran une direction d'éclairage, donc un volume ;
+   - un grain fin, qui empêche les grands aplats sombres de bander.
    =========================================================================== */
 
-body::before {
-  content: "";
+.lampe {
   position: fixed;
-  inset: 0;
+  inset: -20vh -20vw auto -20vw;
+  height: 90vh;
   z-index: 0;
   pointer-events: none;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.06) 1px,
-    transparent 1px
+  background: radial-gradient(
+    ellipse 55% 45% at 50% 30%,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.018) 38%,
+    transparent 72%
   );
-  background-size: 22px 22px;
-  mask-image: radial-gradient(
-    ellipse 130% 90% at 50% -10%,
-    #000 0%,
-    rgba(0, 0, 0, 0.3) 60%,
-    transparent 100%
-  );
-  -webkit-mask-image: radial-gradient(
-    ellipse 130% 90% at 50% -10%,
-    #000 0%,
-    rgba(0, 0, 0, 0.3) 60%,
-    transparent 100%
-  );
+  animation: derive 34s ease-in-out infinite alternate;
+}
+
+/* Le déplacement est minuscule et très lent : on ne le voit pas, on sent
+   seulement que l'écran n'est pas mort. */
+@keyframes derive {
+  from {
+    transform: translate3d(-3%, -1.5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 2%, 0) scale(1.08);
+  }
 }
 
 body::after {
@@ -186,85 +200,97 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Une seule lueur, très sourde, en haut : la lampe au-dessus de l'établi. */
-.lampe {
-  position: fixed;
-  top: -22vh;
-  left: 50%;
-  width: 120vw;
-  height: 50vh;
-  transform: translateX(-50%);
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(204, 255, 0, 0.07) 0%,
-    rgba(204, 255, 0, 0) 65%
-  );
 }
 
 /* ===========================================================================
    TYPOGRAPHIE
+   Deux voix, et c'est l'écart entre elles qui fait l'identité :
+   un très petit texte technique, et de très grands mots.
+   Jamais deux grands mots sur le même écran.
    =========================================================================== */
 
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  letter-spacing: 0.01em;
 }
 
+/* Archivo poussée à sa largeur et à sa graisse maximales : massive, large,
+   énergie d'affiche. C'est la voix « rue » de l'app. */
 .titre {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-variation-settings: "wdth" 125, "wght" 900;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.015em;
-  line-height: 0.88;
+  letter-spacing: -0.025em;
+  line-height: 0.84;
 }
 
-/* Étiquettes : monospace, très espacées, petites. C'est la voix « machine »
-   de l'interface — celle des tickets et des écrans de caisse. */
+/* Le mot-matière : un mot énorme qui appartient au décor plutôt qu'au texte.
+   Il passe DERRIÈRE l'objet, il déborde de l'écran, il ne se lit pas
+   vraiment — il donne le ton et l'échelle. */
+.mot {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 125, "wght" 900;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 0.76;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 235, 230, 0.09);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Variante pleine, pour le seul mot qui compte vraiment sur l'écran. */
+.mot-plein {
+  color: rgba(237, 235, 230, 0.055);
+  -webkit-text-stroke: 0;
+}
+
+/* La voix « machine » : minuscule, très espacée, discrète jusqu'à
+   l'effacement. Elle porte les libellés, les heures, les identifiants. */
 .surtitre {
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  font-size: 0.625rem;
   color: var(--faint);
 }
 
-/* Le sur-titre des cartes de chiffres. Il vit dans des colonnes étroites
-   (trois par ligne sur un téléphone), donc il a le droit de passer à la
-   ligne — mais entre deux mots seulement : « COMMISSION » coupé en
-   « COMMISSI / ON » est illisible. Le `min-height` de deux lignes garde les
-   chiffres alignés d'une carte à l'autre, qu'un libellé tienne sur une
-   ligne ou deux. */
+/* Même voix, dans une colonne étroite : elle a le droit de passer à la
+   ligne, mais entre deux mots seulement — « COMMISSION » coupé en
+   « COMMISSI / ON » est illisible. La hauteur réservée garde les chiffres
+   alignés d'une colonne à l'autre, qu'un libellé tienne sur une ou deux
+   lignes. */
 .surtitre-serre {
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   font-size: 0.6rem;
-  line-height: 1.25;
+  line-height: 1.3;
   color: var(--faint);
   overflow-wrap: normal;
   word-break: keep-all;
   hyphens: none;
-  min-height: 2.5em;
+  min-height: 2.6em;
 }
 
-/* Chiffres : monospace grasse, chasse fixe. Un montant qui passe de 9 à 10
-   ne doit pas décaler la colonne d'à côté. */
+/* Les chiffres sont de la typographie d'affiche, pas du tableau : grands,
+   larges, tabulaires pour qu'une colonne ne danse pas quand une valeur
+   change. */
 .chiffre {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112, "wght" 800;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
-  line-height: 1;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
 }
 
 .tabulaire {
@@ -273,271 +299,300 @@ h3 {
 }
 
 /* ===========================================================================
-   PANNEAUX
-   Plats, cernés, posés. La profondeur vient d'une ombre DURE décalée, pas
-   d'un flou : c'est la sérigraphie, pas le verre.
+   LES PLANS
+   Ce qui remplace les cartes. Aucun contour : un plan se distingue du vide
+   parce qu'il est légèrement plus clair, qu'il porte un liseré de lumière
+   sur son arête haute, et qu'il projette une ombre diffuse. C'est de la
+   profondeur, pas un cadre.
    =========================================================================== */
 
 .panneau {
   position: relative;
-  border-radius: var(--r);
-  background: var(--ardoise);
-  border: 1px solid var(--trait);
-}
-
-.panneau-plat {
-  border-radius: var(--r);
-  background: var(--ardoise-2);
-  border: 1px solid var(--trait);
-}
-
-/* Creux : ce qui est « dans » la machine (champs, sous-totaux). */
-.panneau-creux {
-  border-radius: var(--r);
-  background: rgba(0, 0, 0, 0.42);
-  border: 1px solid var(--trait);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
-}
-
-/* Relief dur, façon autocollant. À réserver aux éléments qu'on peut toucher. */
-.releve {
-  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.85);
-  transition:
-    transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1),
-    box-shadow 0.1s ease;
-}
-
-.releve:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.85);
-}
-
-/* ===========================================================================
-   LE TICKET
-   Le panneau principal de chaque écran : une bande de papier thermique
-   sombre, dentelée en haut et en bas.
-
-   La dentelure est un masque : des demi-cercles transparents répétés le long
-   du bord. Aucune image, aucun SVG — et ça suit la largeur toute seule.
-   =========================================================================== */
-
-.ticket {
-  position: relative;
+  border-radius: var(--r-lg);
   background:
-    linear-gradient(180deg, rgba(204, 255, 0, 0.05), transparent 38%),
-    var(--ardoise);
-  border-left: 1px solid var(--trait);
-  border-right: 1px solid var(--trait);
-  padding: 1.4rem 1.25rem 1.5rem;
-
-  /* Les crans du ticket sont DÉCOUPÉS dans un masque plein.
-     Trois couches, du dessus vers le dessous : les demi-cercles du haut,
-     ceux du bas, puis un aplat opaque qui couvre tout l'élément.
-     `exclude` (ou-exclusif) troue l'aplat là où un cercle tombe.
-
-     L'aplat n'est pas décoratif : sans lui, chaque bande de cercles ne
-     couvre que 12 px de haut et le reste du masque est transparent — le
-     panneau entier disparaît. */
-  mask-image:
-    radial-gradient(circle 7px at 7px 0, #000 6.5px, transparent 7px),
-    radial-gradient(circle 7px at 7px 100%, #000 6.5px, transparent 7px),
-    linear-gradient(#000, #000);
-  mask-size: 14px 12px, 14px 12px, auto;
-  mask-position: 0 0, 0 100%, 0 0;
-  mask-repeat: repeat-x, repeat-x, no-repeat;
-  mask-composite: exclude, exclude, add;
-  -webkit-mask-image:
-    radial-gradient(circle 7px at 7px 0, #000 6.5px, transparent 7px),
-    radial-gradient(circle 7px at 7px 100%, #000 6.5px, transparent 7px),
-    linear-gradient(#000, #000);
-  -webkit-mask-size: 14px 12px, 14px 12px, auto;
-  -webkit-mask-position: 0 0, 0 100%, 0 0;
-  -webkit-mask-repeat: repeat-x, repeat-x, no-repeat;
-  -webkit-mask-composite: xor, xor, source-over;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 42%),
+    var(--fumee);
+  box-shadow:
+    inset 0 1px 0 0 var(--trait),
+    0 18px 40px -30px rgba(0, 0, 0, 0.9);
 }
 
-/* Filet en pointillés : la ligne de perforation du ticket. */
-.perfo {
-  height: 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.18);
+/* Un plan posé plus haut : ce qu'on peut toucher. */
+.panneau-plat {
+  position: relative;
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 40%),
+    var(--beton);
+  box-shadow:
+    inset 0 1px 0 0 var(--trait-fort),
+    0 22px 44px -32px rgba(0, 0, 0, 0.95);
+}
+
+/* Un plan CREUSÉ dans le fond : les champs, les sous-totaux, tout ce qui
+   est « dans » la matière plutôt que posé dessus. */
+.panneau-creux {
+  position: relative;
+  border-radius: var(--r-lg);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(0, 0, 0, 0.7),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.03);
 }
 
 /* ===========================================================================
-   TAMPON
-   Le statut d'une journée n'est pas une pastille pastel : c'est un tampon
-   encré, penché, à l'encre qui bave un peu.
+   L'OBJET — LA DALLE
+   La carte NFC, en volume. Sa géométrie est celle d'une vraie carte
+   (85,6 × 54 mm), ce qui la rend immédiatement reconnaissable comme un objet
+   et non comme un rectangle d'interface.
+
+   Trois choses la font exister :
+   - un REFLET spéculaire qui suit le doigt (variables --lx / --ly) ;
+   - une TRANCHE, sous la face, qui lui donne une épaisseur ;
+   - une CHARGE (--charge, de 0 à 1) qui remplit cette tranche à mesure que
+     les ventes rentrent. C'est la jauge d'objectif, et il n'y en a pas
+     d'autre.
    =========================================================================== */
 
-.tampon {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.7rem;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border: 2px solid currentColor;
+.scene {
+  perspective: 1400px;
+  perspective-origin: 50% 35%;
+}
+
+.dalle {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.586;
+  border-radius: 5.2% / 8.2%;
+  transform-style: preserve-3d;
+  background:
+    /* le reflet, piloté au doigt */
+    radial-gradient(
+      ellipse 80% 120% at var(--lx) var(--ly),
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.045) 28%,
+      transparent 62%
+    ),
+    /* l'inclinaison de la matière */
+    linear-gradient(150deg, #24242a 0%, #141417 46%, #0e0e10 100%);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.6),
+    0 2px 0 0 #08080a,
+    0 4px 0 0 #050506,
+    0 40px 60px -30px rgba(0, 0, 0, 1);
+  transition:
+    transform 0.55s var(--elastique),
+    box-shadow 0.4s var(--camera);
+  will-change: transform;
+}
+
+/* L'antenne gravée. Invisible de face, elle n'apparaît que là où le reflet
+   passe — comme une gravure réelle. */
+.dalle::before {
+  content: "";
+  position: absolute;
+  inset: 11% 9%;
+  border-radius: 4% / 6%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 13px,
+      rgba(255, 255, 255, 0.5) 13px 14px
+    );
+  mask-image: radial-gradient(
+    ellipse 55% 85% at var(--lx) var(--ly),
+    #000 0%,
+    rgba(0, 0, 0, 0.25) 45%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 55% 85% at var(--lx) var(--ly),
+    #000 0%,
+    rgba(0, 0, 0, 0.25) 45%,
+    transparent 70%
+  );
+  opacity: 0.09;
+  pointer-events: none;
+}
+
+/* La tranche qui se charge. `--charge` va de 0 à 1 ; la partie chargée est
+   en braise, le reste reste du graphite éteint. C'est le seul endroit de
+   l'app où l'accent occupe une surface. */
+.dalle::after {
+  content: "";
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: -5px;
+  height: 3px;
   border-radius: 3px;
-  transform: rotate(-2.5deg);
-  opacity: 0.92;
-  white-space: nowrap;
+  background: linear-gradient(
+    90deg,
+    var(--braise) 0%,
+    var(--braise) calc(var(--charge, 0) * 100%),
+    rgba(255, 255, 255, 0.07) calc(var(--charge, 0) * 100%),
+    rgba(255, 255, 255, 0.07) 100%
+  );
+  box-shadow: 0 0 22px -4px
+    color-mix(in srgb, var(--braise) calc(var(--charge, 0) * 85%), transparent);
+  transition:
+    background 0.9s var(--camera),
+    box-shadow 0.9s var(--camera);
+  pointer-events: none;
 }
 
-.tampon-lime {
-  color: var(--lime);
-  background: rgba(204, 255, 0, 0.08);
+/* La respiration. ±0,4 % sur sept secondes : personne ne la remarque, mais
+   un écran sans elle a l'air arrêté. */
+.dalle-vivante {
+  animation: respire 7s ease-in-out infinite;
 }
 
-.tampon-orange {
-  color: var(--orange);
-  background: rgba(255, 106, 26, 0.08);
+@keyframes respire {
+  0%,
+  100% {
+    transform: scale(1) translateZ(0);
+  }
+  50% {
+    transform: scale(1.004) translateZ(0);
+  }
 }
 
-.tampon-rouge {
-  color: var(--rouge);
-  background: rgba(255, 49, 49, 0.08);
+/* Pendant que le doigt travaille, la respiration s'arrête : la matière ne
+   peut pas faire deux choses à la fois. */
+.dalle-tenue {
+  animation: none;
+  transition:
+    transform 0.08s linear,
+    box-shadow 0.2s var(--camera);
 }
 
-.tampon-gris {
-  color: var(--faint);
-  background: rgba(255, 255, 255, 0.03);
+/* Journée close : la matière est figée, mate, sans reflet mobile. */
+.dalle-scellee {
+  animation: none;
+  filter: saturate(0) brightness(0.72);
 }
 
-/* Pastille discrète, pour les statuts secondaires. */
-.pastille {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  border-radius: 3px;
-  padding: 0.2rem 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border: 1px solid var(--trait);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--dim);
-  white-space: nowrap;
-}
-
-.pastille-lime {
-  border-color: rgba(204, 255, 0, 0.4);
-  background: rgba(204, 255, 0, 0.1);
-  color: var(--lime);
-}
-
-.pastille-orange {
-  border-color: rgba(255, 106, 26, 0.4);
-  background: rgba(255, 106, 26, 0.1);
-  color: #ff9a5e;
-}
-
-.pastille-rouge {
-  border-color: rgba(255, 49, 49, 0.4);
-  background: rgba(255, 49, 49, 0.1);
-  color: #ff8080;
-}
-
-.pastille-succes {
-  border-color: rgba(55, 224, 122, 0.4);
-  background: rgba(55, 224, 122, 0.1);
-  color: var(--succes);
+/* L'anneau d'appui long. Il n'apparaît qu'au contact et se remplit en
+   450 ms ; relâcher avant la fin annule, et ça se voit. */
+.anneau {
+  position: absolute;
+  inset: auto;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    var(--braise) calc(var(--progression, 0) * 360deg),
+    rgba(255, 255, 255, 0.08) 0
+  );
+  mask-image: radial-gradient(circle, transparent 60%, #000 62%);
+  -webkit-mask-image: radial-gradient(circle, transparent 60%, #000 62%);
+  transform: translate(-50%, -50%);
 }
 
 /* ===========================================================================
    BOUTONS
-   Rectangulaires, encrés, avec une ombre dure. Le bouton principal est un
-   aplat de lime avec du texte NOIR : sur cette palette, c'est ce qui crie le
-   plus fort, donc il n'y en a qu'un par écran.
+   Il n'y en a presque pas : sur l'écran principal, l'action, c'est l'objet.
+   Ceux qui restent se comportent comme de la matière — ils s'enfoncent puis
+   reviennent avec un léger dépassement.
    =========================================================================== */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--r);
-  padding: 0.7rem 1.1rem;
+  gap: 0.55rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.3rem;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1;
-  border: 1px solid var(--trait-fort);
-  background: var(--ardoise-2);
+  border: none;
+  background: var(--beton);
   color: var(--os);
+  box-shadow:
+    inset 0 1px 0 0 var(--trait-fort),
+    0 12px 24px -18px rgba(0, 0, 0, 1);
   transition:
-    transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1),
-    background 0.15s ease,
-    border-color 0.15s ease,
-    opacity 0.15s ease;
+    transform 0.42s var(--elastique),
+    background 0.25s var(--camera),
+    color 0.25s var(--camera),
+    opacity 0.2s ease;
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: scale(0.965);
+  transition-duration: 0.09s;
+  transition-timing-function: linear;
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.32;
   pointer-events: none;
 }
 
+/* Une seule action principale par écran, et elle porte l'accent. */
 .btn-primaire {
-  border: none;
-  background: var(--lime);
-  color: var(--lime-encre);
-  font-weight: 800;
-  letter-spacing: 0.07em;
-  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.85);
+  background: var(--braise);
+  color: var(--braise-encre);
+  font-weight: 700;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+    0 18px 38px -22px var(--braise-sombre);
 }
 
 .btn-primaire:hover {
-  background: #d9ff3d;
+  background: #ff5f37;
 }
 
-.btn-primaire:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.85);
-}
-
+/* Le danger n'a pas de couleur à lui : il a une matière. Un fond creusé,
+   un texte éteint, et le contour de braise n'arrive qu'à l'approche —
+   l'élément se réveille sous le doigt au lieu de crier en permanence. */
 .btn-danger {
-  border: 1px solid rgba(255, 49, 49, 0.45);
-  background: rgba(255, 49, 49, 0.1);
-  color: #ff8a8a;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--dim);
+  box-shadow: inset 0 0 0 1px rgba(255, 74, 28, 0.22);
+}
+
+.btn-danger:hover {
+  color: var(--braise);
+  box-shadow: inset 0 0 0 1px rgba(255, 74, 28, 0.55);
 }
 
 .btn-fantome {
   background: transparent;
-  border: 1px solid var(--trait);
   color: var(--dim);
+  box-shadow: none;
 }
 
 .btn-fantome:hover {
   color: var(--os);
-  border-color: var(--trait-fort);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* ===========================================================================
    FORMULAIRES
+   Pas de boîtes : des creux dans la matière. Une seule arête s'allume au
+   focus, en bas, là où l'œil est déjà.
    Police >= 16 px sur mobile : en dessous, Safari zoome tout seul au focus.
    =========================================================================== */
 
 .champ {
   width: 100%;
+  border: none;
   border-radius: var(--r);
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid var(--trait);
-  padding: 0.7rem 0.8rem;
+  background: rgba(0, 0, 0, 0.32);
+  padding: 0.85rem 0.95rem;
   font-size: 1rem;
   color: var(--os);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.55);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  box-shadow:
+    inset 0 1px 3px 0 rgba(0, 0, 0, 0.65),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: box-shadow 0.32s var(--camera);
 }
 
 .champ::placeholder {
@@ -546,14 +601,13 @@ h3 {
 
 .champ:focus {
   outline: none;
-  border-color: var(--lime);
   box-shadow:
-    inset 0 2px 5px rgba(0, 0, 0, 0.55),
-    0 0 0 2px rgba(204, 255, 0, 0.25);
+    inset 0 1px 3px 0 rgba(0, 0, 0, 0.65),
+    inset 0 -2px 0 0 var(--braise);
 }
 
 .champ:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
 select.champ {
@@ -573,49 +627,97 @@ select.champ {
 .libelle {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 700;
+  font-size: 0.6rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   color: var(--faint);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 /* ===========================================================================
-   JAUGE D'OBJECTIF
-   Des crans de compteur plutôt qu'une barre : on compte des cartes, pas un
-   pourcentage de chargement.
+   ÉTATS
+   Un état n'est pas une gommette colorée : c'est un mot minuscule posé dans
+   le vide, et au plus un point de braise quand la chose est EN COURS.
+   =========================================================================== */
+
+.pastille {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.pastille-vive {
+  color: var(--braise);
+}
+
+.pastille-os {
+  color: var(--os);
+}
+
+/* Le seul élément qui bouge en permanence dans l'app, et il ne bouge que
+   lorsqu'une journée est réellement ouverte. */
+.point-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--braise);
+  animation: battement 2.6s ease-in-out infinite;
+}
+
+@keyframes battement {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 74, 28, 0.45);
+  }
+  60% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 7px rgba(255, 74, 28, 0);
+  }
+}
+
+/* ===========================================================================
+   JAUGE SECONDAIRE
+   La jauge principale est la tranche de la dalle. Celle-ci ne sert qu'aux
+   LISTES (la vue d'équipe), où il n'y a pas de place pour un objet : des
+   crans fins, monochromes, dont seuls les pleins portent l'accent.
    =========================================================================== */
 
 .jauge {
   display: flex;
-  gap: 3px;
+  gap: 2px;
   width: 100%;
 }
 
 .jauge-cran {
   flex: 1;
-  height: 16px;
+  height: 3px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background 0.25s ease;
+  background: rgba(255, 255, 255, 0.07);
+  transition: background 0.5s var(--camera);
 }
 
 .jauge-cran-plein {
-  background: var(--lime);
-  border-color: var(--lime);
-  box-shadow: 0 0 10px -3px rgba(204, 255, 0, 0.9);
+  background: rgba(237, 235, 230, 0.5);
 }
 
+/* Au-delà de l'objectif : la matière déborde, elle ne change pas de couleur
+   — elle s'épaissit. */
 .jauge-cran-bonus {
-  background: var(--orange);
-  border-color: var(--orange);
-  box-shadow: 0 0 10px -3px rgba(255, 106, 26, 0.9);
+  background: var(--braise);
+  box-shadow: 0 0 10px -2px var(--braise);
 }
 
 .barre {
-  height: 6px;
+  height: 3px;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.07);
   overflow: hidden;
@@ -623,130 +725,147 @@ select.champ {
 
 .barre-remplie {
   height: 100%;
-  background: var(--lime);
-  transition: width 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+  background: var(--braise);
+  transition: width 0.8s var(--camera);
 }
 
 /* ===========================================================================
-   NAVIGATION
+   NAVIGATION — LE RAIL DE CAMÉRA
+   Cinq positions, pas cinq pages. Aucune icône dans une boîte, aucun
+   libellé tant qu'on n'est pas dessus : un trait, et celui de la position
+   courante s'allonge.
    =========================================================================== */
 
 .barre-nav {
-  background: rgba(10, 10, 11, 0.94);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid var(--trait);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 11, 0) 0%,
+    rgba(10, 10, 11, 0.88) 38%,
+    rgba(10, 10, 11, 0.98) 100%
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .onglet-actif {
-  color: var(--lime);
+  color: var(--os);
 }
 
 .onglet-marque {
-  height: 3px;
-  border-radius: 1px;
-  background: var(--lime);
-  opacity: 0;
-  transform: scaleX(0.2);
+  height: 2px;
+  width: 16px;
+  border-radius: 2px;
+  background: var(--faint);
+  opacity: 0.5;
   transition:
-    opacity 0.15s ease,
-    transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+    width 0.5s var(--camera),
+    opacity 0.3s var(--camera),
+    background 0.3s var(--camera);
 }
 
 .onglet-actif .onglet-marque {
+  width: 30px;
   opacity: 1;
-  transform: scaleX(1);
+  background: var(--braise);
 }
 
 .lien-lateral {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  border-radius: var(--r);
-  padding: 0.55rem 0.7rem;
+  gap: 0.8rem;
+  border-radius: 999px;
+  padding: 0.6rem 0.9rem;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--dim);
-  border-left: 2px solid transparent;
+  color: var(--faint);
   transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
+    color 0.3s var(--camera),
+    background 0.3s var(--camera),
+    transform 0.4s var(--elastique);
 }
 
 .lien-lateral:hover {
   color: var(--os);
-  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(3px);
 }
 
 .lien-lateral-actif {
-  color: var(--lime);
-  background: rgba(204, 255, 0, 0.07);
-  border-left-color: var(--lime);
+  color: var(--os);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 /* ===========================================================================
-   ANIMATIONS
-   Courtes et sèches. Une interface qui fait attendre paraît lente.
+   MOUVEMENTS DE CAMÉRA
+   Toutes les apparitions de l'app passent par ces trois-là, et aucune n'est
+   un slide ni un fondu sec.
    =========================================================================== */
 
-@keyframes montee {
+/* Mise au point : l'élément arrive flou et légèrement en arrière, puis la
+   netteté se fait. C'est un changement de focale, pas une apparition. */
+@keyframes focale {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    filter: blur(14px);
+    transform: translate3d(0, 14px, 0) scale(0.965);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
 .montee {
-  animation: montee 0.32s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation: focale 0.72s var(--camera) both;
 }
 
-.retard-1 { animation-delay: 0.04s; }
-.retard-2 { animation-delay: 0.08s; }
-.retard-3 { animation-delay: 0.12s; }
-.retard-4 { animation-delay: 0.16s; }
+.retard-1 { animation-delay: 0.07s; }
+.retard-2 { animation-delay: 0.14s; }
+.retard-3 { animation-delay: 0.21s; }
+.retard-4 { animation-delay: 0.28s; }
 
-@keyframes apparition {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.apparition {
-  animation: apparition 0.22s ease both;
-}
-
-/* Le ticket qui sort de l'imprimante : utilisé au moment d'enregistrer une
-   vente et de clôturer la journée. */
-@keyframes impression {
+/* Recul de caméra : pour ce qui s'ouvre au milieu de l'écran. */
+@keyframes recul {
   from {
     opacity: 0;
-    transform: translateY(-14px) scaleY(0.92);
-    transform-origin: top;
+    transform: perspective(1000px) translate3d(0, 0, -160px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
+    transform: perspective(1000px) translate3d(0, 0, 0);
+  }
+}
+
+.apparition {
+  animation: recul 0.6s var(--camera) both;
+}
+
+/* Un chiffre qui change ne défile pas : il se refait au point. */
+@keyframes remise-au-point {
+  from {
+    opacity: 0.3;
+    filter: blur(9px);
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
   }
 }
 
 .impression {
-  animation: impression 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: remise-au-point 0.62s var(--camera) both;
 }
 
-@keyframes balayage {
-  100% { transform: translateX(100%); }
-}
-
+/* Le squelette de chargement : une onde de lumière, pas une barre grise. */
 .squelette {
   position: relative;
   overflow: hidden;
   border-radius: var(--r);
-  background: var(--ardoise-2);
+  background: var(--fumee);
 }
 
 .squelette::after {
@@ -757,49 +876,40 @@ select.champ {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.045),
     transparent
   );
-  animation: balayage 1.3s infinite;
+  animation: balayage 1.8s var(--camera) infinite;
 }
 
-/* Point « en direct ». */
-.point-live {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lime);
-  animation: pulse 2s infinite;
+@keyframes balayage {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(204, 255, 0, 0.5); }
-  70% { box-shadow: 0 0 0 8px rgba(204, 255, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(204, 255, 0, 0); }
+/* ===========================================================================
+   PARALLAXE
+   Les plans ne défilent pas tous à la même vitesse. Trois profondeurs
+   suffisent : le mot-matière en arrière, l'objet au milieu, le texte devant.
+   =========================================================================== */
+
+.plan-fond {
+  will-change: transform;
+  transform: translate3d(0, calc(var(--defilement, 0px) * 0.22), 0);
 }
 
-/* Bandeau défilant : la piste est dupliquée, elle translate de -50 %, donc
-   la boucle se referme sans saut. */
-.marquee {
-  position: relative;
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+.plan-milieu {
+  will-change: transform;
+  transform: translate3d(0, calc(var(--defilement, 0px) * 0.08), 0);
 }
 
-.marquee-piste {
-  display: flex;
-  width: max-content;
-  animation: defile 30s linear infinite;
-}
-
-.marquee:hover .marquee-piste {
-  animation-play-state: paused;
-}
-
-@keyframes defile {
-  to { transform: translateX(-50%); }
-}
+/* ===========================================================================
+   ACCESSIBILITÉ
+   Toute la DA repose sur le mouvement : si la personne n'en veut pas, il
+   faut que l'app reste entièrement utilisable. Tout retombe sur de
+   l'opacité, et la matière cesse de bouger.
+   =========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -809,6 +919,27 @@ select.champ {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  .montee,
+  .apparition,
+  .impression {
+    animation: apparait 0.2s ease both !important;
+  }
+
+  .lampe,
+  .dalle-vivante {
+    animation: none !important;
+  }
+
+  .plan-fond,
+  .plan-milieu {
+    transform: none !important;
+  }
+}
+
+@keyframes apparait {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ===========================================================================
@@ -824,56 +955,18 @@ select.champ {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--ardoise-3);
-  border-radius: 0;
-  border: 3px solid transparent;
+  background: var(--cendre);
+  border-radius: 999px;
+  border: 2px solid transparent;
   background-clip: content-box;
 }
 
 ::selection {
-  background: var(--lime);
-  color: var(--lime-encre);
-}
-
-/* ===========================================================================
-   LIGNES DE TICKET
-   Libellé à gauche, valeur à droite, pointillés entre les deux : la mise en
-   page d'un reçu de caisse. L'œil suit la ligne au lieu de chercher la
-   colonne, ce qui rend une série de montants lisible sans tableau.
-   =========================================================================== */
-
-.ligne-ticket {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-}
-
-.ligne-ticket-points {
-  flex: 1;
-  border-bottom: 1px dotted rgba(255, 255, 255, 0.22);
-  transform: translateY(-0.25rem);
-}
-
-.ligne-ticket-total {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--lime);
-}
-
-/* En-tête de ticket : le nom de l'enseigne, centré, très espacé. */
-.entete-ticket {
-  font-family: var(--font-mono);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
-  font-size: 0.7rem;
-  text-align: center;
-  color: var(--os);
+  background: var(--braise);
+  color: var(--braise-encre);
 }

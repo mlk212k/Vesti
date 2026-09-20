@@ -28,14 +28,14 @@ export default async function ProfilePage() {
     <div className="montee space-y-5">
       <EnTete surtitre="Mon compte" titre="Profil" />
 
-      <div className="ticket">
+      <div className="panneau">
         <AvatarUploader
           userId={user.id}
           nom={user.full_name}
           avatarActuel={user.avatar_url}
         />
 
-        <div className="perfo my-4" />
+        <div className="my-4" />
 
         <p className="titre text-3xl">{user.full_name}</p>
         <p className="mt-1 font-mono text-xs tracking-wider text-dim uppercase">

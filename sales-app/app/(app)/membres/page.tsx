@@ -40,8 +40,8 @@ export default async function MembersPage() {
                   <span
                     className={
                       profile.is_active
-                        ? "pastille pastille-succes"
-                        : "pastille pastille-rouge"
+                        ? "pastille pastille-vive"
+                        : "pastille pastille-vive"
                     }
                   >
                     {profile.is_active ? "Actif" : "Désactivé"}

@@ -113,7 +113,7 @@ export default async function HistoryPage({
               </div>
 
               {day.penalty_cents > 0 ? (
-                <p className="mt-2 text-xs text-orange">
+                <p className="mt-2 text-xs text-braise">
                   Retenue validée par l&apos;encadrement :{" "}
                   {formatCents(day.penalty_cents)}
                 </p>

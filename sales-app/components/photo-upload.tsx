@@ -107,7 +107,7 @@ export function PhotoUpload({
         </label>
       )}
 
-      {erreur ? <p className="mt-1.5 text-xs text-[#ff8a8a]">{erreur}</p> : null}
+      {erreur ? <p className="mt-1.5 text-xs text-braise">{erreur}</p> : null}
     </div>
   );
 }

@@ -1,34 +1,40 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
-// Trois voix, trois rôles :
+// Deux voix, et c'est l'écart entre elles qui fait l'identité.
 //
-//   Bebas Neue — capitales condensées, une seule graisse. C'est l'affiche
-//   collée sur un mur. Réservée aux titres : illisible en paragraphe.
+//   Archivo, poussée à « wdth » 125 / « wght » 900 — large, massive, énergie
+//   d'affiche et de signalétique urbaine. Elle ne sert qu'aux très grands
+//   mots. En paragraphe elle serait illisible ; c'est voulu, elle n'y va
+//   jamais.
 //
-//   JetBrains Mono — tous les chiffres et toutes les étiquettes. Chasse
-//   fixe, donc un montant qui change ne décale jamais la colonne voisine, et
-//   l'œil lit « compté » plutôt que « écrit ».
+//   JetBrains Mono — la voix machine : libellés, heures, identifiants, en
+//   très petit et très espacé. Chasse fixe, donc un montant qui change ne
+//   décale jamais la colonne voisine.
 //
-//   Inter — le texte courant. Personne ne lit une note de commerce en
-//   condensé.
-const bebas = Bebas_Neue({
+//   Inter Tight — le texte courant, celui qu'on lit vraiment. Neutre au
+//   point de disparaître, ce qui est exactement son travail ici.
+//
+// Archivo est une police variable : on demande explicitement l'axe de
+// largeur, sans quoi « wdth » n'aurait aucun effet et les titres
+// resteraient à la largeur normale.
+const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: "400",
+  axes: ["wdth"],
   display: "swap",
 });
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  weight: ["500", "700", "800"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
-const inter = Inter({
+const inter = Inter_Tight({
   subsets: ["latin"],
   variable: "--font-ui",
   display: "swap",
@@ -70,11 +76,12 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${bebas.variable} ${mono.variable} ${inter.variable}`}
+      className={`${archivo.variable} ${mono.variable} ${inter.variable}`}
     >
-      <body className="min-h-screen bg-noir text-os antialiased">
-        {/* La lampe au-dessus de l'établi : une seule source, très sourde.
-            La trame de points et le grain viennent de globals.css. */}
+      <body className="min-h-screen bg-vide text-os antialiased">
+        {/* La source de lumière unique de l'app. Elle dérive très
+            lentement : c'est elle qui donne une direction d'éclairage, donc
+            un volume, à tout ce qui est posé au-dessus. */}
         <div className="lampe" aria-hidden="true" />
         <div className="relative z-10">{children}</div>
         <EnregistreServiceWorker />

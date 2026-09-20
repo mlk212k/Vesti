@@ -29,7 +29,7 @@ export function Relance({
 
   if (state?.ok) {
     return (
-      <p className="font-mono text-[11px] tracking-wider text-lime uppercase">
+      <p className="font-mono text-[11px] tracking-wider text-braise uppercase">
         Relance envoyée à {nom.split(" ")[0]}
       </p>
     );

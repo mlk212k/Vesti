@@ -27,7 +27,7 @@ export function BoutonSon() {
       </span>
       <span
         className={`font-mono text-xs font-bold tracking-widest uppercase ${
-          actifs ? "text-lime" : "text-faint"
+          actifs ? "text-braise" : "text-faint"
         }`}
       >
         {actifs ? "ON" : "OFF"}

@@ -3,38 +3,19 @@
 import { useActionState, useState } from "react";
 import { jouer } from "@/lib/sfx";
 import { Alerte } from "@/components/alerte";
-import { IconPlay, IconStop } from "@/components/icons";
+import { IconStop } from "@/components/icons";
 import { Submit } from "@/components/submit";
 import type { ActionResult } from "@/lib/errors";
-import { endDayAction, startDayAction } from "./actions";
+import { endDayAction } from "./actions";
 
-export function BoutonCommencer() {
-  const [state, action] = useActionState<ActionResult | undefined, FormData>(
-    async () => {
-      const resultat = await startDayAction();
-      // Le son part sur le RÉSULTAT, pas sur le clic : entendre le tampon
-      // alors que l'ouverture a échoué serait un mensonge sonore.
-      jouer(resultat.ok ? "tampon" : "erreur");
-      return resultat;
-    },
-    undefined,
-  );
-
-  return (
-    <form action={action} className="space-y-3">
-      <Submit className="btn btn-primaire w-full py-4 text-base" pendingLabel="Ouverture…">
-        <IconPlay className="h-5 w-5" />
-        Commencer ma journée
-      </Submit>
-      {state && !state.ok ? <Alerte>{state.error}</Alerte> : null}
-    </form>
-  );
-}
-
-// Terminer sa journée est irréversible dans l'esprit du commercial : on
-// demande donc une confirmation, et on en profite pour proposer une note
+// Ouvrir sa journée se fait sur l'objet lui-même (appui long) : il n'y a
+// plus de bouton pour ça. La CLÔTURE, en revanche, reste un bouton — c'est
+// une action qu'on ne doit pas pouvoir déclencher en manipulant la carte
+// par jeu, et elle est irréversible dans l'esprit du commercial. D'où la
+// confirmation, et la note facultative qu'on en profite pour demander
 // (« 3 commerces fermés », « pluie toute l'aprèm »). Un simple dépliement,
-// pas une fenêtre modale : moins de code, et ça marche sans JavaScript chargé.
+// pas une fenêtre modale : moins de code, et ça marche sans JavaScript
+// chargé.
 export function BoutonTerminer() {
   const [ouvert, setOuvert] = useState(false);
   const [state, action] = useActionState<ActionResult | undefined, FormData>(
@@ -52,7 +33,7 @@ export function BoutonTerminer() {
         <button
           type="button"
           onClick={() => setOuvert(true)}
-          className="btn btn-primaire w-full py-4 text-base"
+          className="btn w-full py-4"
         >
           <IconStop className="h-5 w-5" />
           Terminer ma journée
@@ -88,7 +69,7 @@ export function BoutonTerminer() {
         >
           Annuler
         </button>
-        <Submit className="btn btn-primaire flex-[2] py-3" pendingLabel="Clôture…">
+        <Submit className="btn flex-[2] py-3" pendingLabel="Clôture…">
           Confirmer
         </Submit>
       </div>

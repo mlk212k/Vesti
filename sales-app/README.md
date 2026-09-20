@@ -232,39 +232,69 @@ un composant client casse le build au lieu d'expédier la clé au navigateur.
 
 ## Interface
 
-**Direction artistique : le ticket de caisse.** L'objet central de cette
-app, c'est un reçu — ce que tu as vendu, ce que le chef prend, ce qui te
-reste. Le reste de l'interface en découle : panneaux aux bords crantés
-(`.ticket`), lignes à pointillés de conduite entre un libellé et un montant
-(`.ligne-ticket`), tampons encreurs inclinés pour les statuts (`.tampon`),
-code-barres généré à partir de l'identifiant de la journée, bandeau
-défilant façon caisse enregistreuse.
+**Direction artistique : la matière.** Règle unique, dont tout le reste
+découle :
 
-Couleurs : noir profond et ardoise, blanc cassé, **vert lime** pour l'argent
-gagné et l'action principale, **orange** pour l'alerte et le dépassement,
-**cyan NFC** pour tout ce qui touche à la carte, rouge réservé au danger. La
-matière vient d'une trame de points en demi-teinte, d'un grain très léger et
-d'un halo unique en haut de page — pas d'ombres portées molles : les boutons
-portent une ombre dure de 4 px, franche.
+> On ne décore pas l'interface. On lui fait adopter le comportement d'un
+> objet.
 
-Typographie : Bebas Neue en capitales serrées pour les titres, JetBrains
-Mono pour les sur-titres, les statuts et tous les chiffres, Inter pour le
-texte courant. Les chiffres sont tabulaires : une colonne de montants ne
-danse pas quand une valeur change.
+L'écran d'accueil du commercial n'est pas un tableau de bord : c'est une
+**carte NFC en volume**, posée dans le noir. Ce n'est pas une métaphore
+décorative — c'est ce que l'équipe vend, et son état EST l'état de la
+journée. La tranche qui se charge, c'est 8 cartes sur 10 ; il n'y a pas de
+jauge à côté, la jauge est l'objet. Il n'y a pas non plus de bouton
+« commencer ma journée » : un appui long sur la carte l'ouvre, un autre
+enregistre une vente.
+
+La carte réagit physiquement. Le reflet suit le doigt, la matière s'enfonce
+sous la pression, elle tourne en 3D quand on la fait glisser, continue sur
+son inertie quand on la lâche et revient avec un léger dépassement. Au
+repos elle respire : ±0,4 % sur sept secondes, qu'on ne remarque pas
+consciemment mais dont l'absence donne un écran mort.
+
+**Quatre partis pris, et ce qu'ils interdisent :**
+
+1. **Monochrome, un seul accent.** Cinq gris et un blanc cassé. Une seule
+   couleur — la braise `#ff4a1c` — et trois usages autorisés : la tranche
+   qui se charge, le chiffre qui appartient à la personne qui regarde, et ce
+   qui réclame une action maintenant. Pas de vert de succès, pas de rouge de
+   danger : une erreur se signale par la matière (un creux, une arête qui
+   s'allume), pas par une teinte de plus.
+2. **Pas de cartes, pas de bordures.** Ce qui sépare deux informations,
+   c'est du vide, un écart de taille de texte ou un changement de
+   profondeur. Environ 80 % de l'écran ne porte rien.
+3. **Formes organiques.** Rayons larges, arêtes de lumière plutôt que
+   contours, rien de parfaitement géométrique.
+4. **Une caméra, pas des pages.** Les apparitions sont des mises au point
+   (l'élément arrive flou et en arrière, la netteté se fait), les ouvertures
+   des reculs de caméra. Aucun slide, aucun fondu sec.
+
+**Typographie.** Deux voix, et c'est l'écart entre elles qui fait
+l'identité : **Archivo** poussée à `wdth 125 / wght 900` — large, massive,
+énergie de signalétique urbaine — réservée aux très grands mots, dont un
+seul par écran ; et **JetBrains Mono** en très petit et très espacé pour
+tout ce qui est libellé, heure ou identifiant. **Inter Tight** porte le
+texte courant. Un mot-matière géant passe derrière l'objet, déborde de
+l'écran et ne se lit pas vraiment : il donne l'échelle.
+
+**Navigation.** Cinq positions, pas cinq pages. En bas, un rail : un trait
+par position, celui de la position courante s'allonge et prend l'accent, et
+son nom — un seul — s'affiche au-dessus. Pas de libellé répété cinq fois,
+pas d'icône dans une boîte.
 
 **Sons.** Six effets courts, synthétisés à la volée en Web Audio
 (`lib/sfx.ts`) — aucun fichier audio n'est livré : le tiroir-caisse à
 l'enregistrement d'une vente, le tampon à l'ouverture et à la clôture de la
 journée, un cran au compteur de quantité, un pop à l'envoi d'un message, un
-blip à la réception, deux notes descendantes en cas de refus. Rien ne dépasse
-120 ms, et chacun part sur le **résultat** de l'action, jamais sur le clic.
-Le réglage se coupe depuis le profil et se retient d'une visite à l'autre.
+blip à la réception, deux notes descendantes en cas de refus. Rien ne
+dépasse 120 ms, et chacun part sur le **résultat** de l'action, jamais sur
+le clic. Le réglage se coupe depuis le profil.
 
-Sur mobile : cinq onglets en bas (accueil, ventes, commerces, chat, profil
-pour un commercial ; équipe et planning à la place pour l'encadrement),
-zones tactiles larges, et une vente s'enregistre en trois gestes. Les icônes
-et les graphiques sont dessinés à la main en SVG — aucune librairie
-d'icônes ni de charts.
+**Accessibilité.** Toute la DA repose sur le mouvement : `prefers-reduced-motion`
+le supprime entièrement et tout retombe sur de simples variations
+d'opacité. L'appui long est doublé d'un équivalent clavier, et le
+mot-matière est toujours `aria-hidden` — ce qu'il dit est écrit ailleurs,
+en lisible.
 
 L'app est installable sur l'écran d'accueil (manifeste + icônes générées par
 `scripts/generate-icons.py`). En PWA, le rebond vertical et le glissement

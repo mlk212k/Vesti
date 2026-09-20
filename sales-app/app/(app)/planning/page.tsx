@@ -46,7 +46,7 @@ export default async function PlanningPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/equipe/${ligne.member_id}`}
-                      className="truncate font-medium hover:text-lime"
+                      className="truncate font-medium hover:text-braise"
                     >
                       {ligne.full_name}
                     </Link>
@@ -60,8 +60,8 @@ export default async function PlanningPage() {
                   <span
                     className={
                       ligne.journee_ouverte
-                        ? "tampon tampon-lime"
-                        : "tampon tampon-orange"
+                        ? "pastille pastille-vive"
+                        : "pastille pastille-vive"
                     }
                   >
                     {ligne.journee_ouverte ? "En route" : "Pas ouvert"}
@@ -82,7 +82,7 @@ export default async function PlanningPage() {
       </Section>
 
       {manquants.length > 0 ? (
-        <p className="panneau-creux px-4 py-3 font-mono text-xs text-orange">
+        <p className="panneau-creux px-4 py-3 font-mono text-xs text-braise">
           {manquants.length} personne{manquants.length > 1 ? "s" : ""} attendue
           {manquants.length > 1 ? "s" : ""} n&apos;{manquants.length > 1 ? "ont" : "a"}{" "}
           pas encore ouvert sa journée.
@@ -101,7 +101,7 @@ export default async function PlanningPage() {
                   <th
                     key={jour.num}
                     className={`px-2 py-2.5 text-center font-mono text-[10px] tracking-widest uppercase ${
-                      jour.num === jourCourant ? "text-lime" : "text-faint"
+                      jour.num === jourCourant ? "text-braise" : "text-faint"
                     }`}
                   >
                     {jour.court}
@@ -125,11 +125,11 @@ export default async function PlanningPage() {
                       <td key={jour.num} className="px-2 py-2.5">
                         <div className="flex justify-center gap-[3px]">
                           <span
-                            className={`h-4 w-2 rounded-[1px] ${matin ? "bg-lime" : "bg-[rgba(255,255,255,0.07)]"}`}
+                            className={`h-4 w-2 rounded-[1px] ${matin ? "bg-braise" : "bg-[rgba(255,255,255,0.07)]"}`}
                             title={`${jour.court} matin`}
                           />
                           <span
-                            className={`h-4 w-2 rounded-[1px] ${aprem ? "bg-lime" : "bg-[rgba(255,255,255,0.07)]"}`}
+                            className={`h-4 w-2 rounded-[1px] ${aprem ? "bg-braise" : "bg-[rgba(255,255,255,0.07)]"}`}
                             title={`${jour.court} après-midi`}
                           />
                         </div>

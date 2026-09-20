@@ -104,7 +104,7 @@ export function CommissionPanel({
               </div>
 
               {payout.status === "paid" ? (
-                <span className="pastille pastille-succes">Réglée</span>
+                <span className="pastille pastille-vive">Réglée</span>
               ) : (
                 <form action={paidAction}>
                   <input type="hidden" name="payout_id" value={payout.id} />

@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { IconChevron, IconClock, IconPlus } from "@/components/icons";
-import { IconNFC } from "@/components/nfc";
-import { CodeBarres, Jauge, Section, Stat, StatutJournee, Vide } from "@/components/ui";
+import { Mot, Section, Stat, StatutJournee, Vide } from "@/components/ui";
 import { formatDateLong, formatDuration, formatTime } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate, percentOf } from "@/lib/money";
 import type { SaleWithBusiness } from "@/lib/queries";
@@ -12,7 +10,8 @@ import {
   type MemberCards,
   type WorkDayStats,
 } from "@/lib/types";
-import { BoutonCommencer, BoutonTerminer } from "./journee-boutons";
+import { BoutonTerminer } from "./journee-boutons";
+import { ObjetJournee } from "./objet-journee";
 
 function salutation(): string {
   const heure = Number(
@@ -27,26 +26,18 @@ function salutation(): string {
   return "Bonsoir";
 }
 
-// Une ligne de reçu : libellé à gauche, montant à droite, pointillés entre
-// les deux. C'est la forme que prend l'argent dans cette app.
-function LigneTicket({
-  label,
-  valeur,
-  total = false,
-}: {
-  label: string;
-  valeur: string;
-  total?: boolean;
-}) {
-  return (
-    <div className={`ligne-ticket ${total ? "ligne-ticket-total" : ""}`}>
-      <span className={total ? "" : "text-dim"}>{label}</span>
-      <span className="ligne-ticket-points" />
-      <span className="tabulaire">{valeur}</span>
-    </div>
-  );
-}
-
+/**
+ * L'écran du commercial.
+ *
+ * Il tient en une idée : UN OBJET AU MILIEU DU VIDE, et le strict minimum
+ * autour. Ce qu'on voit en ouvrant l'app, c'est la carte — son état est
+ * celui de la journée, la tranche qui se charge est l'objectif. Il n'y a
+ * pas de bouton « commencer ma journée » à côté : l'objet est l'action.
+ *
+ * Les chiffres arrivent ensuite, en descendant, sans jamais entrer dans une
+ * boîte. Tous sont calculés en base (colonnes générées de `sales`) : cet
+ * écran ne fait que les mettre en forme.
+ */
 export function DashboardMembre({
   user,
   day,
@@ -66,155 +57,139 @@ export function DashboardMembre({
   const vendues = day?.cards_sold ?? 0;
   const pourcentage = percentOf(vendues, objectif);
   const restantes = Math.max(objectif - vendues, 0);
+  const prenom = user.full_name.split(" ")[0] ?? user.full_name;
+
+  // La charge de la tranche. Bornée à 1 : au-delà de l'objectif, c'est la
+  // matière qui déborde (les crans bonus), pas la tranche qui dépasse.
+  const charge = objectif > 0 ? Math.min(1, vendues / objectif) : 0;
+
+  const etat =
+    statut === "in_progress"
+      ? "en_cours"
+      : statut === "not_started"
+        ? "fermee"
+        : "close";
 
   return (
-    <div className="space-y-6">
-      <header className="montee">
-        <p className="surtitre">{salutation()}</p>
-        <h1 className="titre mt-1 text-5xl">{user.full_name}</h1>
-      </header>
-
-      {/* LE TICKET. Tout ce qu'un commercial a besoin de voir en ouvrant
-          l'app tient dedans, sans faire défiler. */}
-      <section className="ticket impression retard-1">
-        <p className="entete-ticket">{settings.team_name}</p>
-        <p className="mt-1 text-center font-mono text-[10px] tracking-widest text-faint uppercase">
-          {day ? formatDateLong(day.work_date) : formatDateLong(new Date())}
-        </p>
-
-        <div className="perfo my-4" />
-
-        <div className="flex items-center justify-between gap-3">
-          <p className="surtitre">Ma journée</p>
-          <StatutJournee statut={statut} />
+    <div className="space-y-14 pt-2">
+      {/* --- L'OBJET -------------------------------------------------------
+          Il occupe presque tout le premier écran, et rien d'autre n'y est
+          posé. Le grand mot passe derrière lui : on le devine, on ne le lit
+          pas. */}
+      <section className="montee relative">
+        <div className="pointer-events-none absolute inset-x-0 top-10 flex justify-center overflow-hidden">
+          <Mot plein className="text-[clamp(5rem,30vw,13rem)]">
+            {vendues > 0 ? vendues : prenom}
+          </Mot>
         </div>
 
-        <div className="mt-3 flex items-end gap-2">
-          <span className="chiffre text-7xl text-lime">{vendues}</span>
-          <span className="chiffre pb-2 text-2xl text-faint">/ {objectif}</span>
-          <span className="pb-2.5 font-mono text-xs tracking-widest text-dim uppercase">
-            cartes
-          </span>
+        <header className="relative mb-8">
+          <p className="surtitre">
+            {salutation()} · {day ? formatDateLong(day.work_date) : formatDateLong(new Date())}
+          </p>
+          <h1 className="titre mt-2 text-[clamp(2.4rem,12vw,4rem)]">{prenom}</h1>
+        </header>
+
+        <div className="relative mx-auto max-w-sm">
+          <ObjetJournee charge={charge} etat={etat}>
+            {/* Ce qui est GRAVÉ dans la dalle : le décompte, et rien
+                d'autre. Une carte de crédit ne porte pas un tableau. */}
+            <div className="flex h-full flex-col justify-between p-[7%]">
+              <div className="flex items-start justify-between">
+                <span className="surtitre text-[0.55rem]">{settings.team_name}</span>
+                <StatutJournee statut={statut} />
+              </div>
+              <div className="flex items-end gap-2">
+                <span className="chiffre text-[clamp(3rem,17vw,4.5rem)] text-os">
+                  {vendues}
+                </span>
+                <span className="chiffre pb-1.5 text-xl text-cendre">/ {objectif}</span>
+              </div>
+            </div>
+          </ObjetJournee>
         </div>
 
-        <div className="mt-3">
-          <Jauge valeur={vendues} objectif={objectif} />
-        </div>
-
-        <p className="mt-2.5 font-mono text-xs text-dim">
-          <span className="font-bold text-os">{pourcentage} %</span>
+        <p className="mt-6 text-center font-mono text-[11px] text-faint">
+          <span className="text-os">{pourcentage} %</span>
           {restantes > 0
             ? ` · ${restantes} carte${restantes > 1 ? "s" : ""} restante${restantes > 1 ? "s" : ""}`
             : " · objectif dépassé"}
+          {day ? ` · ${formatDuration(day.duration_seconds)}` : ""}
         </p>
-
-        <div className="perfo my-4" />
-
-        <div className="space-y-2">
-          <LigneTicket
-            label="Chiffre d'affaires"
-            valeur={formatCents(day?.revenue_cents ?? 0)}
-          />
-          <LigneTicket
-            label={`Commission chef ${formatRate(settings.commission_rate_bp)}`}
-            valeur={`- ${formatCents(day?.commission_cents ?? 0)}`}
-          />
-          <div className="perfo my-3" />
-          <LigneTicket
-            label="Mon net"
-            valeur={formatCents(day?.net_cents ?? 0)}
-            total
-          />
-        </div>
-
-        <div className="perfo my-4" />
-
-        <div className="flex items-center justify-between font-mono text-[11px] text-faint">
-          <span className="inline-flex items-center gap-1.5">
-            <IconClock className="h-3.5 w-3.5" />
-            {day ? formatDuration(day.duration_seconds) : "—"}
-          </span>
-          <span>{day ? `ouverte à ${formatTime(day.started_at)}` : "fermée"}</span>
-        </div>
-
-        {/* Le code-barres signe le ticket. Tiré de l'identifiant de la
-            journée : deux journées n'ont jamais le même. */}
-        <div className="mt-4 flex justify-center">
-          <CodeBarres valeur={day?.id ?? user.id} className="h-7" />
-        </div>
-
-        <div className="mt-5">
-          {statut === "in_progress" ? (
-            <BoutonTerminer />
-          ) : statut === "validated" ? (
-            <p className="panneau-creux px-4 py-3 text-center font-mono text-xs text-dim">
-              Journée validée par l&apos;encadrement.
-              {day && day.penalty_cents > 0
-                ? ` Retenue : ${formatCents(day.penalty_cents)}.`
-                : ""}
-            </p>
-          ) : (
-            <BoutonCommencer />
-          )}
-        </div>
       </section>
 
+      {/* --- L'ARGENT ------------------------------------------------------
+          Un seul nombre en grand, et c'est celui qui appartient à la
+          personne qui regarde. Le CA et la commission sont le détail du
+          calcul : ils passent en toute petite ligne technique, comme tout
+          ce qui explique sans être le sujet. */}
+      <section className="montee retard-1 text-center">
+        <p className="surtitre">Mon net</p>
+        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-braise">
+          {formatCents(day?.net_cents ?? 0)}
+        </p>
+        <p className="mt-3 font-mono text-[11px] text-faint">
+          CA {formatCents(day?.revenue_cents ?? 0)} · commission{" "}
+          {formatRate(settings.commission_rate_bp)} −
+          {formatCents(day?.commission_cents ?? 0)}
+        </p>
+      </section>
+
+      {/* La clôture reste un bouton : ce n'est pas un geste qu'on veut
+          pouvoir déclencher en manipulant l'objet par jeu. */}
       {statut === "in_progress" ? (
-        <Link
-          href="/ventes/nouvelle"
-          className="btn btn-primaire montee retard-2 w-full py-4 text-base"
-        >
-          <IconPlus className="h-5 w-5" />
-          Nouvelle vente
-        </Link>
+        <div className="montee retard-2 mx-auto max-w-sm">
+          <BoutonTerminer />
+        </div>
+      ) : statut === "validated" ? (
+        <p className="montee retard-2 text-center font-mono text-xs text-faint">
+          Journée validée par l&apos;encadrement.
+          {day && day.penalty_cents > 0
+            ? ` Retenue : ${formatCents(day.penalty_cents)}.`
+            : ""}
+        </p>
       ) : null}
 
-      {/* Cartes en main : à savoir avant de sonner à la prochaine porte. */}
-      <div className="montee retard-2 grid grid-cols-3 gap-3">
-        <Stat
-          label="En main"
-          valeur={
-            <span className="flex items-center gap-2">
-              <IconNFC className="h-5 w-5 text-nfc" />
-              {cards.held}
-            </span>
-          }
-          accent
-        />
+      {/* --- LES CARTES EN MAIN --------------------------------------------
+          Aucun accent ici : la jauge d'objectif, c'est la tranche de la
+          dalle. En afficher une seconde affaiblirait les deux. */}
+      <section className="montee retard-2 grid grid-cols-3 gap-5">
+        <Stat label="En main" valeur={cards.held} />
         <Stat label="Reçues" valeur={cards.allocated} />
         <Stat label="Vendues" valeur={cards.sold} />
-      </div>
+      </section>
 
+      {/* --- LES VENTES ---------------------------------------------------- */}
       <div className="montee retard-3">
         <Section
           titre="Mes ventes du jour"
           action={
-            <Link href="/ventes" className="font-mono text-[11px] text-faint hover:text-dim">
-              TOUT VOIR
+            <Link href="/ventes" className="surtitre hover:text-os">
+              Tout voir
             </Link>
           }
         >
           {sales.length === 0 ? (
-            <Vide titre="Aucune vente aujourd'hui">
+            <Vide titre="Rien encore">
               {statut === "in_progress"
-                ? "Le bouton « Nouvelle vente » est juste au-dessus."
-                : "Commence ta journée pour enregistrer une vente."}
+                ? "Un appui long sur la carte ouvre une vente."
+                : "Ouvre ta journée pour enregistrer une vente."}
             </Vide>
           ) : (
-            <ul className="space-y-1.5">
+            <ul>
               {sales.map((sale) => (
                 <li
                   key={sale.id}
-                  className="panneau-plat flex items-center gap-3 px-3.5 py-3"
+                  className="flex items-center gap-4 border-b border-trait py-4"
                 >
-                  <span className="chiffre w-8 shrink-0 text-center text-lg text-lime">
+                  <span className="chiffre w-7 shrink-0 text-lg text-dim">
                     {sale.quantity}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm">
                       {sale.businesses?.name ?? "Vente directe"}
                     </p>
-                    <p className="font-mono text-[11px] text-faint">
+                    <p className="surtitre mt-0.5">
                       {formatTime(sale.sold_at)}
                       {sale.businesses?.city ? ` · ${sale.businesses.city}` : ""}
                     </p>
@@ -223,7 +198,7 @@ export function DashboardMembre({
                     <p className="chiffre text-base">
                       {formatCentsShort(sale.amount_cents)}
                     </p>
-                    <p className="font-mono text-[10px] text-faint">
+                    <p className="surtitre mt-0.5">
                       net {formatCentsShort(sale.net_cents)}
                     </p>
                   </div>
@@ -234,11 +209,12 @@ export function DashboardMembre({
         </Section>
       </div>
 
-      <div className="montee retard-4 grid gap-2 sm:grid-cols-3">
+      {/* --- LE RESTE, en tout petit --------------------------------------- */}
+      <nav className="montee retard-4 flex flex-wrap gap-x-8 gap-y-3 pb-4">
         <Raccourci href="/commerces" titre="Mes commerces" />
         <Raccourci href="/historique" titre="Mon historique" />
         <Raccourci href="/cartes" titre="Mes cartes" />
-      </div>
+      </nav>
     </div>
   );
 }
@@ -247,10 +223,9 @@ function Raccourci({ href, titre }: { href: string; titre: string }) {
   return (
     <Link
       href={href}
-      className="panneau flex items-center justify-between p-4 transition-transform active:scale-[0.99]"
+      className="surtitre transition-colors duration-300 hover:text-os"
     >
-      <span className="titre text-lg">{titre}</span>
-      <IconChevron className="h-4 w-4 text-faint" />
+      {titre}
     </Link>
   );
 }
