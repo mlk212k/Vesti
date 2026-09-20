@@ -22,9 +22,14 @@ psql -v ON_ERROR_STOP=1 -q -d "$BASE" -f supabase/tests/00_stub_supabase.sql 2>&
   | grep -v "wal_level" | grep -v "HINT" || true
 
 echo "→ Migrations"
+# `pg_net` n'est pas installable sur un Postgres nu : les schémas `net` et
+# `vault` sont fournis par 00_stub_supabase.sql. On neutralise donc la seule
+# ligne qui tenterait de charger l'extension binaire — le reste des
+# migrations tourne inchangé.
 for fichier in supabase/migrations/*.sql; do
   echo "   $(basename "$fichier")"
-  psql -v ON_ERROR_STOP=1 -q -d "$BASE" -f "$fichier"
+  sed -E 's/^([[:space:]]*create extension if not exists pg_net[^;]*;)/-- \1 (fourni par le stub de test)/i' "$fichier" \
+    | psql -v ON_ERROR_STOP=1 -q -d "$BASE"
 done
 
 echo "→ Tests"
