@@ -12,7 +12,7 @@ import {
 } from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate } from "@/lib/money";
-import type { TeamRow } from "@/lib/queries";
+import type { LignePlanning, TeamRow } from "@/lib/queries";
 import {
   displayDayStatus,
   ROLE_LABEL,
@@ -29,13 +29,17 @@ export function DashboardEquipe({
   stock,
   estAdmin,
   prenom,
+  planning,
 }: {
   rows: TeamRow[];
   settings: AppSettings;
   stock: StockSummary;
   estAdmin: boolean;
   prenom: string;
+  planning: LignePlanning[];
 }) {
+  const attendus = planning.filter((p) => p.attendu);
+  const manquants = attendus.filter((p) => !p.journee_ouverte);
   const caJour = rows.reduce((total, row) => total + (row.day?.revenue_cents ?? 0), 0);
   const commissionJour = rows.reduce(
     (total, row) => total + (row.day?.commission_cents ?? 0),
@@ -72,7 +76,7 @@ export function DashboardEquipe({
         <p className="surtitre">Aujourd&apos;hui · {settings.team_name}</p>
         {/* « Poste de commandement » en italique grasse déborde d'un écran de
             390 px à partir de text-4xl : on commence plus petit sur mobile. */}
-        <h1 className="titre-vitesse mt-1 text-[1.75rem] sm:text-5xl">
+        <h1 className="titre mt-1 text-[1.75rem] sm:text-5xl">
           {estAdmin ? "Poste de commandement" : "Supervision"}
         </h1>
         <p className="mt-1.5 text-sm text-faint">
@@ -118,6 +122,36 @@ export function DashboardEquipe({
           valeur={`${objectifsAtteints}/${journeesDuJour}`}
           detail={`objectif ${settings.default_daily_goal} cartes`}
         />
+      </div>
+
+      {/* Qui est attendu aujourd'hui. Sans ça, l'encadrement ne sait pas si
+          une journée non ouverte est un retard ou un jour de repos. */}
+      <div className="montee retard-1">
+        <Link href="/planning" className="panneau block p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="surtitre">Planning du jour</p>
+              <p className="mt-1.5 text-sm">
+                <span className="chiffre text-lime">{attendus.length}</span>{" "}
+                attendu{attendus.length > 1 ? "s" : ""}
+                {manquants.length > 0 ? (
+                  <>
+                    {" · "}
+                    <span className="chiffre text-orange">{manquants.length}</span>{" "}
+                    pas encore en route
+                  </>
+                ) : (
+                  " · tout le monde est parti"
+                )}
+              </p>
+            </div>
+            {manquants.length > 0 ? (
+              <span className="tampon tampon-orange">À relancer</span>
+            ) : (
+              <span className="tampon tampon-lime">Complet</span>
+            )}
+          </div>
+        </Link>
       </div>
 
       <div className="montee retard-2">

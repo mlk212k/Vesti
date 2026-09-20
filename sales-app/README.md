@@ -74,6 +74,8 @@ app/
     historique/     journées passées
     analytics/      filtres de période + graphiques
     chat/           conversation d'équipe et messages privés
+    planning/       disponibilités de la semaine, relances (encadrement)
+    profil/         nom, téléphone, photo, créneaux, sons
     membres/        comptes et rôles (admin)
     parametres/     taux, objectif, prix, retenue (admin)
     audit/          journal (admin)
@@ -120,7 +122,7 @@ cp .env.example .env.local     # puis renseigner le projet Supabase
 ### Base de données
 
 Dans le SQL Editor de Supabase, appliquer les fichiers de
-`supabase/migrations/` **dans l'ordre**, de `0001` à `0007`. Ou, avec la CLI
+`supabase/migrations/` **dans l'ordre**, de `0001` à `0008`. Ou, avec la CLI
 Supabase :
 
 ```bash
@@ -230,20 +232,82 @@ un composant client casse le build au lieu d'expédier la clé au navigateur.
 
 ## Interface
 
-Sombre, dense, mobile d'abord. Noir profond et anthracite, blanc cassé, deux
-accents (violet, magenta) et un rouge réservé au danger. La profondeur vient
-de deux halos fixes derrière le document, d'un grain très léger et de
-liserés clairs en haut des panneaux — pas d'ombres portées épaisses.
+**Direction artistique : le ticket de caisse.** L'objet central de cette
+app, c'est un reçu — ce que tu as vendu, ce que le chef prend, ce qui te
+reste. Le reste de l'interface en découle : panneaux aux bords crantés
+(`.ticket`), lignes à pointillés de conduite entre un libellé et un montant
+(`.ligne-ticket`), tampons encreurs inclinés pour les statuts (`.tampon`),
+code-barres généré à partir de l'identifiant de la journée, bandeau
+défilant façon caisse enregistreuse.
 
-Typographie : Archivo en capitales serrées pour les titres et les grands
-chiffres, Inter pour le reste. Les chiffres sont tabulaires, pour que les
-colonnes ne dansent pas quand une valeur change.
+Couleurs : noir profond et ardoise, blanc cassé, **vert lime** pour l'argent
+gagné et l'action principale, **orange** pour l'alerte et le dépassement,
+**cyan NFC** pour tout ce qui touche à la carte, rouge réservé au danger. La
+matière vient d'une trame de points en demi-teinte, d'un grain très léger et
+d'un halo unique en haut de page — pas d'ombres portées molles : les boutons
+portent une ombre dure de 4 px, franche.
+
+Typographie : Bebas Neue en capitales serrées pour les titres, JetBrains
+Mono pour les sur-titres, les statuts et tous les chiffres, Inter pour le
+texte courant. Les chiffres sont tabulaires : une colonne de montants ne
+danse pas quand une valeur change.
+
+**Sons.** Six effets courts, synthétisés à la volée en Web Audio
+(`lib/sfx.ts`) — aucun fichier audio n'est livré : le tiroir-caisse à
+l'enregistrement d'une vente, le tampon à l'ouverture et à la clôture de la
+journée, un cran au compteur de quantité, un pop à l'envoi d'un message, un
+blip à la réception, deux notes descendantes en cas de refus. Rien ne dépasse
+120 ms, et chacun part sur le **résultat** de l'action, jamais sur le clic.
+Le réglage se coupe depuis le profil et se retient d'une visite à l'autre.
 
 Sur mobile : cinq onglets en bas (accueil, ventes, commerces, chat, profil
-pour un commercial ; équipe et stock à la place pour l'encadrement),
+pour un commercial ; équipe et planning à la place pour l'encadrement),
 zones tactiles larges, et une vente s'enregistre en trois gestes. Les icônes
 et les graphiques sont dessinés à la main en SVG — aucune librairie
 d'icônes ni de charts.
 
 L'app est installable sur l'écran d'accueil (manifeste + icônes générées par
-`scripts/generate-icons.py`).
+`scripts/generate-icons.py`). En PWA, le rebond vertical et le glissement
+latéral sont neutralisés (`overscroll-behavior`, `touch-action`), et le
+service worker ne met **jamais** une page en cache — seulement les assets :
+un écran de chiffres périmés serait pire qu'un écran vide.
+
+---
+
+## Planning et relances
+
+Chacun déclare ses créneaux — sept jours × matin/après-midi — depuis son
+profil ; l'encadrement voit la grille complète de la semaine sur
+`/planning`. La vue `v_planning_du_jour` croise ces créneaux avec les
+journées ouvertes et répond à la seule question qui compte le matin : **qui
+est attendu aujourd'hui, et qui n'a pas encore ouvert sa journée ?**
+
+De là, Malik ou le chef envoie une **relance** : un message nominatif qui
+arrive en notification. La fonction `send_nudge` refuse une seconde relance
+de la même personne avant une heure (`NUDGE_TOO_SOON`) — la limite est dans
+la base, pas dans un bouton grisé.
+
+Une absence un jour non déclaré n'est pas un retard : c'est précisément ce
+que le planning permet de distinguer, et rien dans l'app ne transforme un
+créneau manqué en retenue d'argent.
+
+---
+
+## Chat
+
+Un fil d'équipe et des fils privés. Les messages arrivent en temps réel
+(Realtime), les présences aussi : un point indique qui a le fil ouvert. On
+voit **qui est dans la conversation** (panneau des participants, replié par
+défaut), les messages consécutifs d'une même personne sont regroupés, les
+journées sont séparées par une étiquette, et on réagit en un geste avec une
+palette courte de six emojis. Les réactions sont cloisonnées comme le reste :
+on ne peut réagir qu'à un message d'une conversation dont on est membre.
+
+---
+
+## Profil
+
+Chacun modifie son nom, son téléphone, sa photo (bucket public `avatars`,
+2 Mo) et ses disponibilités, et coupe les sons s'il le souhaite. Le rôle,
+l'objectif quotidien et l'état actif restent la main de l'admin : un
+commercial ne s'attribue pas son propre objectif.

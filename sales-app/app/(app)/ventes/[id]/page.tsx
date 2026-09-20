@@ -57,7 +57,7 @@ export default async function SalePage({
         Ventes
       </Link>
 
-      <div className="panneau-heros diagonale mb-5 p-5">
+      <div className="ticket mb-5 p-5">
         <p className="surtitre">
           {formatDateLong(sale.sold_at)} · {formatTime(sale.sold_at)}
         </p>

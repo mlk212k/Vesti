@@ -20,7 +20,7 @@ export default async function MyCardsPage() {
     <div className="montee space-y-6">
       <EnTete surtitre="Ce que j'ai en main" titre="Mes cartes" />
 
-      <div className="panneau-heros diagonale p-6 text-center">
+      <div className="ticket p-6 text-center">
         <p className="surtitre">Cartes en main</p>
         <p className="chiffre mt-2 text-7xl">{cards.held}</p>
         <p className="mt-2 text-sm text-dim">
@@ -58,7 +58,7 @@ export default async function MyCardsPage() {
                 </div>
                 <span
                   className={`chiffre text-base ${
-                    movement.member_delta > 0 ? "text-success" : "text-dim"
+                    movement.member_delta > 0 ? "text-succes" : "text-dim"
                   }`}
                 >
                   {movement.member_delta > 0 ? "+" : ""}

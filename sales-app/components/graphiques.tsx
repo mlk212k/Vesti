@@ -50,16 +50,16 @@ export function Histogramme({
               style={{ width: `${largeurBarre}%` }}
             >
               <span
-                className="w-full rounded-t-[3px] transition-all"
+                className="w-full rounded-t-[2px] transition-all"
                 style={{
                   height: `${Math.max(ratio * 100, point.valeur > 0 ? 3 : 0.8)}%`,
                   background:
                     point.valeur > 0
-                      ? "linear-gradient(180deg, #a78bfa 0%, #8b5cf6 45%, rgba(255,45,134,0.85) 100%)"
-                      : "rgba(255,255,255,0.06)",
+                      ? "linear-gradient(180deg, #ccff00 0%, #a8d400 70%, #7d9e00 100%)"
+                      : "rgba(255,255,255,0.05)",
                   boxShadow:
                     point.valeur > 0
-                      ? "0 0 12px -4px rgba(139,92,246,0.8)"
+                      ? "0 0 10px -4px rgba(204,255,0,0.85)"
                       : "none",
                 }}
                 title={`${point.label} : ${

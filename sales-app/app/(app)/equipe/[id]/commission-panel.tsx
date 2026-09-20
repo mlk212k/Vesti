@@ -87,7 +87,7 @@ export function CommissionPanel({
       </form>
 
       {payouts.length > 0 ? (
-        <ul className="space-y-2 border-t border-line pt-4">
+        <ul className="space-y-2 border-t border-trait pt-4">
           {payouts.map((payout) => (
             <li
               key={payout.id}

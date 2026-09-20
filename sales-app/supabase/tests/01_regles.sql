@@ -740,6 +740,125 @@ begin
 end;
 $$;
 
+-- 21. Planning : chacun ses créneaux, l'encadrement pour tout le monde ------
+
+do $$
+declare
+  a record;
+  v_lignes integer;
+begin
+  select * into a from acteurs;
+
+  perform tests.connecte(a.alex);
+  insert into public.availabilities (member_id, weekday, slot)
+  values (a.alex, 6, 'am'), (a.alex, 6, 'pm');
+  perform tests.egal(
+    (select count(*)::int from public.availabilities where member_id = a.alex), 2,
+    'un commercial pose ses propres créneaux'
+  );
+
+  -- Poser les créneaux d'un collègue n'est pas refusé par une erreur : la
+  -- policy rend simplement la ligne inécrivable.
+  perform tests.refuse(
+    format('insert into public.availabilities (member_id, weekday, slot) values (%L, 1, ''am'')', a.thomas),
+    'row-level security',
+    'un commercial ne pose pas les créneaux d''un collègue'
+  );
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.chef);
+  insert into public.availabilities (member_id, weekday, slot)
+  values (a.thomas, 3, 'pm');
+  perform tests.egal(
+    (select count(*)::int from public.availabilities where member_id = a.thomas), 1,
+    'le chef pose les créneaux de son équipe'
+  );
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.malik);
+  perform tests.egal(
+    (select count(*)::int from public.availabilities), 3,
+    'le planning est visible par toute l''équipe'
+  );
+  perform tests.deconnecte();
+end;
+$$;
+
+-- 22. Relances ---------------------------------------------------------------
+
+do $$
+declare a record;
+begin
+  select * into a from acteurs;
+
+  perform tests.connecte(a.alex);
+  perform tests.refuse(
+    format('select public.send_nudge(%L, ''bouge'')', a.thomas),
+    'FORBIDDEN',
+    'un commercial ne relance personne'
+  );
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.malik);
+  perform public.send_nudge(a.thomas, 'Ouvre ta journée stp');
+
+  -- Le garde-fou anti-harcèlement : pas deux relances dans l'heure.
+  perform tests.refuse(
+    format('select public.send_nudge(%L, ''encore'')', a.thomas),
+    'NUDGE_TOO_SOON',
+    'deux relances dans l''heure sont refusées'
+  );
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.thomas);
+  perform tests.egal(
+    (select count(*)::int from public.notifications where kind = 'nudge'), 1,
+    'la relance arrive en notification chez le commercial'
+  );
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.alex);
+  perform tests.egal(
+    (select count(*)::int from public.nudges), 0,
+    'un commercial ne voit pas les relances des autres'
+  );
+  perform tests.deconnecte();
+end;
+$$;
+
+-- 23. Réactions : cloisonnées comme les messages ------------------------------
+
+do $$
+declare
+  a record;
+  v_msg uuid;
+begin
+  select * into a from acteurs;
+
+  -- Un message de l'équipe, que tout le monde peut voir.
+  perform tests.connecte(a.malik);
+  insert into public.messages (conversation_id, author_id, body)
+  values ('00000000-0000-0000-0000-000000000001', a.malik, 'On y va')
+  returning id into v_msg;
+  perform tests.deconnecte();
+
+  perform tests.connecte(a.alex);
+  insert into public.message_reactions (message_id, user_id, emoji)
+  values (v_msg, a.alex, '🔥');
+  perform tests.egal(
+    (select count(*)::int from public.message_reactions where message_id = v_msg), 1,
+    'on réagit à un message de sa conversation'
+  );
+  perform tests.refuse(
+    format('insert into public.message_reactions (message_id, user_id, emoji) values (%L, %L, ''👍'')',
+           v_msg, a.thomas),
+    'row-level security',
+    'on ne réagit pas au nom de quelqu''un d''autre'
+  );
+  perform tests.deconnecte();
+end;
+$$;
+
 -- Résumé ---------------------------------------------------------------------
 
 do $$

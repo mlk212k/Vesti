@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { IconChevron, IconClock, IconPlus, IconTarget } from "@/components/icons";
-import { FiligraneNFC, IconNFC } from "@/components/nfc";
-import { Jauge, Section, Stat, StatutJournee, Vide } from "@/components/ui";
-import { formatDuration, formatTime } from "@/lib/format";
+import { IconChevron, IconClock, IconPlus } from "@/components/icons";
+import { IconNFC } from "@/components/nfc";
+import { CodeBarres, Jauge, Section, Stat, StatutJournee, Vide } from "@/components/ui";
+import { formatDateLong, formatDuration, formatTime } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate, percentOf } from "@/lib/money";
 import type { SaleWithBusiness } from "@/lib/queries";
 import type { SessionUser } from "@/lib/auth";
@@ -27,6 +27,26 @@ function salutation(): string {
   return "Bonsoir";
 }
 
+// Une ligne de reçu : libellé à gauche, montant à droite, pointillés entre
+// les deux. C'est la forme que prend l'argent dans cette app.
+function LigneTicket({
+  label,
+  valeur,
+  total = false,
+}: {
+  label: string;
+  valeur: string;
+  total?: boolean;
+}) {
+  return (
+    <div className={`ligne-ticket ${total ? "ligne-ticket-total" : ""}`}>
+      <span className={total ? "" : "text-dim"}>{label}</span>
+      <span className="ligne-ticket-points" />
+      <span className="tabulaire">{valeur}</span>
+    </div>
+  );
+}
+
 export function DashboardMembre({
   user,
   day,
@@ -41,7 +61,8 @@ export function DashboardMembre({
   sales: SaleWithBusiness[];
 }) {
   const statut = displayDayStatus(day);
-  const objectif = day?.goal_cards ?? user.daily_goal_override ?? settings.default_daily_goal;
+  const objectif =
+    day?.goal_cards ?? user.daily_goal_override ?? settings.default_daily_goal;
   const vendues = day?.cards_sold ?? 0;
   const pourcentage = percentOf(vendues, objectif);
   const restantes = Math.max(objectif - vendues, 0);
@@ -50,88 +71,86 @@ export function DashboardMembre({
     <div className="space-y-6">
       <header className="montee">
         <p className="surtitre">{salutation()}</p>
-        <h1 className="titre-vitesse mt-1 text-4xl sm:text-5xl">
-          {user.full_name}
-        </h1>
+        <h1 className="titre mt-1 text-5xl">{user.full_name}</h1>
       </header>
 
-      {/* Le panneau de la journée : tout ce qu'un commercial a besoin de voir
-          en ouvrant l'app, sans faire défiler. Le liseré néon ne tourne que
-          sur celui-ci — c'est ce qui en fait LE point d'attention. */}
-      <section
-        className={`panneau-heros diagonale montee retard-1 p-5 sm:p-6 ${
-          statut === "in_progress" ? "neon-bord" : ""
-        }`}
-      >
-        <FiligraneNFC />
+      {/* LE TICKET. Tout ce qu'un commercial a besoin de voir en ouvrant
+          l'app tient dedans, sans faire défiler. */}
+      <section className="ticket impression retard-1">
+        <p className="entete-ticket">{settings.team_name}</p>
+        <p className="mt-1 text-center font-mono text-[10px] tracking-widest text-faint uppercase">
+          {day ? formatDateLong(day.work_date) : formatDateLong(new Date())}
+        </p>
 
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="perfo my-4" />
+
+        <div className="flex items-center justify-between gap-3">
           <p className="surtitre">Ma journée</p>
           <StatutJournee statut={statut} />
         </div>
 
-        <div className="mb-2 flex items-end gap-3">
-          <span className="chiffre chrome text-6xl sm:text-7xl">{vendues}</span>
+        <div className="mt-3 flex items-end gap-2">
+          <span className="chiffre text-7xl text-lime">{vendues}</span>
           <span className="chiffre pb-2 text-2xl text-faint">/ {objectif}</span>
-          <span className="pb-2.5 text-sm text-dim">cartes</span>
+          <span className="pb-2.5 font-mono text-xs tracking-widest text-dim uppercase">
+            cartes
+          </span>
         </div>
 
-        <Jauge valeur={vendues} objectif={objectif} />
+        <div className="mt-3">
+          <Jauge valeur={vendues} objectif={objectif} />
+        </div>
 
-        <p className="mt-2.5 text-sm text-dim">
-          <span className="tabulaire font-semibold text-text">{pourcentage} %</span>
-          {restantes > 0 ? (
-            <>
-              {" · "}
-              {restantes} carte{restantes > 1 ? "s" : ""} restante
-              {restantes > 1 ? "s" : ""}
-            </>
-          ) : (
-            " · objectif dépassé"
-          )}
+        <p className="mt-2.5 font-mono text-xs text-dim">
+          <span className="font-bold text-os">{pourcentage} %</span>
+          {restantes > 0
+            ? ` · ${restantes} carte${restantes > 1 ? "s" : ""} restante${restantes > 1 ? "s" : ""}`
+            : " · objectif dépassé"}
         </p>
 
-        <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-          <div className="panneau-creux p-3">
-            <p className="surtitre-serre">CA</p>
-            <p className="chiffre mt-1.5 text-xl sm:text-2xl">
-              {formatCentsShort(day?.revenue_cents ?? 0)}
-            </p>
-          </div>
-          <div className="panneau-creux p-3">
-            <p className="surtitre-serre">Commission</p>
-            <p className="chiffre mt-1.5 text-xl text-faint sm:text-2xl">
-              {formatCentsShort(day?.commission_cents ?? 0)}
-            </p>
-          </div>
-          <div className="panneau-creux p-3">
-            <p className="surtitre-serre">Mon net</p>
-            <p className="chiffre chrome-cash mt-1.5 text-xl sm:text-2xl">
-              {formatCentsShort(day?.net_cents ?? 0)}
-            </p>
-          </div>
+        <div className="perfo my-4" />
+
+        <div className="space-y-2">
+          <LigneTicket
+            label="Chiffre d'affaires"
+            valeur={formatCents(day?.revenue_cents ?? 0)}
+          />
+          <LigneTicket
+            label={`Commission chef ${formatRate(settings.commission_rate_bp)}`}
+            valeur={`- ${formatCents(day?.commission_cents ?? 0)}`}
+          />
+          <div className="perfo my-3" />
+          <LigneTicket
+            label="Mon net"
+            valeur={formatCents(day?.net_cents ?? 0)}
+            total
+          />
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-faint">
+        <div className="perfo my-4" />
+
+        <div className="flex items-center justify-between font-mono text-[11px] text-faint">
           <span className="inline-flex items-center gap-1.5">
             <IconClock className="h-3.5 w-3.5" />
             {day ? formatDuration(day.duration_seconds) : "—"}
-            {day ? ` · depuis ${formatTime(day.started_at)}` : ""}
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <IconTarget className="h-3.5 w-3.5" />
-            Commission chef : {formatRate(settings.commission_rate_bp)}
-          </span>
+          <span>{day ? `ouverte à ${formatTime(day.started_at)}` : "fermée"}</span>
+        </div>
+
+        {/* Le code-barres signe le ticket. Tiré de l'identifiant de la
+            journée : deux journées n'ont jamais le même. */}
+        <div className="mt-4 flex justify-center">
+          <CodeBarres valeur={day?.id ?? user.id} className="h-7" />
         </div>
 
         <div className="mt-5">
           {statut === "in_progress" ? (
             <BoutonTerminer />
           ) : statut === "validated" ? (
-            <p className="panneau-creux px-4 py-3 text-center text-sm text-dim">
+            <p className="panneau-creux px-4 py-3 text-center font-mono text-xs text-dim">
               Journée validée par l&apos;encadrement.
               {day && day.penalty_cents > 0
-                ? ` Retenue appliquée : ${formatCents(day.penalty_cents)}.`
+                ? ` Retenue : ${formatCents(day.penalty_cents)}.`
                 : ""}
             </p>
           ) : (
@@ -139,23 +158,6 @@ export function DashboardMembre({
           )}
         </div>
       </section>
-
-      {/* Cartes en main : le commercial doit savoir ce qu'il lui reste à
-          vendre avant de sonner à la prochaine porte. */}
-      <div className="montee retard-2 grid grid-cols-3 gap-3">
-        <Stat
-          label="En main"
-          valeur={
-            <span className="flex items-center gap-2">
-              <IconNFC className="h-5 w-5 text-[var(--nfc)]" />
-              {cards.held}
-            </span>
-          }
-          accent
-        />
-        <Stat label="Attribuées" valeur={cards.allocated} />
-        <Stat label="Vendues" valeur={cards.sold} />
-      </div>
 
       {statut === "in_progress" ? (
         <Link
@@ -167,12 +169,28 @@ export function DashboardMembre({
         </Link>
       ) : null}
 
+      {/* Cartes en main : à savoir avant de sonner à la prochaine porte. */}
+      <div className="montee retard-2 grid grid-cols-3 gap-3">
+        <Stat
+          label="En main"
+          valeur={
+            <span className="flex items-center gap-2">
+              <IconNFC className="h-5 w-5 text-nfc" />
+              {cards.held}
+            </span>
+          }
+          accent
+        />
+        <Stat label="Reçues" valeur={cards.allocated} />
+        <Stat label="Vendues" valeur={cards.sold} />
+      </div>
+
       <div className="montee retard-3">
         <Section
           titre="Mes ventes du jour"
           action={
-            <Link href="/ventes" className="text-xs text-faint hover:text-dim">
-              Tout voir
+            <Link href="/ventes" className="font-mono text-[11px] text-faint hover:text-dim">
+              TOUT VOIR
             </Link>
           }
         >
@@ -183,17 +201,20 @@ export function DashboardMembre({
                 : "Commence ta journée pour enregistrer une vente."}
             </Vide>
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
               {sales.map((sale) => (
-                <li key={sale.id} className="panneau flex items-center gap-3 p-3.5">
-                  <span className="chiffre w-10 shrink-0 text-center text-xl">
+                <li
+                  key={sale.id}
+                  className="panneau-plat flex items-center gap-3 px-3.5 py-3"
+                >
+                  <span className="chiffre w-8 shrink-0 text-center text-lg text-lime">
                     {sale.quantity}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">
+                    <p className="truncate text-sm">
                       {sale.businesses?.name ?? "Vente directe"}
                     </p>
-                    <p className="text-xs text-faint">
+                    <p className="font-mono text-[11px] text-faint">
                       {formatTime(sale.sold_at)}
                       {sale.businesses?.city ? ` · ${sale.businesses.city}` : ""}
                     </p>
@@ -202,7 +223,7 @@ export function DashboardMembre({
                     <p className="chiffre text-base">
                       {formatCentsShort(sale.amount_cents)}
                     </p>
-                    <p className="text-[11px] text-faint">
+                    <p className="font-mono text-[10px] text-faint">
                       net {formatCentsShort(sale.net_cents)}
                     </p>
                   </div>
@@ -213,22 +234,22 @@ export function DashboardMembre({
         </Section>
       </div>
 
-      <div className="montee retard-4 grid gap-3 sm:grid-cols-3">
-        <RaccourciLien href="/commerces" titre="Mes commerces" />
-        <RaccourciLien href="/historique" titre="Mon historique" />
-        <RaccourciLien href="/cartes" titre="Mes cartes" />
+      <div className="montee retard-4 grid gap-2 sm:grid-cols-3">
+        <Raccourci href="/commerces" titre="Mes commerces" />
+        <Raccourci href="/historique" titre="Mon historique" />
+        <Raccourci href="/cartes" titre="Mes cartes" />
       </div>
     </div>
   );
 }
 
-function RaccourciLien({ href, titre }: { href: string; titre: string }) {
+function Raccourci({ href, titre }: { href: string; titre: string }) {
   return (
     <Link
       href={href}
       className="panneau flex items-center justify-between p-4 transition-transform active:scale-[0.99]"
     >
-      <span className="titre text-sm">{titre}</span>
+      <span className="titre text-lg">{titre}</span>
       <IconChevron className="h-4 w-4 text-faint" />
     </Link>
   );

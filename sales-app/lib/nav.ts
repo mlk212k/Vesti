@@ -66,6 +66,13 @@ export const NAV: NavItem[] = [
     roles: ["member"],
   },
   {
+    href: "/planning",
+    label: "Planning",
+    short: "Planning",
+    icon: IconClock,
+    roles: ["admin", "manager"],
+  },
+  {
     href: "/stock",
     label: "Stock",
     short: "Stock",
@@ -131,7 +138,7 @@ export function navFor(role: Role): NavItem[] {
 // donc c'est son parcours qui décide : accueil, vendre, prospecter, parler,
 // soi. L'encadrement a besoin de l'équipe et du stock à la place.
 const MOBILE_MEMBER = ["/", "/ventes", "/commerces", "/chat", "/profil"];
-const MOBILE_STAFF = ["/", "/equipe", "/stock", "/chat", "/profil"];
+const MOBILE_STAFF = ["/", "/equipe", "/planning", "/chat", "/profil"];
 
 export function mobileNavFor(role: Role): NavItem[] {
   const wanted = role === "member" ? MOBILE_MEMBER : MOBILE_STAFF;

@@ -189,7 +189,7 @@ export function ReturnForm({ membres }: { membres: Profile[] }) {
         </Submit>
       </form>
 
-      <form action={perteAction} className="space-y-3 border-t border-line pt-5">
+      <form action={perteAction} className="space-y-3 border-t border-trait pt-5">
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <select name="member_id" required className="champ" aria-label="Commercial">
             {membres.map((membre) => (

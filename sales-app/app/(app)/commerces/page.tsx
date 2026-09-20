@@ -12,8 +12,8 @@ export const metadata: Metadata = { title: "Commerces" };
 const PASTILLE: Record<BusinessStatus, string> = {
   prospect: "pastille",
   client: "pastille pastille-succes",
-  callback: "pastille pastille-alerte",
-  refused: "pastille pastille-danger",
+  callback: "pastille pastille-orange",
+  refused: "pastille pastille-rouge",
 };
 
 export default async function BusinessesPage({

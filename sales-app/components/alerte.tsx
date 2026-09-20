@@ -6,15 +6,15 @@ export function Alerte({
   ton?: "danger" | "succes" | "info";
 }) {
   const styles = {
-    danger: "border-[rgba(255,59,59,0.35)] bg-[rgba(255,59,59,0.08)] text-[#ff9b9b]",
+    danger: "border-[rgba(255,49,49,0.4)] bg-[rgba(255,49,49,0.08)] text-[#ff8a8a]",
     succes:
-      "border-[rgba(46,230,168,0.35)] bg-[rgba(46,230,168,0.08)] text-[#7ef0cb]",
-    info: "border-[rgba(139,92,246,0.35)] bg-[rgba(139,92,246,0.08)] text-[#c4b5fd]",
+      "border-[rgba(204,255,0,0.4)] bg-[rgba(204,255,0,0.08)] text-lime",
+    info: "border-[rgba(34,223,255,0.35)] bg-[rgba(34,223,255,0.07)] text-nfc",
   }[ton];
 
   return (
     <p
-      className={`apparition rounded-xl border px-3.5 py-2.5 text-sm ${styles}`}
+      className={`apparition rounded-[6px] border px-3.5 py-2.5 text-sm ${styles}`}
       role={ton === "danger" ? "alert" : "status"}
     >
       {children}

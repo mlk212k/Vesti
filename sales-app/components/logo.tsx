@@ -2,13 +2,11 @@
 
 import { useId } from "react";
 
-// Marque de l'app. Un monogramme dessiné en SVG — pas d'image à charger, et
-// il reste net sur tous les écrans.
+// Marque de l'app : une carte NFC vue de biais, qui émet son onde.
 //
-// Le glyphe : un hexagone taillé (l'entaille des panneaux, reprise en petit)
-// traversé d'une barre en diagonale, avec l'onde NFC qui en sort. La carte et
-// le signal qu'elle émet, en un seul signe. Rien n'est emprunté à une marque
-// ou à un jeu existant.
+// Dessinée en SVG plutôt qu'en image — nette à toutes les tailles, et elle
+// se recolore avec le thème. Les arêtes sont volontairement franches : la DA
+// n'a plus un seul arrondi généreux.
 export function Logo({ className = "h-9 w-9" }: { className?: string }) {
   // Identifiant unique par instance : sans lui, deux logos sur la même page
   // partagent un id de dégradé, et le navigateur résout la référence vers le
@@ -25,37 +23,29 @@ export function Logo({ className = "h-9 w-9" }: { className?: string }) {
       fill="none"
     >
       <defs>
-        <linearGradient id={degrade} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#ff2d86" />
+        <linearGradient id={degrade} x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stopColor="#9bc400" />
+          <stop offset="100%" stopColor="#ccff00" />
         </linearGradient>
       </defs>
 
-      <path
-        d="M24 3 43 14v20L24 45 5 34V14L24 3Z"
-        stroke={`url(#${degrade})`}
-        strokeWidth="2.2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15 32 29 18"
-        stroke={`url(#${degrade})`}
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
+      {/* La carte, vue de biais. */}
+      <path d="M4 16.5 22 7l14 7.5-18 9.5-14-7.5Z" fill={`url(#${degrade})`} />
+      <path d="M4 16.5v12L18 36V24L4 16.5Z" fill="#9bc400" fillOpacity="0.4" />
+      <path d="M18 24v12l18-9.5v-12L18 24Z" fill="#ccff00" fillOpacity="0.14" />
 
-      {/* L'onde qui part de la carte. */}
+      {/* L'onde sans contact : la seule touche de cyan de l'interface. */}
       <path
-        d="M30 19.5a9 9 0 0 1 0 11"
-        stroke="#29e0ff"
-        strokeWidth="2.2"
+        d="M39 19a8 8 0 0 1 0 11"
+        stroke="#22dfff"
+        strokeWidth="2.6"
         strokeLinecap="round"
       />
       <path
-        d="M34.5 16a15 15 0 0 1 0 18"
-        stroke="#29e0ff"
-        strokeOpacity="0.6"
-        strokeWidth="2.2"
+        d="M43.5 15a14 14 0 0 1 0 19"
+        stroke="#22dfff"
+        strokeOpacity="0.55"
+        strokeWidth="2.6"
         strokeLinecap="round"
       />
     </svg>
@@ -66,7 +56,7 @@ export function Marque({ nom }: { nom: string }) {
   return (
     <div className="flex items-center gap-2.5">
       <Logo />
-      <span className="titre text-xl">{nom}</span>
+      <span className="titre text-2xl">{nom}</span>
     </div>
   );
 }

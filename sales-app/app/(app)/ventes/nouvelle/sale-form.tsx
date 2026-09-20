@@ -9,6 +9,7 @@ import { PhotoUpload } from "@/components/photo-upload";
 import { Submit } from "@/components/submit";
 import type { ActionResult } from "@/lib/errors";
 import { formatCents, parseAmountToCents } from "@/lib/money";
+import { jouer } from "@/lib/sfx";
 import type { Business } from "@/lib/types";
 import { createSaleAction } from "../actions";
 
@@ -33,7 +34,12 @@ export function SaleForm({
 }) {
   const router = useRouter();
   const [state, action] = useActionState<ActionResult | undefined, FormData>(
-    createSaleAction,
+    async (precedent: ActionResult | undefined, donnees: FormData) => {
+      const resultat = await createSaleAction(precedent, donnees);
+      // Le tiroir-caisse ne sonne que si la vente est VRAIMENT enregistrée.
+      jouer(resultat.ok ? "cash" : "erreur");
+      return resultat;
+    },
     undefined,
   );
 
@@ -58,7 +64,10 @@ export function SaleForm({
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => setQuantite((q) => Math.max(1, q - 1))}
+            onClick={() => {
+              jouer("tick");
+              setQuantite((q) => Math.max(1, q - 1));
+            }}
             className="btn h-14 w-14 shrink-0 text-2xl"
             aria-label="Une carte de moins"
           >
@@ -79,14 +88,17 @@ export function SaleForm({
           />
           <button
             type="button"
-            onClick={() => setQuantite((q) => Math.min(1000, q + 1))}
+            onClick={() => {
+              jouer("tick");
+              setQuantite((q) => Math.min(1000, q + 1));
+            }}
             className="btn h-14 w-14 shrink-0 text-2xl"
             aria-label="Une carte de plus"
           >
             +
           </button>
         </div>
-        <p className={`mt-1.5 text-xs ${trop ? "text-[#ff9b9b]" : "text-faint"}`}>
+        <p className={`mt-1.5 text-xs ${trop ? "text-[#ff8a8a]" : "text-faint"}`}>
           {trop
             ? `Tu n'as que ${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main.`
             : `${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main`}
@@ -113,23 +125,24 @@ export function SaleForm({
         </div>
       </div>
 
-      {/* Récapitulatif : c'est exactement ce que la base va calculer. */}
-      <div className="panneau-creux grid grid-cols-3 gap-2 p-4">
-        <div>
-          <p className="surtitre-serre">Montant</p>
-          <p className="chiffre mt-1 text-xl">{formatCents(totalCents)}</p>
+      {/* Récapitulatif, sous forme de ticket : c'est exactement ce que la
+          base va calculer. L'aperçu est un confort, pas une source. */}
+      <div className="panneau-creux space-y-2 p-4">
+        <div className="ligne-ticket">
+          <span className="text-dim">Montant</span>
+          <span className="ligne-ticket-points" />
+          <span className="tabulaire">{formatCents(totalCents)}</span>
         </div>
-        <div>
-          <p className="surtitre-serre">Commission</p>
-          <p className="chiffre mt-1 text-xl text-faint">
-            {formatCents(commissionCents)}
-          </p>
+        <div className="ligne-ticket">
+          <span className="text-dim">Commission chef</span>
+          <span className="ligne-ticket-points" />
+          <span className="tabulaire">- {formatCents(commissionCents)}</span>
         </div>
-        <div>
-          <p className="surtitre-serre">Mon net</p>
-          <p className="chiffre mt-1 bg-gradient-to-br from-[#c4b5fd] to-[#ff8ec0] bg-clip-text text-xl text-transparent">
-            {formatCents(netCents)}
-          </p>
+        <div className="perfo my-1" />
+        <div className="ligne-ticket ligne-ticket-total">
+          <span>Mon net</span>
+          <span className="ligne-ticket-points" />
+          <span className="tabulaire">{formatCents(netCents)}</span>
         </div>
       </div>
 

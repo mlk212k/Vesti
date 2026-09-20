@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { parisToday } from "@/lib/format";
 import type {
   Business,
+  Role,
   CardMovement,
   MemberCards,
   MemberTotals,
@@ -321,4 +322,80 @@ export async function getPeriodTotals(options: {
 
 function sum<T>(items: T[], pick: (item: T) => number): number {
   return items.reduce((total, item) => total + (pick(item) ?? 0), 0);
+}
+
+// Membres d'une conversation, avec leur profil. La RLS ne rend ces lignes
+// que si l'on fait soi-même partie de la conversation — inutile de le
+// revérifier ici.
+export type MembreConversation = {
+  user_id: string;
+  last_read_at: string;
+  profil: Pick<Profile, "id" | "full_name" | "role" | "avatar_url"> | null;
+};
+
+export async function listConversationMembers(
+  conversationId: string,
+): Promise<MembreConversation[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("conversation_members")
+    .select("user_id, last_read_at, profil:profiles(id, full_name, role, avatar_url)")
+    .eq("conversation_id", conversationId)
+    .returns<MembreConversation[]>();
+  return data ?? [];
+}
+
+export type ReactionLigne = {
+  message_id: string;
+  user_id: string;
+  emoji: string;
+};
+
+export async function listReactions(
+  messageIds: string[],
+): Promise<ReactionLigne[]> {
+  if (messageIds.length === 0) return [];
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("message_reactions")
+    .select("message_id, user_id, emoji")
+    .in("message_id", messageIds)
+    .returns<ReactionLigne[]>();
+  return data ?? [];
+}
+
+// Qui est censé travailler aujourd'hui, et qui a ouvert sa journée.
+export type LignePlanning = {
+  member_id: string;
+  full_name: string;
+  role: Role;
+  avatar_url: string | null;
+  weekday: number;
+  matin: boolean | null;
+  apres_midi: boolean | null;
+  attendu: boolean;
+  journee_ouverte: boolean;
+};
+
+export async function getPlanningDuJour(): Promise<LignePlanning[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("v_planning_du_jour")
+    .select("*")
+    .returns<LignePlanning[]>();
+  return data ?? [];
+}
+
+export type CreneauLigne = {
+  member_id: string;
+  weekday: number;
+  slot: "am" | "pm";
+};
+
+export async function listCreneaux(memberId?: string): Promise<CreneauLigne[]> {
+  const supabase = await createClient();
+  let query = supabase.from("availabilities").select("member_id, weekday, slot");
+  if (memberId) query = query.eq("member_id", memberId);
+  const { data } = await query.returns<CreneauLigne[]>();
+  return data ?? [];
 }

@@ -192,7 +192,7 @@ export function EditMemberForm({
   }
 
   return (
-    <div className="mt-3 space-y-4 border-t border-line pt-4">
+    <div className="mt-3 space-y-4 border-t border-trait pt-4">
       <form action={action} className="space-y-3">
         <input type="hidden" name="member_id" value={profile.id} />
 
@@ -262,7 +262,7 @@ export function EditMemberForm({
             name="is_active"
             defaultChecked={profile.is_active}
             disabled={estMoi}
-            className="h-4 w-4 accent-[var(--violet)]"
+            className="h-4 w-4 accent-[var(--lime)]"
           />
           Compte actif
           {estMoi ? (
@@ -292,7 +292,7 @@ export function EditMemberForm({
         </div>
       </form>
 
-      <form action={resetAction} className="space-y-2 border-t border-line pt-4">
+      <form action={resetAction} className="space-y-2 border-t border-trait pt-4">
         <input type="hidden" name="member_id" value={profile.id} />
         <label className="libelle" htmlFor={`pwd-${profile.id}`}>
           Réinitialiser le mot de passe

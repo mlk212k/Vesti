@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IconBack } from "@/components/icons";
+import { Avatar } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
+import { urlAvatar } from "@/lib/avatar";
+import { listConversationMembers, listReactions } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
-import type { Conversation, Message, Profile } from "@/lib/types";
+import { ROLE_LABEL, type Conversation, type Message } from "@/lib/types";
 import { markConversationReadAction } from "../actions";
-import { ChatPanel } from "./chat-panel";
+import { ChatPanel, type MembreFil } from "./chat-panel";
 
 export const metadata: Metadata = { title: "Conversation" };
 
@@ -28,50 +31,42 @@ export default async function ConversationPage({
 
   if (!conversation) notFound();
 
-  const [messagesRes, membersRes, profilesRes] = await Promise.all([
+  const [messagesRes, membresBruts] = await Promise.all([
     supabase
       .from("messages")
       .select("*")
       .eq("conversation_id", id)
       .order("created_at", { ascending: true })
-      .limit(200)
+      .limit(300)
       .returns<Message[]>(),
-    supabase
-      .from("conversation_members")
-      .select("user_id")
-      .eq("conversation_id", id)
-      .returns<{ user_id: string }[]>(),
-    supabase
-      .from("profiles")
-      .select("id, full_name, role, phone, avatar_url, daily_goal_override, is_active, created_at")
-      .returns<Profile[]>(),
+    listConversationMembers(id),
   ]);
 
-  const noms: Record<string, string> = {};
-  for (const profile of profilesRes.data ?? []) {
-    noms[profile.id] = profile.full_name;
-  }
+  const messagesBruts = messagesRes.data ?? [];
+  const reactions = await listReactions(messagesBruts.map((m) => m.id));
 
-  const autres = (membersRes.data ?? [])
-    .map((m) => m.user_id)
-    .filter((memberId) => memberId !== user.id)
-    .map((memberId) => noms[memberId] ?? "Membre");
+  const membres: MembreFil[] = membresBruts.map((m) => ({
+    id: m.user_id,
+    nom: m.profil?.full_name ?? "Membre",
+    avatar: urlAvatar(m.profil?.avatar_url),
+    role: m.profil ? ROLE_LABEL[m.profil.role] : "",
+  }));
 
+  const annuaire = new Map(membres.map((m) => [m.id, m]));
+  const messages = messagesBruts.map((message) => ({
+    ...message,
+    auteur: message.author_id ? (annuaire.get(message.author_id) ?? null) : null,
+  }));
+
+  const autres = membres.filter((m) => m.id !== user.id);
   const titre =
     conversation.kind === "team"
-      ? `# ${conversation.title ?? "Équipe"}`
-      : autres.join(", ") || "Conversation";
+      ? (conversation.title ?? "Équipe")
+      : (autres.map((m) => m.nom).join(", ") || "Conversation");
 
-  // On marque lu à l'ouverture. La pastille de non-lus disparaît dès le
+  // On marque lu à l'ouverture : la pastille de non-lus disparaît dès le
   // retour sur la liste.
   await markConversationReadAction(id);
-
-  const messages = (messagesRes.data ?? []).map((message) => ({
-    ...message,
-    author_name: message.author_id
-      ? (noms[message.author_id] ?? "Membre")
-      : "Membre retiré",
-  }));
 
   return (
     <div className="montee">
@@ -79,21 +74,57 @@ export default async function ConversationPage({
         <Link href="/chat" className="text-faint hover:text-dim" aria-label="Retour">
           <IconBack className="h-5 w-5" />
         </Link>
-        <div className="min-w-0">
-          <h1 className="titre truncate text-xl">{titre}</h1>
-          <p className="text-xs text-faint">
-            {conversation.kind === "team"
-              ? "Toute l'équipe"
-              : "Conversation privée"}
+        <div className="min-w-0 flex-1">
+          <h1 className="titre truncate text-2xl">
+            {conversation.kind === "team" ? `# ${titre}` : titre}
+          </h1>
+          <p className="font-mono text-[10px] tracking-widest text-faint uppercase">
+            {membres.length} membre{membres.length > 1 ? "s" : ""}
           </p>
         </div>
       </div>
 
+      {/* Qui est dans la conversation. Replié par défaut : l'information est
+          utile une fois, pas à chaque message. */}
+      <details className="panneau mb-4 overflow-hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
+          <span className="surtitre">Les participants</span>
+          <div className="flex -space-x-2">
+            {membres.slice(0, 6).map((membre) => (
+              <Avatar
+                key={membre.id}
+                nom={membre.nom}
+                url={membre.avatar}
+                taille="sm"
+              />
+            ))}
+          </div>
+        </summary>
+        <ul className="border-t border-trait">
+          {membres.map((membre) => (
+            <li
+              key={membre.id}
+              className="flex items-center gap-3 border-b border-trait px-4 py-2.5 last:border-b-0"
+            >
+              <Avatar nom={membre.nom} url={membre.avatar} taille="sm" />
+              <span className="flex-1 truncate text-sm">
+                {membre.nom}
+                {membre.id === user.id ? (
+                  <span className="text-faint"> (toi)</span>
+                ) : null}
+              </span>
+              <span className="pastille">{membre.role}</span>
+            </li>
+          ))}
+        </ul>
+      </details>
+
       <ChatPanel
         conversationId={id}
-        initialMessages={messages}
-        currentUserId={user.id}
-        noms={noms}
+        messagesInitiaux={messages}
+        reactionsInitiales={reactions}
+        membres={membres}
+        moi={user.id}
       />
     </div>
   );

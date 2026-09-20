@@ -1,15 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Inter } from "next/font/google";
+import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
-// Archivo : grotesque très grasse, excellente en capitales serrées — c'est
-// elle qui porte les titres et les gros chiffres. Inter : la lisibilité
-// tranquille pour tout le reste. Deux familles, deux rôles, pas plus.
-const archivo = Archivo({
+// Trois voix, trois rôles :
+//
+//   Bebas Neue — capitales condensées, une seule graisse. C'est l'affiche
+//   collée sur un mur. Réservée aux titres : illisible en paragraphe.
+//
+//   JetBrains Mono — tous les chiffres et toutes les étiquettes. Chasse
+//   fixe, donc un montant qui change ne décale jamais la colonne voisine, et
+//   l'œil lit « compté » plutôt que « écrit ».
+//
+//   Inter — le texte courant. Personne ne lit une note de commerce en
+//   condensé.
+const bebas = Bebas_Neue({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["600", "700", "800", "900"],
+  weight: "400",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["500", "700", "800"],
   display: "swap",
 });
 
@@ -43,7 +58,7 @@ export const viewport: Viewport = {
   // `cover` est ce qui fait exister env(safe-area-inset-*) : sans lui, la
   // barre du bas passe sous l'indicateur d'accueil de l'iPhone.
   viewportFit: "cover",
-  themeColor: "#07070a",
+  themeColor: "#0a0a0b",
   colorScheme: "dark",
 };
 
@@ -53,14 +68,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${archivo.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-ink text-text antialiased">
-        {/* Les deux halos vivent ici, sous toutes les pages : la profondeur
-            est une propriété du document, pas de chaque écran. */}
-        <div className="halo halo-violet" aria-hidden="true" />
-        <div className="halo halo-magenta" aria-hidden="true" />
-        <div className="grille" aria-hidden="true" />
-        <div className="scanline" aria-hidden="true" />
+    <html
+      lang="fr"
+      className={`${bebas.variable} ${mono.variable} ${inter.variable}`}
+    >
+      <body className="min-h-screen bg-noir text-os antialiased">
+        {/* La lampe au-dessus de l'établi : une seule source, très sourde.
+            La trame de points et le grain viennent de globals.css. */}
+        <div className="lampe" aria-hidden="true" />
         <div className="relative z-10">{children}</div>
         <EnregistreServiceWorker />
       </body>

@@ -30,7 +30,7 @@ export function Sidebar({
   const items = navFor(role);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-[rgba(9,9,13,0.72)] backdrop-blur-xl lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-trait bg-[rgba(10,10,11,0.94)] backdrop-blur-md lg:flex">
       <div className="flex items-center gap-2.5 px-5 py-6">
         <Logo className="h-8 w-8" />
         <div>
@@ -56,9 +56,9 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="border-t border-line p-3">
+      <div className="border-t border-trait p-3">
         <div className="mb-2 flex items-center gap-2.5 px-2 py-1.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-3 text-[11px] font-bold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ardoise-3 text-[11px] font-bold">
             {initials(fullName)}
           </span>
           <span className="truncate text-sm text-dim">{fullName}</span>
@@ -66,7 +66,7 @@ export function Sidebar({
         <form action="/logout" method="post">
           <button
             type="submit"
-            className="lien-lateral w-full text-left text-faint hover:text-danger"
+            className="lien-lateral w-full text-left text-faint hover:text-rouge"
           >
             <IconLogout className="h-[18px] w-[18px]" />
             Se déconnecter
@@ -115,7 +115,7 @@ export function TopBar({
   unread: number;
 }) {
   return (
-    <header className="safe-top sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between border-b border-line bg-[rgba(7,7,10,0.72)] px-4 py-3 backdrop-blur-xl lg:hidden">
+    <header className="safe-top sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between border-b border-trait bg-[rgba(7,7,10,0.72)] px-4 py-3 backdrop-blur-xl lg:hidden">
       <Link href="/" className="flex items-center gap-2">
         <Logo className="h-7 w-7" />
         <span className="titre text-base">{appName}</span>
@@ -123,14 +123,14 @@ export function TopBar({
 
       <Link
         href="/notifications"
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-line bg-surface-2"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-trait bg-ardoise-2"
         aria-label={
           unread > 0 ? `${unread} notification(s) non lue(s)` : "Notifications"
         }
       >
         <IconBell className="h-[18px] w-[18px] text-dim" />
         {unread > 0 ? (
-          <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-magenta px-1 text-[10px] font-bold text-white">
+          <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-sm bg-lime px-1 text-[10px] font-bold text-[var(--lime-encre)]">
             {unread > 9 ? "9+" : unread}
           </span>
         ) : null}
@@ -144,14 +144,14 @@ export function DesktopBell({ unread }: { unread: number }) {
   return (
     <Link
       href="/notifications"
-      className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-line bg-surface-2 transition-colors hover:border-[var(--line-strong)] lg:flex"
+      className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-trait bg-ardoise-2 transition-colors hover:border-[var(--trait-fort)] lg:flex"
       aria-label={
         unread > 0 ? `${unread} notification(s) non lue(s)` : "Notifications"
       }
     >
       <IconBell className="h-5 w-5 text-dim" />
       {unread > 0 ? (
-        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-magenta px-1 text-[10px] font-bold text-white">
+        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-sm bg-lime px-1 text-[10px] font-bold text-[var(--lime-encre)]">
           {unread > 9 ? "9+" : unread}
         </span>
       ) : null}

@@ -41,7 +41,7 @@ export default async function MembersPage() {
                     className={
                       profile.is_active
                         ? "pastille pastille-succes"
-                        : "pastille pastille-danger"
+                        : "pastille pastille-rouge"
                     }
                   >
                     {profile.is_active ? "Actif" : "Désactivé"}

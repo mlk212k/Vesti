@@ -80,3 +80,55 @@ export async function markConversationReadAction(
     .eq("conversation_id", conversationId)
     .eq("user_id", user.id);
 }
+
+// Réactions. Recliquer sur le même emoji le retire : c'est le comportement
+// attendu partout ailleurs, et ça évite une deuxième interaction pour
+// annuler une tape ratée.
+export async function toggleReactionAction(
+  messageId: string,
+  emoji: string,
+): Promise<ActionResult> {
+  try {
+    const user = await requireUser();
+
+    const parsed = z
+      .object({
+        message_id: conversationIdSchema,
+        emoji: z.string().min(1).max(12),
+      })
+      .safeParse({ message_id: messageId, emoji });
+
+    if (!parsed.success) return { ok: false, error: "Réaction invalide." };
+
+    const supabase = await createClient();
+
+    const { data: existante } = await supabase
+      .from("message_reactions")
+      .select("emoji")
+      .eq("message_id", parsed.data.message_id)
+      .eq("user_id", user.id)
+      .eq("emoji", parsed.data.emoji)
+      .maybeSingle<{ emoji: string }>();
+
+    if (existante) {
+      const { error } = await supabase
+        .from("message_reactions")
+        .delete()
+        .eq("message_id", parsed.data.message_id)
+        .eq("user_id", user.id)
+        .eq("emoji", parsed.data.emoji);
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.from("message_reactions").insert({
+        message_id: parsed.data.message_id,
+        user_id: user.id,
+        emoji: parsed.data.emoji,
+      });
+      if (error) throw error;
+    }
+
+    return { ok: true };
+  } catch (error) {
+    return actionError(error);
+  }
+}

@@ -1,6 +1,7 @@
 import { getSettings, isStaff, requireUser } from "@/lib/auth";
 import {
   getMemberCards,
+  getPlanningDuJour,
   getStockSummary,
   getTeamToday,
   getTodayDay,
@@ -17,7 +18,11 @@ export default async function DashboardPage() {
   const settings = await getSettings();
 
   if (isStaff(user.role)) {
-    const [rows, stock] = await Promise.all([getTeamToday(), getStockSummary()]);
+    const [rows, stock, planning] = await Promise.all([
+      getTeamToday(),
+      getStockSummary(),
+      getPlanningDuJour(),
+    ]);
 
     return (
       <DashboardEquipe
@@ -26,6 +31,7 @@ export default async function DashboardPage() {
         stock={stock}
         estAdmin={user.role === "admin"}
         prenom={user.full_name.split(" ")[0] ?? user.full_name}
+        planning={planning}
       />
     );
   }

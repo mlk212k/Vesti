@@ -82,7 +82,7 @@ export default async function ChatPage() {
                   </p>
                 </div>
                 {conversation.unread > 0 ? (
-                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full bg-magenta px-1.5 text-[11px] font-bold text-white">
+                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-sm bg-lime px-1.5 text-[11px] font-bold text-white">
                     {conversation.unread}
                   </span>
                 ) : null}
@@ -102,7 +102,7 @@ export default async function ChatPage() {
                   <input type="hidden" name="member_id" value={profile.id} />
                   <button
                     type="submit"
-                    className="panneau-plat flex w-full items-center gap-3 p-3.5 text-left transition-colors hover:border-[var(--line-strong)]"
+                    className="panneau-plat flex w-full items-center gap-3 p-3.5 text-left transition-colors hover:border-[var(--trait-fort)]"
                   >
                     <Avatar nom={profile.full_name} taille="sm" />
                     <span className="flex-1 truncate text-sm">

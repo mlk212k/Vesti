@@ -21,12 +21,12 @@ export default async function LoginPage({
         <p className="surtitre">Équipe commerciale · cartes NFC</p>
       </div>
 
-      <div className="panneau diagonale entaille neon-bord relative overflow-hidden p-6">
+      <div className="panneau relative overflow-hidden p-6">
         <OndeNFC
           taille={200}
           className="-top-10 -right-12 !opacity-[0.09]"
         />
-        <h1 className="titre-vitesse mb-1 text-3xl">Connexion</h1>
+        <h1 className="titre mb-1 text-3xl">Connexion</h1>
         <p className="mb-6 text-sm text-dim">
           Les comptes sont créés par le chef. Pas de compte&nbsp;? Demande-lui.
         </p>

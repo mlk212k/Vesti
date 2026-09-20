@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { jouer } from "@/lib/sfx";
 import { Alerte } from "@/components/alerte";
 import { IconPlay, IconStop } from "@/components/icons";
 import { Submit } from "@/components/submit";
@@ -9,7 +10,13 @@ import { endDayAction, startDayAction } from "./actions";
 
 export function BoutonCommencer() {
   const [state, action] = useActionState<ActionResult | undefined, FormData>(
-    async () => startDayAction(),
+    async () => {
+      const resultat = await startDayAction();
+      // Le son part sur le RÉSULTAT, pas sur le clic : entendre le tampon
+      // alors que l'ouverture a échoué serait un mensonge sonore.
+      jouer(resultat.ok ? "tampon" : "erreur");
+      return resultat;
+    },
     undefined,
   );
 
@@ -31,7 +38,11 @@ export function BoutonCommencer() {
 export function BoutonTerminer() {
   const [ouvert, setOuvert] = useState(false);
   const [state, action] = useActionState<ActionResult | undefined, FormData>(
-    endDayAction,
+    async (precedent: ActionResult | undefined, donnees: FormData) => {
+      const resultat = await endDayAction(precedent, donnees);
+      jouer(resultat.ok ? "tampon" : "erreur");
+      return resultat;
+    },
     undefined,
   );
 

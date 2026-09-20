@@ -24,6 +24,8 @@ const MESSAGES: Record<string, string> = {
   MEMBER_NOT_FOUND: "Membre introuvable.",
   PAYOUT_NOT_FOUND: "Règlement introuvable ou déjà payé.",
   PROFILE_NOT_FOUND: "Profil introuvable.",
+  NUDGE_TOO_SOON:
+    "Déjà relancé dans l'heure. Laisse-lui le temps de réagir.",
 };
 
 export function translateError(error: unknown): string {

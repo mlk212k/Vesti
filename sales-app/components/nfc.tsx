@@ -18,27 +18,24 @@ export function OndeNFC({
       width={taille}
       height={taille}
       fill="none"
-      className={`onde-nfc ${className}`}
+      className={`pointer-events-none absolute text-nfc ${className}`}
       aria-hidden="true"
     >
       {/* Le point d'émission, puis trois arcs de plus en plus larges. */}
       <circle cx="14" cy="32" r="3.2" fill="currentColor" />
       <path
-        className="onde-nfc-arc"
         d="M23 21a18 18 0 0 1 0 22"
         stroke="currentColor"
         strokeWidth="3.4"
         strokeLinecap="round"
       />
       <path
-        className="onde-nfc-arc"
         d="M33 14a30 30 0 0 1 0 36"
         stroke="currentColor"
         strokeWidth="3.4"
         strokeLinecap="round"
       />
       <path
-        className="onde-nfc-arc"
         d="M43 7a42 42 0 0 1 0 50"
         stroke="currentColor"
         strokeWidth="3.4"
@@ -52,12 +49,7 @@ export function OndeNFC({
 // déborde du cadre se lit comme un signal qui traverse, pas comme un logo
 // collé dans un coin.
 export function FiligraneNFC() {
-  return (
-    <OndeNFC
-      taille={190}
-      className="pointer-events-none absolute -top-8 -right-10 opacity-[0.07]"
-    />
-  );
+  return <OndeNFC taille={170} className="-top-6 -right-8 opacity-[0.06]" />;
 }
 
 // Petite icône NFC, pour les compteurs de cartes.
