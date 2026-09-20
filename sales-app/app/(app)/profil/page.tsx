@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AvatarUploader } from "@/components/avatar-uploader";
+import { BoutonNotifications } from "@/components/bouton-notifications";
 import { BoutonSon } from "@/components/bouton-son";
 import { IconLogout } from "@/components/icons";
 import { PlanningEditor } from "@/components/planning-editor";
@@ -56,6 +57,8 @@ export default async function ProfilePage() {
       <PlanningEditor creneaux={creneaux} />
 
       <ProfilForm user={user} />
+
+      <BoutonNotifications />
 
       <BoutonSon />
 

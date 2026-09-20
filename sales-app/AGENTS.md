@@ -53,7 +53,7 @@ Ne pas « réparer » ça en ajoutant une policy.
 ## Migrations
 
 `supabase/migrations/` est la source de vérité du schéma. Les fichiers
-`0001` à `0008` sont déjà appliqués : ne pas les modifier, ajouter un
+`0001` à `0009` sont déjà appliqués : ne pas les modifier, ajouter un
 nouveau fichier numéroté.
 
 Après toute modification du schéma, mettre à jour `lib/types.ts` (les types

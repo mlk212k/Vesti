@@ -125,7 +125,7 @@ cp .env.example .env.local     # puis renseigner le projet Supabase
 ### Base de données
 
 Dans le SQL Editor de Supabase, appliquer les fichiers de
-`supabase/migrations/` **dans l'ordre**, de `0001` à `0008`. Ou, avec la CLI
+`supabase/migrations/` **dans l'ordre**, de `0001` à `0009`. Ou, avec la CLI
 Supabase :
 
 ```bash
@@ -304,6 +304,46 @@ L'app est installable sur l'écran d'accueil (manifeste + icônes générées pa
 latéral sont neutralisés (`overscroll-behavior`, `touch-action`), et le
 service worker ne met **jamais** une page en cache — seulement les assets :
 un écran de chiffres périmés serait pire qu'un écran vide.
+
+---
+
+---
+
+## Notifications push
+
+Le chemin complet, pour qu'il n'y ait pas de magie :
+
+1. le téléphone s'abonne depuis **Profil → Notifications** ; l'abonnement
+   est rangé dans `push_subscriptions`, visible seulement par son
+   propriétaire ;
+2. quelque chose crée une ligne dans `notifications` (message, relance,
+   validation de journée…) ;
+3. le trigger `notifications_push` appelle, **sans bloquer** (pg_net), la
+   fonction Edge `push` ;
+4. celle-ci signe et chiffre le message avec les clés VAPID et le remet au
+   service de push du navigateur.
+
+L'envoi est branché sur la **table**, pas sur l'application : les
+notifications sont créées par des fonctions SQL qui savent, elles, qui est
+destinataire. Une notification créée par une fonction écrite demain partira
+sans qu'on ait rien à rebrancher.
+
+Les secrets (clé privée VAPID, secret partagé entre le trigger et la
+fonction, URL) vivent dans le **Vault Supabase**, chiffrés, lisibles
+uniquement par le rôle de service. Seule la clé **publique** est côté
+navigateur, dans `NEXT_PUBLIC_VAPID_PUBLIC_KEY` — c'est son rôle.
+
+Tant que ces secrets ne sont pas renseignés, l'app fonctionne exactement
+pareil : la notification existe en base, elle ne part simplement pas en
+push. Une notification ne doit jamais échouer parce qu'un envoi extérieur
+est mal configuré.
+
+Le contenu poussé se limite au titre, au texte et au lien. **Jamais un
+montant** : une notification s'affiche sur un écran verrouillé, parfois
+devant quelqu'un d'autre.
+
+Sur iPhone, l'API n'existe que si l'app a été **ajoutée à l'écran
+d'accueil** ; depuis Safari, le bouton l'explique au lieu de ne rien faire.
 
 ---
 

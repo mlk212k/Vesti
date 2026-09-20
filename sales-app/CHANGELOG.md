@@ -5,10 +5,59 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v2.1 — 20 septembre 2026 — « VELOURS »
+
+### 🔔 Notifications push *(nouveau)*
+
+Les relances et les messages arrivent maintenant **sur ton téléphone, même
+quand l'app est fermée**.
+
+👉 Ça s'active dans **Profil → Notifications**, et c'est un réglage **par
+appareil** : l'activer sur ton téléphone ne l'active pas sur l'ordinateur.
+
+⚠️ **Sur iPhone**, il faut d'abord **ajouter l'app à l'écran d'accueil**.
+Depuis Safari, Apple ne l'autorise pas — l'app te le dira au lieu
+d'afficher un bouton qui ne ferait rien.
+
+La notification ne contient que le titre et le texte : jamais un chiffre
+d'affaires. Elle peut s'afficher sur un écran verrouillé, devant n'importe
+qui.
+
+### 🎨 Nouveau look, en plus doux
+
+Le look précédent faisait trop « site de paris ». Ce qui change :
+
+• **Fini le petit texte technique.** Plus de minuscules capitales espacées,
+  plus de 10 px, plus de police de terminal. Les étiquettes sont écrites
+  normalement, et tout est plus gros.
+• **Des couleurs chaudes.** Le noir tire sur le violet, deux voiles flous
+  dérivent lentement derrière la page — pêche en haut, lilas en bas.
+• **Tout est arrondi et mou.** Boutons pilules, verre dépoli, mouvements
+  ralentis. Plus rien ne claque.
+• Les statuts ne crient plus : « Pas commencé » au lieu de
+  « PAS COMMENCÉ ».
+• Les libellés sont revenus sous les icônes du bas.
+
+### 🐛 L'erreur au moment d'envoyer un message
+
+Envoyer un message dans le groupe pouvait afficher un écran technique en
+anglais parlant de déploiements. Le message partait bien — c'est
+l'affichage qui mentait.
+
+Ça arrivait quand l'app était restée ouverte pendant une mise à jour. Elle
+se recharge maintenant toute seule dans ce cas, et si quelque chose casse
+vraiment, tu vois un message en français avec un bouton, pas une page
+d'erreur de développeur.
+
+---
+
 ## v2.0 — 20 septembre 2026 — « MATIÈRE »
 
 **La plus grosse mise à jour depuis le lancement.** L'app ne ressemble plus
 à un tableau de bord : elle ressemble à un objet.
+
+*(Le look décrit ici a été radouci dès le lendemain — voir la v2.1. La
+carte, les sons et le reste n'ont pas bougé.)*
 
 ### 🃏 La carte
 

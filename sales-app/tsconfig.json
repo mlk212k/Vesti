@@ -41,6 +41,10 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    // Les fonctions Edge tournent sur Deno, pas sur Node : elles importent
+    // en `jsr:` / `npm:` et utilisent le global `Deno`. Les vérifier avec la
+    // configuration de l'app produirait dix erreurs qui n'en sont pas.
+    "supabase/functions"
   ]
 }

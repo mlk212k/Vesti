@@ -13,7 +13,7 @@
 //   en cache : leur nom change à chaque build, ils ne peuvent pas être
 //   périmés, et ce sont eux qui font démarrer l'app instantanément.
 
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE_STATIQUE = `arena-statique-${VERSION}`;
 const CACHE_COQUILLE = `arena-coquille-${VERSION}`;
 
@@ -101,4 +101,62 @@ self.addEventListener("fetch", (event) => {
       ),
     );
   }
+});
+
+// ===========================================================================
+// NOTIFICATIONS PUSH
+//
+// Le message arrive chiffré depuis le service de push du navigateur ; il est
+// déchiffré avant d'atterrir ici. Il contient le strict nécessaire — titre,
+// texte, lien — et aucun chiffre d'affaires : une notification s'affiche sur
+// un écran verrouillé, potentiellement devant quelqu'un d'autre.
+// ===========================================================================
+
+self.addEventListener("push", (event) => {
+  let charge = {};
+  try {
+    charge = event.data ? event.data.json() : {};
+  } catch {
+    charge = { title: "ARENA", body: event.data ? event.data.text() : "" };
+  }
+
+  const titre = charge.title || "ARENA";
+  const options = {
+    body: charge.body || "",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    // Deux notifications de la même conversation se remplacent au lieu de
+    // s'empiler : dix « nouveau message » dans le centre de notifications,
+    // c'est ce qui fait désinstaller une app.
+    tag: charge.tag || "arena",
+    renotify: true,
+    data: { lien: charge.link || "/" },
+  };
+
+  event.waitUntil(self.registration.showNotification(titre, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const lien = (event.notification.data && event.notification.data.lien) || "/";
+  const cible = new URL(lien, self.location.origin).href;
+
+  // On préfère RÉUTILISER un onglet déjà ouvert : ouvrir une deuxième
+  // instance de l'app installée est désorientant, et on y perd l'état en
+  // cours (un message à moitié écrit, par exemple).
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((fenetres) => {
+        for (const fenetre of fenetres) {
+          if (fenetre.url === cible && "focus" in fenetre) return fenetre.focus();
+        }
+        for (const fenetre of fenetres) {
+          if ("navigate" in fenetre && "focus" in fenetre) {
+            return fenetre.navigate(cible).then((f) => (f ? f.focus() : null));
+          }
+        }
+        return self.clients.openWindow(cible);
+      }),
+  );
 });
