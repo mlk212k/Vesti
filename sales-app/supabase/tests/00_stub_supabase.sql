@@ -146,39 +146,3 @@ begin
   end if;
 end;
 $$;
-
--- pg_net et le Vault ---------------------------------------------------------
---
--- La migration 0009 branche l'envoi des notifications push sur `net.http_post`,
--- et la 0010 lit les secrets dans `vault.decrypted_secrets`. Ni l'un ni
--- l'autre n'existe sur un Postgres nu.
---
--- On les simule plutôt que de rendre les migrations conditionnelles : les
--- tests doivent rejouer EXACTEMENT le schéma de production, sans branche
--- « si l'extension est là ». La version simulée de `http_post` ne part sur
--- aucun réseau — elle se contente d'exister, ce qui suffit à vérifier que le
--- trigger ne bloque pas l'insertion d'une notification.
-
-create schema if not exists net;
-
-create or replace function net.http_post(
-  url text,
-  body jsonb default '{}'::jsonb,
-  params jsonb default '{}'::jsonb,
-  headers jsonb default '{}'::jsonb,
-  timeout_milliseconds integer default 5000
-)
-returns bigint
-language sql
-as $$
-  select 1::bigint;
-$$;
-
-create schema if not exists vault;
-
-create table if not exists vault.decrypted_secrets (
-  id uuid primary key default gen_random_uuid(),
-  name text unique,
-  description text,
-  decrypted_secret text
-);
