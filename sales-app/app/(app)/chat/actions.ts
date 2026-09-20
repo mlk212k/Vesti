@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
+import { conversationIdSchema } from "@/lib/chat";
 import { actionError, type ActionResult } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/server";
 
@@ -23,7 +24,10 @@ export async function sendMessageAction(
 
     const parsed = z
       .object({
-        conversation_id: z.uuid(),
+        // `conversationIdSchema` et non `z.uuid()` : voir lib/chat.ts —
+        // l'identifiant de la conversation d'équipe n'est pas un UUID
+        // conforme, et la validation stricte le refusait.
+        conversation_id: conversationIdSchema,
         body: z.string().trim().min(1, "Message vide").max(4000),
       })
       .safeParse({

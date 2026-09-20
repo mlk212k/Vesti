@@ -20,6 +20,7 @@
 
 import { readFileSync } from "node:fs";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { CONVERSATION_EQUIPE } from "../lib/chat.ts";
 
 // -- Configuration ----------------------------------------------------------
 
@@ -233,7 +234,7 @@ async function jouerLaJournee(
 
 async function ecrireMessages(clients: Map<string, SupabaseClient>, ids: Map<string, string>) {
   console.log("→ Chat");
-  const EQUIPE = "00000000-0000-0000-0000-000000000001";
+  const EQUIPE = CONVERSATION_EQUIPE;
 
   const echanges: [string, string][] = [
     ["chef@demo.fr", "Objectif de la semaine : 10 cartes par jour et par personne. On y va."],

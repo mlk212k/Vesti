@@ -10,6 +10,10 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // Les scripts (seed) tournent via `node --experimental-strip-types`, qui
+    // exige l'extension .ts dans les imports. Sans cette option, TypeScript
+    // la refuse — et le seed ne pourrait pas partager de code avec l'app.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
