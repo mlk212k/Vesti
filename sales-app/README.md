@@ -159,6 +159,18 @@ npm run dev
 ## Vérifications
 
 ```bash
+./scripts/check-tokens.sh
+```
+
+Vérifie qu'aucun `var(--quelque-chose)` écrit à la main dans le code ne
+pointe vers une variable CSS disparue. Ça a de l'importance parce qu'une
+couleur écrite en dur dans du JSX (`stroke="var(--braise)"`,
+`accent-[var(--braise)]`) échappe à toute migration de classes Tailwind, et
+qu'une variable morte **ne casse rien au build** : la valeur devient
+invalide en silence, la case à cocher redevient bleue, les barres du
+graphique disparaissent. C'est arrivé deux fois.
+
+```bash
 npm run typecheck        # TypeScript
 npm run lint             # ESLint (règles React + Next 16)
 npm run build            # build de production

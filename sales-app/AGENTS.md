@@ -94,6 +94,12 @@ Trois règles de cette DA, qui ne sont pas des préférences :
 - **Tout mouvement a une cause.** Une animation répond à un geste ou à un
   changement d'état. Pas de glow décoratif, pas de dégradé gratuit.
 
+**Aucune couleur écrite à la main dans du JSX.** Un `stroke="var(--x)"` ou
+un `accent-[var(--x)]` échappe à toute migration de classes, et une variable
+morte ne casse rien au build : elle devient invalide en silence. Préférer
+les utilitaires (`text-peche`, `bg-peche`) et lancer
+`./scripts/check-tokens.sh` après tout changement de palette.
+
 Deux pièges déjà rencontrés dans ce fichier, à ne pas réintroduire :
 
 - **Masques multi-couches.** Une couche `repeat-x` ne couvre que la hauteur

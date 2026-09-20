@@ -257,7 +257,7 @@ export function ChatPanel({
                     }
                     className={`block w-full text-left ${
                       moiMeme
-                        ? "rounded-[8px] rounded-br-[2px] bg-peche px-3.5 py-2.5 text-sm text-[var(--braise-encre)]"
+                        ? "rounded-[8px] rounded-br-[2px] bg-peche px-3.5 py-2.5 text-sm text-[var(--peche-encre)]"
                         : "rounded-[8px] rounded-bl-[2px] border border-trait bg-velours px-3.5 py-2.5 text-sm"
                     }`}
                   >
@@ -312,7 +312,7 @@ export function ChatPanel({
                   ) : null}
 
                   <p
-                    className={`mt-1  text-sm text-faint ${moiMeme ? "text-right" : ""}`}
+                    className={`mt-1 text-sm text-faint ${moiMeme ? "text-right" : ""}`}
                   >
                     {formatTime(message.created_at)}
                   </p>
