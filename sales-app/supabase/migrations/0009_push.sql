@@ -27,7 +27,19 @@
 -- Supabase, chiffrés, lisibles seulement par le rôle de service.
 -- ===========================================================================
 
-create extension if not exists pg_net with schema extensions;
+-- pg_net n'existe que sur Supabase. Les tests rejouent ce fichier sur un
+-- Postgres nu, où `create extension` échouerait et bloquerait toute la
+-- suite ; `supabase/tests/00_stub_supabase.sql` y fournit un `net.http_post`
+-- qui ne part sur aucun réseau. La garde porte donc sur la DISPONIBILITÉ de
+-- l'extension, pas sur un comportement métier : le schéma obtenu est le même
+-- des deux côtés.
+do $$
+begin
+  if exists (select 1 from pg_available_extensions where name = 'pg_net') then
+    create extension if not exists pg_net with schema extensions;
+  end if;
+end;
+$$;
 
 -- ---------------------------------------------------------------------------
 -- Les abonnements

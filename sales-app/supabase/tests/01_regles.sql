@@ -859,6 +859,71 @@ begin
 end;
 $$;
 
+-- Abonnements push -----------------------------------------------------------
+--
+-- Un abonnement push est un identifiant d'appareil. Il ne regarde que son
+-- propriétaire : l'admin lui-même n'a rien à y voir, et surtout personne ne
+-- doit pouvoir en créer un au nom d'un autre — ce serait détourner ses
+-- notifications vers son propre téléphone.
+
+do $$
+declare
+  a record;
+begin
+  select * into a from acteurs;
+
+  perform tests.connecte(a.alex);
+  insert into public.push_subscriptions (user_id, endpoint, p256dh, auth)
+  values (a.alex, 'https://push.example/alex', 'cle-p', 'cle-a');
+  perform tests.egal(
+    (select count(*)::int from public.push_subscriptions), 1,
+    'on enregistre son propre appareil'
+  );
+  perform tests.refuse(
+    format('insert into public.push_subscriptions (user_id, endpoint, p256dh, auth) values (%L, ''https://push.example/vol'', ''p'', ''a'')', a.thomas),
+    'row-level security',
+    'on n''abonne pas l''appareil de quelqu''un d''autre'
+  );
+  perform tests.deconnecte();
+
+  -- Thomas ne voit rien de l'appareil d'Alex : la policy ne renvoie aucune
+  -- ligne, elle ne lève pas d'erreur.
+  perform tests.connecte(a.thomas);
+  perform tests.egal(
+    (select count(*)::int from public.push_subscriptions), 0,
+    'on ne voit pas les appareils des autres'
+  );
+  perform tests.deconnecte();
+
+  -- Le chef non plus : c'est délibéré, la liste des téléphones de l'équipe
+  -- ne lui sert à rien.
+  perform tests.connecte(a.chef);
+  perform tests.egal(
+    (select count(*)::int from public.push_subscriptions), 0,
+    'même le chef ne voit pas les appareils de l''équipe'
+  );
+  perform tests.deconnecte();
+end;
+$$;
+
+-- Le trigger de push ne doit JAMAIS faire échouer une notification, même
+-- quand rien n'est configuré : une relance qui ne part pas en push est un
+-- désagrément, une relance qui n'existe pas est un bug.
+do $$
+declare
+  a record;
+begin
+  select * into a from acteurs;
+  insert into public.notifications (user_id, kind, title, body)
+  values (a.alex, 'test', 'Ping', 'Sans configuration de push');
+  perform tests.egal(
+    (select count(*)::int from public.notifications
+     where user_id = a.alex and kind = 'test'), 1,
+    'une notification s''enregistre même sans push configuré'
+  );
+end;
+$$;
+
 -- Résumé ---------------------------------------------------------------------
 
 do $$

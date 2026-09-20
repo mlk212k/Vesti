@@ -26,22 +26,21 @@ const db = createClient(URL_SUPABASE, CLE_SERVICE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-type Secrets = { name: string; decrypted_secret: string };
-
 let secrets: Record<string, string> | null = null;
 
+// Les secrets ne se lisent PAS directement dans `vault.decrypted_secrets` :
+// PostgREST n'expose que les schémas déclarés dans la configuration de
+// l'API, et `vault` n'en fait pas partie. Exposer ce schéma pour ce seul
+// besoin ouvrirait tous les secrets du projet à l'API.
+//
+// On passe donc par `lire_secrets_push()` (migration 0010), qui ne rend que
+// les quatre clés du push et n'est exécutable que par le rôle de service.
 async function lireSecrets(): Promise<Record<string, string>> {
   if (secrets) return secrets;
-  const { data, error } = await db
-    .schema("vault")
-    .from("decrypted_secrets")
-    .select("name, decrypted_secret")
-    .returns<Secrets[]>();
+  const { data, error } = await db.rpc("lire_secrets_push");
   if (error) throw error;
-  const table: Record<string, string> = {};
-  for (const ligne of data ?? []) table[ligne.name] = ligne.decrypted_secret;
-  secrets = table;
-  return table;
+  secrets = (data ?? {}) as Record<string, string>;
+  return secrets;
 }
 
 Deno.serve(async (req: Request) => {
@@ -52,7 +51,8 @@ Deno.serve(async (req: Request) => {
   let config: Record<string, string>;
   try {
     config = await lireSecrets();
-  } catch {
+  } catch (erreur) {
+    console.error("lecture des secrets", erreur);
     return new Response("Secrets indisponibles", { status: 500 });
   }
 
