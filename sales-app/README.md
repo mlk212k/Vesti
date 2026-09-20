@@ -4,6 +4,9 @@ Pilotage d'une équipe de terrain qui vend des cartes NFC aux commerces
 (avis Google) : stock de cartes, journées de travail, ventes, commissions,
 chat et audit.
 
+Les nouveautés de chaque mise à jour, écrites pour l'équipe et non pour les
+développeurs, sont dans [`CHANGELOG.md`](./CHANGELOG.md).
+
 Application **autonome**, dans son propre dossier, avec son `package.json`,
 son projet Supabase et son déploiement. Elle n'importe rien du projet Vesti
 parent.
