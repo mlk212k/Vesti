@@ -5,6 +5,46 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v2.2 — 20 septembre 2026 — « ARCADE »
+
+### 🎮 L'app bouge
+
+Tout est en mouvement, en permanence et partout :
+
+• **Un décor animé derrière chaque écran** : une grille qui dérive
+  lentement, des ondes NFC qui partent du centre comme quand on approche
+  une carte d'un lecteur, deux voiles de couleur qui flottent, et des
+  lignes de balayage façon vieil écran.
+• **Chaque page « démarre »** au lieu de s'afficher : le contenu arrive de
+  l'arrière, légèrement flou, et se pose.
+• **Les blocs se posent en cascade**, l'un après l'autre.
+• **Les chiffres montent** jusqu'à leur valeur au lieu d'apparaître d'un
+  coup.
+
+### 🏆 Écran du chef et de Malik : un tableau de score
+
+Ce n'est plus un tableau de bord, c'est un score :
+
+• **Le CA du jour en énorme**, qui monte en compteur.
+• **Une barre d'objectif d'équipe** sous le score — calculée sur les
+  personnes **attendues** aujourd'hui, pas sur toute l'équipe : un jour où
+  la moitié est en repos, une barre impossible à remplir ne sert à rien.
+• **Une carte par joueur** : rang (1 en couleur), photo, barre de
+  progression vers son objectif, gain du jour, et une **diode** qui bat
+  pour ceux qui sont dehors en ce moment.
+• Objectif atteint → la barre passe du pêche au violet.
+• Malik n'a plus de barre de vente quand il n'a pas ouvert de journée : ce
+  n'est pas son travail, l'app arrêtait de le lui reprocher.
+
+### 🐛 Couleurs disparues
+
+Plusieurs éléments avaient perdu leur couleur au changement de look
+précédent, sans que rien ne plante : **les barres du graphique d'analytics
+ne s'affichaient plus du tout**, les cases à cocher du planning repassaient
+au bleu du navigateur, l'onde du logo s'éteignait. Tout est revenu.
+
+---
+
 ## v2.1 — 20 septembre 2026 — « VELOURS »
 
 ### 🔔 Notifications push *(nouveau)*

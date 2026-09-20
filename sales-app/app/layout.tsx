@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import { Fond } from "@/components/fond";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
@@ -67,10 +68,10 @@ export default function RootLayout({
       className={`${bricolage.variable} ${jakarta.variable}`}
     >
       <body className="min-h-screen bg-nuit text-craie antialiased">
-        {/* Les deux lavis flous qui dérivent derrière la page, pêche en
-            haut, lilas en bas. C'est ce qui empêche le fond d'être un aplat
-            de noir mort. */}
-        <div className="lampe" aria-hidden="true" />
+        {/* Le décor animé : lavis de couleur, grille en perspective,
+            ondes NFC, lignes de balayage. Entièrement en CSS — pas un octet
+            de JavaScript, et tout s'éteint avec `prefers-reduced-motion`. */}
+        <Fond />
         <div className="relative z-10">{children}</div>
         <EnregistreServiceWorker />
       </body>

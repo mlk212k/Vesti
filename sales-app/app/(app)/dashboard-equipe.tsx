@@ -1,27 +1,26 @@
 import Link from "next/link";
 import { IconChevron } from "@/components/icons";
-import { Avatar, Jauge, Mot, Section, Stat, StatutJournee, Vide } from "@/components/ui";
+import { Compteur } from "@/components/compteur";
+import { Avatar, Mot, Section, Vide } from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate } from "@/lib/money";
 import type { LignePlanning, TeamRow } from "@/lib/queries";
-import {
-  displayDayStatus,
-  ROLE_LABEL,
-  type AppSettings,
-  type StockSummary,
-} from "@/lib/types";
+import { ROLE_LABEL, type AppSettings, type StockSummary } from "@/lib/types";
 
 /**
- * L'écran de l'encadrement.
+ * L'écran de l'encadrement — Mohamed (admin) et Malik (manager).
  *
- * Admin et manager partagent la même vue ; seule la ligne « commission » et
- * les raccourcis d'administration sont réservés à l'admin — c'est son
- * argent et ses réglages.
+ * C'est un TABLEAU DE SCORE, pas un tableau de bord. La différence n'est pas
+ * cosmétique : on ne vient pas y lire des indicateurs, on vient voir où en
+ * est la journée et qui a besoin qu'on l'appelle. Donc un seul grand
+ * chiffre, une barre d'objectif collective, et en dessous une carte par
+ * personne avec sa progression, son état et son rang.
  *
- * Ici l'objet central n'est pas une carte mais un CHIFFRE : le CA du jour,
- * en très grand, seul au milieu du vide. Tout le reste descend derrière lui
- * par ordre d'urgence : qui manque à l'appel, qui vend, ce qu'il reste au
- * dépôt.
+ * Tout est calculé en base ; cet écran ne fait que mettre en scène. Les
+ * compteurs animés réécrivent un nombre DÉJÀ présent dans le HTML : sans
+ * JavaScript, la bonne valeur est là quand même.
+ *
+ * Seule la ligne « commission » est réservée à l'admin — c'est son argent.
  */
 export function DashboardEquipe({
   rows,
@@ -40,6 +39,7 @@ export function DashboardEquipe({
 }) {
   const attendus = planning.filter((p) => p.attendu);
   const manquants = attendus.filter((p) => !p.journee_ouverte);
+
   const caJour = rows.reduce((total, row) => total + (row.day?.revenue_cents ?? 0), 0);
   const commissionJour = rows.reduce(
     (total, row) => total + (row.day?.commission_cents ?? 0),
@@ -50,144 +50,194 @@ export function DashboardEquipe({
   const objectifsAtteints = rows.filter((row) => row.day?.goal_reached).length;
   const journeesDuJour = rows.filter((row) => row.day).length;
 
-  // Les commerciaux en haut, triés par CA du jour : la liste raconte la
+  // L'objectif collectif du jour : la somme des objectifs de ceux qui sont
+  // ATTENDUS. Compter toute l'équipe donnerait une barre incapable de se
+  // remplir un jour où la moitié est en repos — donc inutile, et
+  // démoralisante.
+  const objectifEquipe = attendus.reduce((total, ligne) => {
+    const membre = rows.find((row) => row.profile.id === ligne.member_id);
+    return (
+      total +
+      (membre?.day?.goal_cards ??
+        membre?.profile.daily_goal_override ??
+        settings.default_daily_goal)
+    );
+  }, 0);
+
+  const progression =
+    objectifEquipe > 0 ? Math.min(100, (cartesVendues / objectifEquipe) * 100) : 0;
+
+  // Les meilleurs en haut, triés par CA du jour : la liste raconte la
   // journée dès la première ligne.
   const classement = [...rows].sort(
     (a, b) => (b.day?.revenue_cents ?? 0) - (a.day?.revenue_cents ?? 0),
   );
 
   return (
-    <div className="space-y-14 pt-2">
-      {/* --- LE CHIFFRE ----------------------------------------------------
-          Un seul nombre, énorme, avec le mot-matière derrière. C'est la
-          seule chose qu'on doit voir en ouvrant l'app. */}
-      <section className="montee relative">
-        <div className="pointer-events-none absolute inset-x-0 top-16 flex justify-center overflow-hidden">
+    <div className="space-y-12 pt-2">
+      {/* --- LE SCORE ------------------------------------------------------ */}
+      <section className="relative">
+        <div className="pointer-events-none absolute inset-x-0 -top-2 flex justify-center overflow-hidden">
           <Mot className="text-[clamp(5rem,28vw,12rem)]">{settings.team_name}</Mot>
         </div>
 
         <p className="surtitre relative">
-          Aujourd&apos;hui · {journeesDuJour} journée{journeesDuJour > 1 ? "s" : ""}{" "}
-          sur {rows.length} membre{rows.length > 1 ? "s" : ""}
+          Salut {prenom} · {journeesDuJour} journée{journeesDuJour > 1 ? "s" : ""} sur{" "}
+          {rows.length} membre{rows.length > 1 ? "s" : ""}
         </p>
 
-        <p className="chiffre relative mt-6 text-[clamp(3.4rem,20vw,7rem)] text-craie">
-          {formatCentsShort(caJour)}
+        <p className="chiffre relative mt-5 text-[clamp(3.4rem,20vw,7rem)] text-craie">
+          <Compteur valeur={caJour} format="montant" />
         </p>
-        <p className="surtitre relative mt-3">
-          Chiffre d&apos;affaires · {cartesVendues} carte
-          {cartesVendues > 1 ? "s" : ""} vendue{cartesVendues > 1 ? "s" : ""}
-        </p>
+        <p className="surtitre relative mt-2">Chiffre d&apos;affaires du jour</p>
 
-        <p className="relative mt-8 text-sm text-faint">
-          Salut {prenom}.
-        </p>
+        {/* La barre d'objectif collective : ce qui transforme une liste de
+            chiffres en journée qu'on gagne ou qu'on rate. */}
+        <div className="relative mt-7 space-y-2">
+          <div className={`xp ${progression >= 100 ? "xp-pleine" : ""}`}>
+            <div className="xp-remplie" style={{ width: `${Math.max(progression, 2)}%` }} />
+          </div>
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="surtitre">
+              <span className="text-craie">{cartesVendues}</span> cartes sur{" "}
+              {objectifEquipe} attendues
+            </span>
+            <span className="surtitre">{Math.round(progression)} %</span>
+          </div>
+        </div>
       </section>
 
-      <section className="montee retard-1 grid grid-cols-3 gap-5">
-        {estAdmin ? (
-          <Stat
-            label="Ma commission"
-            valeur={formatCentsShort(commissionJour)}
-            detail={`${formatRate(settings.commission_rate_bp)} du CA`}
-          />
-        ) : (
-          <Stat label="Cartes vendues" valeur={cartesVendues} detail="aujourd'hui" />
-        )}
-        <Stat
+      {/* --- LES TROIS COMPTEURS ------------------------------------------- */}
+      <section className="cascade grid grid-cols-3 gap-5">
+        <Indicateur
+          label={estAdmin ? "Ma commission" : "Cartes vendues"}
+          valeur={estAdmin ? commissionJour : cartesVendues}
+          format={estAdmin ? "montant" : "nombre"}
+          detail={
+            estAdmin ? `${formatRate(settings.commission_rate_bp)} du CA` : "aujourd'hui"
+          }
+        />
+        <Indicateur
           label="En tournée"
           valeur={actifs}
-          detail={actifs > 0 ? "journée en cours" : "personne dehors"}
+          detail={actifs > 0 ? "sur le terrain" : "personne dehors"}
         />
-        <Stat
+        <Indicateur
           label="Objectifs atteints"
-          valeur={`${objectifsAtteints}/${journeesDuJour}`}
+          valeur={objectifsAtteints}
+          suffixe={`/${journeesDuJour}`}
           detail={`objectif ${settings.default_daily_goal}`}
         />
       </section>
 
-      {/* --- QUI MANQUE ----------------------------------------------------
-          Sans cette ligne, l'encadrement ne sait pas si une journée non
-          ouverte est un retard ou un jour de repos. */}
+      {/* --- QUI MANQUE ---------------------------------------------------- */}
       <Link
         href="/planning"
-        className="montee retard-1 group flex items-center gap-4 border-y border-trait py-5"
+        className="group flex items-center gap-4 border-y border-trait py-5"
       >
         <div className="min-w-0 flex-1">
           <p className="surtitre">Planning du jour</p>
-          <p className="mt-2 text-sm">
+          <p className="mt-2 text-[15px]">
             <span className="chiffre text-craie">{attendus.length}</span> attendu
             {attendus.length > 1 ? "s" : ""}
             {manquants.length > 0 ? (
               <>
                 {" · "}
-                <span className="chiffre text-peche">{manquants.length}</span> pas
-                encore en route
+                <span className="chiffre text-peche">{manquants.length}</span> pas encore
+                en route
               </>
             ) : (
               " · tout le monde est parti"
             )}
           </p>
         </div>
-        <span className={manquants.length > 0 ? "pastille pastille-vive" : "pastille"}>
+        <span className={manquants.length > 0 ? "pastille pastille-os" : "pastille"}>
           {manquants.length > 0 ? "À relancer" : "Complet"}
         </span>
-        <IconChevron className="h-4 w-4 shrink-0 text-fumee transition-transform duration-500 group-hover:translate-x-1" />
+        <IconChevron className="h-4 w-4 shrink-0 text-faint transition-transform duration-500 group-hover:translate-x-1" />
       </Link>
 
-      {/* --- L'ÉQUIPE ------------------------------------------------------ */}
-      <div className="montee retard-2">
-        <Section
-          titre="L'équipe aujourd'hui"
-          action={
-            <Link href="/equipe" className="surtitre hover:text-craie">
-              Vue détaillée
-            </Link>
-          }
-        >
-          {classement.length === 0 ? (
-            <Vide titre="Personne">
-              Crée les comptes de ton équipe depuis la page Membres.
-            </Vide>
-          ) : (
-            <ul>
-              {classement.map((row, index) => (
-                <li key={row.profile.id}>
-                  <LigneEquipe
-                    row={row}
-                    estAdmin={estAdmin}
-                    objectifParDefaut={settings.default_daily_goal}
-                    rang={(row.day?.revenue_cents ?? 0) > 0 ? index + 1 : null}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </Section>
-      </div>
+      {/* --- LES JOUEURS --------------------------------------------------- */}
+      <Section
+        titre="L'équipe aujourd'hui"
+        action={
+          <Link href="/equipe" className="surtitre hover:text-craie">
+            Vue détaillée
+          </Link>
+        }
+      >
+        {classement.length === 0 ? (
+          <Vide titre="Personne">
+            Crée les comptes de ton équipe depuis la page Membres.
+          </Vide>
+        ) : (
+          <ul className="cascade space-y-3">
+            {classement.map((row, index) => (
+              <li key={row.profile.id}>
+                <CarteJoueur
+                  row={row}
+                  estAdmin={estAdmin}
+                  objectifParDefaut={settings.default_daily_goal}
+                  rang={(row.day?.revenue_cents ?? 0) > 0 ? index + 1 : null}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
 
       {/* --- LE STOCK ------------------------------------------------------ */}
-      <div className="montee retard-3 pb-4">
-        <Section
-          titre="Stock de cartes"
-          action={
-            <Link href="/stock" className="surtitre hover:text-craie">
-              Gérer
-            </Link>
-          }
-        >
-          <div className="grid grid-cols-3 gap-5">
-            <Stat label="Au dépôt" valeur={stock.in_warehouse} />
-            <Stat label="En circulation" valeur={stock.held_by_members} />
-            <Stat label="Vendues au total" valeur={stock.sold} />
-          </div>
-        </Section>
-      </div>
+      <Section
+        titre="Stock de cartes"
+        action={
+          <Link href="/stock" className="surtitre hover:text-craie">
+            Gérer
+          </Link>
+        }
+      >
+        <div className="cascade grid grid-cols-3 gap-5 pb-4">
+          <Indicateur label="Au dépôt" valeur={stock.in_warehouse} />
+          <Indicateur label="En circulation" valeur={stock.held_by_members} />
+          <Indicateur label="Vendues au total" valeur={stock.sold} />
+        </div>
+      </Section>
     </div>
   );
 }
 
-function LigneEquipe({
+function Indicateur({
+  label,
+  valeur,
+  format = "nombre",
+  suffixe,
+  detail,
+}: {
+  label: string;
+  valeur: number;
+  format?: "nombre" | "montant";
+  suffixe?: string;
+  detail?: string;
+}) {
+  return (
+    <div className="min-w-0">
+      <p className="surtitre-serre">{label}</p>
+      <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+        <Compteur valeur={valeur} format={format} />
+        {suffixe ? <span className="text-faint">{suffixe}</span> : null}
+      </p>
+      {detail ? <p className="mt-1 text-sm text-faint">{detail}</p> : null}
+    </div>
+  );
+}
+
+/**
+ * Une carte joueur.
+ *
+ * Elle répond à trois questions dans l'ordre où on se les pose : où en est
+ * cette personne (la barre), combien a-t-elle rapporté (le chiffre), et
+ * est-elle dehors en ce moment (la diode qui bat).
+ */
+function CarteJoueur({
   row,
   estAdmin,
   objectifParDefaut,
@@ -201,55 +251,74 @@ function LigneEquipe({
   const { profile, day, cards } = row;
   // Quelqu'un qui n'a pas ouvert sa journée n'a pas d'objectif figé : on
   // affiche celui qui s'appliquera, plutôt qu'un tiret.
-  const objectif =
-    day?.goal_cards ?? profile.daily_goal_override ?? objectifParDefaut;
+  const objectif = day?.goal_cards ?? profile.daily_goal_override ?? objectifParDefaut;
   const vendues = day?.cards_sold ?? 0;
+  const progression = objectif > 0 ? Math.min(100, (vendues / objectif) * 100) : 0;
+  const atteint = Boolean(day?.goal_reached);
+  const enTournee = day?.status === "in_progress";
+  // L'encadrement n'a pas d'objectif de vente. Lui afficher une barre à
+  // « 0/10 » lui reprocherait de ne pas faire un travail qui n'est pas le
+  // sien — sauf s'il a réellement ouvert une journée, auquel cas il vend
+  // comme les autres et la barre a du sens.
+  const suitUnObjectif = profile.role === "member" || Boolean(day);
 
   return (
-    <Link
-      href={`/equipe/${profile.id}`}
-      className="group block border-b border-trait py-5 transition-transform duration-300 active:scale-[0.99]"
-    >
-      <div className="flex items-center gap-4">
-        {/* Le rang n'est pas une médaille collée sur l'avatar : c'est un
-            numéro d'ordre, en petit, à sa place — à gauche de la ligne. */}
-        <span className="w-4 shrink-0 text-sm text-fumee">
-          {rang ?? "·"}
+    <Link href={`/equipe/${profile.id}`} className="carte-joueur block p-4">
+      <div className="flex items-center gap-3.5">
+        <span className={`rang ${rang ? `rang-${Math.min(rang, 3)}` : ""}`}>
+          {rang ?? "–"}
         </span>
+
         <Avatar nom={profile.full_name} />
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[15px]">{profile.full_name}</p>
-          <p className="surtitre mt-1">
+          <p className="flex items-center gap-2 truncate text-[15px]">
+            {profile.full_name}
+            <span
+              className={`diode ${enTournee ? "diode-active" : atteint ? "diode-fini" : ""}`}
+              aria-hidden="true"
+            />
+          </p>
+          <p className="surtitre mt-0.5 truncate">
             {ROLE_LABEL[profile.role]}
             {cards ? ` · ${cards.held} en main` : ""}
           </p>
         </div>
 
         <div className="text-right">
-          <p className="chiffre text-lg">
+          <p className="chiffre text-lg text-craie">
             {day ? formatCentsShort(day.revenue_cents) : "—"}
           </p>
           {estAdmin && day ? (
-            <p className="surtitre mt-1">dont {formatCents(day.commission_cents)}</p>
+            <p className="surtitre mt-0.5">dont {formatCents(day.commission_cents)}</p>
           ) : null}
         </div>
 
-        <IconChevron className="h-4 w-4 shrink-0 text-fumee transition-transform duration-500 group-hover:translate-x-1" />
+        <IconChevron className="h-4 w-4 shrink-0 text-faint" />
       </div>
 
-      <div className="mt-4 flex items-center gap-4 pl-8">
-        <span className="w-12 shrink-0 text-sm text-faint">
-          {vendues}/{objectif}
-        </span>
-        <div className="flex-1">
-          {objectif > 0 ? <Jauge valeur={vendues} objectif={objectif} /> : null}
+      {suitUnObjectif ? (
+        <div className="mt-4 space-y-2">
+          <div className={`xp ${atteint ? "xp-pleine" : ""}`}>
+            <div
+              className="xp-remplie"
+              style={{ width: `${Math.max(progression, 2)}%` }}
+            />
+          </div>
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="surtitre">
+              <span className="text-craie">{vendues}</span> / {objectif} cartes
+            </span>
+            <span className="surtitre truncate">
+              {day
+                ? enTournee
+                  ? `en tournée · ${formatDuration(day.duration_seconds)}`
+                  : `journée close · ${formatDuration(day.duration_seconds)}`
+                : "pas commencé"}
+            </span>
+          </div>
         </div>
-        <span className="w-12 shrink-0 text-right text-sm text-faint">
-          {day ? formatDuration(day.duration_seconds) : ""}
-        </span>
-        <StatutJournee statut={displayDayStatus(day)} />
-      </div>
+      ) : null}
     </Link>
   );
 }

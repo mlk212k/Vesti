@@ -1,5 +1,6 @@
 import { requireUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/queries";
+import { Ecran } from "@/components/ecran";
 import { BottomNav, DesktopBell, Sidebar, TopBar } from "@/components/shell";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "ARENA";
@@ -30,7 +31,7 @@ export default async function AppLayout({
             <DesktopBell unread={unread} />
           </div>
 
-          {children}
+          <Ecran>{children}</Ecran>
         </div>
       </div>
 

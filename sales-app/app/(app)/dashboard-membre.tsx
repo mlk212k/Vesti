@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Compteur } from "@/components/compteur";
 import { Mot, Section, Stat, StatutJournee, Vide } from "@/components/ui";
 import { formatDateLong, formatDuration, formatTime } from "@/lib/format";
 import { formatCents, formatCentsShort, formatRate, percentOf } from "@/lib/money";
@@ -123,10 +124,10 @@ export function DashboardMembre({
           personne qui regarde. Le CA et la commission sont le détail du
           calcul : ils passent en toute petite ligne technique, comme tout
           ce qui explique sans être le sujet. */}
-      <section className="montee retard-1 text-center">
+      <section className="montee text-center">
         <p className="surtitre">Mon net</p>
         <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-peche">
-          {formatCents(day?.net_cents ?? 0)}
+          <Compteur valeur={day?.net_cents ?? 0} format="montant-exact" />
         </p>
         <p className="mt-3 text-sm text-faint">
           CA {formatCents(day?.revenue_cents ?? 0)} · commission{" "}
@@ -153,7 +154,7 @@ export function DashboardMembre({
       {/* --- LES CARTES EN MAIN --------------------------------------------
           Aucun accent ici : la jauge d'objectif, c'est la tranche de la
           dalle. En afficher une seconde affaiblirait les deux. */}
-      <section className="montee retard-2 grid grid-cols-3 gap-5">
+      <section className="cascade grid grid-cols-3 gap-5">
         <Stat label="En main" valeur={cards.held} />
         <Stat label="Reçues" valeur={cards.allocated} />
         <Stat label="Vendues" valeur={cards.sold} />

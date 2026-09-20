@@ -305,6 +305,27 @@ blip à la réception, deux notes descendantes en cas de refus. Rien ne
 dépasse 120 ms, et chacun part sur le **résultat** de l'action, jamais sur
 le clic. Le réglage se coupe depuis le profil.
 
+**Le décor.** Quatre couches derrière chaque écran, toutes en CSS et
+toutes `pointer-events: none` — pas un octet de JavaScript : deux voiles de
+couleur qui flottent, une grille qui dérive, trois ondes NFC concentriques
+(le geste du produit), et des lignes de balayage cathodiques. Le composant
+`Fond` est rendu côté serveur.
+
+La première version de la grille était un sol en perspective (`rotateX`).
+Abandonnée : avec la `perspective` du conteneur, l'essentiel du plan se
+projetait hors de la zone visible et on ne voyait rien. Une maille plate
+atténuée sur les bords donne la même lecture sans dépendre d'un calcul de
+projection.
+
+**Les mouvements.** Chaque page rejoue une entrée (`Ecran`, remonté à
+chaque navigation par sa `key`), les blocs se posent en cascade, et les
+nombres montent jusqu'à leur valeur (`Compteur`). Ce dernier réécrit un
+texte **déjà rendu côté serveur** : si le JavaScript ne part pas, la bonne
+valeur est là quand même — un chiffre d'affaires ne dépend jamais d'une
+animation. Il écrit dans `textContent` via une ref, pas dans un `state` :
+soixante rendus React par seconde pour un nombre qui défile, c'est du
+gaspillage.
+
 **Accessibilité.** Toute la DA repose sur le mouvement : `prefers-reduced-motion`
 le supprime entièrement et tout retombe sur de simples variations
 d'opacité. L'appui long est doublé d'un équivalent clavier, et le
