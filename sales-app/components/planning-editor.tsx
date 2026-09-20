@@ -6,19 +6,8 @@ import { Alerte } from "@/components/alerte";
 import { Submit } from "@/components/submit";
 import type { ActionResult } from "@/lib/errors";
 import { jouer } from "@/lib/sfx";
+import { JOURS, type Creneau } from "@/lib/planning";
 import { updateAvailabilityAction } from "@/app/(app)/profil/actions";
-
-export const JOURS = [
-  { num: 1, court: "LUN" },
-  { num: 2, court: "MAR" },
-  { num: 3, court: "MER" },
-  { num: 4, court: "JEU" },
-  { num: 5, court: "VEN" },
-  { num: 6, court: "SAM" },
-  { num: 7, court: "DIM" },
-] as const;
-
-export type Creneau = { weekday: number; slot: "am" | "pm" };
 
 // Grille 7 jours × 2 créneaux. Des cases à cocher, pas un composant maison :
 // elles se cochent au clavier, s'annoncent correctement aux lecteurs d'écran

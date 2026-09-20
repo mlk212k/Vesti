@@ -116,6 +116,22 @@ Pas de librairie d'icônes, de graphiques ni d'animation : `components/icons.tsx
 et `components/graphiques.tsx` sont maison, et `components/dalle.tsx` fait
 ses gestes à la main.
 
+## Une constante partagée ne vit pas dans un module client
+
+Quand un composant SERVEUR importe une valeur ordinaire — un tableau, un
+objet, une constante — depuis un module marqué `"use client"`, Next ne lui
+donne pas la valeur : il lui donne une **référence** au module client, un
+objet opaque destiné au navigateur. Le tableau perd son `.map()`, et la page
+plante à l'exécution avec `TypeError: X.map is not a function`.
+
+Rien ne le signale : les types sont justes, le build passe, l'erreur
+n'apparaît qu'en ouvrant la page. La page Planning a vécu ainsi, cassée,
+jusqu'à ce qu'on la charge réellement dans un navigateur.
+
+Les constantes partagées vont donc dans un module NEUTRE, sans directive —
+`lib/planning.ts` par exemple — que les deux côtés importent. Un module
+`"use client"` n'exporte que des composants et des hooks.
+
 ## L'objet
 
 `components/dalle.tsx` est le cœur de la DA. Trois choses à savoir avant d'y

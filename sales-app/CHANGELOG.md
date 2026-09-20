@@ -5,6 +5,34 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v2.4 — 21 septembre 2026
+
+### 🐛 Le planning ne s'ouvrait pas
+
+La page **Planning** plantait et affichait « Ça a coincé » au lieu du
+planning. Corrigé.
+
+La cause : la liste des jours de la semaine était rangée dans un fichier
+réservé au navigateur, et la page — qui se construit sur le serveur — ne
+recevait pas la liste mais une référence vide. Rien ne le signalait au
+moment de fabriquer l'app ; ça ne se voyait qu'en ouvrant la page.
+
+### 📅 Le chef peut enfin régler les créneaux de chacun
+
+Jusqu'ici chacun ne pouvait modifier que **ses** disponibilités, depuis son
+profil. Mohamed et Malik voyaient le planning de l'équipe sans pouvoir le
+corriger.
+
+Maintenant, sur la page Planning : une rangée de noms, on en touche un, et
+sa grille 7 jours × matin/après-midi s'ouvre juste en dessous. Les noms de
+la table « La semaine » ouvrent la même chose.
+
+La base l'autorisait déjà depuis le début — c'est seulement l'écran qui
+manquait. Et un commercial qui essaierait de modifier les créneaux d'un
+collègue se fait toujours refuser par la base.
+
+---
+
 ## v2.3 — 20 septembre 2026
 
 ### 🧩 Tous les écrans au même niveau
