@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { IconPlus, IconMap } from "@/components/icons";
+import { IconChevron, IconMap, IconPlus } from "@/components/icons";
 import { EnTete, Vide } from "@/components/ui";
 import { isStaff, requireUser } from "@/lib/auth";
 import { formatDateShort } from "@/lib/format";
@@ -37,7 +37,7 @@ export default async function BusinessesPage({
   const noms = new Map(profiles.map((p) => [p.id, p.full_name]));
 
   return (
-    <div className="montee">
+    <div className="space-y-8">
       <EnTete
         surtitre={staff ? "Tous les secteurs" : "Mon secteur"}
         titre="Commerces"
@@ -48,7 +48,7 @@ export default async function BusinessesPage({
         </Link>
       </EnTete>
 
-      <form method="get" className="mb-5 flex flex-wrap gap-2">
+      <form method="get" className="flex flex-wrap gap-2">
         <input
           name="q"
           defaultValue={params.q ?? ""}
@@ -78,17 +78,17 @@ export default async function BusinessesPage({
             : "Chaque porte poussée mérite sa fiche : on retrouve ensuite qui a dit quoi."}
         </Vide>
       ) : (
-        <ul className="space-y-2">
+        <ul className="cascade pb-4">
           {businesses.map((business) => (
             <li key={business.id}>
               <Link
                 href={`/commerces/${business.id}`}
-                className="panneau block p-4 transition-transform active:scale-[0.99]"
+                className="group block border-b border-trait py-4 transition-transform duration-300 active:scale-[0.985]"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{business.name}</p>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-sm text-faint">
+                <div className="flex items-start gap-4">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[15px]">{business.name}</p>
+                    <p className="surtitre mt-1 flex items-center gap-1.5">
                       <IconMap className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
                         {[business.city, business.category]
@@ -100,9 +100,10 @@ export default async function BusinessesPage({
                   <span className={PASTILLE[business.status]}>
                     {BUSINESS_STATUS_LABEL[business.status]}
                   </span>
+                  <IconChevron className="h-4 w-4 shrink-0 self-center text-faint transition-transform duration-500 group-hover:translate-x-1" />
                 </div>
 
-                <p className="mt-2 text-sm text-faint">
+                <p className="surtitre mt-2">
                   {staff ? `${noms.get(business.member_id) ?? "—"} · ` : ""}
                   visité le {formatDateShort(business.visited_at)}
                   {business.next_action ? ` · à faire : ${business.next_action}` : ""}

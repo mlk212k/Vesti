@@ -26,7 +26,7 @@ export default async function NotificationsPage() {
   const nonLues = notifications.filter((n) => !n.read_at).length;
 
   return (
-    <div className="montee space-y-5">
+    <div className="space-y-5">
       <EnTete
         surtitre={nonLues > 0 ? `${nonLues} non lue(s)` : "À jour"}
         titre="Notifications"

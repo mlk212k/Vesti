@@ -73,7 +73,7 @@ export default async function MemberPage({
   const iso = (date: Date) => date.toISOString().slice(0, 10);
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <div>
         <Link
           href="/equipe"

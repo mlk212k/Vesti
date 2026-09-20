@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { IconChevron } from "@/components/icons";
+import { CarteJoueur } from "@/components/carte-joueur";
 import { Compteur } from "@/components/compteur";
-import { Avatar, Mot, Section, Vide } from "@/components/ui";
-import { formatDuration } from "@/lib/format";
-import { formatCents, formatCentsShort, formatRate } from "@/lib/money";
+import { Mot, Section, Vide } from "@/components/ui";
+import { formatRate } from "@/lib/money";
 import type { LignePlanning, TeamRow } from "@/lib/queries";
-import { ROLE_LABEL, type AppSettings, type StockSummary } from "@/lib/types";
+import type { AppSettings, StockSummary } from "@/lib/types";
 
 /**
  * L'écran de l'encadrement — Mohamed (admin) et Malik (manager).
@@ -227,98 +227,5 @@ function Indicateur({
       </p>
       {detail ? <p className="mt-1 text-sm text-faint">{detail}</p> : null}
     </div>
-  );
-}
-
-/**
- * Une carte joueur.
- *
- * Elle répond à trois questions dans l'ordre où on se les pose : où en est
- * cette personne (la barre), combien a-t-elle rapporté (le chiffre), et
- * est-elle dehors en ce moment (la diode qui bat).
- */
-function CarteJoueur({
-  row,
-  estAdmin,
-  objectifParDefaut,
-  rang,
-}: {
-  row: TeamRow;
-  estAdmin: boolean;
-  objectifParDefaut: number;
-  rang: number | null;
-}) {
-  const { profile, day, cards } = row;
-  // Quelqu'un qui n'a pas ouvert sa journée n'a pas d'objectif figé : on
-  // affiche celui qui s'appliquera, plutôt qu'un tiret.
-  const objectif = day?.goal_cards ?? profile.daily_goal_override ?? objectifParDefaut;
-  const vendues = day?.cards_sold ?? 0;
-  const progression = objectif > 0 ? Math.min(100, (vendues / objectif) * 100) : 0;
-  const atteint = Boolean(day?.goal_reached);
-  const enTournee = day?.status === "in_progress";
-  // L'encadrement n'a pas d'objectif de vente. Lui afficher une barre à
-  // « 0/10 » lui reprocherait de ne pas faire un travail qui n'est pas le
-  // sien — sauf s'il a réellement ouvert une journée, auquel cas il vend
-  // comme les autres et la barre a du sens.
-  const suitUnObjectif = profile.role === "member" || Boolean(day);
-
-  return (
-    <Link href={`/equipe/${profile.id}`} className="carte-joueur block p-4">
-      <div className="flex items-center gap-3.5">
-        <span className={`rang ${rang ? `rang-${Math.min(rang, 3)}` : ""}`}>
-          {rang ?? "–"}
-        </span>
-
-        <Avatar nom={profile.full_name} />
-
-        <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-2 truncate text-[15px]">
-            {profile.full_name}
-            <span
-              className={`diode ${enTournee ? "diode-active" : atteint ? "diode-fini" : ""}`}
-              aria-hidden="true"
-            />
-          </p>
-          <p className="surtitre mt-0.5 truncate">
-            {ROLE_LABEL[profile.role]}
-            {cards ? ` · ${cards.held} en main` : ""}
-          </p>
-        </div>
-
-        <div className="text-right">
-          <p className="chiffre text-lg text-craie">
-            {day ? formatCentsShort(day.revenue_cents) : "—"}
-          </p>
-          {estAdmin && day ? (
-            <p className="surtitre mt-0.5">dont {formatCents(day.commission_cents)}</p>
-          ) : null}
-        </div>
-
-        <IconChevron className="h-4 w-4 shrink-0 text-faint" />
-      </div>
-
-      {suitUnObjectif ? (
-        <div className="mt-4 space-y-2">
-          <div className={`xp ${atteint ? "xp-pleine" : ""}`}>
-            <div
-              className="xp-remplie"
-              style={{ width: `${Math.max(progression, 2)}%` }}
-            />
-          </div>
-          <div className="flex items-baseline justify-between gap-3">
-            <span className="surtitre">
-              <span className="text-craie">{vendues}</span> / {objectif} cartes
-            </span>
-            <span className="surtitre truncate">
-              {day
-                ? enTournee
-                  ? `en tournée · ${formatDuration(day.duration_seconds)}`
-                  : `journée close · ${formatDuration(day.duration_seconds)}`
-                : "pas commencé"}
-            </span>
-          </div>
-        </div>
-      ) : null}
-    </Link>
   );
 }

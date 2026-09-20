@@ -26,7 +26,7 @@ export default async function ProfilePage() {
   ]);
 
   return (
-    <div className="montee space-y-5">
+    <div className="space-y-5">
       <EnTete surtitre="Mon compte" titre="Profil" />
 
       <div className="panneau">

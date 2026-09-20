@@ -69,7 +69,7 @@ export default async function ConversationPage({
   await markConversationReadAction(id);
 
   return (
-    <div className="montee">
+    <div>
       <div className="mb-4 flex items-center gap-3">
         <Link href="/chat" className="text-faint hover:text-dim" aria-label="Retour">
           <IconBack className="h-5 w-5" />

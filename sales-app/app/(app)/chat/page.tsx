@@ -49,7 +49,7 @@ export default async function ChatPage() {
   );
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Messagerie interne" titre="Chat" />
 
       <ul className="space-y-2">

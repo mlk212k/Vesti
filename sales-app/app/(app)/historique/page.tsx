@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EnTete, Jauge, Stat, StatutJournee, Vide } from "@/components/ui";
+import { Compteur } from "@/components/compteur";
+import { EnTete, StatutJournee, Vide } from "@/components/ui";
 import { isStaff, requireUser } from "@/lib/auth";
 import { formatDateLong, formatDuration } from "@/lib/format";
 import { formatCents, formatCentsShort } from "@/lib/money";
@@ -29,20 +30,44 @@ export default async function HistoryPage({
   const atteints = days.filter((day) => day.goal_reached).length;
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete
         surtitre={staff ? "Journées de l'équipe" : "Mes journées"}
         titre="Historique"
       />
 
-      <div className="grid grid-cols-3 gap-3">
-        <Stat label="Journées" valeur={days.length} />
-        <Stat label="CA cumulé" valeur={formatCentsShort(caTotal)} accent />
-        <Stat
-          label={staff ? "Objectifs" : "Mon net"}
-          valeur={staff ? `${atteints}/${days.length}` : formatCentsShort(netTotal)}
-        />
-      </div>
+      <section className="cascade grid grid-cols-3 gap-5">
+        <div className="min-w-0">
+          <p className="surtitre-serre">Journées</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+            <Compteur valeur={days.length} />
+          </p>
+          <p className="mt-1 text-sm text-faint">enregistrées</p>
+        </div>
+        <div className="min-w-0">
+          <p className="surtitre-serre">Chiffre d&apos;affaires</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+            <Compteur valeur={caTotal} format="montant" />
+          </p>
+          <p className="mt-1 text-sm text-faint">cumulé</p>
+        </div>
+        <div className="min-w-0">
+          <p className="surtitre-serre">{staff ? "Objectifs" : "Mon net"}</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-peche">
+            {staff ? (
+              <>
+                <Compteur valeur={atteints} />
+                <span className="text-faint">/{days.length}</span>
+              </>
+            ) : (
+              <Compteur valeur={netTotal} format="montant" />
+            )}
+          </p>
+          <p className="mt-1 text-sm text-faint">
+            {staff ? "atteints" : "cumulé"}
+          </p>
+        </div>
+      </section>
 
       {staff ? (
         <form method="get" className="flex gap-2">
@@ -65,62 +90,60 @@ export default async function HistoryPage({
           Les journées apparaissent ici dès la première ouverture.
         </Vide>
       ) : (
-        <ul className="space-y-2">
+        <ul className="cascade space-y-3 pb-4">
           {days.map((day) => (
-            <li key={day.id} className="panneau p-4">
+            <li key={day.id} className="carte-joueur p-4">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-medium capitalize">
+                <div className="min-w-0">
+                  <p className="text-[15px] capitalize">
                     {formatDateLong(day.work_date)}
                   </p>
-                  <p className="text-sm text-faint">
+                  <p className="surtitre mt-0.5 truncate">
                     {staff ? `${noms.get(day.member_id) ?? "—"} · ` : ""}
-                    {formatDuration(day.duration_seconds)} ·{" "}
-                    {day.sale_count} vente{day.sale_count > 1 ? "s" : ""}
+                    {formatDuration(day.duration_seconds)} · {day.sale_count} vente
+                    {day.sale_count > 1 ? "s" : ""}
                   </p>
                 </div>
                 <StatutJournee statut={displayDayStatus(day)} />
               </div>
 
-              <div className="mt-3 flex items-center gap-3">
-                <span className="chiffre w-14 shrink-0 text-sm text-dim">
-                  {day.cards_sold} / {day.goal_cards}
-                </span>
-                <div className="flex-1">
-                  <Jauge valeur={day.cards_sold} objectif={day.goal_cards} />
+              <div className="mt-4 space-y-2">
+                <div className={`xp ${day.goal_reached ? "xp-pleine" : ""}`}>
+                  <div
+                    className="xp-remplie"
+                    style={{
+                      width: `${Math.max(
+                        day.goal_cards > 0
+                          ? Math.min(100, (day.cards_sold / day.goal_cards) * 100)
+                          : 0,
+                        2,
+                      )}%`,
+                    }}
+                  />
                 </div>
-              </div>
-
-              <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                <div className="panneau-creux py-2">
-                  <p className="surtitre">CA</p>
-                  <p className="chiffre mt-0.5 text-sm">
-                    {formatCentsShort(day.revenue_cents)}
-                  </p>
-                </div>
-                <div className="panneau-creux py-2">
-                  <p className="surtitre">Commission</p>
-                  <p className="chiffre mt-0.5 text-sm text-faint">
-                    {formatCentsShort(day.commission_cents)}
-                  </p>
-                </div>
-                <div className="panneau-creux py-2">
-                  <p className="surtitre">Net</p>
-                  <p className="chiffre mt-0.5 text-sm">
-                    {formatCentsShort(day.net_after_penalty_cents)}
-                  </p>
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="surtitre">
+                    <span className="text-craie">{day.cards_sold}</span> /{" "}
+                    {day.goal_cards} cartes
+                  </span>
+                  <span className="surtitre">
+                    CA {formatCentsShort(day.revenue_cents)} · net{" "}
+                    <span className="text-craie">
+                      {formatCentsShort(day.net_after_penalty_cents)}
+                    </span>
+                  </span>
                 </div>
               </div>
 
               {day.penalty_cents > 0 ? (
-                <p className="mt-2 text-sm text-peche">
+                <p className="mt-3 text-sm text-peche">
                   Retenue validée par l&apos;encadrement :{" "}
                   {formatCents(day.penalty_cents)}
                 </p>
               ) : null}
 
               {day.notes ? (
-                <p className="texte-libre mt-2 text-sm whitespace-pre-wrap text-faint">
+                <p className="texte-libre mt-3 text-sm whitespace-pre-wrap text-faint">
                   {day.notes}
                 </p>
               ) : null}
@@ -128,7 +151,7 @@ export default async function HistoryPage({
               {staff ? (
                 <Link
                   href={`/equipe/${day.member_id}`}
-                  className="mt-2 inline-block text-sm text-faint hover:text-dim"
+                  className="surtitre mt-3 inline-block hover:text-craie"
                 >
                   Voir le profil →
                 </Link>

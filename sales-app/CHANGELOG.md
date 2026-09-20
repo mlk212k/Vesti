@@ -5,6 +5,30 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v2.3 — 20 septembre 2026
+
+### 🧩 Tous les écrans au même niveau
+
+Les pages qui n'avaient pas encore été reprises le sont :
+
+• **Équipe** utilise exactement la même carte joueur que l'écran d'accueil —
+  même barre, même diode, même rang — avec en plus le **cumul depuis le
+  début**. L'accueil répond « où en est la journée », Équipe répond « qui
+  porte l'équipe depuis le départ », et les deux se trient différemment
+  pour ça.
+• **Ventes**, **Commerces** et **Historique** : chiffres en compteurs
+  animés, lignes sans cadre, plus de petit texte technique, et les blocs se
+  posent en cascade.
+• Chaque journée de l'historique a sa barre de progression.
+
+### ⚡ Un peu plus rapide à l'affichage
+
+Chaque page jouait **deux** animations d'entrée l'une par-dessus l'autre
+depuis la mise à jour précédente — le contenu mettait deux fois plus de
+temps à se poser pour un effet qu'on ne voyait pas. Il n'en reste qu'une.
+
+---
+
 ## v2.2 — 20 septembre 2026 — « ARCADE »
 
 ### 🎮 L'app bouge

@@ -11,7 +11,7 @@ export default async function SettingsPage() {
   const settings = await getSettings();
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Règles de l'équipe" titre="Paramètres" />
 
       <SettingsForm settings={settings} />

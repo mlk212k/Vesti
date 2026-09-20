@@ -11,7 +11,7 @@ export default async function NewBusinessPage() {
   const user = await requireUser();
 
   return (
-    <div className="montee">
+    <div>
       <Link
         href="/commerces"
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-faint hover:text-dim"

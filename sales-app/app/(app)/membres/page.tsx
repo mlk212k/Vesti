@@ -13,7 +13,7 @@ export default async function MembersPage() {
   const profiles = await listProfiles();
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Comptes et accès" titre="Membres" />
 
       <CreateMemberForm />

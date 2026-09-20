@@ -4,8 +4,9 @@ import { isStaff, requireUser } from "@/lib/auth";
 import { formatDateShort, formatTime } from "@/lib/format";
 import { formatCents, formatCentsShort } from "@/lib/money";
 import { listProfiles, listSales } from "@/lib/queries";
-import { IconPlus } from "@/components/icons";
-import { EnTete, Stat, Vide } from "@/components/ui";
+import { IconChevron, IconPlus } from "@/components/icons";
+import { Compteur } from "@/components/compteur";
+import { EnTete, Vide } from "@/components/ui";
 import { Alerte } from "@/components/alerte";
 
 export const metadata: Metadata = { title: "Ventes" };
@@ -35,7 +36,7 @@ export default async function SalesPage({
   const commission = sales.reduce((sum, sale) => sum + sale.commission_cents, 0);
 
   return (
-    <div className="montee">
+    <div className="space-y-8">
       <EnTete surtitre={staff ? "Toute l'équipe" : "Mes ventes"} titre="Ventes">
         {!staff ? (
           <Link href="/ventes/nouvelle" className="btn btn-primaire">
@@ -46,22 +47,42 @@ export default async function SalesPage({
       </EnTete>
 
       {params.enregistree ? (
-        <div className="mb-4">
+        <div>
           <Alerte ton="succes">Vente enregistrée.</Alerte>
         </div>
       ) : null}
 
-      <div className="mb-5 grid grid-cols-3 gap-3">
-        <Stat label="CA affiché" valeur={formatCentsShort(total)} accent />
-        <Stat label="Cartes" valeur={cartes} />
-        <Stat
-          label={staff ? "Commission" : "Mon net"}
-          valeur={formatCentsShort(staff ? commission : total - commission)}
-        />
-      </div>
+      <section className="cascade grid grid-cols-3 gap-5">
+        <div className="min-w-0">
+          <p className="surtitre-serre">Chiffre d&apos;affaires</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+            <Compteur valeur={total} format="montant" />
+          </p>
+          <p className="mt-1 text-sm text-faint">sur les ventes affichées</p>
+        </div>
+        <div className="min-w-0">
+          <p className="surtitre-serre">Cartes</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+            <Compteur valeur={cartes} />
+          </p>
+          <p className="mt-1 text-sm text-faint">vendues</p>
+        </div>
+        <div className="min-w-0">
+          <p className="surtitre-serre">{staff ? "Commission" : "Mon net"}</p>
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-peche">
+            <Compteur
+              valeur={staff ? commission : total - commission}
+              format="montant"
+            />
+          </p>
+          <p className="mt-1 text-sm text-faint">
+            {staff ? "pour le chef" : "ce qui te revient"}
+          </p>
+        </div>
+      </section>
 
       {staff ? (
-        <form method="get" className="mb-5 flex gap-2">
+        <form method="get" className="flex gap-2">
           <select name="membre" defaultValue={params.membre ?? ""} className="champ">
             <option value="">Toute l&apos;équipe</option>
             {profiles.map((profile) => (
@@ -83,35 +104,37 @@ export default async function SalesPage({
             : "Ta première vente s'enregistre en quelques secondes."}
         </Vide>
       ) : (
-        <ul className="space-y-2">
+        <ul className="cascade pb-4">
           {sales.map((sale) => (
             <li key={sale.id}>
               <Link
                 href={`/ventes/${sale.id}`}
-                className="panneau flex items-center gap-3 p-4 transition-transform active:scale-[0.99]"
+                className="group flex items-center gap-4 border-b border-trait py-4 transition-transform duration-300 active:scale-[0.985]"
               >
-                <span className="chiffre w-10 shrink-0 text-center text-xl">
+                <span className="chiffre w-8 shrink-0 text-xl text-craie">
                   {sale.quantity}
                 </span>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">
+                  <p className="truncate text-[15px]">
                     {sale.businesses?.name ?? "Vente directe"}
                   </p>
-                  <p className="text-sm text-faint">
+                  <p className="surtitre mt-0.5 truncate">
                     {staff ? `${noms.get(sale.member_id) ?? "—"} · ` : ""}
                     {formatDateShort(sale.sold_at)} à {formatTime(sale.sold_at)}
                   </p>
                 </div>
 
                 <div className="text-right">
-                  <p className="chiffre text-base">
+                  <p className="chiffre text-lg text-craie">
                     {formatCentsShort(sale.amount_cents)}
                   </p>
-                  <p className="text-sm text-faint">
+                  <p className="surtitre mt-0.5">
                     {formatCents(sale.unit_price_cents)} / carte
                   </p>
                 </div>
+
+                <IconChevron className="h-4 w-4 shrink-0 text-faint transition-transform duration-500 group-hover:translate-x-1" />
               </Link>
             </li>
           ))}

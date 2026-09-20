@@ -41,7 +41,7 @@ export default async function AuditPage({
   const noms = new Map(profiles.map((p) => [p.id, p.full_name]));
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Tout ce qui s'est passé" titre="Audit" />
 
       <form method="get" className="flex flex-wrap gap-2">

@@ -26,7 +26,7 @@ export default async function PlanningPage() {
   const jourCourant = planning[0]?.weekday ?? 1;
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Qui bosse quand" titre="Planning" />
 
       <Section titre={`Attendus aujourd'hui · ${attendus.length}`}>

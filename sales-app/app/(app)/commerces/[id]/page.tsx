@@ -38,7 +38,7 @@ export default async function BusinessPage({
   const proprietaire = business.member_id === user.id;
 
   return (
-    <div className="montee space-y-5">
+    <div className="space-y-5">
       <div>
         <Link
           href="/commerces"

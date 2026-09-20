@@ -29,7 +29,7 @@ export default async function StockPage() {
   const admin = isAdmin(user.role);
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Cartes NFC" titre="Stock" />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

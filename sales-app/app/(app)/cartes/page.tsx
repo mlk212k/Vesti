@@ -17,7 +17,7 @@ export default async function MyCardsPage() {
   ]);
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete surtitre="Ce que j'ai en main" titre="Mes cartes" />
 
       <div className="panneau p-6 text-center">

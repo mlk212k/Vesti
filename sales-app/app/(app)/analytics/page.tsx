@@ -81,7 +81,7 @@ export default async function AnalyticsPage({
     .sort((a, b) => b.valeur - a.valeur);
 
   return (
-    <div className="montee space-y-6">
+    <div className="space-y-6">
       <EnTete
         surtitre={`${PERIODE_LABEL[periode]} · ${from} → ${to}`}
         titre="Analytics"
