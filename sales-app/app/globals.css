@@ -956,6 +956,92 @@ h3 {
   pointer-events: none;
 }
 
+/* L'INDICE D'ACTION.
+
+   « Appui long pour ouvrir la journée » est la seule phrase qui explique
+   comment se servir de l'objet — sans elle, un nouveau reste devant une
+   plaque muette. Elle était en `--faint`, la couleur des mentions
+   secondaires : techniquement au-dessus du seuil de contraste, mais noyée
+   sous les halos et lue comme une note de bas de page.
+
+   Elle respire quand l'action est EN ATTENTE, et seulement là : c'est une
+   invitation, et une invitation qui clignote une fois le geste fait n'est
+   plus qu'un bruit.
+   --------------------------------------------------------------------------- */
+
+.indice-action {
+  color: var(--dim);
+  font-weight: 500;
+}
+
+.indice-attente {
+  animation: appel 3.6s ease-in-out infinite;
+}
+
+@keyframes appel {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   CE QUI EST POSÉ SUR LA PLAQUE
+   La plaque est une surface CLAIRE au milieu d'une app sombre. Tout ce qu'on
+   y écrit doit donc inverser son contraste — sinon c'est du gris clair sur
+   du chrome blanc, et ça disparaît. C'est arrivé : « ARENA » et le statut
+   de la journée étaient illisibles sur l'écran d'un commercial, alors
+   qu'aucune planche de composants ne pouvait le montrer (aucune n'avait de
+   texte POSÉ sur l'objet).
+
+   La difficulté de fond : le reflet spéculaire SE DÉPLACE au doigt
+   (`--lx/--ly`). La luminosité sous une étiquette n'est donc pas connue à
+   l'avance, et choisir « sombre » ou « clair » une fois pour toutes échoue
+   dès que le reflet passe dessous.
+
+   La parade est celle de la gravure réelle : un texte sombre DOUBLÉ d'une
+   arête claire en dessous. Sur fond clair c'est le texte qui porte, sur
+   fond sombre c'est l'arête — il y a toujours l'un des deux qui tranche.
+   --------------------------------------------------------------------------- */
+
+.sur-plaque .surtitre {
+  color: rgba(22, 14, 10, 0.68);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* La pastille de statut, elle, ne se grave pas : elle devient un vrai
+   jeton sombre. Un fond opaque est la seule garantie de lisibilité quand
+   on ignore ce qu'il y a derrière. */
+.sur-plaque .pastille {
+  background: rgba(18, 12, 10, 0.62);
+  color: var(--craie);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.sur-plaque .pastille-vive {
+  background: rgba(58, 40, 96, 0.72);
+  color: #d9ccff;
+}
+
+.sur-plaque .pastille-accent {
+  background: rgba(70, 52, 8, 0.72);
+  color: #ffe8a8;
+}
+
+/* Le dénominateur « / 10 » était en `--fumee`, un brun sombre choisi pour
+   un fond sombre. Sur la plaque il faut l'inverse. */
+.sur-plaque .denominateur {
+  color: rgba(22, 14, 10, 0.5);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
 /* La respiration : ±0,5 % sur neuf secondes. Personne ne la remarque, mais
    un écran sans elle a l'air arrêté. */
 /* Deux mouvements superposés, de durées PREMIÈRES ENTRE ELLES (9 s et 7 s) :
@@ -1864,6 +1950,7 @@ select.champ {
   .btn-primaire::after,
   .metal,
   .avatar::after,
+  .indice-attente,
   .rang-1::after,
   .scene::after,
   .etoile,

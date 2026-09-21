@@ -86,7 +86,16 @@ export function ObjetJournee({
         {children}
       </Dalle>
 
-      <p className="surtitre text-center">{indice}</p>
+      {/* L'indice respire tant que le geste n'a pas été fait : c'est la
+          seule phrase qui explique comment se servir de l'objet. Une fois
+          la journée ouverte, il redevient une mention calme. */}
+      <p
+        className={`surtitre indice-action text-center ${
+          etat === "fermee" ? "indice-attente" : ""
+        }`}
+      >
+        {indice}
+      </p>
 
       {state && !state.ok ? <Alerte>{state.error}</Alerte> : null}
     </div>

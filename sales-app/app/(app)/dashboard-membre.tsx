@@ -95,7 +95,13 @@ export function DashboardMembre({
           <ObjetJournee charge={charge} etat={etat}>
             {/* Ce qui est GRAVÉ dans la dalle : le décompte, et rien
                 d'autre. Une carte de crédit ne porte pas un tableau. */}
-            <div className="flex h-full flex-col justify-between p-[7%]">
+            {/* `sur-plaque` inverse le contraste de tout ce qui suit : la
+                plaque est une surface CLAIRE dans une app sombre, et le
+                gris des étiquettes y devient invisible. Voir la note dans
+                globals.css — le reflet se déplaçant au doigt, il faut une
+                gravure (texte sombre + arête claire), pas un simple
+                changement de couleur. */}
+            <div className="sur-plaque flex h-full flex-col justify-between p-[7%]">
               <div className="flex items-start justify-between">
                 <span className="surtitre text-sm">{settings.team_name}</span>
                 <StatutJournee statut={statut} />
@@ -104,7 +110,9 @@ export function DashboardMembre({
                 <span className="chiffre metal text-[clamp(3rem,17vw,4.5rem)]">
                   {vendues}
                 </span>
-                <span className="chiffre pb-1.5 text-xl text-fumee">/ {objectif}</span>
+                <span className="chiffre denominateur pb-1.5 text-xl">
+                  / {objectif}
+                </span>
               </div>
             </div>
           </ObjetJournee>
