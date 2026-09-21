@@ -175,3 +175,16 @@ RFC 4122 : ses quartets de version et de variante sont nuls. Zod 4 les
 vérifie dans `z.uuid()`, qui le rejette — d'où `z.guid()` dans `lib/chat.ts`,
 qui ne contrôle que la forme. Valider un identifiant de conversation
 ailleurs avec `z.uuid()` casse le chat d'équipe, et lui seul.
+
+## Direction créative
+
+Le brief de DA et la liste des connecteurs à mobiliser vivent dans
+`../DIRECTION-CREATIVE.md`. Deux points de ce document s'appliquent
+directement ici :
+
+- **Un écran n'est pas fini tant qu'il n'a pas été ouvert.** Le build était
+  vert pendant que la page Planning plantait, et pendant que sept variables
+  CSS mortes rendaient des éléments invisibles. `tsc`, `eslint` et
+  `next build` ne voient rien de tout ça.
+- **`./scripts/check-tokens.sh` fait partie de la sortie**, au même titre
+  que le lint.

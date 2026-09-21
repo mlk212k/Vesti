@@ -7,3 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+# Direction créative
+
+`DIRECTION-CREATIVE.md` à la racine : le mode de travail créatif, les 50
+connecteurs à mobiliser, et le standard de sortie. À lire avant toute
+décision de direction artistique. Les règles techniques et de sécurité de
+`sales-app/AGENTS.md` priment toujours dessus.
