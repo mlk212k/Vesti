@@ -84,7 +84,7 @@ export function Stat({
       <p className="surtitre-serre">{label}</p>
       <p
         className={`chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] ${
-          accent ? "text-os" : "metal"
+          accent ? "text-accent" : "metal"
         }`}
       >
         {valeur}
@@ -142,7 +142,7 @@ export function Jauge({
 
 // Le statut d'une journée.
 //
-// Le beige (`pastille-os`) a trois sens et trois seulement : c'est ton
+// Le beige (`pastille-accent`) a trois sens et trois seulement : c'est ton
 // argent, agis maintenant, quelque chose ne va pas. « Objectif atteint »
 // n'est aucun des trois — c'était donc la même pastille que « des gens
 // manquent à l'appel », ce qui fait dire au même signal une bonne et une
@@ -252,22 +252,29 @@ export function Avatar({
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("");
 
+  // L'anneau holographique vit sur un CONTENEUR, pas sur l'image : un
+  // `<img>` n'a pas de pseudo-élément, donc pas de `::after` pour porter le
+  // masque en anneau. Le conteneur porte aussi le `shrink-0`, sans quoi il
+  // s'écraserait dans une ligne flex serrée en laissant l'anneau de travers.
   if (url) {
     return (
-      /* eslint-disable-next-line @next/next/no-img-element -- le bucket des
-         avatars est public et déjà dimensionné ; passer par l'optimiseur
-         ajouterait un aller-retour pour une vignette de 44 px. */
-      <img
-        src={url}
-        alt={nom}
-        className={`shrink-0 rounded-full object-cover ring-1 ring-white/10 ${classes}`}
-      />
+      <span className={`avatar ${classes}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- le bucket
+            des avatars est public et déjà dimensionné ; passer par
+            l'optimiseur ajouterait un aller-retour pour une vignette de
+            44 px. */}
+        <img
+          src={url}
+          alt={nom}
+          className="h-full w-full rounded-full object-cover"
+        />
+      </span>
     );
   }
 
   return (
     <span
-      className={`flex shrink-0 items-center justify-center rounded-full bg-velours text-dim ring-1 ring-white/[0.06] ${classes}`}
+      className={`avatar items-center justify-center rounded-full bg-velours text-dim ${classes}`}
     >
       {lettres}
     </span>

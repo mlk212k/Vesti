@@ -19,18 +19,28 @@
      polie, avec un reflet spéculaire qui GLISSE sous le doigt et un liseré
      irisé sur la tranche. C'est l'objet le plus précieux de l'écran, et ça
      se voit enfin.
-   - L'ACCENT N'EST PLUS UNE COULEUR, C'EST UNE TEMPÉRATURE. Le pêche a
-     laissé place à un beige os (#ecdfc6) — la seule chose chaude d'un écran
-     entièrement froid. Un orange faisait le même travail en hurlant ; le
-     crème le fait en silence, et c'est l'accord Y2K exact : chrome et crème.
+   - L'ACCENT EST UN VERT ACIDE (#cbff3c), et son jeton s'appelle
+     `--accent` — par son rôle, pas par sa teinte, parce qu'il a déjà changé
+     trois fois. C'est la seule couleur qui n'entre en collision avec aucun
+     des quatre halos du fond, donc la seule qui ressorte partout. Chrome
+     froid et vert acide : l'accord est plus street que chrome et crème, et
+     nettement moins sage qu'un orange.
    - LA TYPOGRAPHIE A UN ACCENT. Unbounded pour les grands mots et les
      chiffres : très large, très grasse, les contrepoints presque fermés —
      la lettre des pochettes du début des années 2000. Space Grotesk pour
      tout le reste. Les deux polices précédentes étaient correctes et
      neutres, c'est-à-dire de la typographie de logiciel bien élevé.
-   - PLUS DE LIGNES DE BALAYAGE. Le cathodique appartient à une autre
-     direction. À la place : un vernis, un voile iridescent très sourd qui
-     donne au verre l'air d'avoir été poli.
+   - UNE COUCHE RÉTRO PAR-DESSUS, pas à la place. Le Y2K n'est pas propre :
+     c'est du chrome VU SUR UN ÉCRAN. D'où les lignes de balayage à 0,03, la
+     courbure qui assombrit les coins comme le verre d'un tube, l'aberration
+     chromatique d'un pixel sur les grands chiffres, et la barre d'objectif
+     qui se remplit par crans au lieu de couler. Aucune ne se remarque
+     isolément ; ensemble elles font que l'image a une TRAME.
+   - DE LA COULEUR EN HALO, et seulement en halo. Quatre lavis dérivent
+     derrière la page — crème, lilas, glacier, rose — et se croisent pour
+     fabriquer des teintes qu'aucun ne contient. La couleur vit dans
+     l'atmosphère ; les SIGNAUX, eux, gardent leurs deux accents. Un halo ne
+     veut rien dire, et c'est exactement pour ça qu'il peut être partout.
 
    Ce qui NE change pas, et c'est délibéré : la carte NFC reste l'objet
    central, l'appui long reste le geste, la tranche qui se remplit reste la
@@ -53,17 +63,24 @@
   --faint: #8e949e;
 
   /* --- Les accents. Deux, et ils ne font pas le même travail. ---------- */
-  /* L'accent n'est plus une couleur, c'est une TEMPÉRATURE.
+  /* L'ACCENT.
 
-     Tout l'écran est froid : le noir tire sur le bleu, le chrome sur le
-     gris-acier, le blanc du texte est un blanc de néon. Le beige os est la
-     seule chose chaude — et sur un fond froid, le chaud saute aux yeux sans
-     avoir besoin de crier. Un orange faisait le même travail en hurlant.
+     Le nom dit le RÔLE, pas la teinte, et c'est délibéré : cette couleur a
+     déjà changé trois fois (pêche, puis beige, puis vert). Tant qu'elle
+     s'appelait `--peche` ou `--os`, chaque changement d'avis imposait de
+     renommer trente-quatre usages. Maintenant c'est une seule ligne.
 
-     C'est aussi l'accord Y2K exact : chrome et crème. */
-  --os: #ecdfc6; /* l'argent, l'action, ce qui est à soi */
+     Vert acide. Sur un écran entièrement froid — noir bleuté, chrome
+     gris-acier — c'est la seule teinte qui ne rentre en collision avec
+     AUCUN des quatre halos du fond (crème, lilas, glacier, rose). Un beige
+     se noyait dans le halo crème, un rose dans le halo rose. Celui-ci
+     n'appartient à aucune famille présente, donc il ressort partout.
+
+     Ses trois emplois, et rien d'autre : c'est ton argent, agis
+     maintenant, quelque chose ne va pas. */
+  --accent: #cbff3c; /* l'argent, l'action, ce qui est à soi */
   --lilas: #8c6bff; /* le vivant : présence, temps réel, relances */
-  --os-encre: #1a1610; /* le texte posé SUR le beige */
+  --accent-encre: #111d06; /* le texte posé SUR le vert */
 
   --trait: rgba(255, 255, 255, 0.09);
   --trait-fort: rgba(255, 255, 255, 0.17);
@@ -117,10 +134,50 @@
      jamais un arc-en-ciel franc — on la remarque en bougeant, pas à l'arrêt. */
   --iris: linear-gradient(
     100deg,
-    rgba(236, 223, 198, 0.5) 0%,
+    rgba(203, 255, 60, 0.5) 0%,
     rgba(140, 107, 255, 0.45) 34%,
     rgba(120, 214, 255, 0.42) 62%,
-    rgba(236, 223, 198, 0.45) 100%
+    rgba(203, 255, 60, 0.45) 100%
+  );
+
+  /* --- LE GEL ---------------------------------------------------------
+     La signature de l'interface Y2K, et elle tient dans un seul détail : la
+     CASSURE NETTE au milieu. Un dégradé blanc qui s'éteint doucement fait
+     du plastique mat ; une lumière qui s'arrête D'UN COUP à mi-hauteur fait
+     une bulle de gel. C'est le même truc que sur les boutons d'OS de 2001.
+
+     Posé en PREMIÈRE COUCHE de `background`, jamais en pseudo-élément : un
+     `::before` absolu passerait au-dessus du texte du bouton et le
+     délaverait, et les deux pseudos de plusieurs classes sont déjà pris. */
+  --gel: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.16) 46%,
+    rgba(255, 255, 255, 0) 47%,
+    rgba(255, 255, 255, 0) 88%,
+    rgba(255, 255, 255, 0.07) 100%
+  );
+
+  /* La même idée, très atténuée, pour les grandes surfaces : sur un panneau
+     de 400 px, le gel franc ressemblerait à une vitre sale. */
+  --gel-doux: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.022) 42%,
+    rgba(255, 255, 255, 0) 43%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  /* L'holographique : l'irisation, mais en anneau tournant. Sert aux
+     avatars et à ce qui mérite d'être distingué sans couleur en plus. */
+  --holo: conic-gradient(
+    from 0deg,
+    rgba(203, 255, 60, 0.9),
+    rgba(140, 107, 255, 0.85) 22%,
+    rgba(120, 214, 255, 0.8) 44%,
+    rgba(255, 255, 255, 0.9) 62%,
+    rgba(140, 107, 255, 0.85) 80%,
+    rgba(203, 255, 60, 0.9) 100%
   );
 
   /* Rien d'anguleux nulle part. */
@@ -147,7 +204,7 @@
   --color-craie: var(--craie);
   --color-dim: var(--dim);
   --color-faint: var(--faint);
-  --color-os: var(--os);
+  --color-accent: var(--accent);
   --color-lilas: var(--lilas);
   --color-trait: var(--trait);
   --font-sans: var(--font-ui);
@@ -237,51 +294,120 @@ li {
   overflow: hidden;
 }
 
-/* Les deux brumes. Plus larges et plus franches qu'en VELOURS : sur un noir
-   neutre, une brume timide ne se voit pas du tout — elle a l'air d'une tache
-   sur l'écran. Il leur faut de la saturation pour lire comme de l'aérographe. */
-.lampe::before,
+/* La courbure. Un tube cathodique assombrit ses coins parce que le verre y
+   est plus épais et le faisceau plus oblique. Reproduit par une vignette
+   elliptique, posée AU-DESSUS des halos : sans elle, les quatre couleurs
+   s'étalent jusqu'aux bords et l'écran n'a plus de centre. */
 .lampe::after {
   content: "";
   position: absolute;
+  inset: -2%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 46%,
+    transparent 0%,
+    transparent 52%,
+    rgba(0, 0, 0, 0.35) 82%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+/* Les halos. Quatre, parce qu'avec deux ils se font face et laissent le
+   milieu de l'écran mort ; à quatre ils se CROISENT, et les recouvrements
+   fabriquent des teintes qu'aucun des quatre ne contient.
+
+   Ils sont posés derrière tout le contenu et restent sous 0,3 d'opacité au
+   centre : un halo qui passe devant du texte le rend illisible, et c'est
+   exactement le piège d'une interface « colorée ». La couleur vit dans
+   l'ATMOSPHÈRE ; les signaux, eux, gardent leurs deux accents. */
+.halo {
+  position: absolute;
   border-radius: 50%;
   filter: blur(100px);
+  will-change: transform;
 }
 
-.lampe::before {
+.halo-acide {
   top: -30vh;
-  left: -20vw;
-  width: 96vw;
-  height: 66vh;
+  left: -22vw;
+  width: 92vw;
+  height: 64vh;
   background: radial-gradient(
     circle,
-    rgba(236, 223, 198, 0.2) 0%,
-    rgba(236, 223, 198, 0.06) 42%,
-    rgba(236, 223, 198, 0) 70%
+    rgba(203, 255, 60, 0.38) 0%,
+    rgba(203, 255, 60, 0.13) 44%,
+    rgba(203, 255, 60, 0) 70%
   );
-  animation: flotte 46s ease-in-out infinite alternate;
+  animation: derive-a 37s ease-in-out infinite alternate;
 }
 
-.lampe::after {
-  right: -28vw;
-  bottom: -22vh;
-  width: 92vw;
-  height: 62vh;
+.halo-lilas {
+  right: -26vw;
+  bottom: -18vh;
+  width: 88vw;
+  height: 60vh;
   background: radial-gradient(
     circle,
-    rgba(140, 107, 255, 0.24) 0%,
-    rgba(140, 107, 255, 0.07) 42%,
+    rgba(140, 107, 255, 0.46) 0%,
+    rgba(140, 107, 255, 0.16) 44%,
     rgba(140, 107, 255, 0) 70%
   );
-  animation: flotte 58s ease-in-out infinite alternate-reverse;
+  animation: derive-b 43s ease-in-out infinite alternate;
 }
 
-@keyframes flotte {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
+.halo-glacier {
+  top: 26vh;
+  right: -34vw;
+  width: 76vw;
+  height: 52vh;
+  background: radial-gradient(
+    circle,
+    rgba(120, 214, 255, 0.36) 0%,
+    rgba(120, 214, 255, 0.12) 44%,
+    rgba(120, 214, 255, 0) 70%
+  );
+  animation: derive-c 53s ease-in-out infinite alternate;
+}
+
+.halo-rose {
+  bottom: 12vh;
+  left: -30vw;
+  width: 78vw;
+  height: 54vh;
+  background: radial-gradient(
+    circle,
+    rgba(255, 122, 217, 0.34) 0%,
+    rgba(255, 122, 217, 0.11) 44%,
+    rgba(255, 122, 217, 0) 70%
+  );
+  animation: derive-d 61s ease-in-out infinite alternate;
+}
+
+/* Quatre trajectoires distinctes. Une seule `@keyframes` partagée ferait
+   dériver les quatre halos dans la même direction, et l'écran entier aurait
+   l'air de glisser. */
+@keyframes derive-a {
   to {
-    transform: translate3d(7%, 6%, 0) scale(1.2);
+    transform: translate3d(9%, 7%, 0) scale(1.22);
+  }
+}
+
+@keyframes derive-b {
+  to {
+    transform: translate3d(-8%, -6%, 0) scale(1.18);
+  }
+}
+
+@keyframes derive-c {
+  to {
+    transform: translate3d(-12%, 9%, 0) scale(1.26);
+  }
+}
+
+@keyframes derive-d {
+  to {
+    transform: translate3d(11%, -8%, 0) scale(1.2);
   }
 }
 
@@ -382,7 +508,7 @@ li {
 
 .onde:nth-child(3) {
   animation-delay: 7.4s;
-  border-color: rgba(236, 223, 198, 0.24);
+  border-color: rgba(203, 255, 60, 0.24);
 }
 
 @keyframes onde-nfc {
@@ -415,6 +541,22 @@ li {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+}
+
+/* Les lignes de balayage. 0,03 d'opacité, une ligne toutes les trois : à
+   cette dose, personne ne les distingue, mais l'écran cesse d'être
+   parfaitement lisse. C'est ce qui sépare un dégradé propre d'une IMAGE. */
+.vernis::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.55;
 }
 
 .vernis::before {
@@ -472,11 +614,18 @@ h3 {
 /* Les grands mots. Bricolage Grotesque en 800 : large, un peu de travers,
    de l'affiche. Pas de `text-transform` : c'est le contenu qui décide, et
    une phrase en capitales est toujours plus dure qu'en bas-de-casse. */
+/* Embossé : une arête claire en haut du glyphe, une ombre courte en bas.
+   C'est ce qui donne à la lettre l'air d'être GRAVÉE dans le chrome plutôt
+   que posée dessus — et c'est un décalage d'un pixel, pas un effet. */
 .titre {
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 0.96;
+  text-shadow:
+    0 -1px 0 rgba(255, 255, 255, 0.22),
+    0 1px 0 rgba(0, 0, 0, 0.55),
+    0 3px 10px rgba(0, 0, 0, 0.45);
 }
 
 /* Le mot-matière : un mot énorme posé derrière le reste, qui déborde et
@@ -486,14 +635,18 @@ h3 {
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 0.82;
-  color: rgba(237, 239, 242, 0.05);
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(237, 239, 242, 0.1);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
 }
 
+/* La variante pleine garde un remplissage : elle sert là où le mot doit
+   peser, pas seulement suggérer une échelle. */
 .mot-plein {
-  color: rgba(237, 239, 242, 0.08);
+  color: rgba(237, 239, 242, 0.06);
+  -webkit-text-stroke: 1.5px rgba(237, 239, 242, 0.13);
 }
 
 /* L'étiquette. Écrite comme une phrase, en 14 px, dans la police du texte
@@ -556,9 +709,21 @@ h3 {
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    /* Une ombre portée très courte redonne l'épaisseur que la découpe
-       enlève : sans elle, le chiffre a l'air collé sur le fond. */
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+    /* Deux ombres portées. La courte et noire redonne l'épaisseur que la
+       découpe enlève ; la large et violette est le HALO — le métal renvoie
+       la couleur de l'ambiance, ce qui l'empêche d'être un trou gris au
+       milieu d'un écran coloré. */
+    /* Quatre ombres portées, et chacune fait un travail :
+         1-2. l'aberration chromatique — un liseré rouge à gauche, cyan à
+              droite, d'UN pixel. C'est le défaut d'un tube cathodique mal
+              convergé, et c'est ce qui fait « écran » plutôt que « print ».
+         3.   l'épaisseur, que la découpe du texte enlève ;
+         4.   le halo violet, pour que le métal renvoie l'ambiance. */
+    filter:
+      drop-shadow(-1px 0 0 rgba(255, 74, 74, 0.38))
+      drop-shadow(1px 0 0 rgba(74, 214, 255, 0.38))
+      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6))
+      drop-shadow(0 0 32px rgba(140, 107, 255, 0.45));
   }
 }
 
@@ -579,24 +744,26 @@ h3 {
 .panneau {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--gel-doux), rgba(255, 255, 255, 0.032);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.11),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    inset 0 2px 1px -1px rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),
     0 26px 52px -32px rgba(0, 0, 0, 0.95);
 }
 
 .panneau-plat {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.055);
+  background: var(--gel-doux), rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    inset 0 2px 1px -1px rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.45),
     0 30px 56px -34px rgba(0, 0, 0, 1);
 }
 
@@ -630,8 +797,48 @@ h3 {
    =========================================================================== */
 
 .scene {
+  position: relative;
   perspective: 1500px;
   perspective-origin: 50% 35%;
+}
+
+/* Le halo de l'objet. Il est SOUS la carte (`z-index: -1`) et déborde
+   largement : c'est ce qui donne l'impression que le métal renvoie de la
+   lumière sur ce qui l'entoure, au lieu d'être découpé sur le fond. */
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 8% -14% -22% -14%;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(54px);
+  background: radial-gradient(
+    ellipse 62% 58% at 50% 50%,
+    rgba(140, 107, 255, 0.58) 0%,
+    rgba(255, 122, 217, 0.34) 42%,
+    rgba(120, 214, 255, 0.24) 66%,
+    transparent 82%
+  );
+  pointer-events: none;
+  animation: respire-halo 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes respire-halo {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Journée close : le halo s'éteint avec le métal. */
+.dalle-scellee ~ * .scene::after {
+  opacity: 0.2;
 }
 
 .dalle {
@@ -661,7 +868,7 @@ h3 {
     /* Une chaleur diffuse : le métal renvoie la brume orange du fond. */
     radial-gradient(
       ellipse 90% 120% at calc(var(--lx) + 18%) calc(var(--ly) + 30%),
-      rgba(236, 223, 198, 0.24) 0%,
+      rgba(203, 255, 60, 0.24) 0%,
       rgba(140, 107, 255, 0.12) 45%,
       transparent 72%
     ),
@@ -719,13 +926,13 @@ h3 {
   border-radius: 4px;
   background: linear-gradient(
     90deg,
-    var(--os) 0%,
-    var(--os) calc(var(--charge, 0) * 100%),
+    var(--accent) 0%,
+    var(--accent) calc(var(--charge, 0) * 100%),
     rgba(255, 255, 255, 0.08) calc(var(--charge, 0) * 100%),
     rgba(255, 255, 255, 0.08) 100%
   );
   box-shadow: 0 0 32px -2px
-    color-mix(in srgb, var(--os) calc(var(--charge, 0) * 85%), transparent);
+    color-mix(in srgb, var(--accent) calc(var(--charge, 0) * 85%), transparent);
   transition:
     background 1.1s var(--doux),
     box-shadow 1.1s var(--doux);
@@ -773,7 +980,7 @@ h3 {
   border-radius: 50%;
   pointer-events: none;
   background: conic-gradient(
-    var(--os) calc(var(--progression, 0) * 360deg),
+    var(--accent) calc(var(--progression, 0) * 360deg),
     rgba(0, 0, 0, 0.35) 0
   );
   mask-image: radial-gradient(circle, transparent 62%, #000 64%);
@@ -800,14 +1007,16 @@ h3 {
   letter-spacing: -0.01em;
   line-height: 1;
   border: none;
-  /* Métal sombre poli : une rampe courte, pas un aplat translucide. */
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.13) 0%,
-    rgba(255, 255, 255, 0.055) 48%,
-    rgba(255, 255, 255, 0.03) 52%,
-    rgba(255, 255, 255, 0.075) 100%
-  );
+  /* Métal sombre poli, sous une bulle de gel. */
+  background:
+    var(--gel),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.11) 0%,
+      rgba(255, 255, 255, 0.05) 48%,
+      rgba(255, 255, 255, 0.028) 52%,
+      rgba(255, 255, 255, 0.07) 100%
+    );
   color: var(--craie);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
@@ -835,20 +1044,22 @@ h3 {
 /* Le bouton qui compte. Verni, pas mat : l'arête blanche du haut et la
    bascule au milieu le font lire comme une pastille émaillée. */
 .btn-primaire {
-  background: linear-gradient(
-    180deg,
-    #fbf3e4 0%,
-    var(--os) 46%,
-    #cdbb9a 54%,
-    #f3e8d2 100%
-  );
-  color: var(--os-encre);
+  background:
+    var(--gel),
+    linear-gradient(
+      180deg,
+      #e6ff8c 0%,
+      var(--accent) 46%,
+      #8fc417 54%,
+      #d8ff6e 100%
+    );
+  color: var(--accent-encre);
   font-weight: 700;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
-    0 20px 44px -20px rgba(236, 223, 198, 0.8);
+    0 20px 44px -20px rgba(203, 255, 60, 0.8);
 }
 
 /* Le danger n'a pas de couleur à lui : il a une matière. Un creux, un texte
@@ -856,12 +1067,12 @@ h3 {
 .btn-danger {
   background: rgba(0, 0, 0, 0.35);
   color: var(--dim);
-  box-shadow: inset 0 0 0 1px rgba(236, 223, 198, 0.26);
+  box-shadow: inset 0 0 0 1px rgba(203, 255, 60, 0.26);
 }
 
 .btn-danger:hover {
-  color: var(--os);
-  box-shadow: inset 0 0 0 1px rgba(236, 223, 198, 0.6);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(203, 255, 60, 0.6);
 }
 
 .btn-fantome {
@@ -884,14 +1095,20 @@ h3 {
   width: 100%;
   border: none;
   border-radius: var(--r);
-  background: rgba(0, 0, 0, 0.26);
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.22) 0%,
+      rgba(0, 0, 0, 0) 40%
+    ),
+    rgba(0, 0, 0, 0.3);
   padding: 1rem 1.1rem;
   font-family: var(--font-ui);
   font-size: 1rem;
   color: var(--craie);
   box-shadow:
-    inset 0 1px 3px 0 rgba(0, 0, 0, 0.5),
-    inset 0 -1px 0 0 rgba(255, 255, 255, 0.06);
+    inset 0 2px 5px 0 rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.09);
   transition: box-shadow 0.4s var(--doux);
 }
 
@@ -903,7 +1120,7 @@ h3 {
   outline: none;
   box-shadow:
     inset 0 1px 3px 0 rgba(0, 0, 0, 0.5),
-    inset 0 -2px 0 0 var(--os);
+    inset 0 -2px 0 0 var(--accent);
 }
 
 .champ:disabled {
@@ -946,7 +1163,10 @@ select.champ {
   gap: 0.45rem;
   border-radius: 999px;
   padding: 0.3rem 0.75rem;
-  background: rgba(255, 255, 255, 0.055);
+  background: var(--gel), rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.3);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0;
@@ -956,13 +1176,13 @@ select.champ {
 }
 
 .pastille-vive {
-  background: rgba(140, 107, 255, 0.14);
+  background: var(--gel), rgba(140, 107, 255, 0.16);
   color: var(--lilas);
 }
 
-.pastille-os {
-  background: rgba(236, 223, 198, 0.14);
-  color: var(--os);
+.pastille-accent {
+  background: var(--gel), rgba(203, 255, 60, 0.16);
+  color: var(--accent);
 }
 
 .point-live {
@@ -1011,7 +1231,7 @@ select.champ {
 }
 
 .jauge-cran-bonus {
-  background: var(--os);
+  background: var(--accent);
 }
 
 .barre {
@@ -1024,7 +1244,7 @@ select.champ {
 .barre-remplie {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(180deg, #fbf3e4 0%, var(--os) 50%, #cdbb9a 100%);
+  background: linear-gradient(180deg, #e6ff8c 0%, var(--accent) 50%, #8fc417 100%);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
   transition: width 0.9s var(--doux);
 }
@@ -1040,8 +1260,9 @@ select.champ {
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-    0 -18px 40px -30px rgba(0, 0, 0, 1);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 -18px 40px -30px rgba(0, 0, 0, 1),
+    0 -14px 44px -26px rgba(140, 107, 255, 0.4);
 }
 
 .onglet-actif {
@@ -1374,6 +1595,116 @@ select.champ {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   L'AVATAR HOLOGRAPHIQUE
+   Un anneau irisé qui tourne autour de la photo. C'est le motif Y2K par
+   excellence — la carte à collectionner, le sticker holo — et il distingue
+   une personne SANS ajouter une couleur au système.
+
+   L'anneau tourne parce que l'ÉLÉMENT tourne : un `conic-gradient` ne
+   s'anime pas tout seul sans enregistrer son angle via `@property`, alors
+   qu'une rotation de disque donne exactement le même rendu et reste sur le
+   GPU.
+   --------------------------------------------------------------------------- */
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: 999px;
+}
+
+.avatar::after {
+  content: "";
+  position: absolute;
+  inset: -2.5px;
+  border-radius: 999px;
+  padding: 2px;
+  background: var(--holo);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.55;
+  pointer-events: none;
+  animation: tourne-holo 16s linear infinite;
+  will-change: transform;
+}
+
+/* La lueur de l'anneau. Séparée de l'anneau lui-même parce qu'elle NE DOIT
+   PAS tourner : une lueur qui tourne se remarque, et on ne veut remarquer
+   que l'irisation. */
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(140, 107, 255, 0.5) 0%,
+    rgba(120, 214, 255, 0.2) 55%,
+    transparent 75%
+  );
+  filter: blur(7px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes tourne-holo {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   L'ÉTINCELLE
+   Le petit éclat à quatre branches. Réservé à la première place : c'est une
+   récompense, et une récompense qu'on distribue partout n'en est plus une.
+   --------------------------------------------------------------------------- */
+
+.rang-1::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 13px;
+  height: 13px;
+  background: #ffffff;
+  clip-path: polygon(
+    50% 0%,
+    58% 42%,
+    100% 50%,
+    58% 58%,
+    50% 100%,
+    42% 58%,
+    0% 50%,
+    42% 42%
+  );
+  animation: scintille 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scintille {
+  0%,
+  100% {
+    transform: scale(0.55) rotate(0deg);
+    opacity: 0.35;
+  }
+  18% {
+    transform: scale(1) rotate(35deg);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.55) rotate(70deg);
+    opacity: 0.3;
+  }
+}
+
 /* ===========================================================================
    ACCESSIBILITÉ
    La DA repose sur du mouvement lent. Si la personne n'en veut pas, tout
@@ -1395,16 +1726,25 @@ select.champ {
     animation: apparait 0.2s ease both !important;
   }
 
-  .lampe::before,
-  .lampe::after,
+  .halo,
   .grille::before,
   .vernis::before,
   .lustre::before,
   .btn-primaire::after,
   .metal,
+  .avatar::after,
+  .rang-1::after,
+  .scene::after,
   .onde,
   .dalle-vivante {
     animation: none !important;
+  }
+
+  /* L'étincelle démarre à 35 % d'opacité : figée là, elle ressemble à une
+     poussière sur l'écran. Elle se pose donc à sa taille pleine. */
+  .rang-1::after {
+    transform: scale(0.9) rotate(20deg);
+    opacity: 0.9;
   }
 
   /* Les reflets qui traversent sont invisibles à l'arrêt (ils démarrent hors
@@ -1458,8 +1798,8 @@ select.champ {
 }
 
 ::selection {
-  background: var(--os);
-  color: var(--os-encre);
+  background: var(--accent);
+  color: var(--accent-encre);
 }
 
 /* ===========================================================================
@@ -1504,13 +1844,32 @@ select.champ {
 
 /* La barre d'expérience d'une carte joueur. Le remplissage est animé par
    la largeur ; le reflet qui la traverse, lui, ne bouge que par transform. */
+/* La barre d'expérience.
+
+   Segmentée, pas continue : une jauge de borne d'arcade se remplit par
+   CRANS, et un cran qui s'allume se compte du regard alors qu'un liquide
+   qui monte ne se lit qu'approximativement. Le découpage est un masque
+   répété — la largeur reste animée normalement, et les blocs apparaissent
+   au fur et à mesure qu'elle les découvre. */
 .xp {
   position: relative;
-  height: 10px;
+  height: 11px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.6),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.07);
   overflow: hidden;
+  -webkit-mask-image: repeating-linear-gradient(
+    90deg,
+    #000 0 7px,
+    transparent 7px 10px
+  );
+  mask-image: repeating-linear-gradient(
+    90deg,
+    #000 0 7px,
+    transparent 7px 10px
+  );
 }
 
 .xp-remplie {
@@ -1519,14 +1878,14 @@ select.champ {
   border-radius: 999px;
   background: linear-gradient(
     180deg,
-    #fbf3e4 0%,
-    var(--os) 48%,
-    #cdbb9a 52%,
-    #f3e8d2 100%
+    #e6ff8c 0%,
+    var(--accent) 48%,
+    #8fc417 52%,
+    #d8ff6e 100%
   );
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
-    0 0 18px -4px rgba(236, 223, 198, 0.7);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    0 0 20px -3px rgba(203, 255, 60, 0.8);
   transition: width 1.1s var(--doux);
 }
 
@@ -1593,12 +1952,13 @@ select.champ {
 .carte-joueur {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--gel-doux), rgba(255, 255, 255, 0.032);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.11),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    inset 0 2px 1px -1px rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),
     0 26px 52px -34px rgba(0, 0, 0, 0.95);
   transition:
     transform 0.55s var(--elastique),
@@ -1609,7 +1969,8 @@ select.champ {
   transform: translateY(-3px);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
-    0 34px 62px -34px rgba(0, 0, 0, 1);
+    0 34px 62px -34px rgba(0, 0, 0, 1),
+    0 18px 50px -24px rgba(140, 107, 255, 0.45);
 }
 
 .carte-joueur:active {
@@ -1622,29 +1983,33 @@ select.champ {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 26px;
   height: 26px;
   border-radius: 9px;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.8125rem;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--gel), rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
   color: var(--faint);
 }
 
 .rang-1 {
-  background: linear-gradient(
-    180deg,
-    #fbf3e4 0%,
-    var(--os) 46%,
-    #cdbb9a 54%,
-    #f3e8d2 100%
-  );
-  color: var(--os-encre);
+  background:
+    var(--gel),
+    linear-gradient(
+      180deg,
+      #e6ff8c 0%,
+      var(--accent) 46%,
+      #8fc417 54%,
+      #d8ff6e 100%
+    );
+  color: var(--accent-encre);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
-    0 8px 20px -9px var(--os);
+    0 8px 20px -9px var(--accent);
 }
 
 .rang-2,

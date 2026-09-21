@@ -53,7 +53,7 @@ export default async function HistoryPage({
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">{staff ? "Objectifs" : "Mon net"}</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-os">
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-accent">
             {staff ? (
               <>
                 <Compteur valeur={atteints} />
@@ -136,7 +136,7 @@ export default async function HistoryPage({
               </div>
 
               {day.penalty_cents > 0 ? (
-                <p className="mt-3 text-sm text-os">
+                <p className="mt-3 text-sm text-accent">
                   Retenue validée par l&apos;encadrement :{" "}
                   {formatCents(day.penalty_cents)}
                 </p>

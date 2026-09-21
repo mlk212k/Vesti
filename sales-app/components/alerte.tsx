@@ -16,7 +16,7 @@ export function Alerte({
 }) {
   const arete =
     ton === "danger"
-      ? "shadow-[inset_2px_0_0_0_var(--os)]"
+      ? "shadow-[inset_2px_0_0_0_var(--accent)]"
       : "shadow-[inset_2px_0_0_0_var(--trait-fort)]";
 
   return (

@@ -58,7 +58,7 @@ export default async function MyCardsPage() {
                 </div>
                 <span
                   className={`chiffre text-base ${
-                    movement.member_delta > 0 ? "text-os" : "text-dim"
+                    movement.member_delta > 0 ? "text-accent" : "text-dim"
                   }`}
                 >
                   {movement.member_delta > 0 ? "+" : ""}

@@ -33,8 +33,8 @@ export default function ErreurGlobale({ reset }: { reset: () => void }) {
             border: "none",
             borderRadius: 999,
             padding: "0.9rem 1.6rem",
-            background: "#ecdfc6",
-            color: "#1a1610",
+            background: "#cbff3c",
+            color: "#111d06",
             fontSize: "1rem",
             fontWeight: 700,
           }}

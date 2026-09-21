@@ -126,7 +126,7 @@ export function DashboardMembre({
           ce qui explique sans être le sujet. */}
       <section className="montee text-center">
         <p className="surtitre">Mon net</p>
-        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-os">
+        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-accent">
           <Compteur valeur={day?.net_cents ?? 0} format="montant-exact" />
         </p>
         <p className="mt-3 text-sm text-faint">

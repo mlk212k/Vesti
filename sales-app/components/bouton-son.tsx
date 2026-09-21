@@ -27,7 +27,7 @@ export function BoutonSon() {
       </span>
       <span
         className={` text-sm    ${
-          actifs ? "text-os" : "text-faint"
+          actifs ? "text-accent" : "text-faint"
         }`}
       >
         {actifs ? "ON" : "OFF"}

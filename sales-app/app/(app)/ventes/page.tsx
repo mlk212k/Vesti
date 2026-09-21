@@ -69,7 +69,7 @@ export default async function SalesPage({
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">{staff ? "Commission" : "Mon net"}</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-os">
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-accent">
             <Compteur
               valeur={staff ? commission : total - commission}
               format="montant"

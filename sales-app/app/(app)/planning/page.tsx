@@ -70,7 +70,7 @@ export default async function PlanningPage({
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/equipe/${ligne.member_id}`}
-                      className="truncate font-medium hover:text-os"
+                      className="truncate font-medium hover:text-accent"
                     >
                       {ligne.full_name}
                     </Link>
@@ -106,7 +106,7 @@ export default async function PlanningPage({
       </Section>
 
       {manquants.length > 0 ? (
-        <p className="panneau-creux px-4 py-3 text-sm text-os">
+        <p className="panneau-creux px-4 py-3 text-sm text-accent">
           {manquants.length} personne{manquants.length > 1 ? "s" : ""} attendue
           {manquants.length > 1 ? "s" : ""} n&apos;{manquants.length > 1 ? "ont" : "a"}{" "}
           pas encore ouvert sa journée.
@@ -162,7 +162,7 @@ export default async function PlanningPage({
                   <th
                     key={jour.num}
                     className={`px-2 py-2.5 text-center  text-sm   ${
-                      jour.num === jourCourant ? "text-os" : "text-faint"
+                      jour.num === jourCourant ? "text-accent" : "text-faint"
                     }`}
                   >
                     {jour.court}
@@ -180,7 +180,7 @@ export default async function PlanningPage({
                   <td className="max-w-[9rem] px-3 py-2.5 text-sm">
                     <Link
                       href={`/planning?membre=${profile.id}`}
-                      className="block truncate hover:text-os"
+                      className="block truncate hover:text-accent"
                     >
                       {profile.full_name}
                     </Link>
@@ -195,11 +195,11 @@ export default async function PlanningPage({
                       <td key={jour.num} className="px-2 py-2.5">
                         <div className="flex justify-center gap-[3px]">
                           <span
-                            className={`h-4 w-2 rounded-[1px] ${matin ? "bg-os" : "bg-[rgba(255,255,255,0.07)]"}`}
+                            className={`h-4 w-2 rounded-[1px] ${matin ? "bg-accent" : "bg-[rgba(255,255,255,0.07)]"}`}
                             title={`${jour.court} matin`}
                           />
                           <span
-                            className={`h-4 w-2 rounded-[1px] ${aprem ? "bg-os" : "bg-[rgba(255,255,255,0.07)]"}`}
+                            className={`h-4 w-2 rounded-[1px] ${aprem ? "bg-accent" : "bg-[rgba(255,255,255,0.07)]"}`}
                             title={`${jour.court} après-midi`}
                           />
                         </div>

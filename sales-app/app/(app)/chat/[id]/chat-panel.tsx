@@ -235,7 +235,7 @@ export function ChatPanel({
                       />
                       {message.author_id && enLigne.includes(message.author_id) ? (
                         <span
-                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-nuit bg-os"
+                          className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-nuit bg-accent"
                           title="En ligne"
                         />
                       ) : null}
@@ -257,7 +257,7 @@ export function ChatPanel({
                     }
                     className={`block w-full text-left ${
                       moiMeme
-                        ? "rounded-[8px] rounded-br-[2px] bg-os px-3.5 py-2.5 text-sm text-[var(--os-encre)]"
+                        ? "rounded-[8px] rounded-br-[2px] bg-accent px-3.5 py-2.5 text-sm text-[var(--accent-encre)]"
                         : "rounded-[8px] rounded-bl-[2px] border border-trait bg-velours px-3.5 py-2.5 text-sm"
                     }`}
                   >
@@ -277,7 +277,7 @@ export function ChatPanel({
                           onClick={() => reagir(message.id, emoji)}
                           className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-sm ${
                             auteurs.includes(moi)
-                              ? "border-os bg-[rgba(236,223,198,0.14)]"
+                              ? "border-accent bg-[rgba(203,255,60,0.14)]"
                               : "border-trait bg-velours"
                           }`}
                           title={auteurs

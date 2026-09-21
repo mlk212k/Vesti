@@ -107,7 +107,7 @@ export function PhotoUpload({
         </label>
       )}
 
-      {erreur ? <p className="mt-1.5 text-sm text-os">{erreur}</p> : null}
+      {erreur ? <p className="mt-1.5 text-sm text-accent">{erreur}</p> : null}
     </div>
   );
 }

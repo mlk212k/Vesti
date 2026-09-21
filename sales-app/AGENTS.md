@@ -88,13 +88,23 @@ aux dix-sept écrans.
 
 Trois règles de cette DA, qui ne sont pas des préférences :
 
-- **Un seul accent, et c'est une température.** `--os` (beige crème) a
-  exactement trois usages : la tranche de la dalle, le chiffre qui
+- **Un seul accent, et son jeton porte son RÔLE.** `--accent` (vert acide)
+  a exactement trois usages : la tranche de la dalle, le chiffre qui
   appartient à la personne qui regarde, ce qui réclame une action
-  maintenant. Il fonctionne parce que TOUT le reste est froid — un accent
-  chaud sur un écran froid n'a pas besoin d'être vif. Ajouter une couleur
-  (un vert de succès, un rouge d'erreur) casse la DA. Une erreur se traite
-  par la matière — voir `components/alerte.tsx`.
+  maintenant. Il s'appelle `--accent` et non `--vert` parce qu'il a déjà
+  changé trois fois — pêche, beige, vert — et que chaque nom de couleur
+  imposait de renommer trente-quatre usages au changement suivant. Ajouter
+  une couleur (un vert de succès, un rouge d'erreur) casse la DA. Une erreur
+  se traite par la matière — voir `components/alerte.tsx`.
+
+- **La couleur d'ambiance et la couleur de SIGNAL sont deux systèmes.** Les
+  quatre halos du fond (acide, lilas, glacier, rose) peuvent être aussi
+  colorés qu'on veut : un halo ne veut rien dire, il est flou, il est
+  derrière tout, et il ne désigne aucun élément. C'est ce qui permet une
+  interface très colorée ET une signalétique de deux accents seulement.
+  Ajouter de la couleur à un halo est toujours sûr ; en ajouter à un
+  élément ne l'est jamais. L'accent a été choisi pour n'entrer en collision
+  avec aucun des quatre halos — un beige se noyait dans le halo crème.
 
 - **Le lilas répond à une autre question.** `--os` dit « agis / c'est à toi /
   ça cloche » ; `--lilas` dit « c'est vrai en ce moment » — présence, temps

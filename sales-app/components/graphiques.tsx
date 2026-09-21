@@ -55,11 +55,11 @@ export function Histogramme({
                   height: `${Math.max(ratio * 100, point.valeur > 0 ? 3 : 0.8)}%`,
                   background:
                     point.valeur > 0
-                      ? "linear-gradient(180deg, #fbf3e4 0%, var(--os) 100%)"
+                      ? "linear-gradient(180deg, #e6ff8c 0%, var(--accent) 100%)"
                       : "rgba(255,255,255,0.05)",
                   boxShadow:
                     point.valeur > 0
-                      ? "0 0 16px -6px var(--os)"
+                      ? "0 0 16px -6px var(--accent)"
                       : "none",
                 }}
                 title={`${point.label} : ${

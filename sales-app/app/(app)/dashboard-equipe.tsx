@@ -143,7 +143,7 @@ export function DashboardEquipe({
             {manquants.length > 0 ? (
               <>
                 {" · "}
-                <span className="chiffre text-os">{manquants.length}</span> pas encore
+                <span className="chiffre text-accent">{manquants.length}</span> pas encore
                 en route
               </>
             ) : (
@@ -151,7 +151,7 @@ export function DashboardEquipe({
             )}
           </p>
         </div>
-        <span className={manquants.length > 0 ? "pastille pastille-os" : "pastille"}>
+        <span className={manquants.length > 0 ? "pastille pastille-accent" : "pastille"}>
           {manquants.length > 0 ? "À relancer" : "Complet"}
         </span>
         <IconChevron className="h-4 w-4 shrink-0 text-faint transition-transform duration-500 group-hover:translate-x-1" />

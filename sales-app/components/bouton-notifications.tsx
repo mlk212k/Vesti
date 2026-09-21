@@ -214,7 +214,7 @@ export function BoutonNotifications() {
         ) : null}
       </div>
 
-      {message ? <p className="mt-3 text-sm text-os">{message}</p> : null}
+      {message ? <p className="mt-3 text-sm text-accent">{message}</p> : null}
     </div>
   );
 }

@@ -5,6 +5,58 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v3.1 — 21 septembre 2026 — « CHROME / Y2K »
+
+Le look CHROME poussé à fond, avec de la couleur et du rétro.
+
+### 🟢 L'accent passe au vert acide
+
+Le beige est remplacé par un **vert acide**. C'est la seule couleur qui ne
+se noie dans aucun des halos du fond — le beige disparaissait dans le halo
+crème.
+
+Il garde exactement ses trois emplois : **ton argent**, **une action à faire
+maintenant**, **un problème**. Rien d'autre.
+
+### 🌈 De la couleur partout, en halo
+
+**Quatre halos** dérivent maintenant derrière l'app — acide, violet,
+glacier, rose — à quatre vitesses différentes. Là où ils se croisent, ils
+fabriquent des teintes qu'aucun ne contient.
+
+Et des lueurs locales : sous la carte, derrière les gros chiffres, autour
+des avatars, sous la barre du bas.
+
+La couleur est dans **l'ambiance**, jamais dans les signaux : un halo est
+flou, il est derrière tout, il ne désigne rien. C'est ce qui permet d'avoir
+une app très colorée sans qu'on ne sache plus ce qui est important.
+
+### 💠 Le côté « gel » et bulle
+
+• **Les boutons, pastilles et badges sont en gel** : une lumière qui
+  s'arrête net à mi-hauteur, comme les boutons des ordinateurs de 2001.
+• **Les titres sont embossés**, comme gravés dans le métal.
+• **Les avatars ont un anneau holographique** qui tourne lentement.
+• **Le premier du classement a une étincelle** qui scintille.
+• Les champs sont creusés plus profond.
+
+### 📺 Le côté rétro
+
+• **Des lignes de balayage** très légères sur tout l'écran.
+• **Les coins s'assombrissent**, comme sur un vieux tube cathodique.
+• **Les gros chiffres ont un liseré rouge et cyan** d'un pixel — le défaut
+  d'un écran mal réglé.
+• **La barre d'objectif se remplit par crans**, comme une jauge de borne
+  d'arcade, au lieu de couler.
+
+### ♿ Toujours
+
+Si ton téléphone est réglé sur « réduire les animations », **tout** s'arrête
+— halos, anneaux, étincelles, reflets — et l'app reste entièrement
+utilisable.
+
+---
+
 ## v3.0 — 21 septembre 2026 — « CHROME »
 
 **Nouveau look complet.** L'app est passée du velours au métal.

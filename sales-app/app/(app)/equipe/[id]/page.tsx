@@ -212,7 +212,7 @@ export default async function MemberPage({
                 </div>
 
                 {d.penalty_cents > 0 ? (
-                  <p className="mt-2 text-sm text-os">
+                  <p className="mt-2 text-sm text-accent">
                     Retenue : {formatCents(d.penalty_cents)}
                   </p>
                 ) : null}

@@ -97,7 +97,7 @@ export function AvatarUploader({
           />
         </label>
         {erreur ? (
-          <p className="mt-1.5 text-sm text-os">{erreur}</p>
+          <p className="mt-1.5 text-sm text-accent">{erreur}</p>
         ) : (
           <p className="mt-1.5 text-sm text-faint">
             2 Mo maximum. Elle apparaît dans le chat et la vue d&apos;équipe.
