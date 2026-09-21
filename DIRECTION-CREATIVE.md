@@ -112,7 +112,7 @@ C'est la famille qui aurait évité le plus d'erreurs de ce projet.
 
 | # | Connecteur | Ce qu'il change |
 |---|---|---|
-| 26 | **Playwright MCP** ○ | Piloter un vrai navigateur : ouvrir chaque écran, cliquer, capturer. Le panneau invisible et la page Planning cassée se voyaient au premier chargement. |
+| 26 | **Playwright MCP** ✅ | Piloter un vrai navigateur : ouvrir chaque écran, cliquer, capturer, lire la console. Déclaré dans `.mcp.json`, viewport téléphone. Le panneau invisible et la page Planning cassée se voyaient au premier chargement. |
 | 27 | **Chrome DevTools MCP** ○ | Traces de performance, Lighthouse, couche par couche. Une animation à 40 fps se mesure, elle ne se devine pas. |
 | 28 | **Puppeteer MCP** ○ | Captures en série, comparaison avant/après d'un changement de DA. |
 | 29 | **Sentry** ○ | L'erreur réelle, chez l'utilisateur réel, avec sa pile. |
