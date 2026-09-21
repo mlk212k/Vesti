@@ -26,3 +26,27 @@ Exception qui compte ici : pour **Next lui-même**, la doc faisant foi reste
 `node_modules/next/dist/docs/`. Le dépôt est sur Next 16.3.4, et Context7
 n'indexe pas encore cette version. Context7 sert pour tout le reste —
 React 19, Tailwind 4, Supabase, Zod 4, web-push.
+
+## Playwright
+
+`.mcp.json` déclare aussi **Playwright** (`@playwright/mcp`, stdio, headless,
+profil isolé, viewport 390×844 — un téléphone, puisque c'est là que l'app
+est utilisée). Il sert à ouvrir réellement un écran : c'est la seule chose
+qui aurait attrapé la page Planning cassée et le panneau invisible, que
+`tsc`, `eslint` et `next build` laissaient tous passer.
+
+Deux pièges, tous deux payés en vrai :
+
+- **Attendre avant de capturer.** Une capture prise juste après
+  `browser_navigate` attrape l'animation d'entrée : l'écran arrive de
+  l'arrière, flou, et la capture montre une page entièrement floue qu'on
+  prend pour un bug de rendu. Toujours un `browser_wait_for` (≈ 3 s) avant
+  `browser_take_screenshot`. Le flou n'est pas une régression, c'est
+  `.ecran`.
+- **Le Chromium du conteneur.** Dans l'environnement distant, le Chromium
+  installé (`chromium-1194`) ne correspond pas à celui qu'attend le paquet
+  (`chromium-1246`), et le serveur répond `Browser "chrome-for-testing" is
+  not installed`. Ajouter alors
+  `--executable-path /opt/pw-browsers/chromium`. Ce drapeau n'est **pas**
+  dans `.mcp.json` : il est propre au conteneur et casserait la config en
+  local, où `npx playwright install chromium` suffit.
