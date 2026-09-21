@@ -1,30 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Bagel_Fat_One, Plus_Jakarta_Sans } from "next/font/google";
+import { Lilita_One, Plus_Jakarta_Sans } from "next/font/google";
 import { Fond } from "@/components/fond";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
 // Deux polices, et plus une seule ligne de monospace.
 //
-//   Bagel Fat One — une lettre BULLE. Gonflée, ronde, les contrepoints
-//   presque refermés, comme peinte à la bombe puis remplie. C'est le
-//   lettrage des pochettes de mixtape et des t-shirts du début des années
-//   2000 — dessiné à la main, pas construit à la règle.
+//   Lilita One — une lettre d'AFFICHE. Grasse, légèrement condensée,
+//   les terminaisons coupées net. C'est le lettrage des maillots, des
+//   panneaux de kermesse et des pochettes — dessiné pour être lu de loin et
+//   en travers, pas pour être élégant de près.
 //
-//   Plus Jakarta Sans — ronde, chaleureuse, très lisible. Elle porte TOUT
-//   le reste.
+//   Elle règle au passage un problème concret : les montants s'affichent
+//   jusqu'à 7 rem de haut. Une lettre large faisait déborder « 1 240 € » sur
+//   un écran étroit ; une condensée tient.
 //
-// Unbounded est partie, et c'est le cœur de la correction. Elle est large,
-// grasse et impeccablement géométrique : construite au compas. Sur un écran
-// déjà chromé, elle tirait toute la direction vers la MACHINE — Tron, le
-// lecteur MP3, le générique de film de science-fiction. Or le Y2K de la rue
-// n'est pas géométrique : il est gonflé, manuel, un peu bancal. C'est la
-// différence entre un logo de constructeur automobile et un tag.
-//
-// Le monospace, lui, ne revient pas. Il donnait à l'app un air de terminal
-// ou de site de paris ; les chiffres gardent la chasse tabulaire, ce qui
-// suffit à ce qu'une colonne de montants ne danse pas.
-const bagel = Bagel_Fat_One({
+const lilita = Lilita_One({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-display",
@@ -73,7 +64,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${bagel.variable} ${jakarta.variable}`}
+      className={`${lilita.variable} ${jakarta.variable}`}
     >
       <body className="min-h-screen bg-nuit text-craie antialiased">
         {/* Le décor animé : brumes à l'aérographe, treillis de chrome,

@@ -206,6 +206,9 @@
   --doux: cubic-bezier(0.22, 1, 0.36, 1);
   --elastique: cubic-bezier(0.34, 1.3, 0.5, 1);
   --liquide: cubic-bezier(0.65, 0, 0.2, 1);
+  /* La gelée : dépasse franchement avant de revenir. Réservée au RETOUR
+     d'un appui — c'est elle qui donne la sensation de matière molle. */
+  --gelee: cubic-bezier(0.18, 1.7, 0.42, 1);
 
   /* Position de la lumière sur l'objet, mise à jour au doigt. */
   --lx: 34%;
@@ -329,7 +332,25 @@ li {
   position: absolute;
   border-radius: 50%;
   filter: blur(100px);
-  will-change: transform;
+  will-change: transform, opacity;
+}
+
+/* Chaque halo porte DEUX animations : sa dérive (qui bouge `transform`) et
+   le souffle commun (qui bouge `opacity`). Les deux sont écrites dans le
+   MÊME raccourci, et c'est obligatoire — un raccourci `animation:` remet à
+   leur valeur par défaut toutes les propriétés de la famille qu'il ne
+   mentionne pas. Poser `animation-name: souffle` sur `.halo` et laisser
+   `animation: derive-a …` sur `.halo-or` supprimerait le souffle en
+   silence. */
+
+@keyframes souffle {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .halo-or {
@@ -343,7 +364,9 @@ li {
     rgba(255, 201, 60, 0.18) 44%,
     rgba(255, 201, 60, 0) 70%
   );
-  animation: derive-a 37s ease-in-out infinite alternate;
+  animation:
+    derive-a 37s ease-in-out infinite alternate,
+    souffle 19s ease-in-out infinite;
 }
 
 .halo-lilas {
@@ -357,7 +380,9 @@ li {
     rgba(140, 107, 255, 0.2) 44%,
     rgba(140, 107, 255, 0) 70%
   );
-  animation: derive-b 43s ease-in-out infinite alternate;
+  animation:
+    derive-b 43s ease-in-out infinite alternate,
+    souffle 19s ease-in-out infinite;
 }
 
 .halo-azur {
@@ -371,7 +396,9 @@ li {
     rgba(143, 208, 255, 0.15) 44%,
     rgba(143, 208, 255, 0) 70%
   );
-  animation: derive-c 53s ease-in-out infinite alternate;
+  animation:
+    derive-c 53s ease-in-out infinite alternate,
+    souffle 19s ease-in-out infinite;
 }
 
 .halo-rose {
@@ -385,7 +412,9 @@ li {
     rgba(255, 111, 200, 0.17) 44%,
     rgba(255, 111, 200, 0) 70%
   );
-  animation: derive-d 61s ease-in-out infinite alternate;
+  animation:
+    derive-d 61s ease-in-out infinite alternate,
+    souffle 19s ease-in-out infinite;
 }
 
 /* Quatre trajectoires distinctes. Une seule `@keyframes` partagée ferait
@@ -551,21 +580,25 @@ h3 {
 /* Embossé : une arête claire en haut du glyphe, une ombre courte en bas.
    C'est ce qui donne à la lettre l'air d'être GRAVÉE dans le chrome plutôt
    que posée dessus — et c'est un décalage d'un pixel, pas un effet. */
-/* L'interlettrage est POSITIF, et c'est contre-intuitif.
+/* L'INTERLETTRAGE SE RÈGLE PAR POLICE, jamais une fois pour toutes.
 
-   Sur une grotesque grasse, on serre : les blancs entre les lettres sont
-   larges et le mot se délite. Sur une lettre BULLE, c'est l'inverse — les
-   glyphes sont déjà gonflés jusqu'à se toucher, et le moindre serrage les
-   fait fusionner en une tache. Le réglage hérité (-0,03em, interligne 0,96)
-   venait d'Unbounded et rendait « Tableau de score » illisible.
+   Trois polices ont défilé ici et chacune voulait l'inverse de la
+   précédente. Unbounded, large et géométrique : il fallait SERRER
+   (-0,03em), sinon le mot se déliait. Bagel Fat One, gonflée jusqu'à ce
+   que les glyphes se touchent : il fallait ÉCARTER (+0,012em), sinon le
+   titre devenait une tache. Lilita One, condensée avec de vrais blancs
+   internes : elle ne demande presque rien.
 
-   Le poids 800 n'a plus d'effet non plus : Bagel Fat One n'existe qu'en
-   400. Il est laissé pour le jour où la police changera encore. */
+   Le symptôme d'un réglage hérité est toujours le même — « la police est
+   illisible » — alors que la police n'y est pour rien.
+
+   Le poids 800 n'a pas d'effet : Lilita One n'existe qu'en 400. Il est
+   laissé pour le jour où elle changera encore. */
 .titre {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: 0.012em;
-  line-height: 1.08;
+  letter-spacing: 0.004em;
+  line-height: 1.04;
   /* UNE ombre, pas cinq.
 
      Bagel Fat One est déjà une lettre très grasse aux contrepoints presque
@@ -581,8 +614,8 @@ h3 {
 .mot {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: 0.01em;
-  line-height: 0.92;
+  letter-spacing: 0.006em;
+  line-height: 0.9;
   /* Plein, pas en contour : un lettrage filaire est un rendu 3D, donc une
      machine. Un mot gonflé et rempli est une bombe de peinture. */
   color: rgba(246, 240, 233, 0.06);
@@ -631,8 +664,8 @@ h3 {
   font-family: var(--font-display);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.005em;
-  line-height: 1.02;
+  letter-spacing: 0.002em;
+  line-height: 1.04;
 }
 
 /* ---------------------------------------------------------------------------
@@ -925,8 +958,25 @@ h3 {
 
 /* La respiration : ±0,5 % sur neuf secondes. Personne ne la remarque, mais
    un écran sans elle a l'air arrêté. */
+/* Deux mouvements superposés, de durées PREMIÈRES ENTRE ELLES (9 s et 7 s) :
+   la respiration d'échelle et une dérive verticale. Comme ils ne se
+   resynchronisent qu'au bout de 63 secondes, l'objet ne repasse jamais
+   visiblement par la même pose — c'est ce qui le fait paraître vivant
+   plutôt que bouclé. */
 .dalle-vivante {
-  animation: respire 9s ease-in-out infinite;
+  animation:
+    respire 9s ease-in-out infinite,
+    flotte-objet 7s ease-in-out infinite;
+}
+
+@keyframes flotte-objet {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
 }
 
 @keyframes respire {
@@ -1007,17 +1057,37 @@ h3 {
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.45),
     0 10px 22px -16px rgba(0, 0, 0, 0.9);
   transition:
-    transform 0.55s var(--elastique),
+    transform 0.62s var(--gelee),
     background 0.3s var(--doux),
     color 0.3s var(--doux),
     box-shadow 0.3s var(--doux),
     opacity 0.25s ease;
 }
 
+/* ÉCRASEMENT ET ÉTIREMENT.
+
+   Un bouton qui rapetisse uniformément (`scale(0.955)`) est un bouton
+   d'appareil : la matière rigide ne change pas de forme, seulement de
+   taille. Un bouton qui s'ÉCRASE — plus large, moins haut — est mou, et
+   c'est le premier principe de l'animation de dessin animé.
+
+   L'ancienne version utilisait en plus `linear`, la courbe la plus
+   mécanique qui existe : vitesse constante, aucune inertie. Rien dans la
+   nature ne bouge en linéaire. */
 .btn:active {
-  transform: scale(0.955);
-  transition-duration: 0.1s;
-  transition-timing-function: linear;
+  transform: scale(1.035, 0.9);
+  transition-duration: 0.09s;
+  transition-timing-function: var(--doux);
+}
+
+/* Au relâchement, la gelée fait dépasser le bouton avant qu'il se repose. */
+.btn {
+  transition:
+    transform 0.62s var(--gelee),
+    background 0.3s var(--doux),
+    color 0.3s var(--doux),
+    box-shadow 0.3s var(--doux),
+    opacity 0.25s ease;
 }
 
 .btn:disabled {
@@ -1892,7 +1962,22 @@ select.champ {
 /* Les enfants directs se posent l'un après l'autre. Sept paliers suffisent :
    au-delà, l'attente se voit. */
 .cascade > * {
-  animation: leve 0.7s var(--doux) both;
+  animation: rebond 0.78s var(--gelee) both;
+}
+
+/* Le bloc arrive un peu trop bas et un peu trop petit, dépasse sa position,
+   puis se pose. La différence avec un simple `leve` tient au DÉPASSEMENT :
+   sans lui, un bloc glisse en place comme un tiroir ; avec lui, il tombe et
+   rebondit comme un objet. */
+@keyframes rebond {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 .cascade > *:nth-child(1) { animation-delay: 0.04s; }
@@ -2022,7 +2107,7 @@ select.champ {
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),
     0 26px 52px -34px rgba(0, 0, 0, 0.95);
   transition:
-    transform 0.55s var(--elastique),
+    transform 0.62s var(--gelee),
     box-shadow 0.45s var(--doux);
 }
 
@@ -2035,7 +2120,8 @@ select.champ {
 }
 
 .carte-joueur:active {
-  transform: scale(0.99);
+  transform: scale(1.014, 0.968);
+  transition-duration: 0.09s;
 }
 
 /* Le rang. 1 en pêche, 2 et 3 en clair, le reste en sourdine — pas de

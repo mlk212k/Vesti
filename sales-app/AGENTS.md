@@ -143,6 +143,21 @@ Trois règles de cette DA, qui ne sont pas des préférences :
   lilas (en tournée / objectif atteint), c'est le MOUVEMENT qui les sépare :
   l'un porte un point qui bat, l'autre non. Jamais une troisième couleur.
 
+- **Un raccourci `animation:` efface les animations posées plus haut.** Un
+  raccourci CSS remet à leur défaut TOUTES les propriétés de sa famille
+  qu'il ne mentionne pas. Poser `animation-name: souffle` sur `.halo` puis
+  écrire `animation: derive-a 37s …` sur `.halo-or` supprime le souffle
+  sans un mot. Quand deux animations doivent coexister sur un élément, elles
+  vont dans le MÊME raccourci, séparées par une virgule. Vérifiable en une
+  ligne dans un navigateur : `getComputedStyle(el).animationName` doit
+  lister les deux.
+
+- **L'interlettrage se règle PAR POLICE, jamais une fois pour toutes.**
+  Trois polices ont défilé et chacune voulait l'inverse de la précédente :
+  serrer pour une grotesque large, écarter pour une lettre bulle, presque
+  rien pour une condensée. Le symptôme d'un réglage hérité est toujours
+  « la police est illisible » — alors que la police n'y est pour rien.
+
 - **Deux `@keyframes` de même nom sont VALIDES, et la dernière gagne.**
   C'est le piège n°3 de `scripts/check-tokens.sh`. Une séquence d'allumage
   cathodique a vécu des heures sans jamais s'exécuter, masquée par une

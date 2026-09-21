@@ -5,6 +5,42 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v4.2 — 21 septembre 2026
+
+### ✍️ Encore une nouvelle écriture
+
+Les grands mots et les chiffres passent à une **lettre d'affiche** :
+grasse, un peu resserrée, terminaisons coupées net. Du maillot, du panneau,
+de la pochette — fait pour être lu de loin.
+
+Elle règle aussi un problème concret : les montants s'affichent très gros,
+et une lettre large faisait déborder « 1 240 € » sur un écran étroit.
+
+### 🫨 Ça bouge comme de la matière molle
+
+Nouvelles animations, toutes construites sur le même principe —
+**l'écrasement**, le premier principe du dessin animé :
+
+• **Les boutons s'écrasent** quand tu appuies : plus larges, moins hauts,
+  puis ils dépassent leur taille avant de se reposer. Avant, ils
+  rapetissaient uniformément, à vitesse constante — c'est le geste d'un
+  appareil, pas d'une matière.
+• **Les cartes joueur** font pareil.
+• **Les blocs rebondissent** en arrivant au lieu de glisser en place.
+• **La carte flotte** doucement de haut en bas, en plus de respirer. Les
+  deux mouvements ont des durées qui ne retombent jamais ensemble : l'objet
+  ne repasse jamais par la même pose.
+• **Les halos respirent** : leur intensité monte et descend lentement.
+
+### 🐛 Une animation qui aurait disparu en silence
+
+La respiration des halos était annulée par leur propre déclaration de
+dérive — en CSS, une écriture raccourcie efface les réglages posés plus
+haut, sans erreur. Attrapé avant livraison en mesurant les animations
+réellement en cours dans un navigateur (31).
+
+---
+
 ## v4.1 — 21 septembre 2026
 
 ### 💡 L'app est beaucoup moins sombre
