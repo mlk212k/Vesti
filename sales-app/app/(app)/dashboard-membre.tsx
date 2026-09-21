@@ -101,7 +101,7 @@ export function DashboardMembre({
                 <StatutJournee statut={statut} />
               </div>
               <div className="flex items-end gap-2">
-                <span className="chiffre text-[clamp(3rem,17vw,4.5rem)] text-craie">
+                <span className="chiffre metal text-[clamp(3rem,17vw,4.5rem)]">
                   {vendues}
                 </span>
                 <span className="chiffre pb-1.5 text-xl text-fumee">/ {objectif}</span>
@@ -126,7 +126,7 @@ export function DashboardMembre({
           ce qui explique sans être le sujet. */}
       <section className="montee text-center">
         <p className="surtitre">Mon net</p>
-        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-peche">
+        <p className="chiffre mt-2 text-[clamp(2.6rem,16vw,4.5rem)] text-os">
           <Compteur valeur={day?.net_cents ?? 0} format="montant-exact" />
         </p>
         <p className="mt-3 text-sm text-faint">

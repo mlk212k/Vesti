@@ -39,13 +39,13 @@ export function Logo({ className = "h-9 w-9" }: { className?: string }) {
           l'accent. La carte, elle, est de la matière grise. */}
       <path
         d="M39 19a8 8 0 0 1 0 11"
-        stroke="var(--peche)"
+        stroke="var(--os)"
         strokeWidth="2.6"
         strokeLinecap="round"
       />
       <path
         d="M43.5 15a14 14 0 0 1 0 19"
-        stroke="var(--peche)"
+        stroke="var(--os)"
         strokeOpacity="0.55"
         strokeWidth="2.6"
         strokeLinecap="round"

@@ -1,67 +1,138 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   DIRECTION ARTISTIQUE — « VELOURS »
+   DIRECTION ARTISTIQUE — « CHROME »
    ---------------------------------------------------------------------------
-   Douce, lente, chaude. Une app qu'on a envie de garder ouverte.
+   Du métal liquide posé sur du noir profond, et deux brumes à l'aérographe
+   qui dérivent derrière. Street sans être agressif : le chrome, c'est le
+   bijou, la jante, la pochette de mixtape — du luxe de quartier.
 
-   Ce qu'on a retiré, et pourquoi :
+   Ce qui change par rapport à « VELOURS » :
 
-   - LES CAPITALES MINUSCULES TRÈS ESPACÉES. Du texte de 10 px en majuscules
-     monospace avec 0,2em d'interlettrage, c'est la signature visuelle d'un
-     terminal, d'un site de paris ou d'un tableau de bord d'entreprise. Ici
-     les étiquettes sont écrites normalement, en 14 px, comme on écrit à
-     quelqu'un.
-   - LE MONOSPACE. Plus une seule ligne. Les chiffres sont en chasse
-     tabulaire, ce qui suffit à ce qu'une colonne ne danse pas.
-   - LE NOIR FROID ET LES ANGLES. Le fond est un noir CHAUD, légèrement
-     violine, et rien n'a d'angle vif : les rayons vont de 20 à 44 px.
+   - LE NOIR DEVIENT FROID ET PROFOND. Le violine chaud est parti. Le chrome
+     n'a de reflets que sur un fond qui ne raconte rien lui-même : plus le
+     fond est neutre, plus le métal existe.
+   - LES CHIFFRES SONT EN MÉTAL. Ce ne sont plus des chiffres colorés, c'est
+     une matière : une rampe blanc → acier → creux → blanc, découpée dans le
+     texte. Un montant a du poids parce qu'il a l'air lourd.
+   - LA CARTE EST CHROMÉE. Elle était en velours sombre ; elle est maintenant
+     polie, avec un reflet spéculaire qui GLISSE sous le doigt et un liseré
+     irisé sur la tranche. C'est l'objet le plus précieux de l'écran, et ça
+     se voit enfin.
+   - L'ACCENT N'EST PLUS UNE COULEUR, C'EST UNE TEMPÉRATURE. Le pêche a
+     laissé place à un beige os (#ecdfc6) — la seule chose chaude d'un écran
+     entièrement froid. Un orange faisait le même travail en hurlant ; le
+     crème le fait en silence, et c'est l'accord Y2K exact : chrome et crème.
+   - LA TYPOGRAPHIE A UN ACCENT. Unbounded pour les grands mots et les
+     chiffres : très large, très grasse, les contrepoints presque fermés —
+     la lettre des pochettes du début des années 2000. Space Grotesk pour
+     tout le reste. Les deux polices précédentes étaient correctes et
+     neutres, c'est-à-dire de la typographie de logiciel bien élevé.
+   - PLUS DE LIGNES DE BALAYAGE. Le cathodique appartient à une autre
+     direction. À la place : un vernis, un voile iridescent très sourd qui
+     donne au verre l'air d'avoir été poli.
 
-   Ce qu'on a mis à la place :
+   Ce qui NE change pas, et c'est délibéré : la carte NFC reste l'objet
+   central, l'appui long reste le geste, la tranche qui se remplit reste la
+   jauge. C'est la signature de l'app — on change sa matière, pas sa nature.
 
-   - DEUX LAVIS FLOUS très sourds derrière la page, pêche en haut, lilas en
-     bas, qui dérivent lentement. C'est ce qui rend l'écran « mou » : aucune
-     zone n'est un aplat mort.
-   - DES PLANS EN VERRE DÉPOLI, généreusement espacés. Un plan se distingue
-     du fond parce qu'il est un peu plus clair et qu'il flotte, pas parce
-     qu'un trait en fait le tour.
-   - UNE TYPO À CARACTÈRE. Bricolage Grotesque pour les grands mots : large,
-     un peu bancale, éditoriale — de l'affiche de quartier, pas du logiciel.
-     Plus Jakarta Sans pour tout le reste : ronde, lisible, chaleureuse.
-
-   Règle qui tranche les cas douteux : si un élément ressemble à un écran de
-   cotes ou à un tableur, il est raté.
+   Règle qui tranche les cas douteux : si un élément a l'air imprimé à plat,
+   il est raté. Tout ici a une épaisseur et renvoie de la lumière.
    =========================================================================== */
 
 :root {
-  /* --- Les fonds. Noir CHAUD : il y a du rouge et du violet dedans, ce qui
-     empêche l'écran d'être clinique. ------------------------------------- */
-  --nuit: #100e12;
-  --encre: #17151a;
-  --velours: #1e1b23;
-  --fumee: #272430;
+  /* --- Les fonds. Noir PROFOND et neutre, presque bleuté. -------------- */
+  --nuit: #08080a;
+  --encre: #101014;
+  --velours: #16161c;
+  --fumee: #21212a;
 
-  /* --- Le texte. Blanc crème, gris lilas. ------------------------------- */
-  --craie: #f4f0ea;
-  --dim: #a49dad;
-  --faint: #7a7386;
+  /* --- Le texte. Blanc froid, gris acier. ------------------------------ */
+  --craie: #edeff2;
+  --dim: #a8aeb8;
+  --faint: #8e949e;
 
-  /* --- Les accents. Deux, doux tous les deux, jamais fluo. -------------- */
-  --peche: #ff8f5e; /* l'argent, l'action, ce qui est à soi */
-  --lilas: #b39bff; /* le vivant : présence, temps réel, relances */
-  --peche-encre: #2a0f02;
+  /* --- Les accents. Deux, et ils ne font pas le même travail. ---------- */
+  /* L'accent n'est plus une couleur, c'est une TEMPÉRATURE.
 
-  --trait: rgba(255, 255, 255, 0.07);
-  --trait-fort: rgba(255, 255, 255, 0.13);
+     Tout l'écran est froid : le noir tire sur le bleu, le chrome sur le
+     gris-acier, le blanc du texte est un blanc de néon. Le beige os est la
+     seule chose chaude — et sur un fond froid, le chaud saute aux yeux sans
+     avoir besoin de crier. Un orange faisait le même travail en hurlant.
+
+     C'est aussi l'accord Y2K exact : chrome et crème. */
+  --os: #ecdfc6; /* l'argent, l'action, ce qui est à soi */
+  --lilas: #8c6bff; /* le vivant : présence, temps réel, relances */
+  --os-encre: #1a1610; /* le texte posé SUR le beige */
+
+  --trait: rgba(255, 255, 255, 0.09);
+  --trait-fort: rgba(255, 255, 255, 0.17);
+
+  /* --- LE CHROME ------------------------------------------------------- */
+  /* Cinq arrêts, pas un dégradé de deux couleurs. Ce qui fait lire « métal »
+     plutôt que « gris », c'est l'INVERSION brutale au milieu : le clair
+     bascule dans le sombre d'un coup, comme l'horizon dans une carrosserie.
+     Un dégradé linéaire doux, lui, ne ressemble qu'à du plastique. */
+  --chrome-blanc: #ffffff;
+  --chrome-clair: #d8dde5;
+  --chrome-acier: #8a929e;
+  --chrome-creux: #3a3f49;
+  --chrome-nuit: #1a1d22;
+
+  --chrome-rampe: linear-gradient(
+    168deg,
+    #ffffff 0%,
+    #d8dde5 13%,
+    #8a929e 29%,
+    #3a3f49 45%,
+    #1a1d22 52%,
+    #6f7784 66%,
+    #e6eaf0 83%,
+    #9aa2ae 100%
+  );
+
+  /* La rampe du TEXTE n'est pas celle de la carte, et c'est délibéré.
+
+     Une carte est une grande surface : elle peut se permettre de plonger
+     dans le noir au milieu, c'est même ce qui la fait lire comme du métal.
+     Un chiffre, non — la bande sombre tombe en plein sur les jambages et le
+     glyphe disparaît sur un fond déjà noir. Vérifié à l'écran : « 1 240 € »
+     était illisible avec la rampe de la carte.
+
+     Celle-ci garde l'inversion (donc l'effet métal) mais ne descend jamais
+     sous #6e7684, qui reste franchement au-dessus du fond. */
+  --chrome-texte: linear-gradient(
+    172deg,
+    #ffffff 0%,
+    #e9edf3 16%,
+    #b6bdc8 34%,
+    #6e7684 48%,
+    #8d96a3 56%,
+    #dfe4ec 74%,
+    #ffffff 88%,
+    #aab2be 100%
+  );
+
+  /* L'irisation : ce que renvoie une surface polie sur ses bords. Sourde,
+     jamais un arc-en-ciel franc — on la remarque en bougeant, pas à l'arrêt. */
+  --iris: linear-gradient(
+    100deg,
+    rgba(236, 223, 198, 0.5) 0%,
+    rgba(140, 107, 255, 0.45) 34%,
+    rgba(120, 214, 255, 0.42) 62%,
+    rgba(236, 223, 198, 0.45) 100%
+  );
 
   /* Rien d'anguleux nulle part. */
   --r: 18px;
   --r-lg: 28px;
   --r-xl: 40px;
 
-  /* Deux courbes, lentes toutes les deux. L'app ne se presse jamais. */
+  /* Trois courbes. `--liquide` est nouvelle : elle démarre vite et s'étale
+     longtemps, ce qui est exactement la façon dont un reflet se déplace. */
   --doux: cubic-bezier(0.22, 1, 0.36, 1);
   --elastique: cubic-bezier(0.34, 1.3, 0.5, 1);
+  --liquide: cubic-bezier(0.65, 0, 0.2, 1);
 
   /* Position de la lumière sur l'objet, mise à jour au doigt. */
   --lx: 34%;
@@ -76,7 +147,7 @@
   --color-craie: var(--craie);
   --color-dim: var(--dim);
   --color-faint: var(--faint);
-  --color-peche: var(--peche);
+  --color-os: var(--os);
   --color-lilas: var(--lilas);
   --color-trait: var(--trait);
   --font-sans: var(--font-ui);
@@ -154,8 +225,8 @@ li {
 
 /* ===========================================================================
    LE FOND
-   Deux lavis flous qui dérivent, et un grain. C'est tout — et c'est ce qui
-   fait la douceur : il n'y a nulle part un aplat de noir mort.
+   Deux brumes à l'aérographe, un treillis de chrome, les ondes NFC, un
+   vernis. Quatre couches, zéro image, zéro octet de JavaScript.
    =========================================================================== */
 
 .lampe {
@@ -166,40 +237,43 @@ li {
   overflow: hidden;
 }
 
-/* Les deux lavis de couleur, qui dérivent lentement. Ils donnent la
-   chaleur ; la grille et les ondes donnent le mouvement. */
+/* Les deux brumes. Plus larges et plus franches qu'en VELOURS : sur un noir
+   neutre, une brume timide ne se voit pas du tout — elle a l'air d'une tache
+   sur l'écran. Il leur faut de la saturation pour lire comme de l'aérographe. */
 .lampe::before,
 .lampe::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(100px);
 }
 
 .lampe::before {
-  top: -28vh;
-  left: -18vw;
+  top: -30vh;
+  left: -20vw;
+  width: 96vw;
+  height: 66vh;
+  background: radial-gradient(
+    circle,
+    rgba(236, 223, 198, 0.2) 0%,
+    rgba(236, 223, 198, 0.06) 42%,
+    rgba(236, 223, 198, 0) 70%
+  );
+  animation: flotte 46s ease-in-out infinite alternate;
+}
+
+.lampe::after {
+  right: -28vw;
+  bottom: -22vh;
   width: 92vw;
   height: 62vh;
   background: radial-gradient(
     circle,
-    rgba(255, 143, 94, 0.17) 0%,
-    rgba(255, 143, 94, 0) 68%
+    rgba(140, 107, 255, 0.24) 0%,
+    rgba(140, 107, 255, 0.07) 42%,
+    rgba(140, 107, 255, 0) 70%
   );
-  animation: flotte 42s ease-in-out infinite alternate;
-}
-
-.lampe::after {
-  right: -26vw;
-  bottom: -20vh;
-  width: 88vw;
-  height: 58vh;
-  background: radial-gradient(
-    circle,
-    rgba(179, 155, 255, 0.14) 0%,
-    rgba(179, 155, 255, 0) 68%
-  );
-  animation: flotte 54s ease-in-out infinite alternate-reverse;
+  animation: flotte 58s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes flotte {
@@ -207,19 +281,15 @@ li {
     transform: translate3d(0, 0, 0) scale(1);
   }
   to {
-    transform: translate3d(6%, 5%, 0) scale(1.18);
+    transform: translate3d(7%, 6%, 0) scale(1.2);
   }
 }
 
 /* ---------------------------------------------------------------------------
-   LA GRILLE
-   La maille des jeux 80, qui dérive lentement vers le haut.
-
-   Première version : un sol en perspective (`rotateX`). Abandonné — avec la
-   `perspective` du conteneur, l'essentiel du plan se projetait hors de la
-   zone visible et on ne voyait strictement rien. Une maille plate,
-   atténuée sur les bords, donne la même lecture et ne dépend d'aucun
-   calcul de projection.
+   LE TREILLIS
+   Le fil de fer qui entoure un objet en cours de rendu. En VELOURS c'était
+   une maille de jeu vidéo ; ici c'est le filaire d'un modèle 3D — la même
+   couche, un propos différent.
 
    Le motif fait 56 px et la couche se translate d'exactement 56 px avant de
    reboucler : la maille retombe sur elle-même, donc le défilement n'a ni
@@ -235,13 +305,13 @@ li {
   mask-image: radial-gradient(
     ellipse 85% 70% at 50% 45%,
     #000 0%,
-    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.5) 55%,
     transparent 100%
   );
   -webkit-mask-image: radial-gradient(
     ellipse 85% 70% at 50% 45%,
     #000 0%,
-    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.5) 55%,
     transparent 100%
   );
 }
@@ -253,15 +323,15 @@ li {
   background-image:
     repeating-linear-gradient(
       90deg,
-      rgba(255, 143, 94, 0.07) 0 1px,
+      rgba(216, 221, 229, 0.055) 0 1px,
       transparent 1px 56px
     ),
     repeating-linear-gradient(
       0deg,
-      rgba(179, 155, 255, 0.06) 0 1px,
+      rgba(216, 221, 229, 0.045) 0 1px,
       transparent 1px 56px
     );
-  animation: defile-grille 7s linear infinite;
+  animation: defile-grille 11s linear infinite;
   will-change: transform;
 }
 
@@ -278,7 +348,8 @@ li {
    LES ONDES NFC
    Trois anneaux qui partent du même point et s'effacent, décalés dans le
    temps. C'est le geste du produit — approcher une carte d'un lecteur —
-   transformé en respiration de l'écran.
+   transformé en respiration de l'écran. Ils sont maintenant en chrome, pas
+   en couleur : sur cette direction, l'accent se réserve à ce qui compte.
    --------------------------------------------------------------------------- */
 
 .ondes {
@@ -298,19 +369,20 @@ li {
   height: 42vmax;
   margin: -21vmax 0 0 -21vmax;
   border-radius: 50%;
-  border: 1px solid rgba(255, 143, 94, 0.28);
+  border: 1px solid rgba(216, 221, 229, 0.3);
   opacity: 0;
-  animation: onde-nfc 9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: onde-nfc 11s var(--liquide) infinite;
   will-change: transform, opacity;
 }
 
 .onde:nth-child(2) {
-  animation-delay: 3s;
-  border-color: rgba(179, 155, 255, 0.26);
+  animation-delay: 3.7s;
+  border-color: rgba(140, 107, 255, 0.28);
 }
 
 .onde:nth-child(3) {
-  animation-delay: 6s;
+  animation-delay: 7.4s;
+  border-color: rgba(236, 223, 198, 0.24);
 }
 
 @keyframes onde-nfc {
@@ -319,7 +391,7 @@ li {
     opacity: 0;
   }
   12% {
-    opacity: 0.85;
+    opacity: 0.8;
   }
   100% {
     transform: scale(1.5);
@@ -327,18 +399,52 @@ li {
   }
 }
 
-/* Lignes de balayage : la trace d'un écran cathodique. 0,018 d'opacité —
-   on ne les voit pas, on sent la matière de l'image. */
-.scanlines {
+/* ---------------------------------------------------------------------------
+   LE VERNIS
+   Remplace les lignes de balayage cathodiques, qui appartenaient à une autre
+   direction. Une bande iridescente très sourde traverse l'écran en diagonale,
+   très lentement — l'impression que la vitre vient d'être polie.
+
+   Elle ne bouge que par `transform`, sur une couche fixe : aucun recalcul de
+   mise en page, et rien à repeindre en dehors de la bande elle-même.
+   --------------------------------------------------------------------------- */
+
+.vernis {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.026) 0 1px,
-    transparent 1px 3px
+  overflow: hidden;
+}
+
+.vernis::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 60%;
+  height: 220%;
+  transform: rotate(18deg) translate3d(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(216, 221, 229, 0.035) 38%,
+    rgba(140, 107, 255, 0.03) 52%,
+    rgba(216, 221, 229, 0.035) 64%,
+    transparent 100%
   );
+  animation: passe-vernis 26s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes passe-vernis {
+  0%,
+  100% {
+    transform: rotate(18deg) translate3d(-20%, 0, 0);
+  }
+  50% {
+    transform: rotate(18deg) translate3d(240%, 0, 0);
+  }
 }
 
 body::after {
@@ -347,13 +453,14 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.032;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ===========================================================================
    TYPOGRAPHIE
-   Deux polices, et surtout : PLUS DE MAJUSCULES ESPACÉES, PLUS DE 10 PX.
+   Deux polices, et une MATIÈRE en plus : le métal, réservé aux grands
+   chiffres.
    =========================================================================== */
 
 h1,
@@ -368,7 +475,7 @@ h3 {
 .titre {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.028em;
+  letter-spacing: -0.03em;
   line-height: 0.96;
 }
 
@@ -379,19 +486,18 @@ h3 {
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 0.82;
-  color: rgba(244, 240, 234, 0.045);
+  color: rgba(237, 239, 242, 0.05);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
 }
 
 .mot-plein {
-  color: rgba(244, 240, 234, 0.07);
+  color: rgba(237, 239, 242, 0.08);
 }
 
-/* L'étiquette. Ce qui était en capitales monospace de 10 px est maintenant
-   une phrase, en 14 px, dans la police du texte courant. C'est le
-   changement qui enlève le plus de « logiciel » à l'app. */
+/* L'étiquette. Écrite comme une phrase, en 14 px, dans la police du texte
+   courant — pas en capitales espacées de 10 px. */
 .surtitre {
   font-family: var(--font-ui);
   font-weight: 500;
@@ -414,7 +520,12 @@ h3 {
 }
 
 /* Les chiffres : la police d'affiche, en chasse tabulaire pour qu'une
-   colonne de montants ne danse pas quand une valeur change. */
+   colonne de montants ne danse pas quand une valeur change.
+
+   Volontairement SANS matière : `.chiffre` sert du 14 px au 36 px, et une
+   rampe métallique sur du petit texte rend le chiffre illisible — la bande
+   sombre du milieu tombe en plein sur les jambages. Le métal est une classe
+   à part, `.metal`, qu'on pose seulement sur les grands. */
 .chiffre {
   font-family: var(--font-display);
   font-weight: 800;
@@ -423,55 +534,99 @@ h3 {
   line-height: 1;
 }
 
+/* ---------------------------------------------------------------------------
+   LE MÉTAL
+   La rampe de chrome découpée dans le texte. À réserver aux chiffres d'au
+   moins 24 px : en dessous, la bande sombre mange le glyphe.
+
+   La couleur de repli est posée AVANT, en dur : si `background-clip: text`
+   n'est pas supporté (ou si une extension force les couleurs), le chiffre
+   reste blanc et lisible au lieu de devenir invisible. C'est tout l'intérêt
+   du `@supports` — l'effet est un bonus, jamais une condition de lecture.
+   --------------------------------------------------------------------------- */
+
+.metal {
+  color: var(--craie);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .metal {
+    background-image: var(--chrome-texte);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    /* Une ombre portée très courte redonne l'épaisseur que la découpe
+       enlève : sans elle, le chiffre a l'air collé sur le fond. */
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+  }
+}
+
 .tabulaire {
   font-variant-numeric: tabular-nums;
 }
 
 /* ===========================================================================
    LES PLANS
-   Du verre dépoli posé sur les lavis. Pas de contour : un plan se voit
-   parce qu'il est plus clair, qu'il laisse passer le fond, et qu'il flotte.
+   Du verre poli posé sur les brumes. Pas de contour : un plan se voit parce
+   qu'il est plus clair, qu'il laisse passer le fond, et qu'il flotte.
+
+   Le liseré du haut est plus net qu'en VELOURS (0,11 au lieu de 0,07) : sur
+   un noir froid, une arête molle ne se lit pas — le plan a l'air sale
+   plutôt que vitré.
    =========================================================================== */
 
 .panneau {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.032);
-  backdrop-filter: blur(18px) saturate(1.2);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-    0 24px 48px -32px rgba(0, 0, 0, 0.9);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.11),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    0 26px 52px -32px rgba(0, 0, 0, 0.95);
 }
 
 .panneau-plat {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(18px) saturate(1.2);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
-    0 28px 52px -34px rgba(0, 0, 0, 0.95);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),
+    0 30px 56px -34px rgba(0, 0, 0, 1);
 }
 
 /* Creusé dans la matière : les champs, les sous-totaux. */
 .panneau-creux {
   position: relative;
   border-radius: var(--r-lg);
-  background: rgba(0, 0, 0, 0.24);
-  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 3px 0 rgba(0, 0, 0, 0.6),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ===========================================================================
    L'OBJET — LA CARTE
    La carte NFC en volume : c'est ce que l'équipe vend, et son état est
    l'état de la journée. La tranche se remplit à mesure des ventes — il n'y
-   a pas de jauge à côté, la jauge est l'objet.
+   a pas de jauge à côté, la jauge EST l'objet.
 
-   Version VELOURS : plus ronde, plus chaude, plus molle. L'antenne gravée a
-   disparu (trop technique) ; à la place, un voile de lumière qui glisse
-   sous le doigt.
+   Version CHROME : elle est polie. Trois choses la font lire comme du métal
+   plutôt que comme un rectangle gris :
+
+   1. LA RAMPE S'INVERSE au milieu. Un dégradé doux ressemble à du plastique ;
+      c'est la bascule brutale clair → sombre qui fait l'horizon d'une
+      carrosserie.
+   2. LE REFLET SUIT LE DOIGT. Le point spéculaire est posé en `--lx/--ly`,
+      que la dalle met à jour au `pointermove`. C'est ce qui fait qu'on a
+      l'impression de tenir une surface, pas de regarder une image.
+   3. LA TRANCHE EST IRISÉE. Un liseré en dégradé tout autour, obtenu par
+      masque — voir la note sur `mask-composite` plus bas.
    =========================================================================== */
 
 .scene {
@@ -486,37 +641,70 @@ h3 {
   border-radius: 9% / 14%;
   transform-style: preserve-3d;
   background:
+    /* Le point spéculaire, qui suit le doigt. SERRÉ : à 60 % de large il
+       couvrait la carte entière et la rendait blanche — le métal ne se
+       lisait plus du tout. Un reflet, c'est petit et c'est franc. */
     radial-gradient(
-      ellipse 85% 130% at var(--lx) var(--ly),
-      rgba(255, 255, 255, 0.16) 0%,
-      rgba(255, 255, 255, 0.05) 30%,
-      transparent 64%
+      ellipse 30% 42% at var(--lx) var(--ly),
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.32) 26%,
+      rgba(255, 255, 255, 0) 62%
     ),
-    linear-gradient(155deg, #322b3a 0%, #221e28 48%, #16131a 100%);
+    /* Un assombrissement du bas : sans lui la carte flotte sans poids. */
+    linear-gradient(
+      190deg,
+      transparent 0%,
+      transparent 44%,
+      rgba(0, 0, 0, 0.38) 78%,
+      rgba(0, 0, 0, 0.6) 100%
+    ),
+    /* Une chaleur diffuse : le métal renvoie la brume orange du fond. */
+    radial-gradient(
+      ellipse 90% 120% at calc(var(--lx) + 18%) calc(var(--ly) + 30%),
+      rgba(236, 223, 198, 0.24) 0%,
+      rgba(140, 107, 255, 0.12) 45%,
+      transparent 72%
+    ),
+    /* La rampe de chrome. */
+    var(--chrome-rampe);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
-    0 3px 0 0 rgba(0, 0, 0, 0.5),
-    0 44px 70px -34px rgba(0, 0, 0, 1);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.7),
+    0 3px 0 0 rgba(0, 0, 0, 0.6),
+    0 50px 80px -34px rgba(0, 0, 0, 1);
   transition:
     transform 0.72s var(--elastique),
     box-shadow 0.5s var(--doux);
   will-change: transform;
 }
 
-/* Un voile chaud, très large, qui suit la lumière. C'est ce qui remplace
-   l'antenne gravée : de la matière, pas un schéma technique. */
+/* Le liseré irisé.
+
+   Technique : deux masques superposés, l'un cadré sur la `content-box`
+   (donc rétréci du `padding`), l'autre sur la boîte entière, composés en
+   `exclude`. Il reste l'anneau entre les deux — d'où le liseré, qui suit le
+   `border-radius` (ce qu'un `border-image` ne sait pas faire).
+
+   Le piège documenté dans AGENTS.md : `intersect` de deux bandes `repeat-x`
+   ne laisse RIEN d'opaque et fait disparaître l'élément. Ici les deux
+   couches sont des aplats pleins et la composition est `exclude` — c'est le
+   cas qui fonctionne. À vérifier à l'écran malgré tout, jamais à la lecture. */
 .dalle::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    ellipse 70% 100% at var(--lx) var(--ly),
-    rgba(255, 143, 94, 0.14) 0%,
-    rgba(179, 155, 255, 0.07) 42%,
-    transparent 70%
-  );
+  padding: 1.5px;
+  background: var(--iris);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.8;
   pointer-events: none;
 }
 
@@ -531,13 +719,13 @@ h3 {
   border-radius: 4px;
   background: linear-gradient(
     90deg,
-    var(--peche) 0%,
-    var(--peche) calc(var(--charge, 0) * 100%),
-    rgba(255, 255, 255, 0.07) calc(var(--charge, 0) * 100%),
-    rgba(255, 255, 255, 0.07) 100%
+    var(--os) 0%,
+    var(--os) calc(var(--charge, 0) * 100%),
+    rgba(255, 255, 255, 0.08) calc(var(--charge, 0) * 100%),
+    rgba(255, 255, 255, 0.08) 100%
   );
-  box-shadow: 0 0 28px -2px
-    color-mix(in srgb, var(--peche) calc(var(--charge, 0) * 75%), transparent);
+  box-shadow: 0 0 32px -2px
+    color-mix(in srgb, var(--os) calc(var(--charge, 0) * 85%), transparent);
   transition:
     background 1.1s var(--doux),
     box-shadow 1.1s var(--doux);
@@ -569,10 +757,11 @@ h3 {
     box-shadow 0.3s var(--doux);
 }
 
-/* Journée close : la matière s'apaise. */
+/* Journée close : le métal se ternit. Pas de gris plat — une surface
+   oxydée, qui a perdu son poli mais reste une surface. */
 .dalle-scellee {
   animation: none;
-  filter: saturate(0.25) brightness(0.8);
+  filter: saturate(0.2) brightness(0.62) contrast(0.85);
 }
 
 /* L'anneau d'appui long. Il n'apparaît qu'au contact et se remplit en
@@ -584,8 +773,8 @@ h3 {
   border-radius: 50%;
   pointer-events: none;
   background: conic-gradient(
-    var(--peche) calc(var(--progression, 0) * 360deg),
-    rgba(255, 255, 255, 0.1) 0
+    var(--os) calc(var(--progression, 0) * 360deg),
+    rgba(0, 0, 0, 0.35) 0
   );
   mask-image: radial-gradient(circle, transparent 62%, #000 64%);
   -webkit-mask-image: radial-gradient(circle, transparent 62%, #000 64%);
@@ -594,7 +783,8 @@ h3 {
 
 /* ===========================================================================
    BOUTONS
-   Ronds, épais, doux. Ils s'enfoncent puis reviennent avec un dépassement.
+   Des pastilles de métal. Chacune a une arête claire en haut et une ombre
+   en bas : c'est ce qui donne l'épaisseur, pas une bordure.
    =========================================================================== */
 
 .btn {
@@ -610,13 +800,24 @@ h3 {
   letter-spacing: -0.01em;
   line-height: 1;
   border: none;
-  background: rgba(255, 255, 255, 0.07);
+  /* Métal sombre poli : une rampe courte, pas un aplat translucide. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.055) 48%,
+    rgba(255, 255, 255, 0.03) 52%,
+    rgba(255, 255, 255, 0.075) 100%
+  );
   color: var(--craie);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.45),
+    0 10px 22px -16px rgba(0, 0, 0, 0.9);
   transition:
     transform 0.55s var(--elastique),
     background 0.3s var(--doux),
     color 0.3s var(--doux),
+    box-shadow 0.3s var(--doux),
     opacity 0.25s ease;
 }
 
@@ -631,26 +832,36 @@ h3 {
   pointer-events: none;
 }
 
+/* Le bouton qui compte. Verni, pas mat : l'arête blanche du haut et la
+   bascule au milieu le font lire comme une pastille émaillée. */
 .btn-primaire {
-  background: linear-gradient(140deg, #ffa878 0%, var(--peche) 62%, #f2723d 100%);
-  color: var(--peche-encre);
+  background: linear-gradient(
+    180deg,
+    #fbf3e4 0%,
+    var(--os) 46%,
+    #cdbb9a 54%,
+    #f3e8d2 100%
+  );
+  color: var(--os-encre);
   font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.38),
-    0 20px 44px -22px rgba(255, 143, 94, 0.75);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    0 20px 44px -20px rgba(236, 223, 198, 0.8);
 }
 
 /* Le danger n'a pas de couleur à lui : il a une matière. Un creux, un texte
-   éteint, et un halo qui ne se réveille qu'à l'approche. */
+   éteint, et un liseré qui ne se réveille qu'à l'approche. */
 .btn-danger {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.35);
   color: var(--dim);
-  box-shadow: inset 0 0 0 1px rgba(255, 143, 94, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(236, 223, 198, 0.26);
 }
 
 .btn-danger:hover {
-  color: var(--peche);
-  box-shadow: inset 0 0 0 1px rgba(255, 143, 94, 0.55);
+  color: var(--os);
+  box-shadow: inset 0 0 0 1px rgba(236, 223, 198, 0.6);
 }
 
 .btn-fantome {
@@ -661,7 +872,7 @@ h3 {
 
 .btn-fantome:hover {
   color: var(--craie);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ===========================================================================
@@ -692,7 +903,7 @@ h3 {
   outline: none;
   box-shadow:
     inset 0 1px 3px 0 rgba(0, 0, 0, 0.5),
-    inset 0 -2px 0 0 var(--peche);
+    inset 0 -2px 0 0 var(--os);
 }
 
 .champ:disabled {
@@ -745,13 +956,13 @@ select.champ {
 }
 
 .pastille-vive {
-  background: rgba(179, 155, 255, 0.14);
+  background: rgba(140, 107, 255, 0.14);
   color: var(--lilas);
 }
 
 .pastille-os {
-  background: rgba(255, 143, 94, 0.14);
-  color: var(--peche);
+  background: rgba(236, 223, 198, 0.14);
+  color: var(--os);
 }
 
 .point-live {
@@ -766,11 +977,11 @@ select.champ {
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 0 0 rgba(179, 155, 255, 0.45);
+    box-shadow: 0 0 0 0 rgba(140, 107, 255, 0.45);
   }
   60% {
     opacity: 0.5;
-    box-shadow: 0 0 0 9px rgba(179, 155, 255, 0);
+    box-shadow: 0 0 0 9px rgba(140, 107, 255, 0);
   }
 }
 
@@ -796,11 +1007,11 @@ select.champ {
 }
 
 .jauge-cran-plein {
-  background: rgba(244, 240, 234, 0.55);
+  background: linear-gradient(180deg, #ffffff 0%, #8a929e 100%);
 }
 
 .jauge-cran-bonus {
-  background: var(--peche);
+  background: var(--os);
 }
 
 .barre {
@@ -813,7 +1024,8 @@ select.champ {
 .barre-remplie {
   height: 100%;
   border-radius: 999px;
-  background: var(--peche);
+  background: linear-gradient(180deg, #fbf3e4 0%, var(--os) 50%, #cdbb9a 100%);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
   transition: width 0.9s var(--doux);
 }
 
@@ -824,7 +1036,7 @@ select.champ {
    =========================================================================== */
 
 .barre-nav {
-  background: rgba(23, 21, 26, 0.82);
+  background: rgba(16, 16, 20, 0.84);
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   box-shadow:
@@ -952,6 +1164,217 @@ select.champ {
 }
 
 /* ===========================================================================
+   MOTION — LA LUMIÈRE QUI SE DÉPLACE
+   ---------------------------------------------------------------------------
+   Une seule idée porte tout le mouvement de cette direction : LE MÉTAL NE
+   BOUGE PAS, C'EST LA LUMIÈRE QUI PASSE DESSUS. Rien ne glisse, ne rebondit
+   ni ne clignote — ce sont des reflets qui traversent des surfaces immobiles.
+
+   Chaque mouvement d'ici a une cause, comme l'exige la règle de DA :
+
+     le lustre de la carte  → la surface est polie
+     la coulée des chiffres → ce montant est en métal, pas peint
+     le balayage d'un bouton→ il est prêt, il attend le doigt
+     le liseré d'une carte  → c'est celle que tu vises
+     l'ouverture d'écran    → tu viens d'arriver quelque part
+
+   Toutes reposent sur `transform`, `opacity` ou `background-position`, et
+   aucune ne touche la géométrie : pas un recalcul de mise en page.
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   LE LUSTRE DE LA CARTE
+   Une bande de lumière large et molle qui traverse le métal en 7 s, puis
+   attend. La pause compte autant que le passage : un reflet qui boucle sans
+   répit devient un gyrophare.
+   --------------------------------------------------------------------------- */
+
+.lustre {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lustre::before {
+  content: "";
+  position: absolute;
+  top: -55%;
+  left: -70%;
+  width: 45%;
+  height: 210%;
+  transform: rotate(22deg) translate3d(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 28%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.1) 72%,
+    transparent 100%
+  );
+  animation: passe-lustre 7s var(--liquide) infinite;
+  will-change: transform;
+}
+
+@keyframes passe-lustre {
+  0% {
+    transform: rotate(22deg) translate3d(0, 0, 0);
+  }
+  /* Le passage tient dans les 38 premiers pour cent ; le reste, la carte se
+     repose. */
+  38%,
+  100% {
+    transform: rotate(22deg) translate3d(560%, 0, 0);
+  }
+}
+
+/* Sous le doigt, le lustre s'efface : le reflet qui compte à cet instant
+   est celui que la personne déplace elle-même, pas celui de la boucle. */
+.dalle-tenue .lustre::before {
+  opacity: 0;
+  transition: opacity 0.25s linear;
+}
+
+/* Journée close : plus de reflet du tout. Le métal est éteint. */
+.dalle-scellee .lustre {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   LA COULÉE DES CHIFFRES
+   La rampe métallique descend lentement à travers les glyphes. C'est ce qui
+   fait la différence entre « un chiffre gris » et « un chiffre EN métal ».
+
+   `background-position` repeint, contrairement à `transform` — c'est
+   assumé : la surface concernée est une poignée de glyphes, et il n'existe
+   pas d'autre façon de déplacer un dégradé DANS du texte.
+   --------------------------------------------------------------------------- */
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .metal {
+    background-size: 100% 340%;
+    background-position: 0% 14%;
+    animation: coule-metal 11s ease-in-out infinite;
+  }
+}
+
+@keyframes coule-metal {
+  0%,
+  100% {
+    background-position: 0% 14%;
+  }
+  50% {
+    background-position: 0% 86%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   LES BOUTONS
+   Un balayage court traverse le bouton principal toutes les 5 s : il dit
+   « c'est celui-là », sans clignoter ni changer de couleur.
+   --------------------------------------------------------------------------- */
+
+.btn-primaire {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-primaire::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  transform: rotate(20deg) translate3d(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  animation: passe-bouton 5s var(--liquide) infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes passe-bouton {
+  0% {
+    transform: rotate(20deg) translate3d(0, 0, 0);
+  }
+  26%,
+  100% {
+    transform: rotate(20deg) translate3d(620%, 0, 0);
+  }
+}
+
+/* Un bouton désactivé n'attend personne : le balayage s'arrête. */
+.btn-primaire:disabled::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   LES CARTES JOUEUR
+   Au survol, un liseré irisé s'allume sur le pourtour — la même technique de
+   masque que la tranche de la carte NFC, donc le même vocabulaire. Au doigt,
+   la carte s'enfonce.
+   --------------------------------------------------------------------------- */
+
+.carte-joueur {
+  isolation: isolate;
+}
+
+.carte-joueur::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--iris);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.45s var(--doux);
+  pointer-events: none;
+}
+
+.carte-joueur:hover::before,
+.carte-joueur:focus-visible::before {
+  opacity: 0.75;
+}
+
+/* ---------------------------------------------------------------------------
+   L'OUVERTURE D'ÉCRAN
+   Le contenu arrive de l'arrière, flou, et se pose. Une capture prise avant
+   la fin de ce mouvement montre une page entièrement floue — ce n'est pas
+   un bug de rendu, c'est cette animation. Noté dans AGENTS.md parce que le
+   piège a déjà coûté une fausse alerte.
+   --------------------------------------------------------------------------- */
+
+@keyframes entree-ecran {
+  from {
+    opacity: 0;
+    transform: perspective(1200px) translate3d(0, 26px, -110px) scale(0.985);
+    filter: blur(9px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1200px) translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* ===========================================================================
    ACCESSIBILITÉ
    La DA repose sur du mouvement lent. Si la personne n'en veut pas, tout
    retombe sur de l'opacité et l'app reste entièrement utilisable.
@@ -975,9 +1398,27 @@ select.champ {
   .lampe::before,
   .lampe::after,
   .grille::before,
+  .vernis::before,
+  .lustre::before,
+  .btn-primaire::after,
+  .metal,
   .onde,
   .dalle-vivante {
     animation: none !important;
+  }
+
+  /* Les reflets qui traversent sont invisibles à l'arrêt (ils démarrent hors
+     cadre) : sans ça, une bande blanche resterait figée en travers de la
+     carte et du bouton. */
+  .lustre::before,
+  .btn-primaire::after {
+    display: none;
+  }
+
+  /* Le dégradé du texte s'immobilise sur sa position la plus claire, pas sur
+     une position au hasard. */
+  .metal {
+    background-position: 0% 14% !important;
   }
 
   /* Les ondes sont invisibles à l'arrêt (opacité 0 au départ) : sans ça,
@@ -1017,8 +1458,8 @@ select.champ {
 }
 
 ::selection {
-  background: var(--peche);
-  color: var(--peche-encre);
+  background: var(--os);
+  color: var(--os-encre);
 }
 
 /* ===========================================================================
@@ -1076,7 +1517,16 @@ select.champ {
   position: relative;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #ffa878, var(--peche));
+  background: linear-gradient(
+    180deg,
+    #fbf3e4 0%,
+    var(--os) 48%,
+    #cdbb9a 52%,
+    #f3e8d2 100%
+  );
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+    0 0 18px -4px rgba(236, 223, 198, 0.7);
   transition: width 1.1s var(--doux);
 }
 
@@ -1103,7 +1553,16 @@ select.champ {
 
 /* Objectif atteint : la barre pulse une fois de plus, en lilas. */
 .xp-pleine .xp-remplie {
-  background: linear-gradient(90deg, var(--peche), var(--lilas));
+  background: linear-gradient(
+    180deg,
+    #b49dff 0%,
+    var(--lilas) 48%,
+    #6a47e0 52%,
+    #a58bff 100%
+  );
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+    0 0 20px -4px rgba(140, 107, 255, 0.75);
 }
 
 /* La diode d'état d'un joueur. Verte n'existe pas dans cette palette : on
@@ -1122,7 +1581,7 @@ select.champ {
 }
 
 .diode-fini {
-  background: var(--peche);
+  background: var(--os);
 }
 
 /* Le cadre d'une carte joueur : un liseré qui s'allume au survol, et un
@@ -1131,11 +1590,12 @@ select.champ {
   position: relative;
   border-radius: var(--r-lg);
   background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(18px) saturate(1.2);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-    0 24px 48px -34px rgba(0, 0, 0, 0.95);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.11),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    0 26px 52px -34px rgba(0, 0, 0, 0.95);
   transition:
     transform 0.55s var(--elastique),
     box-shadow 0.45s var(--doux);
@@ -1144,8 +1604,8 @@ select.champ {
 .carte-joueur:hover {
   transform: translateY(-3px);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
-    0 30px 56px -34px rgba(0, 0, 0, 1);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 34px 62px -34px rgba(0, 0, 0, 1);
 }
 
 .carte-joueur:active {
@@ -1169,15 +1629,31 @@ select.champ {
 }
 
 .rang-1 {
-  background: linear-gradient(140deg, #ffa878, var(--peche));
-  color: var(--peche-encre);
-  box-shadow: 0 8px 20px -10px var(--peche);
+  background: linear-gradient(
+    180deg,
+    #fbf3e4 0%,
+    var(--os) 46%,
+    #cdbb9a 54%,
+    #f3e8d2 100%
+  );
+  color: var(--os-encre);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    0 8px 20px -9px var(--os);
 }
 
 .rang-2,
 .rang-3 {
-  background: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.1) 48%,
+    rgba(255, 255, 255, 0.05) 52%,
+    rgba(255, 255, 255, 0.14) 100%
+  );
   color: var(--craie);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
 }
 
 @media (prefers-reduced-motion: reduce) {

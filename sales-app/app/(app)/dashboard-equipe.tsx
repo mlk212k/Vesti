@@ -86,7 +86,7 @@ export function DashboardEquipe({
           {rows.length} membre{rows.length > 1 ? "s" : ""}
         </p>
 
-        <p className="chiffre relative mt-5 text-[clamp(3.4rem,20vw,7rem)] text-craie">
+        <p className="chiffre metal relative mt-5 text-[clamp(3.4rem,20vw,7rem)]">
           <Compteur valeur={caJour} format="montant" />
         </p>
         <p className="surtitre relative mt-2">Chiffre d&apos;affaires du jour</p>
@@ -143,7 +143,7 @@ export function DashboardEquipe({
             {manquants.length > 0 ? (
               <>
                 {" · "}
-                <span className="chiffre text-peche">{manquants.length}</span> pas encore
+                <span className="chiffre text-os">{manquants.length}</span> pas encore
                 en route
               </>
             ) : (
@@ -221,7 +221,7 @@ function Indicateur({
   return (
     <div className="min-w-0">
       <p className="surtitre-serre">{label}</p>
-      <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+      <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
         <Compteur valeur={valeur} format={format} />
         {suffixe ? <span className="text-faint">{suffixe}</span> : null}
       </p>

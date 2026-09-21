@@ -82,7 +82,7 @@ export function PlanningEditor({
                   name={`c-${jour.num}-${slot}`}
                   defaultChecked={coche(jour.num, slot)}
                   onChange={() => jouer("tick")}
-                  className="h-5 w-5 accent-[var(--peche)]"
+                  className="h-5 w-5 accent-[var(--os)]"
                   aria-label={`${jour.court} ${slot === "am" ? "matin" : "après-midi"}`}
                 />
               </label>

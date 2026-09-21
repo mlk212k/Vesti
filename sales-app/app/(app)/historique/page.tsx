@@ -39,21 +39,21 @@ export default async function HistoryPage({
       <section className="cascade grid grid-cols-3 gap-5">
         <div className="min-w-0">
           <p className="surtitre-serre">Journées</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={days.length} />
           </p>
           <p className="mt-1 text-sm text-faint">enregistrées</p>
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">Chiffre d&apos;affaires</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={caTotal} format="montant" />
           </p>
           <p className="mt-1 text-sm text-faint">cumulé</p>
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">{staff ? "Objectifs" : "Mon net"}</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-peche">
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-os">
             {staff ? (
               <>
                 <Compteur valeur={atteints} />
@@ -136,7 +136,7 @@ export default async function HistoryPage({
               </div>
 
               {day.penalty_cents > 0 ? (
-                <p className="mt-3 text-sm text-peche">
+                <p className="mt-3 text-sm text-os">
                   Retenue validée par l&apos;encadrement :{" "}
                   {formatCents(day.penalty_cents)}
                 </p>

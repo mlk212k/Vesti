@@ -98,7 +98,7 @@ export function SaleForm({
             +
           </button>
         </div>
-        <p className={`mt-1.5 text-sm ${trop ? "text-peche" : "text-faint"}`}>
+        <p className={`mt-1.5 text-sm ${trop ? "text-os" : "text-faint"}`}>
           {trop
             ? `Tu n'as que ${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main.`
             : `${cardsHeld} carte${cardsHeld > 1 ? "s" : ""} en main`}
@@ -141,7 +141,7 @@ export function SaleForm({
         </div>
         <div className="flex items-baseline justify-between pt-1">
           <span className="surtitre">Mon net</span>
-          <span className="chiffre text-2xl text-peche">{formatCents(netCents)}</span>
+          <span className="chiffre text-2xl text-os">{formatCents(netCents)}</span>
         </div>
       </div>
 

@@ -61,7 +61,7 @@ export default async function SalePage({
         <p className="surtitre">
           {formatDateLong(sale.sold_at)} · {formatTime(sale.sold_at)}
         </p>
-        <p className="chiffre mt-2 text-5xl">{formatCents(sale.amount_cents)}</p>
+        <p className="chiffre metal mt-2 text-5xl">{formatCents(sale.amount_cents)}</p>
         <p className="mt-2 text-sm text-dim">
           {sale.quantity} carte{sale.quantity > 1 ? "s" : ""} ×{" "}
           {formatCents(sale.unit_price_cents)}

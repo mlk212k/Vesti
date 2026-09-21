@@ -74,20 +74,39 @@ s'applique pas à lui.
 
 ## Design
 
+Direction artistique en cours : **CHROME** (l'en-tête de `app/globals.css`
+la décrit en entier, y compris ce qu'elle remplace et pourquoi).
+
 Le système visuel tient entièrement dans `app/globals.css` : classes
-`panneau`, `panneau-plat`, `panneau-creux`, `dalle`, `champ`,
-`btn-primaire`, `jauge-cran`, `pastille`, `titre`, `mot`, `chiffre`,
-`surtitre`… Utiliser ces classes plutôt que de réinventer des utilitaires
-Tailwind au cas par cas — un changement de direction artistique doit se
-faire dans ce fichier, pas dans quinze composants.
+`panneau`, `panneau-plat`, `panneau-creux`, `dalle`, `lustre`, `champ`,
+`btn-primaire`, `metal`, `jauge-cran`, `pastille`, `titre`, `mot`,
+`chiffre`, `surtitre`… Utiliser ces classes plutôt que de réinventer des
+utilitaires Tailwind au cas par cas — un changement de direction artistique
+doit se faire dans ce fichier, pas dans quinze composants. C'est ce qui a
+permis de passer de VELOURS à CHROME en changeant des VALEURS, sans toucher
+aux dix-sept écrans.
 
 Trois règles de cette DA, qui ne sont pas des préférences :
 
-- **Un seul accent.** `--braise` a exactement trois usages : la tranche de
-  la dalle, le chiffre qui appartient à la personne qui regarde, ce qui
-  réclame une action maintenant. Ajouter une couleur (un vert de succès, un
-  rouge d'erreur) casse la DA. Une erreur se traite par la matière — voir
-  `components/alerte.tsx`.
+- **Un seul accent, et c'est une température.** `--os` (beige crème) a
+  exactement trois usages : la tranche de la dalle, le chiffre qui
+  appartient à la personne qui regarde, ce qui réclame une action
+  maintenant. Il fonctionne parce que TOUT le reste est froid — un accent
+  chaud sur un écran froid n'a pas besoin d'être vif. Ajouter une couleur
+  (un vert de succès, un rouge d'erreur) casse la DA. Une erreur se traite
+  par la matière — voir `components/alerte.tsx`.
+
+- **Deux rampes de chrome, jamais une.** `--chrome-rampe` habille les
+  grandes surfaces (la carte) et plonge jusqu'au quasi-noir au milieu :
+  c'est cette inversion qui fait lire « métal » plutôt que « plastique ».
+  `--chrome-texte` habille les glyphes et ne descend jamais sous `#6e7684`.
+  Utiliser la première sur du texte rend le chiffre ILLISIBLE — la bande
+  sombre tombe en plein sur les jambages, sur un fond déjà noir. Constaté à
+  l'écran, pas déduit.
+
+- **`.metal` ne se pose que sur du 24 px et plus**, et jamais sur un chiffre
+  en `text-os` : l'accent a un sens (« c'est ton argent »), le métal en a un
+  autre (« c'est un total »). Les deux sur le même nombre n'en disent aucun.
 - **Aucune bordure qui fait le tour.** La séparation vient de la profondeur
   (`inset 0 1px 0` en haut d'un plan, une ombre diffuse), pas d'un cadre.
   Un `border` de quatre côtés sur un panneau est un bug de DA.
@@ -97,8 +116,8 @@ Trois règles de cette DA, qui ne sont pas des préférences :
 **Aucune couleur écrite à la main dans du JSX.** Un `stroke="var(--x)"` ou
 un `accent-[var(--x)]` échappe à toute migration de classes, et une variable
 morte ne casse rien au build : elle devient invalide en silence. Préférer
-les utilitaires (`text-peche`, `bg-peche`) et lancer
-`./scripts/check-tokens.sh` après tout changement de palette.
+les utilitaires (`text-os`, `bg-os`) et lancer `./scripts/check-tokens.sh`
+après tout changement de palette.
 
 Deux pièges déjà rencontrés dans ce fichier, à ne pas réintroduire :
 
@@ -115,6 +134,22 @@ Deux pièges déjà rencontrés dans ce fichier, à ne pas réintroduire :
 Pas de librairie d'icônes, de graphiques ni d'animation : `components/icons.tsx`
 et `components/graphiques.tsx` sont maison, et `components/dalle.tsx` fait
 ses gestes à la main.
+
+**Le mouvement de cette DA tient en une phrase :** le métal ne bouge pas,
+c'est la lumière qui passe dessus. Rien ne glisse, ne rebondit ni ne
+clignote — ce sont des reflets qui traversent des surfaces immobiles
+(`.lustre` sur la carte, `coule-metal` dans les chiffres, `passe-bouton`
+sur le bouton principal, `passe-vernis` sur l'écran). Une animation qui
+déplace un ÉLÉMENT plutôt qu'un reflet est probablement hors direction.
+
+Deux conséquences pratiques :
+
+- **`.dalle` n'a plus de pseudo-élément libre.** `::before` porte le liseré
+  irisé, `::after` la tranche qui se charge. Toute couche supplémentaire
+  passe par un vrai élément — c'est pour ça que `.lustre` est un `<span>`.
+- **Une capture prise juste après une navigation montre une page floue.**
+  C'est `entree-ecran`, pas un bug de rendu. Attendre ~3 s (un
+  `browser_wait_for`) avant toute capture Playwright.
 
 ## Une constante partagée ne vit pas dans un module client
 

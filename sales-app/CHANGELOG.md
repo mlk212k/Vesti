@@ -5,6 +5,54 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v3.0 — 21 septembre 2026 — « CHROME »
+
+**Nouveau look complet.** L'app est passée du velours au métal.
+
+### 🪞 Tout est en chrome
+
+• **La carte est polie.** Elle était en velours sombre ; c'est maintenant du
+  métal, avec un reflet qui **glisse sous ton doigt** quand tu la touches et
+  une bande de lumière qui la traverse toute seule. Sa tranche continue de
+  se remplir à mesure que tu vends — ça, ça ne change pas.
+• **Les gros chiffres sont en métal**, vraiment : la matière coule
+  lentement dedans. Les petits chiffres restent normaux — en métal ils
+  devenaient illisibles.
+• **Les boutons ont une épaisseur** : une arête claire en haut, une ombre en
+  bas, et un éclat qui traverse le bouton principal toutes les cinq
+  secondes.
+
+### 🎨 Plus d'orange
+
+L'orange est remplacé par un **beige crème**. Tout l'écran est froid — noir
+bleuté, chrome gris — et le beige est la seule chose chaude. Sur un fond
+froid, le chaud ressort sans avoir besoin de crier.
+
+Le violet reste, et garde son rôle : il veut dire « ça se passe maintenant »
+(quelqu'un est en ligne, une relance part, un objectif est atteint).
+
+### 🔤 Nouvelle écriture
+
+Les grands mots et les chiffres sont en **Unbounded** : très large, très
+grasse — la lettre des pochettes du début des années 2000. Le reste est en
+**Space Grotesk**, qui a du caractère tout en restant lisible en petit.
+
+Les deux polices précédentes étaient correctes, mais neutres.
+
+### ✨ Le fond a changé aussi
+
+Les lignes de balayage façon vieil écran ont disparu. À la place : deux
+brumes à l'aérographe qui dérivent, un treillis de chrome, les ondes NFC, et
+un **vernis** — une bande iridescente qui traverse l'écran très lentement,
+comme sur une vitre qu'on vient de polir.
+
+### ♿ Toujours
+
+Si ton téléphone est réglé sur « réduire les animations », **tous** ces
+reflets s'arrêtent et l'app reste parfaitement utilisable.
+
+---
+
 ## v2.4 — 21 septembre 2026
 
 ### 🐛 Le planning ne s'ouvrait pas

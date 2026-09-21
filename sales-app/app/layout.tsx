@@ -1,29 +1,36 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import { Unbounded, Space_Grotesk } from "next/font/google";
 import { Fond } from "@/components/fond";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
 // Deux polices, et plus une seule ligne de monospace.
 //
-//   Bricolage Grotesque — large, un peu de travers, éditoriale. C'est de
-//   l'affiche de quartier, pas du logiciel. Elle ne sert qu'aux grands mots
-//   et aux chiffres.
+//   Unbounded — très large, très grasse, les contrepoints presque fermés.
+//   C'est la lettre des pochettes et des logos du début des années 2000,
+//   celle qui va avec du chrome. Elle ne sert qu'aux grands mots et aux
+//   chiffres, parce qu'elle est illisible en petit et que c'est très bien
+//   comme ça.
 //
-//   Plus Jakarta Sans — ronde, chaleureuse, très lisible. Elle porte TOUT
-//   le reste, y compris ce qui était avant en capitales monospace de 10 px :
-//   les étiquettes sont maintenant des phrases écrites normalement.
+//   Space Grotesk — ses chiffres ont une vraie tête, ses `a` et ses `g`
+//   aussi, et elle reste parfaitement lisible à 14 px. Elle porte TOUT le
+//   reste.
 //
-// Le monospace a disparu volontairement. Il donnait à l'app un air de
-// terminal ou de site de paris ; les chiffres gardent la chasse tabulaire,
-// ce qui suffit à ce qu'une colonne de montants ne danse pas.
-const bricolage = Bricolage_Grotesque({
+// Bricolage Grotesque et Plus Jakarta Sans sont parties : correctes toutes
+// les deux, mais neutres — de la typographie de logiciel bien élevé. Cette
+// direction demande de la lettre qui a un accent.
+//
+// Le monospace, lui, ne revient pas. Il donnait à l'app un air de terminal
+// ou de site de paris ; les chiffres gardent la chasse tabulaire, ce qui
+// suffit à ce qu'une colonne de montants ne danse pas.
+const unbounded = Unbounded({
   subsets: ["latin"],
+  weight: ["600", "800"],
   variable: "--font-display",
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const space = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-ui",
   display: "swap",
@@ -65,11 +72,11 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${bricolage.variable} ${jakarta.variable}`}
+      className={`${unbounded.variable} ${space.variable}`}
     >
       <body className="min-h-screen bg-nuit text-craie antialiased">
-        {/* Le décor animé : lavis de couleur, grille en perspective,
-            ondes NFC, lignes de balayage. Entièrement en CSS — pas un octet
+        {/* Le décor animé : brumes à l'aérographe, treillis de chrome,
+            ondes NFC, vernis iridescent. Entièrement en CSS — pas un octet
             de JavaScript, et tout s'éteint avec `prefers-reduced-motion`. */}
         <Fond />
         <div className="relative z-10">{children}</div>

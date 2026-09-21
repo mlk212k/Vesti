@@ -82,7 +82,7 @@ export default async function ChatPage() {
                   </p>
                 </div>
                 {conversation.unread > 0 ? (
-                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-sm bg-peche px-1.5 text-sm text-white">
+                  <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-sm bg-os px-1.5 text-sm text-white">
                     {conversation.unread}
                   </span>
                 ) : null}

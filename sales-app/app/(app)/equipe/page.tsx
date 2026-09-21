@@ -53,14 +53,14 @@ export default async function TeamPage() {
       <section className="cascade grid grid-cols-3 gap-5">
         <div className="min-w-0">
           <p className="surtitre-serre">Chiffre d&apos;affaires</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={caTotal} format="montant" />
           </p>
           <p className="mt-1 text-sm text-faint">depuis le début</p>
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">Cartes vendues</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={cartesTotal} />
           </p>
           <p className="mt-1 text-sm text-faint">toutes journées</p>
@@ -69,7 +69,7 @@ export default async function TeamPage() {
           <p className="surtitre-serre">
             {isAdmin(viewer.role) ? "Ma commission" : "Commission"}
           </p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={commissionTotal} format="montant" />
           </p>
           <p className="mt-1 text-sm text-faint">cumulée</p>

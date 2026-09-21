@@ -55,7 +55,7 @@ export function Histogramme({
                   height: `${Math.max(ratio * 100, point.valeur > 0 ? 3 : 0.8)}%`,
                   background:
                     point.valeur > 0
-                      ? "linear-gradient(180deg, #ffa878 0%, var(--peche) 100%)"
+                      ? "linear-gradient(180deg, #ffa878 0%, var(--os) 100%)"
                       : "rgba(255,255,255,0.05)",
                   boxShadow:
                     point.valeur > 0

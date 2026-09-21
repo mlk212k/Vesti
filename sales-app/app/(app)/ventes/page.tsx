@@ -55,21 +55,21 @@ export default async function SalesPage({
       <section className="cascade grid grid-cols-3 gap-5">
         <div className="min-w-0">
           <p className="surtitre-serre">Chiffre d&apos;affaires</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={total} format="montant" />
           </p>
           <p className="mt-1 text-sm text-faint">sur les ventes affichées</p>
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">Cartes</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-craie">
+          <p className="chiffre metal mt-1 text-[clamp(1.5rem,7vw,2.25rem)]">
             <Compteur valeur={cartes} />
           </p>
           <p className="mt-1 text-sm text-faint">vendues</p>
         </div>
         <div className="min-w-0">
           <p className="surtitre-serre">{staff ? "Commission" : "Mon net"}</p>
-          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-peche">
+          <p className="chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] text-os">
             <Compteur
               valeur={staff ? commission : total - commission}
               format="montant"

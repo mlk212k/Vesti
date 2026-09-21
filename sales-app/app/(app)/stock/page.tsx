@@ -119,7 +119,7 @@ export default async function StockPage() {
                   </div>
                   <span
                     className={`chiffre text-base ${
-                      signe > 0 ? "text-peche" : "text-dim"
+                      signe > 0 ? "text-os" : "text-dim"
                     }`}
                   >
                     {signe > 0 ? "+" : ""}

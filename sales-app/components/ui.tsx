@@ -84,7 +84,7 @@ export function Stat({
       <p className="surtitre-serre">{label}</p>
       <p
         className={`chiffre mt-1 text-[clamp(1.5rem,7vw,2.25rem)] ${
-          accent ? "text-peche" : "text-craie"
+          accent ? "text-os" : "metal"
         }`}
       >
         {valeur}
