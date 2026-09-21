@@ -46,6 +46,31 @@ brumes à l'aérographe qui dérivent, un treillis de chrome, les ondes NFC, et
 un **vernis** — une bande iridescente qui traverse l'écran très lentement,
 comme sur une vitre qu'on vient de polir.
 
+### 🐛 Ce que le changement de look avait laissé derrière
+
+Six endroits gardaient les couleurs de l'ancienne version, sans que rien ne
+plante :
+
+• **Les barres du graphique** étaient encore orange en haut.
+• **Les réactions du chat** (celles que TU as mises) avaient un contour
+  **vert fluo**, hérité d'une version encore plus ancienne.
+• **L'écran d'erreur** — celui qui dit « Ça a coincé » — était resté
+  entièrement dans l'ancien look.
+• La barre du haut, le menu latéral et la couleur de lancement de l'app
+  installée : tous sur l'ancien noir.
+
+Tout est corrigé, et une vérification automatique refuse maintenant ce genre
+d'oubli.
+
+### 🎯 « Objectif atteint » a changé de couleur
+
+La pastille était **beige** — la même que « des gens manquent à l'appel ».
+Le même signal disait donc une bonne et une mauvaise nouvelle.
+
+Elle est maintenant **violette**, comme la barre d'objectif qui vire déjà au
+violet quand elle se remplit. Le beige reste réservé à trois choses : ton
+argent, une action à faire maintenant, un problème.
+
 ### ♿ Toujours
 
 Si ton téléphone est réglé sur « réduire les animations », **tous** ces

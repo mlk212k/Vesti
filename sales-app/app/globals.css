@@ -1580,8 +1580,12 @@ select.champ {
   animation: battement 2.6s ease-in-out infinite;
 }
 
+/* Journée close et objectif tenu. Même couleur que « en tournée », mais
+   IMMOBILE : c'est le mouvement qui sépare les deux, pas la teinte. Le beige
+   resterait un contresens ici — il veut dire « agis », or il n'y a plus rien
+   à faire. */
 .diode-fini {
-  background: var(--os);
+  background: var(--lilas);
 }
 
 /* Le cadre d'une carte joueur : un liseré qui s'allume au survol, et un

@@ -140,12 +140,22 @@ export function Jauge({
   );
 }
 
-// Le statut d'une journée. Une pastille douce et remplie ; le lilas est
-// réservé à ce qui est vrai EN CE MOMENT, et c'est le seul état qui bouge.
+// Le statut d'une journée.
+//
+// Le beige (`pastille-os`) a trois sens et trois seulement : c'est ton
+// argent, agis maintenant, quelque chose ne va pas. « Objectif atteint »
+// n'est aucun des trois — c'était donc la même pastille que « des gens
+// manquent à l'appel », ce qui fait dire au même signal une bonne et une
+// mauvaise nouvelle.
+//
+// Un objectif atteint est vrai EN CE MOMENT : il passe donc en lilas, comme
+// la barre d'XP qui vire déjà au violet quand elle se remplit. Ce qui le
+// distingue d'« en tournée », c'est le point qui bat — la DA sépare par le
+// mouvement, pas par une couleur de plus.
 const STATUT_CLASSE: Record<DisplayDayStatus, string> = {
   not_started: "pastille",
   in_progress: "pastille pastille-vive",
-  goal_reached: "pastille pastille-os",
+  goal_reached: "pastille pastille-vive",
   goal_missed: "pastille",
   validated: "pastille",
 };

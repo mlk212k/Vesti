@@ -13,8 +13,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Cartes NFC, journées de travail, ventes et commissions de l'équipe.",
     start_url: "/",
     display: "standalone",
-    background_color: "#07070a",
-    theme_color: "#07070a",
+    background_color: "#08080a",
+    theme_color: "#08080a",
     orientation: "portrait",
     lang: "fr",
     icons: [

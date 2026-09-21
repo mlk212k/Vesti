@@ -25,15 +25,15 @@ export function Logo({ className = "h-9 w-9" }: { className?: string }) {
     >
       <defs>
         <linearGradient id={degrade} x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#3a3a42" />
-          <stop offset="100%" stopColor="#8b8b94" />
+          <stop offset="0%" stopColor="#3a3f49" />
+          <stop offset="100%" stopColor="#d8dde5" />
         </linearGradient>
       </defs>
 
       {/* La carte, vue de biais. */}
       <path d="M4 16.5 22 7l14 7.5-18 9.5-14-7.5Z" fill={`url(#${degrade})`} />
-      <path d="M4 16.5v12L18 36V24L4 16.5Z" fill="#1c1c20" />
-      <path d="M18 24v12l18-9.5v-12L18 24Z" fill="#131316" />
+      <path d="M4 16.5v12L18 36V24L4 16.5Z" fill="#1a1d22" />
+      <path d="M18 24v12l18-9.5v-12L18 24Z" fill="#101014" />
 
       {/* L'onde sans contact : le seul endroit du logo qui porte
           l'accent. La carte, elle, est de la matière grise. */}

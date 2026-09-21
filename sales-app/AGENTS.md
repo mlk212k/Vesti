@@ -96,6 +96,21 @@ Trois règles de cette DA, qui ne sont pas des préférences :
   (un vert de succès, un rouge d'erreur) casse la DA. Une erreur se traite
   par la matière — voir `components/alerte.tsx`.
 
+- **Le lilas répond à une autre question.** `--os` dit « agis / c'est à toi /
+  ça cloche » ; `--lilas` dit « c'est vrai en ce moment » — présence, temps
+  réel, objectif atteint, barre d'XP pleine. Quand deux états partagent le
+  lilas (en tournée / objectif atteint), c'est le MOUVEMENT qui les sépare :
+  l'un porte un point qui bat, l'autre non. Jamais une troisième couleur.
+
+- **Une couleur écrite en dur survit à tout changement de DA.** C'est le
+  piège n°2 de `scripts/check-tokens.sh`, ajouté parce qu'au passage à CHROME
+  six fichiers gardaient la palette précédente — dont un vert acide (#ccff00)
+  hérité d'une direction encore antérieure, et l'écran d'erreur global resté
+  entièrement en VELOURS. Aucun ne cassait : une couleur en dur reste
+  parfaitement valide, et parfaitement fausse. Le vérificateur les refuse
+  désormais, sauf dans `app/global-error.tsx` qui n'a pas de feuille de style
+  à sa disposition.
+
 - **Deux rampes de chrome, jamais une.** `--chrome-rampe` habille les
   grandes surfaces (la carte) et plonge jusqu'au quasi-noir au milieu :
   c'est cette inversion qui fait lire « métal » plutôt que « plastique ».

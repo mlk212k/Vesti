@@ -4,7 +4,7 @@
  * La DA n'a qu'une couleur d'accent : un message d'erreur ne peut donc pas
  * être rouge. Il est traité comme le reste — par la MATIÈRE. Le message est
  * posé dans un creux sombre, et une seule arête, à gauche, s'allume en
- * pêche quand quelque chose ne va pas. Un succès n'allume rien : on ne
+ * beige quand quelque chose ne va pas. Un succès n'allume rien : on ne
  * félicite pas quelqu'un d'avoir cliqué.
  */
 export function Alerte({
