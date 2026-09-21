@@ -74,7 +74,35 @@ s'applique pas à lui.
 
 ## Design
 
-Direction artistique en cours : **CHROME** (l'en-tête de `app/globals.css`
+## Les deux Y2K, et pourquoi ça compte ici
+
+La distinction la plus utile de tout ce fichier, parce qu'elle a coûté une
+version entière et deux fois le mot « robotique » de la part du chef.
+
+|  | Y2K MACHINE | Y2K DE LA RUE |
+|---|---|---|
+| Références | Matrix, Tron, lecteur MP3, interface d'OS | Pochette de mixtape, aérographe, bijou, t-shirt |
+| Température | froid | chaud |
+| Construction | géométrique, à la règle | gonflé, fait main |
+| Couleurs | chrome gris, vert de terminal, cyan | chrome ET or, rose, lilas |
+| Motifs | lignes de balayage, viseurs, filaires 3D, aberration chromatique | strass, dégradés soufflés, autocollants, grain d'impression |
+| Typographie | grotesque large construite au compas | lettre bulle aux contrepoints refermés |
+
+Les deux datent de la même époque et n'ont rien à voir. **C'est le second
+qui est visé.** Du vert vif sur du noir est un terminal ; des équerres aux
+coins sont un viseur de jeu de tir ; un treillis filaire est un rendu 3D.
+Chacun de ces éléments, pris seul, semble « Y2K » — ensemble ils font une
+machine.
+
+**Règle qui tranche les cas douteux : si un élément évoque un APPAREIL, il
+est raté. S'il évoque un OBJET qu'on porte ou qu'on touche, il est bon.**
+
+Le chrome passe cette règle (c'est un bijou), le gel aussi (c'est une
+sucrerie), l'anneau holographique aussi (c'est un autocollant à
+collectionner). Le grain d'impression est même monté volontairement : une
+pochette est imprimée, pas diffusée.
+
+Direction artistique en cours : **CHROME & OR** (l'en-tête de `app/globals.css`
 la décrit en entier, y compris ce qu'elle remplace et pourquoi).
 
 Le système visuel tient entièrement dans `app/globals.css` : classes
@@ -88,12 +116,13 @@ aux dix-sept écrans.
 
 Trois règles de cette DA, qui ne sont pas des préférences :
 
-- **Un seul accent, et son jeton porte son RÔLE.** `--accent` (vert acide)
-  a exactement trois usages : la tranche de la dalle, le chiffre qui
+- **Un seul accent, et son jeton porte son RÔLE.** `--accent` (or) a
+  exactement trois usages : la tranche de la dalle, le chiffre qui
   appartient à la personne qui regarde, ce qui réclame une action
   maintenant. Il s'appelle `--accent` et non `--vert` parce qu'il a déjà
   changé trois fois — pêche, beige, vert — et que chaque nom de couleur
-  imposait de renommer trente-quatre usages au changement suivant. Ajouter
+  imposait de renommer trente-quatre usages au changement suivant — quatre
+  fois maintenant : pêche, beige, vert, or. Ajouter
   une couleur (un vert de succès, un rouge d'erreur) casse la DA. Une erreur
   se traite par la matière — voir `components/alerte.tsx`.
 
@@ -104,7 +133,9 @@ Trois règles de cette DA, qui ne sont pas des préférences :
   interface très colorée ET une signalétique de deux accents seulement.
   Ajouter de la couleur à un halo est toujours sûr ; en ajouter à un
   élément ne l'est jamais. L'accent a été choisi pour n'entrer en collision
-  avec aucun des quatre halos — un beige se noyait dans le halo crème.
+  avec aucun des quatre halos — un beige se noyait dans le halo crème. Et
+  il doit dire la bonne chose : chrome + or, c'est du bijou ; chrome +
+  vert, c'est une console. L'app parle d'argent gagné dans la rue.
 
 - **Le lilas répond à une autre question.** `--os` dit « agis / c'est à toi /
   ça cloche » ; `--lilas` dit « c'est vrai en ce moment » — présence, temps

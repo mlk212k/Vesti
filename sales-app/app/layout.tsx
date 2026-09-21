@@ -1,36 +1,37 @@
 import type { Metadata, Viewport } from "next";
-import { Unbounded, Space_Grotesk } from "next/font/google";
+import { Bagel_Fat_One, Plus_Jakarta_Sans } from "next/font/google";
 import { Fond } from "@/components/fond";
 import { EnregistreServiceWorker } from "@/components/pwa";
 import "./globals.css";
 
 // Deux polices, et plus une seule ligne de monospace.
 //
-//   Unbounded — très large, très grasse, les contrepoints presque fermés.
-//   C'est la lettre des pochettes et des logos du début des années 2000,
-//   celle qui va avec du chrome. Elle ne sert qu'aux grands mots et aux
-//   chiffres, parce qu'elle est illisible en petit et que c'est très bien
-//   comme ça.
+//   Bagel Fat One — une lettre BULLE. Gonflée, ronde, les contrepoints
+//   presque refermés, comme peinte à la bombe puis remplie. C'est le
+//   lettrage des pochettes de mixtape et des t-shirts du début des années
+//   2000 — dessiné à la main, pas construit à la règle.
 //
-//   Space Grotesk — ses chiffres ont une vraie tête, ses `a` et ses `g`
-//   aussi, et elle reste parfaitement lisible à 14 px. Elle porte TOUT le
-//   reste.
+//   Plus Jakarta Sans — ronde, chaleureuse, très lisible. Elle porte TOUT
+//   le reste.
 //
-// Bricolage Grotesque et Plus Jakarta Sans sont parties : correctes toutes
-// les deux, mais neutres — de la typographie de logiciel bien élevé. Cette
-// direction demande de la lettre qui a un accent.
+// Unbounded est partie, et c'est le cœur de la correction. Elle est large,
+// grasse et impeccablement géométrique : construite au compas. Sur un écran
+// déjà chromé, elle tirait toute la direction vers la MACHINE — Tron, le
+// lecteur MP3, le générique de film de science-fiction. Or le Y2K de la rue
+// n'est pas géométrique : il est gonflé, manuel, un peu bancal. C'est la
+// différence entre un logo de constructeur automobile et un tag.
 //
 // Le monospace, lui, ne revient pas. Il donnait à l'app un air de terminal
 // ou de site de paris ; les chiffres gardent la chasse tabulaire, ce qui
 // suffit à ce qu'une colonne de montants ne danse pas.
-const unbounded = Unbounded({
+const bagel = Bagel_Fat_One({
   subsets: ["latin"],
-  weight: ["600", "800"],
+  weight: "400",
   variable: "--font-display",
   display: "swap",
 });
 
-const space = Space_Grotesk({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-ui",
   display: "swap",
@@ -60,7 +61,7 @@ export const viewport: Viewport = {
   // `cover` est ce qui fait exister env(safe-area-inset-*) : sans lui, la
   // barre du bas passe sous l'indicateur d'accueil de l'iPhone.
   viewportFit: "cover",
-  themeColor: "#08080a",
+  themeColor: "#0b0809",
   colorScheme: "dark",
 };
 
@@ -72,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${unbounded.variable} ${space.variable}`}
+      className={`${bagel.variable} ${jakarta.variable}`}
     >
       <body className="min-h-screen bg-nuit text-craie antialiased">
         {/* Le décor animé : brumes à l'aérographe, treillis de chrome,

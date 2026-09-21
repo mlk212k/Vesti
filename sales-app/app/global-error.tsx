@@ -15,15 +15,15 @@ export default function ErreurGlobale({ reset }: { reset: () => void }) {
           alignItems: "center",
           justifyContent: "center",
           gap: "1.5rem",
-          background: "#08080a",
-          color: "#edeff2",
+          background: "#0b0809",
+          color: "#f6f0e9",
           fontFamily: "system-ui, sans-serif",
           textAlign: "center",
           padding: "2rem",
         }}
       >
         <p style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>Ça a coincé</p>
-        <p style={{ margin: 0, color: "#a8aeb8" }}>
+        <p style={{ margin: 0, color: "#b6aaa2" }}>
           Recharge l&apos;application, tes données sont intactes.
         </p>
         <button
@@ -33,8 +33,8 @@ export default function ErreurGlobale({ reset }: { reset: () => void }) {
             border: "none",
             borderRadius: 999,
             padding: "0.9rem 1.6rem",
-            background: "#cbff3c",
-            color: "#111d06",
+            background: "#ffc93c",
+            color: "#2b1c00",
             fontSize: "1rem",
             fontWeight: 700,
           }}

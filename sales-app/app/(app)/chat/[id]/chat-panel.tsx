@@ -277,7 +277,7 @@ export function ChatPanel({
                           onClick={() => reagir(message.id, emoji)}
                           className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-sm ${
                             auteurs.includes(moi)
-                              ? "border-accent bg-[rgba(203,255,60,0.14)]"
+                              ? "border-accent bg-[rgba(255,201,60,0.15)]"
                               : "border-trait bg-velours"
                           }`}
                           title={auteurs
@@ -327,7 +327,7 @@ export function ChatPanel({
       <form
         ref={formRef}
         action={action}
-        className="safe-bottom sticky bottom-20 z-10 flex gap-2 border-t border-trait bg-[rgba(8,8,10,0.96)] py-3 backdrop-blur-md lg:bottom-0"
+        className="safe-bottom sticky bottom-20 z-10 flex gap-2 border-t border-trait bg-[rgba(11,8,9,0.96)] py-3 backdrop-blur-md lg:bottom-0"
       >
         <input type="hidden" name="conversation_id" value={conversationId} />
         <input

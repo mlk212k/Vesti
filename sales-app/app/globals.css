@@ -1,66 +1,68 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   DIRECTION ARTISTIQUE — « CHROME »
+   DIRECTION ARTISTIQUE — « CHROME & OR »
    ---------------------------------------------------------------------------
-   Du métal liquide posé sur du noir profond, et deux brumes à l'aérographe
-   qui dérivent derrière. Street sans être agressif : le chrome, c'est le
-   bijou, la jante, la pochette de mixtape — du luxe de quartier.
+   Y2K DE LA RUE, pas Y2K de science-fiction. C'est toute la direction, et
+   la distinction a coûté une version entière.
 
-   Ce qui change par rapport à « VELOURS » :
+   Il y a deux Y2K, et ils sont opposés :
 
-   - LE NOIR DEVIENT FROID ET PROFOND. Le violine chaud est parti. Le chrome
-     n'a de reflets que sur un fond qui ne raconte rien lui-même : plus le
-     fond est neutre, plus le métal existe.
-   - LES CHIFFRES SONT EN MÉTAL. Ce ne sont plus des chiffres colorés, c'est
-     une matière : une rampe blanc → acier → creux → blanc, découpée dans le
-     texte. Un montant a du poids parce qu'il a l'air lourd.
-   - LA CARTE EST CHROMÉE. Elle était en velours sombre ; elle est maintenant
-     polie, avec un reflet spéculaire qui GLISSE sous le doigt et un liseré
-     irisé sur la tranche. C'est l'objet le plus précieux de l'écran, et ça
-     se voit enfin.
-   - L'ACCENT EST UN VERT ACIDE (#cbff3c), et son jeton s'appelle
-     `--accent` — par son rôle, pas par sa teinte, parce qu'il a déjà changé
-     trois fois. C'est la seule couleur qui n'entre en collision avec aucun
-     des quatre halos du fond, donc la seule qui ressorte partout. Chrome
-     froid et vert acide : l'accord est plus street que chrome et crème, et
-     nettement moins sage qu'un orange.
-   - LA TYPOGRAPHIE A UN ACCENT. Unbounded pour les grands mots et les
-     chiffres : très large, très grasse, les contrepoints presque fermés —
-     la lettre des pochettes du début des années 2000. Space Grotesk pour
-     tout le reste. Les deux polices précédentes étaient correctes et
-     neutres, c'est-à-dire de la typographie de logiciel bien élevé.
-   - UNE COUCHE RÉTRO PAR-DESSUS, pas à la place. Le Y2K n'est pas propre :
-     c'est du chrome VU SUR UN ÉCRAN. D'où les lignes de balayage à 0,03, la
-     courbure qui assombrit les coins comme le verre d'un tube, l'aberration
-     chromatique d'un pixel sur les grands chiffres, et la barre d'objectif
-     qui se remplit par crans au lieu de couler. Aucune ne se remarque
-     isolément ; ensemble elles font que l'image a une TRAME.
-   - DE LA COULEUR EN HALO, et seulement en halo. Quatre lavis dérivent
-     derrière la page — crème, lilas, glacier, rose — et se croisent pour
-     fabriquer des teintes qu'aucun ne contient. La couleur vit dans
-     l'atmosphère ; les SIGNAUX, eux, gardent leurs deux accents. Un halo ne
-     veut rien dire, et c'est exactement pour ça qu'il peut être partout.
+     LE Y2K MACHINE — Matrix, Tron, le lecteur MP3, l'interface d'OS. Froid,
+     géométrique, construit à la règle. Chrome gris, vert de terminal,
+     lignes de balayage, viseurs, filaires 3D, aberration chromatique.
 
-   Ce qui NE change pas, et c'est délibéré : la carte NFC reste l'objet
-   central, l'appui long reste le geste, la tranche qui se remplit reste la
-   jauge. C'est la signature de l'app — on change sa matière, pas sa nature.
+     LE Y2K DE LA RUE — la pochette de mixtape, l'aérographe, le bijou, le
+     t-shirt. Chaud, gonflé, fait main. Chrome et OR, lettres bulles,
+     dégradés soufflés, strass, papier glacé.
 
-   Règle qui tranche les cas douteux : si un élément a l'air imprimé à plat,
-   il est raté. Tout ici a une épaisseur et renvoie de la lumière.
+   La version précédente avait glissé entièrement dans le premier. Elle
+   n'était pas ratée, elle était À CÔTÉ : chaque élément — équerres de
+   visée, treillis filaire, trame cathodique, vert acide sur noir — disait
+   « machine » avec application. Le brief créatif le prévoyait : « si une
+   solution ressemble à ce qu'on voit partout, transforme-la », et le Y2K
+   cyber est le cliché le plus servi des deux.
+
+   Ce qui a changé :
+
+   - LE NOIR EST CHAUD. Du brun et du rouge dedans, plus de bleu. Un noir
+     froid rend métallique tout ce qu'on pose dessus.
+   - L'ACCENT EST L'OR (#ffc93c). Le vert acide sur noir était un terminal.
+     L'or réchauffe un écran chromé au lieu de le refroidir, et il a le bon
+     SENS : chrome + or, c'est du bijou ; chrome + vert, c'est une console.
+     Cette app parle d'argent gagné dans la rue — l'or est le sujet, pas la
+     décoration.
+   - LA LETTRE EST UNE BULLE. Bagel Fat One : gonflée, ronde, contrepoints
+     refermés, comme peinte à la bombe puis remplie. Unbounded était
+     construite au compas.
+   - RETIRÉS : les équerres de visée, le treillis filaire, les lignes de
+     balayage, l'aberration chromatique, l'allumage cathodique. Cinq motifs
+     de machine.
+   - CONSERVÉS : le chrome (c'est du bijou), le gel, l'anneau holographique
+     (l'autocollant à collectionner), les strass, la carte NFC. Le grain
+     d'impression a même été monté — une pochette est imprimée, pas
+     diffusée.
+
+   Règle qui tranche les cas douteux : si un élément évoque un APPAREIL, il
+   est raté. S'il évoque un OBJET qu'on porte ou qu'on touche, il est bon.
    =========================================================================== */
 
 :root {
-  /* --- Les fonds. Noir PROFOND et neutre, presque bleuté. -------------- */
-  --nuit: #08080a;
-  --encre: #101014;
-  --velours: #16161c;
-  --fumee: #21212a;
+  /* --- Les fonds. Noir CHAUD, avec du brun et du rouge dedans.
 
-  /* --- Le texte. Blanc froid, gris acier. ------------------------------ */
-  --craie: #edeff2;
-  --dim: #a8aeb8;
-  --faint: #8e949e;
+     Le bleuté précédent était une erreur de direction : un noir froid rend
+     tout ce qui est posé dessus métallique et clinique. Le Y2K de la rue
+     est chaud — c'est du papier glacé, de la peinture de carrosserie, de
+     l'or. -------------------------------------------------------------- */
+  --nuit: #0b0809;
+  --encre: #141010;
+  --velours: #1d1718;
+  --fumee: #2a2223;
+
+  /* --- Le texte. Blanc CRÈME, gris chaud. ------------------------------ */
+  --craie: #f6f0e9;
+  --dim: #b6aaa2;
+  --faint: #968a83;
 
   /* --- Les accents. Deux, et ils ne font pas le même travail. ---------- */
   /* L'ACCENT.
@@ -70,20 +72,24 @@
      s'appelait `--peche` ou `--os`, chaque changement d'avis imposait de
      renommer trente-quatre usages. Maintenant c'est une seule ligne.
 
-     Vert acide. Sur un écran entièrement froid — noir bleuté, chrome
-     gris-acier — c'est la seule teinte qui ne rentre en collision avec
-     AUCUN des quatre halos du fond (crème, lilas, glacier, rose). Un beige
-     se noyait dans le halo crème, un rose dans le halo rose. Celui-ci
-     n'appartient à aucune famille présente, donc il ressort partout.
+     OR. Le vert acide était une faute : du vert vif sur du noir, c'est un
+     terminal — la chose la plus robotique qu'on puisse dessiner, et
+     exactement ce qu'on cherchait à fuir.
+
+     L'or fait le travail inverse. Il est chaud, donc il réchauffe un écran
+     chromé au lieu de le refroidir. Et surtout il a le bon SENS : du
+     chrome avec de l'or, c'est du bijou ; du chrome avec du vert, c'est une
+     console. Or cette app parle d'argent gagné dans la rue — l'or n'est pas
+     une décoration ici, c'est le sujet.
 
      Ses trois emplois, et rien d'autre : c'est ton argent, agis
      maintenant, quelque chose ne va pas. */
-  --accent: #cbff3c; /* l'argent, l'action, ce qui est à soi */
+  --accent: #ffc93c; /* l'argent, l'action, ce qui est à soi */
   --lilas: #8c6bff; /* le vivant : présence, temps réel, relances */
-  --accent-encre: #111d06; /* le texte posé SUR le vert */
+  --accent-encre: #2b1c00; /* le texte posé SUR l'or */
 
-  --trait: rgba(255, 255, 255, 0.09);
-  --trait-fort: rgba(255, 255, 255, 0.17);
+  --trait: rgba(255, 240, 230, 0.1);
+  --trait-fort: rgba(255, 240, 230, 0.18);
 
   /* --- LE CHROME ------------------------------------------------------- */
   /* Cinq arrêts, pas un dégradé de deux couleurs. Ce qui fait lire « métal »
@@ -91,21 +97,21 @@
      bascule dans le sombre d'un coup, comme l'horizon dans une carrosserie.
      Un dégradé linéaire doux, lui, ne ressemble qu'à du plastique. */
   --chrome-blanc: #ffffff;
-  --chrome-clair: #d8dde5;
-  --chrome-acier: #8a929e;
-  --chrome-creux: #3a3f49;
-  --chrome-nuit: #1a1d22;
+  --chrome-clair: #e3ddd4;
+  --chrome-acier: #968c82;
+  --chrome-creux: #443c39;
+  --chrome-nuit: #1f1a19;
 
   --chrome-rampe: linear-gradient(
     168deg,
     #ffffff 0%,
-    #d8dde5 13%,
-    #8a929e 29%,
-    #3a3f49 45%,
-    #1a1d22 52%,
-    #6f7784 66%,
-    #e6eaf0 83%,
-    #9aa2ae 100%
+    #e3ddd4 13%,
+    #968c82 29%,
+    #443c39 45%,
+    #1f1a19 52%,
+    #7d736c 66%,
+    #efe7dc 83%,
+    #a69b91 100%
   );
 
   /* La rampe du TEXTE n'est pas celle de la carte, et c'est délibéré.
@@ -117,27 +123,32 @@
      était illisible avec la rampe de la carte.
 
      Celle-ci garde l'inversion (donc l'effet métal) mais ne descend jamais
-     sous #6e7684, qui reste franchement au-dessus du fond. */
+     sous #7a7068, qui reste franchement au-dessus du fond. */
+  /* La rampe du texte est passée à l'OR, et pas seulement par goût : sur
+     une lettre bulle, un chrome gris perd toute définition — les
+     contrepoints sont trop petits pour qu'on lise l'inversion, et le
+     chiffre vire au gris mou. L'or a plus de contraste avec le fond chaud,
+     donc le glyphe tient. Et un total de ventes doré dit ce qu'il est. */
   --chrome-texte: linear-gradient(
     172deg,
-    #ffffff 0%,
-    #e9edf3 16%,
-    #b6bdc8 34%,
-    #6e7684 48%,
-    #8d96a3 56%,
-    #dfe4ec 74%,
-    #ffffff 88%,
-    #aab2be 100%
+    #fffdf5 0%,
+    #ffeeb0 15%,
+    #ffc93c 33%,
+    #b3800c 47%,
+    #e0a521 56%,
+    #ffe08a 73%,
+    #fffdf5 87%,
+    #d4a52e 100%
   );
 
   /* L'irisation : ce que renvoie une surface polie sur ses bords. Sourde,
      jamais un arc-en-ciel franc — on la remarque en bougeant, pas à l'arrêt. */
   --iris: linear-gradient(
     100deg,
-    rgba(203, 255, 60, 0.5) 0%,
-    rgba(140, 107, 255, 0.45) 34%,
-    rgba(120, 214, 255, 0.42) 62%,
-    rgba(203, 255, 60, 0.45) 100%
+    rgba(255, 201, 60, 0.55) 0%,
+    rgba(255, 111, 200, 0.5) 32%,
+    rgba(140, 107, 255, 0.46) 60%,
+    rgba(255, 201, 60, 0.5) 100%
   );
 
   /* --- LE GEL ---------------------------------------------------------
@@ -172,12 +183,12 @@
      avatars et à ce qui mérite d'être distingué sans couleur en plus. */
   --holo: conic-gradient(
     from 0deg,
-    rgba(203, 255, 60, 0.9),
-    rgba(140, 107, 255, 0.85) 22%,
-    rgba(120, 214, 255, 0.8) 44%,
+    rgba(255, 201, 60, 0.95),
+    rgba(255, 111, 200, 0.9) 22%,
+    rgba(140, 107, 255, 0.85) 44%,
     rgba(255, 255, 255, 0.9) 62%,
-    rgba(140, 107, 255, 0.85) 80%,
-    rgba(203, 255, 60, 0.9) 100%
+    rgba(255, 111, 200, 0.9) 80%,
+    rgba(255, 201, 60, 0.95) 100%
   );
 
   /* Rien d'anguleux nulle part. */
@@ -294,10 +305,13 @@ li {
   overflow: hidden;
 }
 
-/* La courbure. Un tube cathodique assombrit ses coins parce que le verre y
-   est plus épais et le faisceau plus oblique. Reproduit par une vignette
-   elliptique, posée AU-DESSUS des halos : sans elle, les quatre couleurs
-   s'étalent jusqu'aux bords et l'écran n'a plus de centre. */
+/* La vignette. Ce n'est plus la courbure d'un tube cathodique mais celle
+   d'un OBJECTIF : le bord d'une photo au flash, d'une pochette, d'un
+   Polaroid. Même outil, propos inverse — et nettement plus douce, parce
+   qu'une vignette dure referme l'image au lieu de la cadrer.
+
+   Elle reste nécessaire : sans elle les quatre halos s'étalent jusqu'aux
+   bords et l'écran n'a plus de centre. */
 .lampe::after {
   content: "";
   position: absolute;
@@ -307,9 +321,9 @@ li {
   background: radial-gradient(
     ellipse 78% 68% at 50% 46%,
     transparent 0%,
-    transparent 52%,
-    rgba(0, 0, 0, 0.35) 82%,
-    rgba(0, 0, 0, 0.72) 100%
+    transparent 58%,
+    rgba(20, 8, 4, 0.22) 84%,
+    rgba(20, 8, 4, 0.52) 100%
   );
 }
 
@@ -328,16 +342,16 @@ li {
   will-change: transform;
 }
 
-.halo-acide {
+.halo-or {
   top: -30vh;
   left: -22vw;
   width: 92vw;
   height: 64vh;
   background: radial-gradient(
     circle,
-    rgba(203, 255, 60, 0.38) 0%,
-    rgba(203, 255, 60, 0.13) 44%,
-    rgba(203, 255, 60, 0) 70%
+    rgba(255, 201, 60, 0.38) 0%,
+    rgba(255, 201, 60, 0.13) 44%,
+    rgba(255, 201, 60, 0) 70%
   );
   animation: derive-a 37s ease-in-out infinite alternate;
 }
@@ -356,16 +370,16 @@ li {
   animation: derive-b 43s ease-in-out infinite alternate;
 }
 
-.halo-glacier {
+.halo-azur {
   top: 26vh;
   right: -34vw;
   width: 76vw;
   height: 52vh;
   background: radial-gradient(
     circle,
-    rgba(120, 214, 255, 0.36) 0%,
-    rgba(120, 214, 255, 0.12) 44%,
-    rgba(120, 214, 255, 0) 70%
+    rgba(143, 208, 255, 0.34) 0%,
+    rgba(143, 208, 255, 0.11) 44%,
+    rgba(143, 208, 255, 0) 70%
   );
   animation: derive-c 53s ease-in-out infinite alternate;
 }
@@ -377,9 +391,9 @@ li {
   height: 54vh;
   background: radial-gradient(
     circle,
-    rgba(255, 122, 217, 0.34) 0%,
-    rgba(255, 122, 217, 0.11) 44%,
-    rgba(255, 122, 217, 0) 70%
+    rgba(255, 111, 200, 0.4) 0%,
+    rgba(255, 111, 200, 0.13) 44%,
+    rgba(255, 111, 200, 0) 70%
   );
   animation: derive-d 61s ease-in-out infinite alternate;
 }
@@ -408,65 +422,6 @@ li {
 @keyframes derive-d {
   to {
     transform: translate3d(11%, -8%, 0) scale(1.2);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   LE TREILLIS
-   Le fil de fer qui entoure un objet en cours de rendu. En VELOURS c'était
-   une maille de jeu vidéo ; ici c'est le filaire d'un modèle 3D — la même
-   couche, un propos différent.
-
-   Le motif fait 56 px et la couche se translate d'exactement 56 px avant de
-   reboucler : la maille retombe sur elle-même, donc le défilement n'a ni
-   début ni fin. C'est une translation, pas un `background-position` animé —
-   ça reste sur le GPU.
-   --------------------------------------------------------------------------- */
-
-.grille {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  mask-image: radial-gradient(
-    ellipse 85% 70% at 50% 45%,
-    #000 0%,
-    rgba(0, 0, 0, 0.5) 55%,
-    transparent 100%
-  );
-  -webkit-mask-image: radial-gradient(
-    ellipse 85% 70% at 50% 45%,
-    #000 0%,
-    rgba(0, 0, 0, 0.5) 55%,
-    transparent 100%
-  );
-}
-
-.grille::before {
-  content: "";
-  position: absolute;
-  inset: -56px 0 -56px 0;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(216, 221, 229, 0.055) 0 1px,
-      transparent 1px 56px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(216, 221, 229, 0.045) 0 1px,
-      transparent 1px 56px
-    );
-  animation: defile-grille 11s linear infinite;
-  will-change: transform;
-}
-
-@keyframes defile-grille {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(0, -56px, 0);
   }
 }
 
@@ -508,7 +463,7 @@ li {
 
 .onde:nth-child(3) {
   animation-delay: 7.4s;
-  border-color: rgba(203, 255, 60, 0.24);
+  border-color: rgba(255, 201, 60, 0.24);
 }
 
 @keyframes onde-nfc {
@@ -543,21 +498,10 @@ li {
   overflow: hidden;
 }
 
-/* Les lignes de balayage. 0,03 d'opacité, une ligne toutes les trois : à
-   cette dose, personne ne les distingue, mais l'écran cesse d'être
-   parfaitement lisse. C'est ce qui sépare un dégradé propre d'une IMAGE. */
-.vernis::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.3) 0 1px,
-    transparent 1px 3px
-  );
-  opacity: 0.55;
-}
+/* Les lignes de balayage ont été retirées. Une trame horizontale, c'est un
+   TUBE CATHODIQUE — encore une machine. Le grain d'impression, lui, reste
+   (voir `body::after`) et il est monté d'un cran : une pochette de mixtape
+   est imprimée, pas diffusée. */
 
 .vernis::before {
   content: "";
@@ -595,7 +539,7 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.055;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -617,19 +561,29 @@ h3 {
 /* Embossé : une arête claire en haut du glyphe, une ombre courte en bas.
    C'est ce qui donne à la lettre l'air d'être GRAVÉE dans le chrome plutôt
    que posée dessus — et c'est un décalage d'un pixel, pas un effet. */
+/* L'interlettrage est POSITIF, et c'est contre-intuitif.
+
+   Sur une grotesque grasse, on serre : les blancs entre les lettres sont
+   larges et le mot se délite. Sur une lettre BULLE, c'est l'inverse — les
+   glyphes sont déjà gonflés jusqu'à se toucher, et le moindre serrage les
+   fait fusionner en une tache. Le réglage hérité (-0,03em, interligne 0,96)
+   venait d'Unbounded et rendait « Tableau de score » illisible.
+
+   Le poids 800 n'a plus d'effet non plus : Bagel Fat One n'existe qu'en
+   400. Il est laissé pour le jour où la police changera encore. */
 .titre {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.96;
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.22),
-    0 1px 0 rgba(0, 0, 0, 0.55),
-    0 3px 10px rgba(0, 0, 0, 0.45),
-    /* Le bloom du phosphore : la lueur qu'un tube laisse autour d'un
-       glyphe clair. Très faible — au-delà, le titre devient flou. */
-      0 0 26px rgba(203, 255, 60, 0.13),
-    0 0 48px rgba(140, 107, 255, 0.1);
+  letter-spacing: 0.012em;
+  line-height: 1.08;
+  /* UNE ombre, pas cinq.
+
+     Bagel Fat One est déjà une lettre très grasse aux contrepoints presque
+     refermés : chaque ombre supplémentaire remplit ce qui reste de blanc
+     interne, et le mot devient une tache. L'embossage à trois couches qui
+     marchait sur une grotesque géométrique détruit celle-ci. Une ombre
+     portée courte suffit à la décoller du fond. */
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
 /* Le mot-matière : un mot énorme posé derrière le reste, qui déborde et
@@ -637,10 +591,11 @@ h3 {
 .mot {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 0.82;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(237, 239, 242, 0.1);
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  /* Plein, pas en contour : un lettrage filaire est un rendu 3D, donc une
+     machine. Un mot gonflé et rempli est une bombe de peinture. */
+  color: rgba(246, 240, 233, 0.06);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
@@ -649,8 +604,7 @@ h3 {
 /* La variante pleine garde un remplissage : elle sert là où le mot doit
    peser, pas seulement suggérer une échelle. */
 .mot-plein {
-  color: rgba(237, 239, 242, 0.06);
-  -webkit-text-stroke: 1.5px rgba(237, 239, 242, 0.13);
+  color: rgba(255, 201, 60, 0.09);
 }
 
 /* L'étiquette. Écrite comme une phrase, en 14 px, dans la police du texte
@@ -687,8 +641,8 @@ h3 {
   font-family: var(--font-display);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.035em;
-  line-height: 1;
+  letter-spacing: 0.005em;
+  line-height: 1.02;
 }
 
 /* ---------------------------------------------------------------------------
@@ -717,17 +671,15 @@ h3 {
        découpe enlève ; la large et violette est le HALO — le métal renvoie
        la couleur de l'ambiance, ce qui l'empêche d'être un trou gris au
        milieu d'un écran coloré. */
-    /* Quatre ombres portées, et chacune fait un travail :
-         1-2. l'aberration chromatique — un liseré rouge à gauche, cyan à
-              droite, d'UN pixel. C'est le défaut d'un tube cathodique mal
-              convergé, et c'est ce qui fait « écran » plutôt que « print ».
-         3.   l'épaisseur, que la découpe du texte enlève ;
-         4.   le halo violet, pour que le métal renvoie l'ambiance. */
+    /* L'aberration chromatique a été retirée : un liseré rouge et cyan,
+       c'est le défaut d'un TUBE CATHODIQUE mal convergé. Ça dit « écran de
+       machine » là où on veut dire « or sur papier glacé ».
+
+       Restent l'épaisseur que la découpe enlève, et le halo doré — le métal
+       renvoie la chaleur de l'ambiance au lieu d'être un trou gris. */
     filter:
-      drop-shadow(-1px 0 0 rgba(255, 74, 74, 0.38))
-      drop-shadow(1px 0 0 rgba(74, 214, 255, 0.38))
       drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6))
-      drop-shadow(0 0 32px rgba(140, 107, 255, 0.45));
+      drop-shadow(0 0 36px rgba(255, 201, 60, 0.5));
   }
 }
 
@@ -841,9 +793,9 @@ h3 {
   filter: blur(54px);
   background: radial-gradient(
     ellipse 62% 58% at 50% 50%,
-    rgba(140, 107, 255, 0.58) 0%,
-    rgba(255, 122, 217, 0.34) 42%,
-    rgba(120, 214, 255, 0.24) 66%,
+    rgba(255, 201, 60, 0.5) 0%,
+    rgba(255, 111, 200, 0.36) 42%,
+    rgba(140, 107, 255, 0.24) 66%,
     transparent 82%
   );
   pointer-events: none;
@@ -895,7 +847,7 @@ h3 {
     /* Une chaleur diffuse : le métal renvoie la brume orange du fond. */
     radial-gradient(
       ellipse 90% 120% at calc(var(--lx) + 18%) calc(var(--ly) + 30%),
-      rgba(203, 255, 60, 0.24) 0%,
+      rgba(255, 201, 60, 0.24) 0%,
       rgba(140, 107, 255, 0.12) 45%,
       transparent 72%
     ),
@@ -1075,10 +1027,10 @@ h3 {
     var(--gel),
     linear-gradient(
       180deg,
-      #e6ff8c 0%,
+      #ffe9a3 0%,
       var(--accent) 46%,
-      #8fc417 54%,
-      #d8ff6e 100%
+      #d99a12 54%,
+      #ffdd7a 100%
     );
   color: var(--accent-encre);
   font-weight: 700;
@@ -1086,7 +1038,7 @@ h3 {
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
-    0 20px 44px -20px rgba(203, 255, 60, 0.8);
+    0 20px 44px -20px rgba(255, 201, 60, 0.8);
 }
 
 /* Le danger n'a pas de couleur à lui : il a une matière. Un creux, un texte
@@ -1094,12 +1046,12 @@ h3 {
 .btn-danger {
   background: rgba(0, 0, 0, 0.35);
   color: var(--dim);
-  box-shadow: inset 0 0 0 1px rgba(203, 255, 60, 0.26);
+  box-shadow: inset 0 0 0 1px rgba(255, 201, 60, 0.26);
 }
 
 .btn-danger:hover {
   color: var(--accent);
-  box-shadow: inset 0 0 0 1px rgba(203, 255, 60, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(255, 201, 60, 0.6);
 }
 
 .btn-fantome {
@@ -1208,7 +1160,7 @@ select.champ {
 }
 
 .pastille-accent {
-  background: var(--gel), rgba(203, 255, 60, 0.16);
+  background: var(--gel), rgba(255, 201, 60, 0.16);
   color: var(--accent);
 }
 
@@ -1254,7 +1206,7 @@ select.champ {
 }
 
 .jauge-cran-plein {
-  background: linear-gradient(180deg, #ffffff 0%, #8a929e 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #968c82 100%);
 }
 
 .jauge-cran-bonus {
@@ -1271,7 +1223,7 @@ select.champ {
 .barre-remplie {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(180deg, #e6ff8c 0%, var(--accent) 50%, #8fc417 100%);
+  background: linear-gradient(180deg, #ffe9a3 0%, var(--accent) 50%, #d99a12 100%);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
   transition: width 0.9s var(--doux);
 }
@@ -1283,13 +1235,13 @@ select.champ {
    =========================================================================== */
 
 .barre-nav {
-  background: rgba(16, 16, 20, 0.84);
+  background: rgba(20, 16, 16, 0.86);
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
     0 -18px 40px -30px rgba(0, 0, 0, 1),
-    0 -14px 44px -26px rgba(140, 107, 255, 0.4);
+    0 -14px 44px -26px rgba(255, 201, 60, 0.35);
 }
 
 .onglet-actif {
@@ -1609,42 +1561,34 @@ select.champ {
    piège a déjà coûté une fausse alerte.
    --------------------------------------------------------------------------- */
 
-/* L'ALLUMAGE.
+/* L'ÉCLOSION.
 
-   Un écran ne s'affiche plus : il S'ALLUME. Le contenu part d'une ligne
-   horizontale surexposée, s'étire à la largeur, puis se déplie
-   verticalement avec un léger dépassement avant de retomber — exactement
-   la séquence d'un tube cathodique qu'on met sous tension.
+   Remplace l'allumage cathodique, qui était une faute de direction : un
+   écran qui s'ouvre depuis un trait de lumière, c'est un TÉLÉVISEUR qu'on
+   met sous tension — encore une machine, et la plus datée de toutes.
 
-   L'ordre des étapes est ce qui fait tout : la largeur AVANT la hauteur.
-   L'inverse donne un simple zoom, et le trait de lumière disparaît.
+   Ici le contenu GONFLE : il arrive un peu trop petit et flou, dépasse
+   légèrement sa taille, puis se pose. C'est le même geste que la
+   typographie — de la matière qu'on souffle, pas un appareil qui démarre.
+   Le flash est chaud et saturé, comme un tirage photo qui révèle.
 
-   `transform-origin` est à 42 % et non à 50 % : le regard se pose au tiers
-   supérieur, et une ouverture centrée sur le bas de l'écran a l'air de
-   tomber. */
+   Tout tient en `transform`, `opacity` et `filter` : pas un recalcul de
+   mise en page. */
 @keyframes entree-ecran {
   0% {
     opacity: 0;
-    transform: perspective(1200px) scaleX(0.7) scaleY(0.006);
-    filter: brightness(2.8) saturate(0.4);
+    transform: scale(0.945) translate3d(0, 16px, 0);
+    filter: blur(11px) brightness(1.55) saturate(1.45);
   }
-  22% {
+  58% {
     opacity: 1;
-    transform: perspective(1200px) scaleX(1) scaleY(0.006);
-    filter: brightness(2.8) saturate(0.4);
-  }
-  56% {
-    transform: perspective(1200px) scaleX(1) scaleY(1.05);
-    filter: brightness(1.45) saturate(0.85);
-  }
-  78% {
-    transform: perspective(1200px) scaleX(1) scaleY(0.985);
-    filter: brightness(1.08) saturate(1);
+    transform: scale(1.014) translate3d(0, 0, 0);
+    filter: blur(0) brightness(1.13) saturate(1.12);
   }
   100% {
     opacity: 1;
-    transform: perspective(1200px) scale(1);
-    filter: brightness(1) saturate(1);
+    transform: scale(1) translate3d(0, 0, 0);
+    filter: blur(0) brightness(1) saturate(1);
   }
 }
 
@@ -1795,7 +1739,7 @@ select.champ {
 /* Une seule est acide, une seule est lilas : si toutes prenaient l'accent,
    le fond se mettrait à signaler quelque chose. */
 .etoile:nth-child(2) {
-  background: rgba(203, 255, 60, 0.8);
+  background: rgba(255, 201, 60, 0.8);
 }
 
 .etoile:nth-child(5) {
@@ -1816,63 +1760,6 @@ select.champ {
     transform: scale(0.3) rotate(80deg);
     opacity: 0;
   }
-}
-
-/* ---------------------------------------------------------------------------
-   LES ÉQUERRES DE VISÉE
-   Quatre coins d'un viseur d'arcade. Elles donnent à l'écran un BORD
-   délibéré : sans elles, le contenu s'arrête simplement là où le téléphone
-   s'arrête, ce qui n'est pas une composition.
-
-   Posées en `fixed` et sous le contenu (`z-index: 1`, comme le vernis) :
-   elles encadrent, elles ne surplombent pas.
-   --------------------------------------------------------------------------- */
-
-.hud {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.equerre {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid rgba(203, 255, 60, 0.45);
-  filter: drop-shadow(0 0 6px rgba(203, 255, 60, 0.4));
-}
-
-.equerre:nth-child(1) {
-  top: calc(env(safe-area-inset-top) + 10px);
-  left: 10px;
-  border-right: none;
-  border-bottom: none;
-  border-top-left-radius: 6px;
-}
-
-.equerre:nth-child(2) {
-  top: calc(env(safe-area-inset-top) + 10px);
-  right: 10px;
-  border-left: none;
-  border-bottom: none;
-  border-top-right-radius: 6px;
-}
-
-.equerre:nth-child(3) {
-  bottom: calc(env(safe-area-inset-bottom) + 10px);
-  left: 10px;
-  border-right: none;
-  border-top: none;
-  border-bottom-left-radius: 6px;
-}
-
-.equerre:nth-child(4) {
-  bottom: calc(env(safe-area-inset-bottom) + 10px);
-  right: 10px;
-  border-left: none;
-  border-top: none;
-  border-bottom-right-radius: 6px;
 }
 
 /* ===========================================================================
@@ -1897,7 +1784,6 @@ select.champ {
   }
 
   .halo,
-  .grille::before,
   .vernis::before,
   .lustre::before,
   .btn-primaire::after,
@@ -1995,8 +1881,7 @@ select.champ {
    ancienne définition restée cinquante lignes plus bas. */
 
 .ecran {
-  transform-origin: 50% 42%;
-  animation: entree-ecran 0.66s var(--doux) both;
+  animation: entree-ecran 0.7s var(--elastique) both;
 }
 
 /* Les enfants directs se posent l'un après l'autre. Sept paliers suffisent :
@@ -2049,14 +1934,14 @@ select.champ {
   border-radius: 999px;
   background: linear-gradient(
     180deg,
-    #e6ff8c 0%,
+    #ffe9a3 0%,
     var(--accent) 48%,
-    #8fc417 52%,
-    #d8ff6e 100%
+    #d99a12 52%,
+    #ffdd7a 100%
   );
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
-    0 0 20px -3px rgba(203, 255, 60, 0.8);
+    0 0 20px -3px rgba(255, 201, 60, 0.8);
   transition: width 1.1s var(--doux);
 }
 
@@ -2171,10 +2056,10 @@ select.champ {
     var(--gel),
     linear-gradient(
       180deg,
-      #e6ff8c 0%,
+      #ffe9a3 0%,
       var(--accent) 46%,
-      #8fc417 54%,
-      #d8ff6e 100%
+      #d99a12 54%,
+      #ffdd7a 100%
     );
   color: var(--accent-encre);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);

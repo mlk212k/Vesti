@@ -5,6 +5,67 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v4.0 — 21 septembre 2026 — « CHROME & OR »
+
+**Changement de cap.** La version précédente était juste techniquement et
+fausse de direction : elle faisait du Y2K de science-fiction (Matrix, Tron,
+interface de machine) là où il fallait du **Y2K de la rue** — la pochette de
+mixtape, l'aérographe, le bijou.
+
+### 🥇 L'or remplace le vert
+
+Le vert acide sur fond noir, c'est un écran de terminal — la chose la plus
+robotique qu'on puisse dessiner.
+
+L'or fait l'inverse : il **réchauffe** un écran chromé au lieu de le
+refroidir, et il dit la bonne chose. Du chrome avec de l'or, c'est un
+bijou ; du chrome avec du vert, c'est une console. Cette app parle d'argent
+gagné dans la rue.
+
+**Les gros chiffres sont maintenant en or chromé**, plus en argent.
+
+### 🫧 Une écriture en lettres bulles
+
+Les grands mots et les chiffres passent à une lettre **gonflée et ronde**,
+comme peinte à la bombe puis remplie — le lettrage des pochettes et des
+t-shirts du début des années 2000.
+
+La police précédente était large et grasse, mais construite à la règle : du
+logo de constructeur automobile, pas du tag.
+
+### 🔥 Le noir devient chaud
+
+Du brun et du rouge dedans, plus de bleu. Un noir froid rendait métallique
+tout ce qu'on posait dessus.
+
+### 🗑 Cinq choses retirées
+
+Toutes disaient « machine » :
+
+• les **équerres de visée** aux coins (un viseur de jeu de tir) ;
+• le **treillis en fil de fer** (un rendu 3D) ;
+• les **lignes de balayage** (un vieux téléviseur) ;
+• le **liseré rouge et cyan** sur les chiffres (un écran mal réglé) ;
+• **l'allumage cathodique** des pages, remplacé par une **éclosion** — le
+  contenu gonfle comme une bulle au lieu de s'allumer comme un poste.
+
+En revanche le **grain d'impression** a été monté : une pochette est
+imprimée, pas diffusée.
+
+### ✅ Ce qui reste
+
+Le chrome (c'est un bijou), le gel brillant, l'anneau holographique des
+avatars (l'autocollant à collectionner), les strass, les halos de couleur,
+et la carte NFC avec son appui long.
+
+### 🐛 Deux titres devenus illisibles
+
+Les réglages d'espacement des lettres avaient été gardés de l'ancienne
+police. Sur une lettre bulle, déjà gonflée jusqu'à se toucher, le serrage
+transformait les mots en tache. Corrigé.
+
+---
+
 ## v3.2 — 21 septembre 2026
 
 ### 📺 Les écrans s'allument

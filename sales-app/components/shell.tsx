@@ -30,7 +30,7 @@ export function Sidebar({
   const items = navFor(role);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-[rgba(16,16,20,0.74)] shadow-[inset_-1px_0_0_0_var(--trait)] backdrop-blur-2xl lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-[rgba(20,16,16,0.76)] shadow-[inset_-1px_0_0_0_var(--trait)] backdrop-blur-2xl lg:flex">
       <div className="flex items-center gap-2.5 px-5 py-6">
         <Logo className="h-8 w-8" />
         <div>
@@ -128,7 +128,7 @@ export function TopBar({
   unread: number;
 }) {
   return (
-    <header className="safe-top sticky top-0 z-20 -mx-4 mb-6 flex items-center justify-between bg-[rgba(8,8,10,0.62)] px-4 py-3 backdrop-blur-2xl lg:hidden">
+    <header className="safe-top sticky top-0 z-20 -mx-4 mb-6 flex items-center justify-between bg-[rgba(11,8,9,0.64)] px-4 py-3 backdrop-blur-2xl lg:hidden">
       <Link href="/" className="flex items-center gap-2">
         <Logo className="h-7 w-7" />
         <span className="titre text-base">{appName}</span>
