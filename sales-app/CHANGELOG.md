@@ -5,6 +5,46 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v3.2 — 21 septembre 2026
+
+### 📺 Les écrans s'allument
+
+Une page ne s'affiche plus : elle **s'allume**, comme un vieux téléviseur.
+Le contenu part d'un trait de lumière horizontal surexposé, s'étire à la
+largeur, puis se déplie vers le haut et le bas avec un petit rebond.
+
+C'est à chaque changement de page.
+
+### 🎯 Un cadre de viseur
+
+Quatre **équerres vertes** aux coins de l'écran, comme dans un jeu de tir.
+L'app a maintenant un bord voulu, au lieu de s'arrêter là où le téléphone
+s'arrête.
+
+### ✨ Des étincelles dans le fond
+
+Six éclats scintillent lentement derrière l'app, à des rythmes différents.
+Deux sont colorés, quatre sont blancs.
+
+### 💧 La carte a un reflet
+
+Une traînée claire sous la carte : elle est posée **sur** quelque chose, au
+lieu de flotter dans le vide.
+
+### 🌟 Les titres rayonnent
+
+Une lueur très légère autour des grands titres — le halo qu'un écran laisse
+autour d'une lettre claire.
+
+### 🐛 Une animation qui ne se jouait pas
+
+L'animation d'ouverture d'écran avait été écrite **deux fois** dans le
+fichier de style. En informatique, c'est la dernière qui gagne : la nouvelle
+version était donc ignorée sans le moindre message d'erreur. Corrigé, et une
+vérification automatique refuse maintenant ce cas.
+
+---
+
 ## v3.1 — 21 septembre 2026 — « CHROME / Y2K »
 
 Le look CHROME poussé à fond, avec de la couleur et du rétro.

@@ -625,7 +625,11 @@ h3 {
   text-shadow:
     0 -1px 0 rgba(255, 255, 255, 0.22),
     0 1px 0 rgba(0, 0, 0, 0.55),
-    0 3px 10px rgba(0, 0, 0, 0.45);
+    0 3px 10px rgba(0, 0, 0, 0.45),
+    /* Le bloom du phosphore : la lueur qu'un tube laisse autour d'un
+       glyphe clair. Très faible — au-delà, le titre devient flou. */
+      0 0 26px rgba(203, 255, 60, 0.13),
+    0 0 48px rgba(140, 107, 255, 0.1);
 }
 
 /* Le mot-matière : un mot énorme posé derrière le reste, qui déborde et
@@ -800,6 +804,29 @@ h3 {
   position: relative;
   perspective: 1500px;
   perspective-origin: 50% 35%;
+}
+
+/* Le reflet. Une traînée claire juste sous la carte, aplatie et floue :
+   l'objet n'est plus posé dans le vide, il est posé SUR quelque chose. Ce
+   n'est pas une vraie réflexion — il faudrait dupliquer la carte — mais à
+   cette échelle l'œil ne demande que la trace lumineuse. */
+.scene::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -7%;
+  height: 16%;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(13px);
+  background: linear-gradient(
+    180deg,
+    rgba(216, 221, 229, 0.42) 0%,
+    rgba(216, 221, 229, 0.12) 45%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* Le halo de l'objet. Il est SOUS la carte (`z-index: -1`) et déborde
@@ -1582,16 +1609,42 @@ select.champ {
    piège a déjà coûté une fausse alerte.
    --------------------------------------------------------------------------- */
 
+/* L'ALLUMAGE.
+
+   Un écran ne s'affiche plus : il S'ALLUME. Le contenu part d'une ligne
+   horizontale surexposée, s'étire à la largeur, puis se déplie
+   verticalement avec un léger dépassement avant de retomber — exactement
+   la séquence d'un tube cathodique qu'on met sous tension.
+
+   L'ordre des étapes est ce qui fait tout : la largeur AVANT la hauteur.
+   L'inverse donne un simple zoom, et le trait de lumière disparaît.
+
+   `transform-origin` est à 42 % et non à 50 % : le regard se pose au tiers
+   supérieur, et une ouverture centrée sur le bas de l'écran a l'air de
+   tomber. */
 @keyframes entree-ecran {
-  from {
+  0% {
     opacity: 0;
-    transform: perspective(1200px) translate3d(0, 26px, -110px) scale(0.985);
-    filter: blur(9px);
+    transform: perspective(1200px) scaleX(0.7) scaleY(0.006);
+    filter: brightness(2.8) saturate(0.4);
   }
-  to {
+  22% {
     opacity: 1;
-    transform: perspective(1200px) translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    transform: perspective(1200px) scaleX(1) scaleY(0.006);
+    filter: brightness(2.8) saturate(0.4);
+  }
+  56% {
+    transform: perspective(1200px) scaleX(1) scaleY(1.05);
+    filter: brightness(1.45) saturate(0.85);
+  }
+  78% {
+    transform: perspective(1200px) scaleX(1) scaleY(0.985);
+    filter: brightness(1.08) saturate(1);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) scale(1);
+    filter: brightness(1) saturate(1);
   }
 }
 
@@ -1705,6 +1758,123 @@ select.champ {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   LE CHAMP D'ÉTINCELLES
+   Six éclats qui scintillent lentement dans le fond. Ils reprennent
+   exactement la forme de l'étincelle du premier du classement — même
+   `clip-path`, même vocabulaire — mais en très sourd : ici ils décorent,
+   là-bas ils récompensent.
+   --------------------------------------------------------------------------- */
+
+.etoiles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.etoile {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  clip-path: polygon(
+    50% 0%,
+    58% 42%,
+    100% 50%,
+    58% 58%,
+    50% 100%,
+    42% 58%,
+    0% 50%,
+    42% 42%
+  );
+  opacity: 0;
+  animation: scintille-fond 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Une seule est acide, une seule est lilas : si toutes prenaient l'accent,
+   le fond se mettrait à signaler quelque chose. */
+.etoile:nth-child(2) {
+  background: rgba(203, 255, 60, 0.8);
+}
+
+.etoile:nth-child(5) {
+  background: rgba(140, 107, 255, 0.85);
+}
+
+@keyframes scintille-fond {
+  0%,
+  100% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    transform: scale(1) rotate(40deg);
+    opacity: 0.85;
+  }
+  18% {
+    transform: scale(0.3) rotate(80deg);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   LES ÉQUERRES DE VISÉE
+   Quatre coins d'un viseur d'arcade. Elles donnent à l'écran un BORD
+   délibéré : sans elles, le contenu s'arrête simplement là où le téléphone
+   s'arrête, ce qui n'est pas une composition.
+
+   Posées en `fixed` et sous le contenu (`z-index: 1`, comme le vernis) :
+   elles encadrent, elles ne surplombent pas.
+   --------------------------------------------------------------------------- */
+
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.equerre {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid rgba(203, 255, 60, 0.45);
+  filter: drop-shadow(0 0 6px rgba(203, 255, 60, 0.4));
+}
+
+.equerre:nth-child(1) {
+  top: calc(env(safe-area-inset-top) + 10px);
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+}
+
+.equerre:nth-child(2) {
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 10px;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 6px;
+}
+
+.equerre:nth-child(3) {
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
+  left: 10px;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 6px;
+}
+
+.equerre:nth-child(4) {
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
+  right: 10px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+}
+
 /* ===========================================================================
    ACCESSIBILITÉ
    La DA repose sur du mouvement lent. Si la personne n'en veut pas, tout
@@ -1735,6 +1905,7 @@ select.champ {
   .avatar::after,
   .rang-1::after,
   .scene::after,
+  .etoile,
   .onde,
   .dalle-vivante {
     animation: none !important;
@@ -1745,6 +1916,13 @@ select.champ {
   .rang-1::after {
     transform: scale(0.9) rotate(20deg);
     opacity: 0.9;
+  }
+
+  /* Les étincelles de fond, elles, démarrent à opacité NULLE : figées, on
+     ne verrait rien du tout. Elles se posent visibles et immobiles. */
+  .etoile {
+    transform: scale(0.8) rotate(25deg);
+    opacity: 0.5;
   }
 
   /* Les reflets qui traversent sont invisibles à l'arrêt (ils démarrent hors
@@ -1809,23 +1987,16 @@ select.champ {
    déclenche de recalcul de mise en page.
    =========================================================================== */
 
-/* Chargement d'écran. Chaque changement de page rejoue ce mouvement : le
-   contenu arrive de l'arrière, légèrement flou, et se pose. */
-@keyframes entree-ecran {
-  from {
-    opacity: 0;
-    transform: perspective(1200px) translate3d(0, 24px, -90px);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: perspective(1200px) translate3d(0, 0, 0);
-    filter: blur(0);
-  }
-}
+/* Chargement d'écran. La séquence d'allumage est définie plus haut, dans la
+   section MOTION — il n'y en a qu'UNE, et c'est important : deux
+   `@keyframes` de même nom sont parfaitement valides en CSS, la dernière du
+   fichier écrase l'autre, et rien ne le signale. Une version cathodique a
+   ainsi vécu plusieurs heures sans jamais s'exécuter, masquée par une
+   ancienne définition restée cinquante lignes plus bas. */
 
 .ecran {
-  animation: entree-ecran 0.62s var(--doux) both;
+  transform-origin: 50% 42%;
+  animation: entree-ecran 0.66s var(--doux) both;
 }
 
 /* Les enfants directs se posent l'un après l'autre. Sept paliers suffisent :

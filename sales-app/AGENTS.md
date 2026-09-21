@@ -112,6 +112,15 @@ Trois règles de cette DA, qui ne sont pas des préférences :
   lilas (en tournée / objectif atteint), c'est le MOUVEMENT qui les sépare :
   l'un porte un point qui bat, l'autre non. Jamais une troisième couleur.
 
+- **Deux `@keyframes` de même nom sont VALIDES, et la dernière gagne.**
+  C'est le piège n°3 de `scripts/check-tokens.sh`. Une séquence d'allumage
+  cathodique a vécu des heures sans jamais s'exécuter, masquée par une
+  ancienne définition d'`entree-ecran` restée cinquante lignes plus bas dans
+  le même fichier. Le symptôme n'est pas une erreur, c'est « l'animation n'a
+  pas changé » — et on cherche alors le bug dans la nouvelle version, qui
+  est pourtant correcte. Avant de déboguer une animation qui ne bouge pas,
+  vérifier qu'elle n'est définie qu'une fois.
+
 - **Une couleur écrite en dur survit à tout changement de DA.** C'est le
   piège n°2 de `scripts/check-tokens.sh`, ajouté parce qu'au passage à CHROME
   six fichiers gardaient la palette précédente — dont un vert acide (#ccff00)

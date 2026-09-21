@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# Deux vérifications, contre deux façons DIFFÉRENTES de rater un changement
-# de direction artistique. Les deux sont arrivées pour de vrai.
+# Trois vérifications, contre trois façons DIFFÉRENTES de rater un
+# changement de direction artistique. Les trois sont arrivées pour de vrai,
+# et aucune ne casse quoi que ce soit au build.
 #
 #   1. UNE VARIABLE QUI N'EXISTE PLUS.  `stroke="var(--braise)"` après un
 #      renommage : la valeur devient invalide en silence, donc la case à
@@ -83,5 +84,31 @@ if [ -n "$suspectes" ]; then
   exit 1
 fi
 
+# ---------------------------------------------------------------------------
+# 3. Les @keyframes définies deux fois
+# ---------------------------------------------------------------------------
+# Troisième façon de rater un changement de DA, et la plus sournoise : deux
+# `@keyframes` de même nom sont parfaitement VALIDES en CSS. La dernière du
+# fichier gagne, silencieusement. Ni le build, ni le lint, ni les deux
+# vérifications ci-dessus ne peuvent le voir.
+#
+# C'est arrivé avec `entree-ecran` : une séquence d'allumage cathodique
+# écrite dans la section MOTION est restée sans effet pendant des heures,
+# masquée par une ancienne définition cinquante lignes plus bas. Le symptôme
+# n'était pas une erreur — c'était « l'animation n'a pas changé ».
+
+doublons=$(grep -oE '^@keyframes [a-z0-9-]+' "$CSS" | sed 's/@keyframes //' | sort | uniq -d)
+
+if [ -n "$doublons" ]; then
+  echo "Animations définies plusieurs fois dans $CSS :"
+  echo ""
+  printf '%s\n' "$doublons" | sed 's/^/  @keyframes /'
+  echo ""
+  echo "Deux @keyframes de même nom sont valides : la DERNIÈRE écrase"
+  echo "l'autre sans un mot. N'en garder qu'une."
+  exit 1
+fi
+
 echo "→ Jetons CSS : toutes les variables référencées existent."
 echo "→ Couleurs   : aucune couleur en dur hors palette."
+echo "→ Animations : aucune @keyframes définie deux fois."
