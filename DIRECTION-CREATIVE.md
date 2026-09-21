@@ -55,8 +55,16 @@ constante partagée ne vit pas dans un module client » de `sales-app/AGENTS.md`
 À combiner selon le besoin, jamais tous à la fois — exactement comme les
 mots-clés qu'ils remplacent.
 
-**Légende :** ✅ actif dans cette session · ⚠️ installé, connexion à finir ·
-○ à ajouter sur claude.ai ou en MCP local · ✍️ à écrire pour ce projet.
+**Légende :** ✅ actif · ⚠️ installé, connexion à finir · ○ à ajouter ·
+✍️ à écrire pour ce projet.
+
+> **Branchement — état au 21 septembre 2026.** Context7 est passé en ✅ : il
+> répond sans compte ni clé, il est donc déclaré dans `.mcp.json` et
+> pré-approuvé dans `.claude/settings.json`, ce qui le rend disponible à
+> quiconque ouvre ce dépôt — pas seulement sur un compte claude.ai.
+> **60fps** et **n8n** ne peuvent pas être branchés depuis le dépôt : le
+> premier attend une fin d'OAuth dans un navigateur, le second a une
+> passerelle qui répond 404. Voir leurs lignes ci-dessous.
 
 ### A — Voir et fabriquer la matière visuelle (1–10)
 
@@ -69,15 +77,15 @@ mots-clés qu'ils remplacent.
 | 5 | **Moda — Slides & Designs** ○ | Présenter une DA à l'équipe (Mohamed, Malik) sans passer par du JSX. |
 | 6 | **Cloudinary** ○ | Avatars et photos de vente : transformation, formats modernes, poids maîtrisé. |
 | 7 | **Higgsfield** ✅ | Images, vidéos, 3D, voix. Fabriquer un visuel de carte, une vidéo de lancement, un fond animé. |
-| 8 | **60fps** ⚠️ | Motion design. La connexion n'est pas terminée — c'est le chaînon manquant entre « ça bouge » et « ça bouge juste ». |
+| 8 | **60fps** ⚠️ | Motion design. OAuth commencé mais jamais terminé, donc aucun outil exposé — c'est le chaînon manquant entre « ça bouge » et « ça bouge juste ». Se termine dans le navigateur, nulle part ailleurs. |
 | 9 | **Webflow** ○ | Vitrine publique / page de vente, séparée de l'app. |
-| 10 | **WeWeb** ○ | Prototype d'écran jetable, à ne jamais confondre avec la prod. |
+| 10 | **Mobbin** ○ | `search_flows`, `search_screens` : des références d'UI réelles et récentes. Un garde-fou contre la DA inventée de mémoire. |
 
 ### B — Savoir avant d'écrire (11–17)
 
 | # | Connecteur | Ce qu'il change |
 |---|---|---|
-| 11 | **Context7** ⚠️ | Doc à jour des librairies. Next 16 et React 19 ont cassé des API que la mémoire d'un modèle croit encore valides. |
+| 11 | **Context7** ✅ | Doc à jour des librairies. Branché en **MCP de projet** (`.mcp.json`), sans compte ni clé. Next 16 et React 19 ont cassé des API que la mémoire d'un modèle croit encore valides. |
 | 12 | **WebSearch** ✅ | Vérifier qu'une technique existe encore, pas qu'elle existait. |
 | 13 | **WebFetch** ✅ | Lire la source, pas son résumé. |
 | 14 | **Fetch (MCP officiel)** ○ | Même chose côté serveur local, sans passer par l'interface. |
@@ -96,7 +104,7 @@ mots-clés qu'ils remplacent.
 | 22 | **Postgres (MCP officiel)** ○ | Lecture SQL directe quand Supabase n'est pas le bon niveau. |
 | 23 | **Git (MCP officiel)** ○ | Diff, blame, bisect — retrouver *quand* une régression visuelle est entrée. |
 | 24 | **Filesystem (MCP officiel)** ○ | Accès fichier cadré, hors du dépôt. |
-| 25 | **n8n** ✅⚠️ | Automatisations (relances, exports). *Connecté au compte, mais le serveur a refusé la connexion lors de cette session — à retenter.* |
+| 25 | **n8n** ⚠️ | Automatisations (relances, exports). Connecté au compte, mais sa passerelle répond **404** : aucun outil `mcp__n8n__*` n'arrive jusqu'ici. Rien à corriger dans le dépôt — c'est la connexion elle-même qu'il faut refaire. |
 
 ### D — Vérifier avec les yeux de l'utilisateur (26–31)
 
@@ -129,7 +137,7 @@ C'est la famille qui aurait évité le plus d'erreurs de ce projet.
 | 38 | **Memory (MCP officiel)** ○ | Retenir les décisions de DA entre deux sessions au lieu de les redécouvrir. |
 | 39 | **Sequential Thinking (MCP officiel)** ○ | Forcer les 8 étapes du processus plutôt que sauter à la solution. |
 | 40 | **Time (MCP officiel)** ○ | Fuseaux et semaines — le planning en dépend. |
-| 41 | **Skills** (Claude Code) | Emballer une procédure répétée : « vérifier une DA », « sortir une note de version ». |
+| 41 | **Skills** (Claude Code) | Déjà présentes dans `.claude/skills/` : `design`, `design-system`, `ui-styling`, `ui-ux-pro-max`, `brand`, `banner-design`, `slides`. À invoquer, pas à redécouvrir. |
 | 42 | **Plugins / marketplaces** | Installer une capacité une fois, la retrouver toujours. |
 | 43 | **Sous-agents** | Explorer 3 directions de DA en parallèle, comparer, garder la meilleure. |
 | 44 | **Hooks** | Rendre une règle inviolable : `check-tokens.sh` à chaque écriture de CSS, pas quand on y pense. |

@@ -14,3 +14,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 connecteurs à mobiliser, et le standard de sortie. À lire avant toute
 décision de direction artistique. Les règles techniques et de sécurité de
 `sales-app/AGENTS.md` priment toujours dessus.
+
+## Context7
+
+`.mcp.json` déclare **Context7** en HTTP (`https://mcp.context7.com/mcp`),
+sans authentification, pré-approuvé dans `.claude/settings.json`. Il sert à
+lire la doc à jour d'une librairie plutôt que de se fier à sa mémoire —
+`resolve-library-id` exige **`libraryName` ET `query`**, les deux.
+
+Exception qui compte ici : pour **Next lui-même**, la doc faisant foi reste
+`node_modules/next/dist/docs/`. Le dépôt est sur Next 16.3.4, et Context7
+n'indexe pas encore cette version. Context7 sert pour tout le reste —
+React 19, Tailwind 4, Supabase, Zod 4, web-push.
