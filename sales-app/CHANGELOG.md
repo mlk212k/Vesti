@@ -5,6 +5,37 @@ pour les développeurs — la version technique est dans `README.md`.
 
 ---
 
+## v4.1 — 21 septembre 2026
+
+### 💡 L'app est beaucoup moins sombre
+
+Le fond passe d'un noir quasi pur à un **brun chaud**. Une pièce éclairée
+au soir, plus une rue la nuit.
+
+L'assombrissement des coins a été **complètement retiré** : c'était lui qui
+écrasait le plus l'ambiance. Les halos de couleur suffisent à donner un
+centre à l'écran, par la lumière plutôt que par l'ombre.
+
+Les panneaux et la barre du bas remontent avec le fond. L'or et le chrome
+ne bougent pas : ils sont bien plus clairs que le fond, ils ressortent
+toujours.
+
+### 🟨 L'objet a enfin la forme de ce qu'on vend
+
+L'objet au centre de l'écran d'accueil était dessiné au **format d'une
+carte bancaire**. Or ce que l'équipe vend est une **plaque presque carrée**,
+posée sur le comptoir d'un commerce.
+
+Il est maintenant aux vraies proportions, avec les vrais coins arrondis.
+C'est la seule chose que l'app et le terrain ont en commun — s'il ne
+ressemble pas à ce qu'on tend au client, l'app parle d'autre chose que du
+travail.
+
+Tout le reste ne change pas : l'appui long ouvre la journée, la tranche du
+bas se remplit à mesure des ventes.
+
+---
+
 ## v4.0 — 21 septembre 2026 — « CHROME & OR »
 
 **Changement de cap.** La version précédente était juste techniquement et

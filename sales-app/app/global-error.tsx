@@ -15,7 +15,7 @@ export default function ErreurGlobale({ reset }: { reset: () => void }) {
           alignItems: "center",
           justifyContent: "center",
           gap: "1.5rem",
-          background: "#0b0809",
+          background: "#2a2124",
           color: "#f6f0e9",
           fontFamily: "system-ui, sans-serif",
           textAlign: "center",

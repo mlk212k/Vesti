@@ -270,7 +270,7 @@ export function Dalle({ charge, scellee = false, onOuvrir, action, children }: P
             liseré irisé, l'autre pour la tranche qui se charge. */}
         <span className="lustre" aria-hidden="true" />
 
-        <div className="absolute inset-0 overflow-hidden rounded-[5.2%/8.2%]">
+        <div className="absolute inset-0 overflow-hidden rounded-[7%]">
           {children}
           {onOuvrir ? (
             <div

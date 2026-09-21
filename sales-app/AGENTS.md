@@ -245,6 +245,14 @@ Les constantes partagées vont donc dans un module NEUTRE, sans directive —
 
 ## L'objet
 
+**Ses proportions sont celles du produit réel, et ce n'est pas négociable.**
+L'équipe vend une PLAQUE presque carrée (`aspect-ratio: 1.06`, rayon 11 %),
+qu'un commerçant pose sur son comptoir et qu'on approche du téléphone pour
+laisser un avis Google. Elle a longtemps été dessinée au format d'une carte
+bancaire (1,55:1) — une erreur silencieuse, parce que rien dans le code ne
+dit à quoi ressemble le produit. L'objet au centre de l'écran est la seule
+chose que l'app et le terrain ont en commun.
+
 `components/dalle.tsx` est le cœur de la DA. Trois choses à savoir avant d'y
 toucher :
 

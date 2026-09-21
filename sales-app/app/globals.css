@@ -48,16 +48,21 @@
    =========================================================================== */
 
 :root {
-  /* --- Les fonds. Noir CHAUD, avec du brun et du rouge dedans.
+  /* --- Les fonds. Brun CHAUD, et surtout : PAS NOIR.
 
-     Le bleuté précédent était une erreur de direction : un noir froid rend
-     tout ce qui est posé dessus métallique et clinique. Le Y2K de la rue
-     est chaud — c'est du papier glacé, de la peinture de carrosserie, de
-     l'or. -------------------------------------------------------------- */
-  --nuit: #0b0809;
-  --encre: #141010;
-  --velours: #1d1718;
-  --fumee: #2a2223;
+     Deux corrections successives ici. D'abord la teinte — le bleuté du
+     début rendait métallique et clinique tout ce qu'on posait dessus. Puis
+     la LUMINOSITÉ : le noir quasi pur qui a suivi écrasait l'ambiance,
+     l'app avait l'air d'une pièce éteinte.
+
+     Ces valeurs sont un brun sombre, pas un noir. Une pièce éclairée au
+     soir, pas une rue la nuit. L'or et le chrome ont toujours de quoi
+     ressortir — ils sont bien plus clairs — mais le fond cesse d'être un
+     trou. ------------------------------------------------------------- */
+  --nuit: #2a2124;
+  --encre: #362b2e;
+  --velours: #43363a;
+  --fumee: #564548;
 
   /* --- Le texte. Blanc CRÈME, gris chaud. ------------------------------ */
   --craie: #f6f0e9;
@@ -305,27 +310,12 @@ li {
   overflow: hidden;
 }
 
-/* La vignette. Ce n'est plus la courbure d'un tube cathodique mais celle
-   d'un OBJECTIF : le bord d'une photo au flash, d'une pochette, d'un
-   Polaroid. Même outil, propos inverse — et nettement plus douce, parce
-   qu'une vignette dure referme l'image au lieu de la cadrer.
-
-   Elle reste nécessaire : sans elle les quatre halos s'étalent jusqu'aux
-   bords et l'écran n'a plus de centre. */
-.lampe::after {
-  content: "";
-  position: absolute;
-  inset: -2%;
-  z-index: 2;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 78% 68% at 50% 46%,
-    transparent 0%,
-    transparent 58%,
-    rgba(20, 8, 4, 0.22) 84%,
-    rgba(20, 8, 4, 0.52) 100%
-  );
-}
+/* LA VIGNETTE A ÉTÉ RETIRÉE. Elle assombrissait les coins pour donner un
+   centre à l'image — mais c'était elle qui écrasait le plus l'ambiance, et
+   sur un fond désormais clair elle n'a plus rien à cadrer. Les quatre halos
+   suffisent à faire le centre : ils sont brillants au milieu et s'éteignent
+   vers les bords, ce qui produit le même effet par la lumière plutôt que
+   par l'ombre. */
 
 /* Les halos. Quatre, parce qu'avec deux ils se font face et laissent le
    milieu de l'écran mort ; à quatre ils se CROISENT, et les recouvrements
@@ -349,8 +339,8 @@ li {
   height: 64vh;
   background: radial-gradient(
     circle,
-    rgba(255, 201, 60, 0.38) 0%,
-    rgba(255, 201, 60, 0.13) 44%,
+    rgba(255, 201, 60, 0.5) 0%,
+    rgba(255, 201, 60, 0.18) 44%,
     rgba(255, 201, 60, 0) 70%
   );
   animation: derive-a 37s ease-in-out infinite alternate;
@@ -363,8 +353,8 @@ li {
   height: 60vh;
   background: radial-gradient(
     circle,
-    rgba(140, 107, 255, 0.46) 0%,
-    rgba(140, 107, 255, 0.16) 44%,
+    rgba(140, 107, 255, 0.56) 0%,
+    rgba(140, 107, 255, 0.2) 44%,
     rgba(140, 107, 255, 0) 70%
   );
   animation: derive-b 43s ease-in-out infinite alternate;
@@ -377,8 +367,8 @@ li {
   height: 52vh;
   background: radial-gradient(
     circle,
-    rgba(143, 208, 255, 0.34) 0%,
-    rgba(143, 208, 255, 0.11) 44%,
+    rgba(143, 208, 255, 0.44) 0%,
+    rgba(143, 208, 255, 0.15) 44%,
     rgba(143, 208, 255, 0) 70%
   );
   animation: derive-c 53s ease-in-out infinite alternate;
@@ -391,8 +381,8 @@ li {
   height: 54vh;
   background: radial-gradient(
     circle,
-    rgba(255, 111, 200, 0.4) 0%,
-    rgba(255, 111, 200, 0.13) 44%,
+    rgba(255, 111, 200, 0.5) 0%,
+    rgba(255, 111, 200, 0.17) 44%,
     rgba(255, 111, 200, 0) 70%
   );
   animation: derive-d 61s ease-in-out infinite alternate;
@@ -700,7 +690,7 @@ h3 {
 .panneau {
   position: relative;
   border-radius: var(--r-lg);
-  background: var(--gel-doux), rgba(255, 255, 255, 0.032);
+  background: var(--gel-doux), rgba(255, 245, 235, 0.075);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
@@ -713,7 +703,7 @@ h3 {
 .panneau-plat {
   position: relative;
   border-radius: var(--r-lg);
-  background: var(--gel-doux), rgba(255, 255, 255, 0.05);
+  background: var(--gel-doux), rgba(255, 245, 235, 0.11);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:
@@ -820,11 +810,26 @@ h3 {
   opacity: 0.2;
 }
 
+/* LES PROPORTIONS SONT CELLES DU VRAI PRODUIT.
+
+   L'objet était modelé en 1,55:1 — le format d'une carte bancaire. Or ce
+   que l'équipe vend n'est pas une carte de poche : c'est une PLAQUE CARRÉE
+   qu'un commerçant pose sur son comptoir, qu'on approche du téléphone pour
+   laisser un avis. Presque carrée, coins largement arrondis, plastique
+   brillant.
+
+   Ça compte plus qu'un détail de dessin. L'objet au centre de l'écran est
+   la seule chose que l'app et le terrain ont en commun ; s'il ne ressemble
+   pas à ce qu'on tend au client, l'app parle d'autre chose que du travail.
+
+   Le rayon est en POURCENTAGE et non en pixels : sur une forme presque
+   carrée, un rayon fixe donne des coins très différents selon la largeur
+   d'écran. */
 .dalle {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.55;
-  border-radius: 9% / 14%;
+  aspect-ratio: 1.06;
+  border-radius: 11%;
   transform-style: preserve-3d;
   background:
     /* Le point spéculaire, qui suit le doigt. SERRÉ : à 60 % de large il
@@ -898,8 +903,8 @@ h3 {
 .dalle::after {
   content: "";
   position: absolute;
-  left: 9%;
-  right: 9%;
+  left: 11%;
+  right: 11%;
   bottom: -4px;
   height: 4px;
   border-radius: 4px;
@@ -1235,7 +1240,7 @@ select.champ {
    =========================================================================== */
 
 .barre-nav {
-  background: rgba(20, 16, 16, 0.86);
+  background: rgba(54, 43, 46, 0.86);
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   box-shadow:
@@ -2008,7 +2013,7 @@ select.champ {
 .carte-joueur {
   position: relative;
   border-radius: var(--r-lg);
-  background: var(--gel-doux), rgba(255, 255, 255, 0.032);
+  background: var(--gel-doux), rgba(255, 245, 235, 0.075);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
   box-shadow:

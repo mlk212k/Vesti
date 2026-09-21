@@ -327,7 +327,7 @@ export function ChatPanel({
       <form
         ref={formRef}
         action={action}
-        className="safe-bottom sticky bottom-20 z-10 flex gap-2 border-t border-trait bg-[rgba(11,8,9,0.96)] py-3 backdrop-blur-md lg:bottom-0"
+        className="safe-bottom sticky bottom-20 z-10 flex gap-2 border-t border-trait bg-[rgba(42,33,36,0.96)] py-3 backdrop-blur-md lg:bottom-0"
       >
         <input type="hidden" name="conversation_id" value={conversationId} />
         <input

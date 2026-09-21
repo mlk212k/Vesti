@@ -61,7 +61,7 @@ export const viewport: Viewport = {
   // `cover` est ce qui fait exister env(safe-area-inset-*) : sans lui, la
   // barre du bas passe sous l'indicateur d'accueil de l'iPhone.
   viewportFit: "cover",
-  themeColor: "#0b0809",
+  themeColor: "#2a2124",
   colorScheme: "dark",
 };
 
