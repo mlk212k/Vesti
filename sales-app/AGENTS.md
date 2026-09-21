@@ -165,6 +165,17 @@ Deux conséquences pratiques :
 - **Une capture prise juste après une navigation montre une page floue.**
   C'est `entree-ecran`, pas un bug de rendu. Attendre ~3 s (un
   `browser_wait_for`) avant toute capture Playwright.
+- **Playwright ne voit que `localhost` depuis l'environnement distant.**
+  Le trafic sortant passe par un proxy qui déchiffre le TLS, et Chromium ne
+  connaît pas son autorité : toute URL externe finit sur
+  `chrome-error://chromewebdata/` (« Privacy error »), avec zéro feuille de
+  style et zéro erreur console — donc une page qui a l'air cassée alors
+  qu'elle va très bien. `certutil` n'est pas installable pour corriger le
+  magasin NSS, et l'épinglage par SPKI fait planter le serveur MCP au
+  démarrage. Vérifier un déploiement se fait donc par requête HTTP (le code
+  de statut, et le CONTENU de la feuille de style servie, qui prouve la
+  palette et les polices), pas par capture d'écran. Les captures locales,
+  elles, ne passent pas par le proxy et fonctionnent normalement.
 
 ## Une constante partagée ne vit pas dans un module client
 
