@@ -70,7 +70,7 @@ mots-clés qu'ils remplacent.
 
 | # | Connecteur | Ce qu'il change |
 |---|---|---|
-| 1 | **Figma** ○ | `get_design_context`, `get_variable_defs`, `get_screenshot`, `create_design_system_rules`. La maquette devient la source de vérité au lieu d'une description en prose. |
+| 1 | **Figma** ✅ | `get_design_context`, `get_variable_defs`, `get_screenshot`, `get_motion_context`. La maquette devient la source de vérité au lieu d'une description en prose. **Siège « View » sur un plan starter** : la lecture marche, l'écriture vers Figma (`use_figma`, `create_new_file`) demandera un siège Edit. |
 | 2 | **Canva** ○ | Exports, gabarits, déclinaisons de la carte NFC pour la com. |
 | 3 | **Adobe for creativity** ○ | Retouche, chartes, `animate_design`, thèmes de couleurs d'une marque. |
 | 4 | **Magic Patterns** ○ | Itérer sur une direction d'UI hors du code avant d'écrire une ligne. |
@@ -104,7 +104,7 @@ mots-clés qu'ils remplacent.
 | 22 | **Postgres (MCP officiel)** ○ | Lecture SQL directe quand Supabase n'est pas le bon niveau. |
 | 23 | **Git (MCP officiel)** ○ | Diff, blame, bisect — retrouver *quand* une régression visuelle est entrée. |
 | 24 | **Filesystem (MCP officiel)** ○ | Accès fichier cadré, hors du dépôt. |
-| 25 | **n8n** ⚠️ | Automatisations (relances, exports). Connecté au compte, mais sa passerelle répond **404** : aucun outil `mcp__n8n__*` n'arrive jusqu'ici. Rien à corriger dans le dépôt — c'est la connexion elle-même qu'il faut refaire. |
+| 25 | **n8n** ○ | Automatisations (relances, exports). Sa passerelle répondait **404**, et il a depuis **disparu de la liste des connecteurs** : il est à réinstaller, pas à réparer. |
 
 ### D — Vérifier avec les yeux de l'utilisateur (26–31)
 
