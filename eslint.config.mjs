@@ -25,6 +25,8 @@ const eslintConfig = defineConfig([
     // repo. It lints and type-checks itself; the root config must not walk
     // into it.
     "club-app/**",
+    // Même chose pour radio-tripoint/ : projet autonome, vérifié par lui-même.
+    "radio-tripoint/**",
   ]),
 ]);
 
