@@ -10,8 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "fr",
     start_url: "/?source=pwa",
     display: "standalone",
-    background_color: "#0b0e14",
-    theme_color: "#0b0e14",
+    background_color: "#0a0a0a",
+    theme_color: "#0a0a0a",
     categories: ["news", "music", "entertainment"],
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png" },

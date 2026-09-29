@@ -94,7 +94,7 @@ export default function PageContact() {
       </section>
 
       <section aria-labelledby="titre-ecrire" className="conteneur pb-20">
-        <div className="border-trait-fort grid gap-12 border-t-2 pt-8 lg:grid-cols-[1fr_1.6fr]">
+        <div className="filet-section grid gap-12 pt-8 lg:grid-cols-[1fr_1.6fr]">
           <div>
             <h2 id="titre-ecrire" className="titre-section">
               Nous écrire

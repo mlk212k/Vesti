@@ -94,7 +94,7 @@ export function LecteurBarre({ grille }: { grille: GrilleClient }) {
             "grid size-11 flex-none place-items-center rounded-full transition-colors",
             direct
               ? "bg-direct text-sur-direct hover:brightness-110"
-              : "bg-nuit-encre text-nuit hover:bg-white",
+              : "bg-accent text-sur-accent hover:brightness-105",
           )}
         >
           {charge ? (

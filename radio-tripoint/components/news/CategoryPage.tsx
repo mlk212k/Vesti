@@ -37,9 +37,13 @@ export async function CategoryPage({
         titre={cat.nom}
         intro={cat.accroche}
         enfants={
-          <div className="mt-8 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="mt-8 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
             <CategoryNav active={slug} />
-            <form role="search" action={cat.chemin} className="relative w-full flex-none lg:w-72">
+            <form
+              role="search"
+              action={cat.chemin}
+              className="relative w-full flex-none sm:max-w-sm xl:w-72"
+            >
               <label htmlFor="q-rubrique" className="sr-only">
                 Rechercher dans {cat.nom}
               </label>

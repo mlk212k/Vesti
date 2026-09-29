@@ -52,7 +52,7 @@ export function Footer() {
       <div className="conteneur relative pt-16 pb-10 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <Logo sombre className="[&>span:last-child]:text-[2.2rem]" />
+            <Logo sombre taille={128} className="size-28 lg:size-32" />
             <p className="presse text-nuit-encre-2 mt-5 max-w-sm text-[1.15rem] leading-snug">
               La radio et le média des Trois Frontières. France, Luxembourg, Allemagne&nbsp;: une
               seule antenne.

@@ -194,7 +194,7 @@ export default async function PageEmission(props: PageProps<"/emissions/[slug]">
       </div>
 
       <section id="episodes" aria-labelledby="titre-episodes" className="conteneur scroll-mt-24">
-        <div className="border-trait-fort border-t-2 pt-4">
+        <div className="filet-section pt-5">
           <h2 id="titre-episodes" className="titre-section">
             Derniers épisodes
           </h2>
@@ -220,7 +220,7 @@ export default async function PageEmission(props: PageProps<"/emissions/[slug]">
 
       {articles && articles.elements.length > 0 && (
         <section aria-labelledby="titre-articles" className="conteneur mt-20">
-          <div className="border-trait-fort border-t-2 pt-4">
+          <div className="filet-section pt-5">
             <h2 id="titre-articles" className="titre-section">
               Articles associés
             </h2>
@@ -236,7 +236,7 @@ export default async function PageEmission(props: PageProps<"/emissions/[slug]">
       )}
 
       <section aria-labelledby="titre-autres" className="conteneur mt-20 pb-20">
-        <div className="border-trait-fort flex flex-wrap items-end justify-between gap-4 border-t-2 pt-4">
+        <div className="filet-section flex flex-wrap items-end justify-between gap-4 pt-5">
           <h2 id="titre-autres" className="titre-section">
             Autres émissions
           </h2>

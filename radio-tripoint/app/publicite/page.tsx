@@ -65,16 +65,16 @@ export default function PagePublicite() {
     <>
       <header className="bg-accent text-sur-accent relative isolate overflow-hidden">
         <Tripoint
-          className="pointer-events-none absolute top-1/2 left-[80%] -z-10 h-[160%] w-auto -translate-x-1/2 -translate-y-1/2 text-white/25"
+          className="pointer-events-none absolute top-1/2 left-[80%] -z-10 h-[160%] w-auto -translate-x-1/2 -translate-y-1/2 text-black/15"
           epaisseur={1}
         />
         <div className="conteneur pt-6 pb-14 sm:pt-8 lg:pb-24">
           <Breadcrumbs
             sombre
             elements={[{ nom: "Publicité", chemin: "/publicite" }]}
-            className="[&_*]:!text-white/80"
+            className="[&_*]:!text-black/70"
           />
-          <p className="surtitre mt-10 opacity-80">Professionnels · Annonceurs · Partenaires</p>
+          <p className="surtitre mt-10 opacity-80">{site.promessePro}</p>
           <h1 className="titre-affiche mt-4 text-[clamp(2.8rem,1.4rem+6.4vw,7rem)]">
             Votre entreprise.
             <br />
@@ -88,13 +88,13 @@ export default function PagePublicite() {
           <div className="mt-9 flex flex-wrap gap-3">
             <a
               href={`tel:${site.contact.telephoneE164}`}
-              className="btn bg-sur-accent text-accent min-h-14 !px-6 hover:bg-white"
+              className="btn bg-sur-accent text-accent hover:bg-nuit-3 min-h-14 !px-6"
             >
               <Phone className="size-4" aria-hidden /> Parler à notre équipe
             </a>
             <a
               href="#demande"
-              className="btn min-h-14 border-[1.5px] border-current !px-6 hover:bg-white/10"
+              className="btn min-h-14 border-[1.5px] border-current !px-6 hover:bg-black/10"
             >
               Demander une offre <ArrowDown className="size-4" aria-hidden />
             </a>

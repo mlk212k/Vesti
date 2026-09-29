@@ -20,8 +20,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#0b0e14",
-        color: "#f2efe9",
+        background: "#0a0a0a",
+        color: "#fafaf7",
         padding: 72,
         position: "relative",
       }}
@@ -32,17 +32,17 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         viewBox="0 0 1200 630"
         style={{ position: "absolute", top: 0, left: 0 }}
       >
-        <line x1="860" y1="300" x2="0" y2="300" stroke="#2a3244" strokeWidth="2" />
-        <line x1="860" y1="300" x2="860" y2="0" stroke="#2a3244" strokeWidth="2" />
-        <line x1="860" y1="300" x2="1200" y2="640" stroke="#2a3244" strokeWidth="2" />
-        <circle cx="860" cy="300" r="10" fill="#8aa0ff" />
+        <line x1="860" y1="300" x2="0" y2="300" stroke="#2c2c2c" strokeWidth="2" />
+        <line x1="860" y1="300" x2="860" y2="0" stroke="#2c2c2c" strokeWidth="2" />
+        <line x1="860" y1="300" x2="1200" y2="640" stroke="#2c2c2c" strokeWidth="2" />
+        <circle cx="860" cy="300" r="10" fill="#f9b800" />
       </svg>
       <div
         style={{
           display: "flex",
           fontSize: 26,
           letterSpacing: 6,
-          color: "#8aa0ff",
+          color: "#f9b800",
           textTransform: "uppercase",
         }}
       >
@@ -70,7 +70,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         }}
       >
         RADIO TRIPOINT
-        <span style={{ color: "#a7adb8", fontWeight: 400, marginLeft: 20, letterSpacing: 0 }}>
+        <span style={{ color: "#a9a8a2", fontWeight: 400, marginLeft: 20, letterSpacing: 0 }}>
           France · Luxembourg · Allemagne
         </span>
       </div>

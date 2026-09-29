@@ -15,8 +15,8 @@ export default function GlobalError({
           minHeight: "100vh",
           display: "grid",
           placeItems: "center",
-          background: "#0b0e14",
-          color: "#f2efe9",
+          background: "#0a0a0a",
+          color: "#fafaf7",
           fontFamily: "system-ui, sans-serif",
           padding: 24,
         }}
@@ -27,7 +27,7 @@ export default function GlobalError({
               letterSpacing: "0.14em",
               fontSize: 12,
               fontWeight: 700,
-              color: "#8aa0ff",
+              color: "#f9b800",
               textTransform: "uppercase",
             }}
           >
@@ -36,14 +36,14 @@ export default function GlobalError({
           <h1 style={{ fontSize: 40, lineHeight: 1.05, margin: "16px 0" }}>
             Le site est momentanément indisponible.
           </h1>
-          <p style={{ color: "#a7adb8", fontSize: 18 }}>Réessayez dans un instant.</p>
+          <p style={{ color: "#a9a8a2", fontSize: 18 }}>Réessayez dans un instant.</p>
           <button
             onClick={() => retry()}
             style={{
               marginTop: 24,
               padding: "12px 22px",
-              background: "#f2efe9",
-              color: "#0b0e14",
+              background: "#fafaf7",
+              color: "#0a0a0a",
               border: 0,
               borderRadius: 4,
               fontWeight: 700,

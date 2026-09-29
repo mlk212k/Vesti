@@ -41,7 +41,7 @@ export function Hero({ grille }: { grille: GrilleClient }) {
         <div>
           <p className="surtitre text-nuit-encre-2 flex items-center gap-3">
             <span className="bg-nuit-accent h-px w-8" aria-hidden />
-            Radio & média · Sierck-les-Bains
+            La radio transfrontalière<span className="hidden sm:inline"> · Sierck-les-Bains</span>
           </p>
           <h1
             id="titre-accueil"

@@ -46,9 +46,13 @@ export default async function PagePodcasts(props: PageProps<"/podcasts">) {
         intro="Une émission manquée, un reportage à réécouter : tout Radio Tripoint, quand vous voulez. La lecture continue pendant que vous naviguez."
         enfants={
           tous.length > 0 && (
-            <div className="mt-8 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="mt-8 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
               <Filtres label="Thèmes" options={themesPodcast} actif={theme} href={href} />
-              <form role="search" action="/podcasts" className="relative w-full flex-none lg:w-72">
+              <form
+                role="search"
+                action="/podcasts"
+                className="relative w-full flex-none sm:max-w-sm xl:w-72"
+              >
                 {theme !== "toutes" && <input type="hidden" name="theme" value={theme} />}
                 <label htmlFor="q-podcasts" className="sr-only">
                   Rechercher un épisode

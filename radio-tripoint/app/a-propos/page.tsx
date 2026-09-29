@@ -17,7 +17,7 @@ function Chapitre({ n, titre, children }: { n: string; titre: string; children: 
   return (
     <section
       aria-labelledby={`ch-${n}`}
-      className="border-trait-fort grid gap-6 border-t-2 pt-5 lg:grid-cols-[1fr_2fr] lg:gap-14"
+      className="filet-section grid gap-6 pt-6 lg:grid-cols-[1fr_2fr] lg:gap-14"
     >
       <div className="flex items-baseline gap-4 lg:block">
         <span className="titre-affiche text-accent-encre text-[2.4rem] tabular-nums lg:text-[3.6rem]">

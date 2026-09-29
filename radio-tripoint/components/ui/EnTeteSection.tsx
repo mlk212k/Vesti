@@ -22,13 +22,7 @@ export function EnTeteSection({
   sombre?: boolean
 }) {
   return (
-    <div
-      className={cn(
-        "border-t-2 pt-4",
-        sombre ? "border-nuit-encre" : "border-trait-fort",
-        className,
-      )}
-    >
+    <div className={cn("filet-section pt-5", sombre && "!border-nuit-encre", className)}>
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
         <div className="min-w-0">
           {surtitre && (

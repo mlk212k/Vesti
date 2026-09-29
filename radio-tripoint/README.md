@@ -41,23 +41,25 @@ compléter, dans l'ordre d'impact :
 | --- | -------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | 1   | **URL du flux audio** (Radioking → Diffusion → Liens d'écoute) | `NEXT_PUBLIC_STREAM_URL`                          | Active le direct dans tout le site. Sans elle, le bouton affiche « flux non branché ». |
 | 2   | Lien du player Radioking                                       | `NEXT_PUBLIC_RADIOKING_URL`                       | Bouton « Ouvrir le player »                                                            |
-| 3   | **Logo officiel** (SVG de préférence)                          | `public/brand/` + `config/site.ts → visuels.logo` | Remplace le nom composé en toutes lettres dans l'en-tête et le pied de page            |
-| 4   | **Couleur du logo**                                            | `app/globals.css → --accent`                      | L'accent de marque (bleu provisoire)                                                   |
-| 5   | Grille des émissions (jour, début, fin)                        | `data/shows.ts → creneaux`                        | Active « En ce moment », « Ensuite », « Quand écouter ? »                              |
-| 6   | Présentations et visuels des émissions                         | `data/shows.ts`                                   | Pages émission complètes                                                               |
-| 7   | Adresses des réseaux sociaux                                   | `config/socialLinks.ts`                           | Icônes dans le pied de page, le menu, la page Contact                                  |
-| 8   | Webhook des formulaires (Make, n8n, Zapier, Formspree…)        | `FORM_WEBHOOK_URL`                                | Envoi en ligne. Sans lui : repli « envoyer par e-mail » pré-rempli                     |
-| 9   | Endpoint « titre en cours »                                    | `RADIO_NOW_PLAYING_URL`                           | Artiste — titre dans le lecteur                                                        |
-| 10  | Forme juridique, SIRET, directeur·rice de publication          | `config/site.ts → legal`                          | Mentions légales complètes                                                             |
-| 11  | Photo de la région / du studio                                 | `public/media/` + `config/site.ts → visuels.hero` | Image de fond du hero                                                                  |
-| 12  | Articles, replays, événements existants                        | `data/*.ts` ou un CMS                             | Voir `MIGRATION.md`                                                                    |
+| 3   | Grille des émissions (jour, début, fin)                        | `data/shows.ts → creneaux`                        | Active « En ce moment », « Ensuite », « Quand écouter ? »                              |
+| 4   | Présentations et visuels des émissions                         | `data/shows.ts`                                   | Pages émission complètes                                                               |
+| 5   | Adresses des réseaux sociaux                                   | `config/socialLinks.ts`                           | Icônes dans le pied de page, le menu, la page Contact                                  |
+| 6   | Webhook des formulaires (Make, n8n, Zapier, Formspree…)        | `FORM_WEBHOOK_URL`                                | Envoi en ligne. Sans lui : repli « envoyer par e-mail » pré-rempli                     |
+| 7   | Endpoint « titre en cours »                                    | `RADIO_NOW_PLAYING_URL`                           | Artiste — titre dans le lecteur                                                        |
+| 8   | Forme juridique, SIRET, directeur·rice de publication          | `config/site.ts → legal`                          | Mentions légales complètes                                                             |
+| 9   | Photo de la région / du studio                                 | `public/media/` + `config/site.ts → visuels.hero` | Image de fond du hero                                                                  |
+| 10  | Articles, replays, événements existants                        | `data/*.ts` ou un CMS                             | Voir `MIGRATION.md`                                                                    |
 
 Les variables `NEXT_PUBLIC_*` sont figées au build : les modifier impose
 un redéploiement.
 
-Les icônes (favicon, PWA) sont un monogramme « RT » **provisoire** : les
-régénérer à partir du logo officiel dès qu'il est disponible
-(`app/icon.png`, `app/apple-icon.png`, `public/icon-*.png`).
+**Logo et couleurs** : le logo officiel est en place
+(`public/brand/logo-radio-tripoint.png`, découpé en rond depuis le fichier
+fourni) et le site reprend exactement ses couleurs — jaune `#F9B800`, noir,
+blanc. Favicon et icônes d'application sont générés à partir de lui. Une
+version vectorielle (SVG) du logo, si elle existe, donnerait un rendu plus
+net : la déposer dans `public/brand/` et mettre son chemin dans
+`config/site.ts → visuels.logo`.
 
 ## Architecture
 

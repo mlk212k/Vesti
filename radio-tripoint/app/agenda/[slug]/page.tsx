@@ -110,7 +110,7 @@ export default async function PageEvenement(props: PageProps<"/agenda/[slug]">) 
       </article>
       {autres.length > 0 && (
         <section aria-labelledby="titre-autres-ev" className="conteneur pb-20">
-          <div className="border-trait-fort flex flex-wrap items-end justify-between gap-4 border-t-2 pt-4">
+          <div className="filet-section flex flex-wrap items-end justify-between gap-4 pt-5">
             <h2 id="titre-autres-ev" className="titre-section">
               Aussi à l&apos;agenda
             </h2>

@@ -43,8 +43,11 @@ compléter ». Le contenu de démonstration (`data/demo/`) est fictif, badgé
 
 - **Le rouge `--direct` est réservé au direct.** Bouton d'écoute, point
   « en direct ». Pas une erreur (→ `--alerte`), pas une promo.
-- **`--accent` porte la marque** et changera quand le logo officiel sera
-  fourni : on modifie sa valeur dans `globals.css`, nulle part ailleurs.
+- **Les couleurs sont celles du logo, et elles seules** : jaune `#F9B800`
+  (`--accent`), noir, blanc. Le jaune est une surface (bouton, pastille,
+  bloc, marqueur) ; il n'est jamais du texte sur fond clair, où il est
+  illisible — pour un texte accentué, `--accent-encre` (noir le jour, jaune
+  la nuit). Plus aucun bleu : l'ancienne palette provisoire est supprimée.
 - **Le motif tripoint est orienté comme le terrain** : ouest (FR/LU), nord
   (Moselle, LU/DE), sud-est (FR/DE). Ne pas le « symétriser ».
 

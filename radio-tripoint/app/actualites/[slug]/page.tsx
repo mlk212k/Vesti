@@ -164,11 +164,8 @@ export default async function PageArticle(props: PageProps<"/actualites/[slug]">
       </div>
 
       {similaires.length > 0 && (
-        <section
-          aria-labelledby="titre-lire-aussi"
-          className="conteneur border-trait-fort mt-20 border-t-2 pt-4 lg:mt-28"
-        >
-          <div className="flex flex-wrap items-end justify-between gap-4">
+        <section aria-labelledby="titre-lire-aussi" className="conteneur mt-20 lg:mt-28">
+          <div className="filet-section flex flex-wrap items-end justify-between gap-4 pt-5">
             <h2 id="titre-lire-aussi" className="titre-section">
               À lire aussi
             </h2>

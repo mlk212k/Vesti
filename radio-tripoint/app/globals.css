@@ -3,58 +3,62 @@
 /*
  * RADIO TRIPOINT — système visuel
  * ─────────────────────────────────────────────────────────────────────────
- * Concept : LE TRIPOINT. Le point où trois frontières se touchent. Trois
- * rayons qui partent d'un point — ouest (frontière FR/LU), nord (la Moselle,
- * LU/DE), sud-est (FR/DE) — orientés comme sur le terrain, à Schengen.
+ * Couleurs : celles du logo officiel, et elles seules. JAUNE #F9B800,
+ * NOIR, BLANC. Le jaune est une surface (boutons, blocs, pastilles,
+ * marqueurs) ; le texte reste noir sur clair et blanc sur noir, comme sur le
+ * logo — un texte jaune n'apparaît que sur fond noir.
  *
- * Matière : papier de presse chaud le jour, studio de nuit le soir. Titres
- * en Archivo élargi (affiche, habillage d'antenne), textes longs en
- * Newsreader (serif de presse).
+ * Concept : LE TRIPOINT. Trois rayons qui partent d'un point — ouest
+ * (frontière FR/LU), nord (la Moselle, LU/DE), sud-est (FR/DE) — orientés
+ * comme sur le terrain, à Schengen. Titres en Archivo élargi (le lettrage
+ * gras et compact du logo), textes longs en Newsreader.
  *
  * Règles qui ne sont pas des préférences :
- *  1. --direct (rouge) = LE DIRECT, et rien d'autre. Pas une erreur, pas
- *     une promo, pas un lien. S'il apparaît, c'est que l'antenne est là.
- *  2. --accent porte la marque. Son nom est un rôle, pas une couleur : le
- *     jour où le logo officiel est fourni, on change la valeur ici, et
- *     seulement ici.
+ *  1. --direct (rouge) = LE DIRECT, et rien d'autre. Ce n'est pas une
+ *     couleur de marque : c'est le voyant « à l'antenne ».
+ *  2. --accent = le jaune du logo. Jamais en texte sur fond clair (il y est
+ *     illisible) : pour un texte « accentué » sur clair, --accent-encre, qui
+ *     vaut le noir le jour et le jaune la nuit.
  *  3. Aucun composant ne redéfinit une couleur en dur. Tout passe par les
  *     jetons ci-dessous, sinon le mode sombre casse.
  */
 
 :root {
-  --papier: #f5f2ec;
-  --papier-2: #ebe6dc;
-  --papier-3: #e0d9cb;
-  --surface: #fbfaf7;
-  --encre: #121417;
-  --encre-2: #474c54;
-  --encre-3: #6b6f76;
-  --trait: #d6cfc1;
-  --trait-fort: #121417;
+  --papier: #fafaf7;
+  --papier-2: #f1f0eb;
+  --papier-3: #e7e5de;
+  --surface: #ffffff;
+  --encre: #0a0a0a;
+  --encre-2: #45443f;
+  --encre-3: #6a6963;
+  --trait: #dddbd3;
+  --trait-fort: #0a0a0a;
 
-  --accent: #1c3dd1;
-  --accent-encre: #1c3dd1;
-  --accent-doux: #e3e7fb;
-  --sur-accent: #ffffff;
+  /* Jaune du logo (relevé sur le fichier officiel). */
+  --accent: #f9b800;
+  --accent-encre: #0a0a0a;
+  --accent-doux: #fdefc0;
+  --sur-accent: #0a0a0a;
+  --focus: #0a0a0a;
 
   --direct: #d8261c;
   --sur-direct: #ffffff;
 
   --succes: #1b6e45;
-  --alerte: #9a5b00;
-  --erreur-fond: #fbeae3;
+  --alerte: #b54708;
+  --erreur-fond: #fdece2;
 
-  /* Le studio : toujours sombre, quel que soit le thème. */
-  --nuit: #0b0e14;
-  --nuit-2: #141925;
-  --nuit-3: #1f2636;
-  --nuit-encre: #f2efe9;
-  --nuit-encre-2: #a7adb8;
-  --nuit-trait: #2a3244;
-  --nuit-accent: #8aa0ff;
+  /* Le studio : noir du logo, toujours sombre quel que soit le thème. */
+  --nuit: #0a0a0a;
+  --nuit-2: #151515;
+  --nuit-3: #232323;
+  --nuit-encre: #fafaf7;
+  --nuit-encre-2: #a9a8a2;
+  --nuit-trait: #2c2c2c;
+  --nuit-accent: #f9b800;
 
-  --ombre-1: 0 1px 2px rgb(18 20 23 / 0.06);
-  --ombre-2: 0 8px 28px -12px rgb(18 20 23 / 0.22);
+  --ombre-1: 0 1px 2px rgb(10 10 10 / 0.06);
+  --ombre-2: 0 8px 28px -12px rgb(10 10 10 / 0.25);
 
   --barre-lecteur: 64px;
   color-scheme: light;
@@ -62,47 +66,45 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="clair"]) {
-    --papier: #0d1016;
-    --papier-2: #151a23;
-    --papier-3: #1d2330;
-    --surface: #121620;
-    --encre: #efece6;
-    --encre-2: #b3b8c2;
-    --encre-3: #8c929d;
-    --trait: #262d3a;
-    --trait-fort: #efece6;
-    --accent: #7d95ff;
-    --accent-encre: #9aadff;
-    --accent-doux: #1b2340;
-    --sur-accent: #0b0e14;
+    --papier: #0a0a0a;
+    --papier-2: #141414;
+    --papier-3: #1f1f1f;
+    --surface: #121212;
+    --encre: #f7f6f2;
+    --encre-2: #b9b8b1;
+    --encre-3: #8f8e88;
+    --trait: #2b2b2b;
+    --trait-fort: #f7f6f2;
+    --accent-encre: #f9b800;
+    --accent-doux: #2e2403;
+    --focus: #f9b800;
     --direct: #ff4538;
     --succes: #4fbf86;
-    --alerte: #e0a24a;
+    --alerte: #ff9a5c;
     --erreur-fond: #2b1714;
-    --ombre-2: 0 8px 28px -12px rgb(0 0 0 / 0.6);
+    --ombre-2: 0 8px 28px -12px rgb(0 0 0 / 0.7);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="sombre"] {
-  --papier: #0d1016;
-  --papier-2: #151a23;
-  --papier-3: #1d2330;
-  --surface: #121620;
-  --encre: #efece6;
-  --encre-2: #b3b8c2;
-  --encre-3: #8c929d;
-  --trait: #262d3a;
-  --trait-fort: #efece6;
-  --accent: #7d95ff;
-  --accent-encre: #9aadff;
-  --accent-doux: #1b2340;
-  --sur-accent: #0b0e14;
+  --papier: #0a0a0a;
+  --papier-2: #141414;
+  --papier-3: #1f1f1f;
+  --surface: #121212;
+  --encre: #f7f6f2;
+  --encre-2: #b9b8b1;
+  --encre-3: #8f8e88;
+  --trait: #2b2b2b;
+  --trait-fort: #f7f6f2;
+  --accent-encre: #f9b800;
+  --accent-doux: #2e2403;
+  --focus: #f9b800;
   --direct: #ff4538;
   --succes: #4fbf86;
-  --alerte: #e0a24a;
+  --alerte: #ff9a5c;
   --erreur-fond: #2b1714;
-  --ombre-2: 0 8px 28px -12px rgb(0 0 0 / 0.6);
+  --ombre-2: 0 8px 28px -12px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }
 
@@ -119,6 +121,7 @@
   --color-accent: var(--accent);
   --color-accent-encre: var(--accent-encre);
   --color-accent-doux: var(--accent-doux);
+  --color-focus: var(--focus);
   --color-sur-accent: var(--sur-accent);
   --color-direct: var(--direct);
   --color-sur-direct: var(--sur-direct);
@@ -169,7 +172,7 @@
     color: var(--sur-accent);
   }
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--focus);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -362,15 +365,20 @@
   }
 
   /* Badge de rubrique : texte, pas pastille colorée. */
+  /* Pastille de rubrique : un autocollant jaune, comme les bandeaux du logo. */
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    padding: 0.18rem 0.45rem 0.14rem;
+    width: fit-content;
+    background: var(--accent);
+    color: var(--sur-accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
     text-transform: uppercase;
-    color: var(--accent-encre);
     font-variation-settings: "wdth" 108;
   }
   .badge-exemple {
@@ -458,11 +466,32 @@
     inset: 0;
     z-index: 1;
   }
+  /* Survol : un trait de surligneur jaune sous le titre. */
   .carte .carte-titre {
-    transition: color 160ms ease;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 0.18em;
+    text-underline-offset: 0.16em;
+    text-decoration-skip-ink: none;
+    transition: text-decoration-color 160ms ease;
   }
   .carte:hover .carte-titre {
-    color: var(--accent-encre);
+    text-decoration-color: var(--accent);
+  }
+
+  /* Filet de section : règle noire + tampon jaune à gauche. */
+  .filet-section {
+    position: relative;
+    border-top: 2px solid var(--trait-fort);
+  }
+  .filet-section::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 0;
+    width: 3.5rem;
+    height: 10px;
+    background: var(--accent);
   }
   .carte .carte-visuel img,
   .carte .carte-visuel .couverture {
@@ -473,7 +502,7 @@
     transform: scale(1.03);
   }
   .carte:has(:focus-visible) {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--focus);
     outline-offset: 4px;
   }
   .carte .carte-lien:focus-visible {
@@ -502,7 +531,7 @@
   }
   .champ:focus {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--encre);
     box-shadow: 0 0 0 3px var(--accent-doux);
   }
   .champ[aria-invalid="true"] {
@@ -729,36 +758,40 @@
    contenu lui-même. Teintes fixes (indépendantes du thème) : une affiche
    ne change pas de couleur la nuit. */
 .couverture {
-  --c-fond: #121417;
-  --c-encre: #f5f2ec;
-  --c-trait: rgb(245 242 236 / 0.22);
+  --c-fond: #0a0a0a;
+  --c-encre: #fafaf7;
+  --c-trait: rgb(250 250 247 / 0.2);
   background: var(--c-fond);
   color: var(--c-encre);
 }
 .couverture[data-teinte="accent"] {
-  --c-fond: #1c3dd1;
-  --c-encre: #ffffff;
-  --c-trait: rgb(255 255 255 / 0.3);
+  --c-fond: #f9b800;
+  --c-encre: #0a0a0a;
+  --c-trait: rgb(10 10 10 / 0.25);
 }
 .couverture[data-teinte="sable"] {
-  --c-fond: #e0d9cb;
-  --c-encre: #121417;
-  --c-trait: rgb(18 20 23 / 0.2);
+  --c-fond: #ffffff;
+  --c-encre: #0a0a0a;
+  --c-trait: rgb(249 184 0 / 0.9);
 }
 .couverture[data-teinte="nuit"] {
-  --c-fond: #141925;
-  --c-encre: #f2efe9;
-  --c-trait: rgb(138 160 255 / 0.35);
+  --c-fond: #151515;
+  --c-encre: #f9b800;
+  --c-trait: rgb(249 184 0 / 0.35);
 }
 
 /* En sombre, la couverture « encre » se détacherait mal du fond : on l'éclaircit d'un cran. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="clair"]) .couverture:not([data-teinte]),
   :root:not([data-theme="clair"]) .couverture[data-teinte="encre"] {
-    --c-fond: #1c2230;
+    --c-fond: #1f1f1f;
   }
 }
 :root[data-theme="sombre"] .couverture:not([data-teinte]),
 :root[data-theme="sombre"] .couverture[data-teinte="encre"] {
-  --c-fond: #1c2230;
+  --c-fond: #1f1f1f;
+}
+
+.couverture[data-teinte="sable"] {
+  box-shadow: inset 0 0 0 1px var(--trait);
 }

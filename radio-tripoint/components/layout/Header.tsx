@@ -77,8 +77,25 @@ export function Header() {
             compact ? "h-14 lg:h-16" : "h-16 lg:h-20",
           )}
         >
-          <Link href="/" className="flex-none" aria-label="Radio Tripoint — accueil">
-            <Logo />
+          {/* Le logo rond déborde sous la barre, comme un autocollant ; il rentre dans le rang au défilement. */}
+          <Link
+            href="/"
+            aria-label="Radio Tripoint — accueil"
+            className={cn(
+              "relative flex-none self-stretch transition-[width] duration-300",
+              compact ? "w-12 lg:w-14" : "w-[4.25rem] lg:w-[5.75rem]",
+            )}
+          >
+            <Logo
+              taille={96}
+              preload
+              className={cn(
+                "shadow-2 absolute left-0 ring-1 ring-black/5 transition-all duration-300",
+                compact
+                  ? "top-1 size-12 lg:size-14"
+                  : "top-1.5 size-[4.25rem] lg:top-2 lg:size-[5.75rem]",
+              )}
+            />
           </Link>
 
           <nav
@@ -96,7 +113,7 @@ export function Header() {
                       className={cn(
                         "relative inline-flex h-10 items-center px-2.5 text-[0.9rem] font-semibold transition-colors xl:px-3",
                         actif ? "text-encre" : "text-encre-2 hover:text-encre",
-                        "after:bg-accent after:absolute after:inset-x-2.5 after:bottom-1 after:h-0.5 after:origin-left after:transition-transform xl:after:inset-x-3",
+                        "after:bg-accent after:absolute after:inset-x-2.5 after:bottom-1 after:h-1 after:origin-left after:transition-transform xl:after:inset-x-3",
                         actif ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
                       )}
                     >

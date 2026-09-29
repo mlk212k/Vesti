@@ -48,7 +48,7 @@ export function MobileMenu({
         />
         <div className="conteneur flex h-16 flex-none items-center justify-between">
           <Link href="/" onClick={fermer} aria-label="Radio Tripoint — accueil">
-            <Logo sombre />
+            <Logo sombre taille={48} className="size-12" />
           </Link>
           <button
             type="button"

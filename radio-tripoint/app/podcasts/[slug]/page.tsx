@@ -102,7 +102,7 @@ export default async function PageEpisode(props: PageProps<"/podcasts/[slug]">) 
       </article>
       {autres.length > 0 && (
         <section aria-labelledby="titre-autres-ep" className="conteneur pb-20">
-          <div className="border-trait-fort flex flex-wrap items-end justify-between gap-4 border-t-2 pt-4">
+          <div className="filet-section flex flex-wrap items-end justify-between gap-4 pt-5">
             <h2 id="titre-autres-ep" className="titre-section">
               {emission ? `Autres épisodes de ${emission.nom}` : "À écouter aussi"}
             </h2>

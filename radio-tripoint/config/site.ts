@@ -11,6 +11,9 @@ export const site = {
     "",
   ),
   signature: "La radio qui fait vibrer les Trois Frontières.",
+  /** Mentions portées par le logo officiel. */
+  baseline: "La radio transfrontalière",
+  promessePro: "Nous vous donnons une visibilité transfrontalière",
   description:
     "Radio et média transfrontalier entre la France, le Luxembourg et l'Allemagne : actualités locales, émissions, podcasts, sport, culture et agenda des Trois Frontières, depuis Sierck-les-Bains.",
   langue: "fr-FR",
@@ -37,8 +40,9 @@ export const site = {
    * toutes lettres (ce n'est pas une refonte du logo, c'est son absence).
    */
   visuels: {
-    logo: null as string | null, // ex. "/brand/logo-radio-tripoint.svg"
-    logoSombre: null as string | null, // variante pour fond sombre
+    /** Logo officiel (rond, fond transparent), extrait du fichier fourni. */
+    logo: "/brand/logo-radio-tripoint.png" as string | null,
+    logoSombre: null as string | null, // variante pour fond sombre, si elle existe
     hero: null as string | null, // ex. "/media/hero-moselle.jpg"
   },
 
